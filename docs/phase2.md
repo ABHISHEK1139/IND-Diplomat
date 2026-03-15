@@ -13,6 +13,18 @@ Inspired by how humans learn from experience, the system will aim to:
 
 Over time this process should allow the system to refine its internal world model and improve its geopolitical analysis through continuous observation and feedback.
 
+## Pipeline Relationship
+
+```text
+Phase-1
+Structured analytical pipeline
+
+Phase-2
+Learning layer that updates belief parameters,
+hypothesis reliability, and forecast behavior
+based on prediction outcomes
+```
+
 ## Current Exploration
 
 Work in Phase-2 currently focuses on investigating architectures that allow the system to:
@@ -23,6 +35,13 @@ Work in Phase-2 currently focuses on investigating architectures that allow the 
 - Experiment with continuous learning mechanisms
 
 These experiments aim to understand how structured analytical frameworks can guide the development of adaptive reasoning systems.
+
+Possible learning mechanisms currently under exploration include:
+
+- Bayesian parameter updates from resolved forecasts
+- reinforcement-style feedback derived from prediction accuracy
+- hypothesis reliability scoring across repeated evaluations
+- signal-importance recalibration when persistent forecast errors appear
 
 ## Planned Components
 

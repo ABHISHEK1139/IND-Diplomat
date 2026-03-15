@@ -2,6 +2,8 @@
 
 This is a sanitized example derived from a real saved assessment artifact. It shows the output format produced by the IND-Diplomat pipeline; it is not presented as a live forecast.
 
+This example is intended to show how the system combines Bayesian state classification, minister deliberation, deterministic judgment gates, and verification-oriented reporting into a single structured assessment.
+
 ## Scenario
 
 Persian Gulf escalation risk with emphasis on Iran-related nuclear tensions.

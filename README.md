@@ -1,21 +1,111 @@
 # IND-Diplomat
 
-**A geopolitical risk analysis engine that reasons like an intelligence analyst — structured, evidence-grounded, and self-correcting — built to evolve into a system that learns from its own predictions.**
+**A research prototype exploring structured geopolitical reasoning using probabilistic state models and multi-agent analytical debate.**
 
 ---
 
-IND-Diplomat collects open-source geopolitical signals, builds evidence-based state models through Bayesian inference, and produces guarded analytical assessments through a council-style reasoning pipeline with explicit gates, red-team challenge, and verification at every stage.
+IND-Diplomat collects open-source geopolitical signals, builds evidence-based state models through Bayesian inference, and produces structured analytical assessments through a council-style reasoning pipeline with explicit gates, challenge mechanisms, and verification steps.
 
-## What The System Does
+## Research Contribution
 
-- Collects and normalizes geopolitical signals from **15+ structured data providers** and OSINT sensors
-- Builds country state context through a **Bayesian conflict-state model** (5 states: PEACE → CRISIS → LIMITED_STRIKES → ACTIVE_CONFLICT → FULL_WAR)
-- Runs **council-style analysis** with 7 specialized ministers, each proposing hypotheses from different analytical perspectives
-- Applies **Chain of Verification (CoVe)**, **Corrective RAG (CRAG)**, and **Red Team** challenge before any assessment is released
-- Enforces a **deterministic assessment gate** — 5 rules that can withhold conclusions when evidence is insufficient
-- Detects **black swan events** through 3 independent channels (spike severity, velocity, systemic cascade)
-- Models **cross-theater contagion** through a global interdependence matrix with 150+ geopolitical coupling weights
-- Produces intelligence-style reports with full reasoning traces, confidence framing, and evidence provenance
+IND-Diplomat explores whether structured analytical pipelines can act as mentor systems for learning architectures that gradually develop their own reasoning patterns through interaction with real-world signals.
+
+The project investigates three research questions:
+
+1. Can probabilistic state models improve geopolitical risk forecasting?
+2. Can multi-agent analytical debate reduce reasoning errors in AI analysis?
+3. Can deterministic reasoning frameworks provide training signals for autonomous learning systems?
+
+## System Overview
+
+```text
+Signals
+   ↓
+Evidence Processing
+   ↓
+Bayesian State Model
+   ↓
+Council Deliberation
+   ↓
+Assessment Gate
+   ↓
+Intelligence Report
+   ↓
+Learning Loop (Phase-2)
+```
+
+## Core Model
+
+**Bayesian Conflict-State Model**
+
+`PEACE → CRISIS → LIMITED_STRIKES → ACTIVE_CONFLICT → FULL_WAR`
+
+The state model uses:
+
+- an expert-initialized transition matrix
+- posterior updates conditioned on observed signal groups
+- persistence between runs through stored prior state probabilities
+
+At a high level, the Bayesian update follows:
+
+`Posterior(state) ∝ Prior(state) × Likelihood(signals | state)`
+
+## Methodology
+
+The system combines three core components:
+
+- a Bayesian conflict-state model for probabilistic state estimation
+- a multi-agent deliberation layer for structured analytical debate
+- deterministic assessment gates for epistemic safety and explicit withholding
+
+Together these components form a layered analytical pipeline that produces forecasts and assessments which can later be evaluated against historical outcomes and future forecast resolution.
+
+## Goal
+
+Build an AI system that can analyze geopolitical signals, form hypotheses, test them against evidence, and update its internal belief model through forecast outcomes and structured feedback.
+
+## Why This Project Exists
+
+Most AI systems rely on static models and opaque outputs. IND-Diplomat explores a different approach: a reasoning system that combines probabilistic state estimation, structured analytical debate, explicit evidence thresholds, and learning-oriented feedback loops so that conclusions can be inspected, challenged, and improved over time.
+
+## Example Analysis
+
+```text
+Input signal:
+China naval drills near the Taiwan Strait
+
+System reasoning:
+- Military signal intensity increased
+- Historical escalation correlation detected
+- Diplomatic activity remains active, which moderates immediate war risk
+
+Council debate:
+- Security Minister: deterrence signalling with elevated force-posture risk
+- Diplomatic Minister: escalation pressure is rising, but crisis management channels remain open
+- Red Team: no full mobilization pattern yet, so confidence should stay bounded
+
+Final assessment:
+- Escalation probability: 0.43
+- Confidence: Medium
+```
+
+## Key Ideas
+
+- Bayesian conflict-state modeling
+- Council-style multi-agent deliberation
+- Chain-of-verification reasoning
+- Deterministic assessment gates
+- Evidence provenance and epistemic safety
+- Long-term progression toward a self-learning world model
+
+## System Design
+
+- **Evidence processing** collects and normalizes geopolitical signals from **15+ structured data providers** and OSINT sensors.
+- **State estimation** builds country state context through a Bayesian conflict-state model over five ordered states.
+- **Multi-agent deliberation** evaluates the state context through specialized analytical perspectives and structured challenge.
+- **Verification and safety mechanisms** apply evidence checks, deterministic withholding rules, and confidence framing before release.
+- **Forecasting and monitoring** extend the core assessment with trajectory views, anomaly tracking, and cross-theater spillover analysis.
+- **Reporting and provenance** produce structured outputs with reasoning traces and evidence linkage.
 
 ## Architecture
 
@@ -59,6 +149,35 @@ More detail in [docs/architecture.md](docs/architecture.md) and [docs/repo-map.m
 - **15+ Data Providers** — SIPRI, ATOP, V-Dem, OFAC, GDELT, WorldBank, Comtrade, Lowy, UCDP, EEZ, Leaders, Ports, Sanctions, MoltBot
 - **Safety Architecture** — Refusal engine, HITL gate, groupthink detector, counterfactual engine
 
+## Evaluation Strategy
+
+IND-Diplomat is evaluated using three experimental approaches:
+
+- **Crisis Replay** for historical backtesting against past geopolitical crises
+- **Signal Ablation** for measuring sensitivity to specific signal groups and analytical components
+- **Lead-Time Detection** for measuring early-warning capability before escalation peaks
+
+## Evidence And Reproducibility
+
+- **Experimental results:** the current packaged `DIP_6` replay artifacts report 2 validated scenarios, average multiclass Brier score `0.1308`, MAP accuracy `0.92`, top-2 transition accuracy `0.8099`, and calibration tier `EXCELLENT`.
+- **Evaluation dataset:** the packaged results currently cover `Taiwan Strait Crisis 2022` and `Crimea Annexation`.
+- **Structured system output:** a full example assessment is available in [examples/sample_assessment.md](examples/sample_assessment.md).
+- **Mathematical grounding:** the Bayesian state model uses explicit priors, transition probabilities, and likelihood-based posterior updates rather than free-form state selection.
+- **Reproducibility:** replay, ablation, and lead-time experiments are runnable from the CLI.
+- **Detailed evidence page:** see [docs/evidence.md](docs/evidence.md) for metrics, source artifacts, data provenance notes, and failure-mode examples.
+
+### Proof Snapshot
+
+| Evidence Type | Current Public Proof |
+|---|---|
+| Replay scenarios | Taiwan Strait Crisis 2022; Crimea Annexation |
+| Multiclass Brier | `0.1308` |
+| MAP accuracy | `0.92` |
+| Top-2 transition accuracy | `0.8099` |
+| Calibration tier | `EXCELLENT` |
+| Structured output | [examples/sample_assessment.md](examples/sample_assessment.md) |
+| Reproducibility | `python run.py --experiment replay` |
+
 ## CLI Quick Start
 
 ```bash
@@ -84,6 +203,8 @@ python run.py --experiment leadtime
 ```
 
 ## Sample Output
+
+This example shows how the system combines Bayesian state classification, minister deliberation, and verification mechanisms to produce a structured intelligence assessment.
 
 ```
 IND-DIPLOMAT  —  DUAL-TRACK INTELLIGENCE ASSESSMENT
@@ -111,15 +232,33 @@ IND-DIPLOMAT  —  DUAL-TRACK INTELLIGENCE ASSESSMENT
 
 For the full assessment with council deliberation, confidence decomposition, bias detection, trajectory forecast, black swan monitoring, and global theater analysis, see [examples/sample_assessment.md](examples/sample_assessment.md).
 
+## Reproducing Experiments
+
+```bash
+python run.py --experiment replay
+python run.py --experiment ablation
+python run.py --experiment leadtime
+```
+
+- `replay` measures day-by-day forecasting behavior on historical crises
+- `ablation` measures the effect of removing parts of the analytical stack
+- `leadtime` measures how early the system raises elevated alerts before crisis peaks
+
 ## Experimental Validation
 
-Three research-grade experiments built into the CLI:
+Three built-in evaluation modes are exposed through the CLI:
 
-- **Crisis Replay** — Day-by-day backtesting against historical crises (Ukraine 2022, Crimea 2014, Iran-US 2019, Karabakh 2020). Aggregate Brier: 0.2461 (26 data points)
+- **Crisis Replay** — The currently packaged `DIP_6` result files cover `Taiwan Strait Crisis 2022` and `Crimea Annexation`, with aggregate multiclass Brier `0.1308`, MAP accuracy `0.92`, and calibration tier `EXCELLENT`
 - **Signal Ablation** — Remove one signal category at a time, measure SRE delta to identify which signals matter most
 - **Lead Time** — Measures how many days before a crisis the system triggers ELEVATED/HIGH/CRITICAL alerts
 
 ---
+
+## Research Direction
+
+Phase-1 centers on a structured analytical pipeline: signal ingestion, Bayesian state construction, council reasoning, deterministic judgment gates, and replay-based evaluation.
+
+Phase-2 adds a learning layer on top of that pipeline so that belief parameters, hypothesis reliability, and forecast behavior can be updated through prediction outcomes and feedback.
 
 ## Phase-2: Autonomous Learning Intelligence (Upcoming)
 
@@ -145,6 +284,13 @@ Work in Phase-2 currently focuses on investigating architectures that allow the 
 - Store hypotheses and evaluate their reliability over time
 - Experiment with continuous learning mechanisms
 
+Possible learning mechanisms under exploration include:
+
+- Bayesian parameter updates from forecast resolution
+- reinforcement-style signals derived from prediction accuracy
+- hypothesis reliability scoring over repeated evaluations
+- signal-importance recalibration when forecast errors accumulate
+
 ### Planned Components
 
 The upcoming Phase-2 work will explore:
@@ -163,6 +309,25 @@ See [docs/phase2.md](docs/phase2.md) for deeper detail.
 
 ---
 
+## Limitations And Open Questions
+
+- Limited real-time data coverage outside configured providers and local datasets
+- Expert-initialized transition matrices remain a strong prior in the Bayesian model
+- Parts of the reasoning pipeline are still deterministic rather than learned
+- Evaluation coverage is still limited to a small set of historical crisis scenarios
+- Learning mechanisms are still under active design rather than fully integrated into the main pipeline
+- Sparse or contradictory evidence can still force withheld or low-confidence assessments
+
+Phase-2 work investigates learning mechanisms that can adapt belief weights and improve model behavior from forecast outcomes.
+
+## Structure
+
+For the full repository layout and file-level map, see [docs/repo-map.md](docs/repo-map.md).
+
+## Data Sources
+
+The system draws from publicly available OSINT and structured datasets, including SIPRI, GDELT, ATOP, World Bank, V-Dem, UCDP, OFAC, and related provider integrations documented in the implementation.
+
 ## Requirements
 
 - Python 3.12+
@@ -177,3 +342,12 @@ This project is under active development and feedback is welcome.
 
 - GitHub Issues: open an issue in this repository for questions, bugs, or collaboration requests
 - Email: `ak612520208365@gmail.com`
+
+## Research Statement
+
+This project explores ideas related to:
+
+- probabilistic reasoning and recursive state estimation
+- multi-agent deliberation and structured analytical debate
+- epistemic safety, verification, and evidence-gated assessment
+- learning-oriented forecasting systems and persistent world models
