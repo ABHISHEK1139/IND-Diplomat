@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IND-Diplomat Chat</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="screen-backdrop" id="screenBackdrop"></div>
+
+    <div class="shell">
+        <aside class="sidebar" id="historySidebar">
+            <div class="brand-block">
+                <p class="brand-kicker">IND-Diplomat</p>
+                <h1 class="brand-title">Strategic Chat</h1>
+                <p class="brand-subtitle">Minimal analyst workspace</p>
+            </div>
+
+            <button class="new-chat-btn" id="newChatBtn" type="button">New Chat</button>
+
+            <div class="history-block">
+                <p class="history-label">History</p>
+                <ul class="history-list" id="historyList"></ul>
+            </div>
+
+            <div class="sidebar-footer">
+                <label class="field-label" for="countryInput">Country Code</label>
+                <input id="countryInput" class="field-input" type="text" value="IND" maxlength="5" spellcheck="false">
+
+                <div class="status-row">
+                    <span class="status-chip" id="apiStatus">API: checking</span>
+                    <span class="status-chip" id="modelStatus">Model: checking</span>
+                </div>
+            </div>
+        </aside>
+
+        <section class="workspace">
+            <header class="workspace-header">
+                <button class="history-toggle" id="historyToggle" type="button" aria-label="Toggle history panel">History</button>
+                <div class="workspace-title-wrap">
+                    <p class="workspace-kicker">Live Session</p>
+                    <h2 class="workspace-title" id="workspaceTitle">New strategic thread</h2>
+                </div>
+                <button class="clear-chat-btn" id="clearChatBtn" type="button">Clear</button>
+            </header>
+
+            <main class="chat-feed" id="chatFeed">
+                <div class="empty-state" id="emptyState">
+                    <h3>Start a diplomatic assessment</h3>
+                    <p>Ask one focused question. Responses are stored in local chat history on this device.</p>
+                </div>
+            </main>
+
+            <form class="composer" id="composerForm">
+                <textarea
+                    id="promptInput"
+                    class="composer-input"
+                    placeholder="Ask IND-Diplomat (example: Assess India-Pakistan escalation risk in 30 days.)"
+                    rows="1"
+                    required
+                ></textarea>
+                <button id="sendBtn" class="send-btn" type="submit">Send</button>
+            </form>
+        </section>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

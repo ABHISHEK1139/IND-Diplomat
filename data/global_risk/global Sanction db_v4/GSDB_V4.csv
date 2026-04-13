@@ -1,0 +1,1548 @@
+case_id,sanctioned_state,sanctioning_state,begin,end,trade,descr_trade,arms,military,financial,travel,other,target_mult,sender_mult,objective,success
+1,German Democratic Republic,Germany,1949,1973,0,,0,0,0,0,1,0,0,territorial_conflict,success_total
+2,Pakistan,India,1949,1951,1,"exp_compl,imp_compl",0,0,0,0,0,0,0,policy_change,nego_settlement
+3,Bulgaria,United States,1950,1963,0,,0,0,1,0,0,0,0,destab_regime,success_part
+4,Bulgaria,United States,1950,1966,0,,0,0,0,0,1,0,0,destab_regime,failed
+5,Bulgaria,United States,1950,1959,0,,0,0,0,1,0,0,0,destab_regime,success_part
+6,China,CoCom,1950,1985,1,exp_part,0,0,0,0,0,0,1,destab_regime,nego_settlement
+7,China,New Zealand,1950,1956,1,exp_part,0,0,0,0,0,0,0,destab_regime,failed
+8,China,Organization of American States,1950,1985,1,exp_part,0,0,0,0,0,0,1,destab_regime,failed
+9,China,South Africa,1950,1985,1,exp_part,0,0,0,0,0,0,0,destab_regime,failed
+10,China,United Kingdom,1950,1956,1,exp_part,0,0,0,0,0,0,0,destab_regime,failed
+11,China,United States,1950,1972,1,"exp_compl,imp_compl",0,0,0,1,0,0,0,destab_regime,nego_settlement
+12,Comecon,"Austria, Finland, Sweden, Switzerland",1950,1994,1,exp_part,0,0,0,0,0,1,1,"prevent_war,policy_change","success_total,failed"
+13,Comecon,CoCom,1950,1994,1,exp_part,0,0,0,0,0,1,1,"prevent_war,policy_change","success_total,failed"
+14,Israel,"Egypt, Arab Rep.",1950,1957,1,"exp_compl,imp_compl",0,0,0,0,1,0,0,prevent_war,failed
+15,Israel,France,1950,1955,0,,1,0,0,0,0,0,0,prevent_war,failed
+16,Israel,League of Arab States,1950,2023,1,"exp_compl,imp_compl",0,0,0,0,0,0,1,territorial_conflict,ongoing
+17,"Korea, North",United States,1950,1954,1,"exp_compl,imp_compl",0,0,1,0,0,0,0,end_war,success_total
+18,Palestine,League of Arab States,1950,1994,1,"exp_compl,imp_compl",0,0,0,0,0,0,1,territorial_conflict,failed
+19,Taiwan,United States,1950,1953,0,,0,0,0,0,1,0,0,prevent_war,success_total
+20,Yugoslavia,Soviet Union,1950,1955,1,"exp_compl,imp_compl",0,0,0,0,0,0,0,policy_change,success_part
+21,China,Hong Kong,1951,1954,1,exp_part,0,0,0,0,0,0,0,destab_regime,failed
+22,China,UN,1951,1953,0,,1,0,0,0,0,0,1,"end_war,destab_regime","success_total,failed"
+23,China,United States,1951,1979,0,,0,0,1,0,0,0,0,destab_regime,success_part
+24,"Egypt, Arab Rep.",United Kingdom,1951,1954,0,,1,0,0,0,0,0,0,prevent_war,success_part
+25,Hungary,United States,1951,1973,0,,0,0,1,1,1,0,0,human_rights,nego_settlement
+26,"Korea, North",UN,1951,2023,0,,1,0,0,0,0,0,1,end_war,ongoing
+27,Switzerland,United States,1951,1951,1,imp_part,0,0,0,0,0,0,0,policy_change,nego_settlement
+28,China,ChinCom,1952,1958,1,exp_part,0,0,0,0,0,0,1,destab_regime,failed
+29,China,Japan,1952,1954,1,exp_part,0,0,0,0,0,0,0,destab_regime,failed
+30,"Egypt, Arab Rep.",United States,1952,1952,0,,0,0,1,0,0,0,0,policy_change,failed
+31,Australia,Soviet Union,1954,1959,1,imp_part,0,0,0,1,1,0,0,other,failed
+32,German Democratic Republic,United States,1954,1974,0,,0,0,0,0,1,0,0,territorial_conflict,success_total
+33,Gibraltar,Spain,1954,1984,0,,0,0,0,1,0,0,0,territorial_conflict,nego_settlement
+34,Guatemala,United States,1954,1954,0,,1,0,0,0,0,0,0,"human_rights,democracy","success_total,success_total"
+35,North Vietnam,South Vietnam,1954,1976,1,"exp_compl,imp_compl",0,0,0,1,0,0,0,territorial_conflict,failed
+36,North Vietnam,United States,1954,1964,1,exp_compl,0,0,0,0,0,0,0,destab_regime,failed
+37,Portugal,India,1954,1975,0,,0,0,0,0,1,0,0,"territorial_conflict,democracy","success_total,success_total"
+38,Portugal,India,1954,1961,0,,0,0,1,0,0,0,0,territorial_conflict,success_total
+39,Portugal,India,1954,1959,0,,0,0,0,1,0,0,0,territorial_conflict,failed
+40,Portugal,India,1954,1954,0,,0,0,0,0,1,0,0,territorial_conflict,failed
+41,"Korea, North",United States,1955,2008,1,"exp_compl,imp_compl",0,0,1,0,0,0,0,prevent_war,failed
+42,Portugal,India,1955,1961,1,"exp_compl,imp_compl",0,0,0,0,1,0,0,territorial_conflict,success_total
+43,"Egypt, Arab Rep.","United States, United Kingdom, France",1956,1957,0,,0,0,1,0,0,0,1,prevent_war,nego_settlement
+44,Israel,United States,1956,1983,0,,1,1,1,0,0,0,0,end_war,failed
+45,Netherlands,Indonesia,1957,1963,1,"exp_compl,imp_compl",0,0,1,1,0,0,0,territorial_conflict,success_total
+46,Romania,United States,1957,1960,1,"exp_compl,imp_compl",0,0,0,0,1,0,0,"policy_change,human_rights","nego_settlement,nego_settlement"
+47,Transjordan,"Egypt, Arab Rep., Syria",1957,1958,1,"exp_compl,imp_compl",0,0,1,0,0,0,1,policy_change,failed
+48,Tunisia,France,1957,1963,0,,0,0,1,0,0,0,0,policy_change,failed
+49,Yugoslavia,Germany,1957,1968,0,,0,0,0,0,1,0,0,policy_change,success_part
+50,Cuba,United States,1958,2023,0,,1,0,0,0,0,0,0,destab_regime,ongoing
+51,Finland,Soviet Union,1958,1959,1,"exp_part,imp_part",0,0,0,0,1,0,0,destab_regime,success_total
+52,Laos,United States,1958,1958,0,,0,0,1,0,0,0,0,other,success_total
+53,Yugoslavia,Soviet Union,1958,1960,0,,0,0,1,0,0,0,0,policy_change,failed
+54,Israel,"Egypt, Arab Rep.",1959,1979,1,"exp_compl,imp_compl",0,0,0,0,1,0,0,territorial_conflict,nego_settlement
+55,Albania,Soviet Union,1960,1960,1,exp_part,0,0,0,0,0,0,0,policy_change,failed
+56,China,Soviet Union,1960,1970,1,"exp_part,imp_part",0,1,1,0,0,0,0,"destab_regime,territorial_conflict","success_part,nego_settlement"
+57,"Congo, Democratic Republic of the",United States,1960,1963,0,,0,1,0,0,0,0,0,territorial_conflict,success_total
+58,Cuba,United States,1960,1964,1,"exp_part,imp_part",0,0,0,0,0,0,0,destab_regime,failed
+59,Dominican Republic,Organization of American States,1960,1961,1,exp_part,1,0,0,0,1,0,1,destab_regime,success_total
+60,Dominican Republic,United States,1960,1961,1,imp_part,0,1,0,0,0,0,0,destab_regime,success_total
+61,Laos,United States,1960,1960,0,,0,1,0,0,0,0,0,end_war,failed
+62,Netherlands,Indonesia,1960,1963,0,,0,0,0,0,1,0,0,territorial_conflict,success_total
+63,Albania,Soviet Union,1961,1965,1,"exp_compl,imp_compl",0,0,1,1,1,0,0,policy_change,failed
+64,Cuba,United States,1961,2015,0,,0,0,1,1,0,0,0,destab_regime,failed
+65,German Democratic Republic,Germany,1961,1989,0,,0,0,0,1,0,0,0,territorial_conflict,success_total
+66,"Korea, South",United States,1961,1961,0,,0,0,1,0,0,0,0,"democracy,human_rights","success_total,success_total"
+67,Pakistan,Afghanistan,1961,1963,0,,0,0,0,1,1,0,0,territorial_conflict,nego_settlement
+68,"Poland, Hungary, Czechoslovakia",United States,1961,1991,0,,1,0,0,0,0,1,0,destab_regime,success_total
+69,Algeria,United States,1962,1962,0,,0,0,1,0,0,0,0,"policy_change,destab_regime","failed,failed"
+70,Brazil,United States,1962,1964,0,,0,1,1,0,0,0,0,destab_regime,success_total
+71,Cuba,Organization of American States,1962,2015,0,,0,0,0,0,1,0,1,destab_regime,nego_settlement
+72,Cuba,United States,1962,2015,0,,0,0,1,0,0,0,0,destab_regime,failed
+73,Cuba,United States,1962,2023,1,"exp_compl,imp_compl",0,0,0,0,0,0,0,destab_regime,ongoing
+74,Haiti,United States,1962,1964,0,,0,0,1,0,0,0,0,destab_regime,failed
+75,Laos,United States,1962,1962,0,,0,0,1,0,0,0,0,destab_regime,success_total
+76,Nepal,India,1962,1965,1,exp_part,1,0,0,0,0,0,0,destab_regime,failed
+77,Peru,United States,1962,1962,0,,0,1,1,0,1,0,0,destab_regime,failed
+78,Peru,"Venezuela, Colombia, Costa Rica, Dominican Republic",1962,1963,0,,0,0,0,0,1,0,1,"democracy,human_rights","success_total,success_total"
+79,Romania,Soviet Union,1962,1963,0,,0,0,0,0,1,0,0,policy_change,failed
+80,Soviet Union,NATO,1962,1966,1,imp_part,0,0,0,0,0,0,1,prevent_war,failed
+81,Ceylon,United States,1963,1965,0,,0,0,1,0,0,0,0,policy_change,success_total
+82,Cuba,Germany,1963,1969,0,,0,0,0,0,1,0,0,policy_change,failed
+83,Cuba,United States,1963,1977,0,,0,0,1,1,0,0,0,destab_regime,failed
+84,Dominican Republic,United States,1963,1963,0,,0,1,1,0,1,0,0,destab_regime,failed
+85,Dominican Republic,Venezuela,1963,1963,0,,0,0,0,0,1,0,0,destab_regime,success_total
+86,"Egypt, Arab Rep.",United States,1963,1964,0,,0,0,1,0,0,0,0,prevent_war,failed
+87,Indonesia,Malaya,1963,1967,1,"exp_compl,imp_compl",0,0,0,0,1,0,0,territorial_conflict,success_total
+88,Indonesia,United States,1963,1966,0,,0,1,1,0,0,0,0,prevent_war,success_total
+89,Malaya,Indonesia,1963,1966,1,"exp_compl,imp_compl",0,0,0,0,0,0,0,territorial_conflict,success_total
+90,Philippines,Malaya,1963,1964,0,,0,0,0,0,1,0,0,territorial_conflict,failed
+91,Portugal,Organisation of African Unity,1963,1974,1,imp_compl,0,0,0,0,1,0,1,territorial_conflict,success_total
+92,Singapore,Indonesia,1963,1966,1,"exp_part,imp_part",0,0,0,0,1,0,0,destab_regime,failed
+93,South Africa,Switzerland,1963,1994,1,exp_part,1,0,0,0,0,0,0,policy_change,success_total
+94,South Africa,UN,1963,1977,0,,1,0,0,0,0,0,1,policy_change,failed
+95,South Africa,United States,1963,1998,0,,1,0,0,0,0,0,0,policy_change,success_total
+96,South Vietnam,United States,1963,1963,0,,0,1,1,0,0,0,0,human_rights,success_total
+97,Cuba,Organization of American States,1964,1975,1,"exp_compl,imp_compl",0,0,0,1,1,0,1,destab_regime,failed
+98,"Egypt, Arab Rep.",United States,1964,1965,0,,0,0,1,0,0,0,0,"policy_change,end_war,other","success_total,success_part,success_part"
+99,Gibraltar,Spain,1964,1984,1,exp_part,0,0,0,0,0,0,0,territorial_conflict,nego_settlement
+100,Indonesia,United States,1964,1966,0,,1,0,0,0,0,0,0,"human_rights,democracy","success_part,success_part"
+101,North Vietnam,United States,1964,1975,1,"exp_compl,imp_compl",0,0,1,0,0,0,0,destab_regime,failed
+102,South Africa,India,1964,1993,1,"exp_compl,imp_compl",0,0,0,0,1,0,0,policy_change,success_total
+103,South Africa,Japan,1964,1994,0,,0,0,1,0,0,0,0,policy_change,success_total
+104,South Africa,United Kingdom,1964,1994,0,,1,0,0,0,0,0,0,policy_change,success_total
+105,Tunisia,France,1964,1966,1,imp_part,0,0,1,0,0,0,0,other,nego_settlement
+106,Algeria,France,1965,1971,1,imp_part,0,0,1,0,0,0,0,other,nego_settlement
+107,"Egypt, Arab Rep.",Germany,1965,1972,0,,1,0,1,0,0,0,0,prevent_war,failed
+108,Germany,League of Arab States,1965,1979,0,,0,0,0,0,1,0,1,policy_change,success_part
+109,Gibraltar,Spain,1965,1984,1,exp_part,0,0,0,0,0,0,0,"territorial_conflict,policy_change","failed,failed"
+110,India,United Kingdom,1965,1967,0,,1,0,0,0,0,0,0,end_war,success_part
+111,India,United States,1965,1967,0,,0,1,1,0,0,0,0,end_war,success_total
+112,"India, Pakistan","United States, United Kingdom",1965,1966,0,,1,0,0,0,0,1,1,end_war,success_total
+113,"Pakistan, India",UN,1965,1975,0,,1,0,0,0,0,1,1,"territorial_conflict,end_war","failed,failed"
+114,"Pakistan, India",United Kingdom,1965,1975,0,,1,1,0,0,0,1,0,"territorial_conflict,end_war","failed,failed"
+115,"Pakistan, India",United States,1965,1975,0,,1,1,0,0,0,1,0,"territorial_conflict,end_war","failed,failed"
+116,Rhodesia,United Kingdom,1965,1966,1,"exp_part,imp_part",0,0,1,0,0,0,0,territorial_conflict,nego_settlement
+117,Gibraltar,Spain,1966,1984,0,,0,0,0,0,1,0,0,territorial_conflict,nego_settlement
+118,Portugal,UN,1966,1974,1,imp_compl,1,0,0,0,0,0,1,policy_change,success_total
+119,Rhodesia,"Denmark, Norway, Canada, Australia, Switzerland, Germany",1966,1979,1,"exp_part,imp_part",1,0,0,0,0,0,1,democracy,success_total
+120,Rhodesia,UN,1966,1979,1,"exp_part,imp_part",1,0,0,0,0,0,1,democracy,success_total
+121,Rhodesia,United Kingdom,1966,1979,1,"exp_compl,imp_part",0,0,1,0,1,0,0,territorial_conflict,nego_settlement
+122,United Kingdom,Spain,1966,1984,0,,0,0,0,0,1,0,0,territorial_conflict,failed
+123,"Egypt, Arab Rep.",France,1967,1974,0,,1,0,0,0,0,0,0,territorial_conflict,failed
+124,Greece,United States,1967,1970,0,,1,0,0,0,0,0,0,"human_rights,democracy","success_total,success_total"
+125,Greece,United States,1967,1972,0,,0,1,0,0,0,0,0,"human_rights,democracy","success_total,success_total"
+126,Israel,France,1967,1974,0,,1,0,0,0,0,0,0,territorial_conflict,failed
+127,Myanmar,China,1967,1971,0,,0,0,1,0,0,0,0,human_rights,nego_settlement
+128,Nigeria,United Kingdom,1967,1970,0,,1,0,0,0,0,0,0,end_war,success_total
+129,Nigeria,United States,1967,1970,0,,1,0,0,0,0,0,0,end_war,success_total
+130,Rhodesia,United States,1967,1979,1,"exp_part,imp_part",1,0,0,0,0,0,0,democracy,success_total
+131,Transjordan,France,1967,1974,0,,1,0,0,0,0,0,0,prevent_war,failed
+132,United States,Sudan,1967,1971,0,,0,0,0,0,1,0,0,policy_change,failed
+133,Cambodia,Japan,1968,1999,0,,0,0,1,0,0,0,0,"democracy,human_rights","success_part,success_part"
+134,Ecuador,United States,1968,1969,0,,1,0,0,0,0,0,0,other,failed
+135,Nigeria,Czechoslovakia,1968,1970,0,,1,0,0,0,0,0,0,"territorial_conflict,democracy,human_rights","success_total,success_total,success_total"
+136,Nigeria,"Netherlands, Italy, France, Belgium",1968,1970,0,,1,0,0,0,0,0,1,end_war,success_total
+137,Panama,United States,1968,1968,0,,0,0,0,0,1,0,0,"democracy,human_rights","success_total,success_total"
+138,Peru,United States,1968,1968,0,,0,0,0,0,1,0,0,"democracy,human_rights","success_total,success_total"
+139,Peru,United States,1968,1974,0,,0,0,1,0,0,0,0,"policy_change,other","success_total,success_total"
+140,Philippines,Malaya,1968,1969,0,,0,0,0,0,1,0,0,territorial_conflict,failed
+141,Rhodesia,UN,1968,1979,1,"exp_compl,imp_compl",1,0,1,1,1,0,1,democracy,success_total
+142,Sweden,United States,1968,1970,0,,0,0,0,0,1,0,0,policy_change,failed
+143,Chad,Central African Republic,1969,1969,1,"exp_compl,imp_compl",0,0,0,1,0,0,0,policy_change,nego_settlement
+144,"El Salvador, Honduras",United States,1969,1969,0,,1,0,0,0,0,0,0,prevent_war,success_total
+145,Gibraltar,Spain,1969,1984,1,"exp_compl,imp_compl",0,0,0,0,0,0,0,territorial_conflict,nego_settlement
+146,Chile,United States,1970,1973,0,,0,0,1,0,0,0,0,destab_regime,success_part
+147,Lesotho,United Kingdom,1970,1970,0,,0,0,1,0,1,0,0,"destab_regime,democracy,human_rights","success_total,success_total,success_total"
+148,Mozambique,"United States, Italy, Sweden",1970,1971,0,,0,0,1,0,0,0,1,other,success_total
+149,Ecuador,United States,1971,1972,0,,0,1,1,0,0,0,0,other,failed
+150,India,United States,1971,1971,0,,1,1,1,0,0,0,0,end_war,success_total
+151,Malta,United Kingdom,1971,1971,0,,0,1,1,0,0,0,0,policy_change,nego_settlement
+152,Pakistan,India,1971,1976,1,"exp_compl,imp_compl",0,0,0,0,1,0,0,territorial_conflict,success_total
+153,Pakistan,United States,1971,1971,0,,1,1,1,0,0,0,0,end_war,nego_settlement
+154,Uganda,United Kingdom,1972,1979,0,,0,0,1,0,0,0,0,human_rights,success_total
+155,Canada,League of Arab States,1973,1974,1,exp_part,0,0,0,0,0,0,1,policy_change,failed
+156,Chile,Belgium,1973,1990,0,,0,0,1,0,0,0,0,"democracy,human_rights","success_total,success_total"
+157,Chile,Denmark,1973,1990,0,,0,0,1,0,0,0,0,"democracy,human_rights","success_total,success_total"
+158,Chile,German Democratic Republic,1973,1990,0,,0,0,0,0,1,0,0,"democracy,human_rights","success_total,success_total"
+159,Chile,Germany,1973,1990,0,,1,0,1,0,0,0,0,"democracy,human_rights","success_total,success_total"
+160,Chile,Soviet Union,1973,1990,0,,0,0,0,0,1,0,0,"democracy,human_rights","success_total,success_total"
+161,Chile,"Sweden, Finland, Norway, Netherlands",1973,1990,0,,0,0,1,0,0,0,1,"democracy,human_rights","failed,failed"
+162,Denmark,League of Arab States,1973,1974,1,exp_part,0,0,0,0,0,0,1,policy_change,failed
+163,Israel,Organisation of African Unity,1973,1974,1,exp_compl,0,0,0,0,0,0,1,policy_change,failed
+164,Japan,League of Arab States,1973,1974,1,exp_part,0,0,0,0,0,0,1,policy_change,failed
+165,"Korea, South",United States,1973,1977,0,,0,1,1,0,0,0,0,human_rights,failed
+166,Netherlands,League of Arab States,1973,1974,1,exp_part,0,0,0,0,0,0,1,policy_change,failed
+167,Portugal,League of Arab States,1973,1974,1,exp_part,0,0,0,0,0,0,1,policy_change,failed
+168,Portugal,Organisation of African Unity,1973,1974,1,exp_compl,0,0,0,0,0,0,1,territorial_conflict,success_total
+169,Rhodesia,League of Arab States,1973,1974,1,exp_part,0,0,0,0,0,0,1,destab_regime,failed
+170,Rhodesia,Organisation of African Unity,1973,1974,1,exp_compl,0,0,0,0,0,0,1,destab_regime,failed
+171,South Africa,League of Arab States,1973,1974,1,exp_part,0,0,0,0,0,0,1,policy_change,failed
+172,South Africa,Organisation of African Unity,1973,1974,1,exp_compl,0,0,0,0,0,0,1,policy_change,failed
+173,United Kingdom,League of Arab States,1973,1974,1,exp_part,0,0,0,0,0,0,1,policy_change,failed
+174,United States,League of Arab States,1973,1974,1,exp_part,0,0,0,0,0,0,1,policy_change,failed
+175,Western countries,OAPEC,1973,1974,1,exp_part,0,0,0,0,0,1,1,policy_change,failed
+176,Chile,Mexico,1974,1990,0,,0,0,0,0,1,0,0,"democracy,human_rights","success_total,success_total"
+177,Chile,United Kingdom,1974,1980,1,exp_part,1,0,1,0,0,0,0,"democracy,human_rights","failed,failed"
+178,Chile,United States,1974,1983,0,,1,1,1,0,0,0,0,"democracy,human_rights","failed,failed"
+179,Cyprus (Northern),Cyprus,1974,2023,0,,0,0,0,0,1,0,0,territorial_conflict,ongoing
+180,India,Canada,1974,2008,1,"exp_part,imp_part",0,0,1,0,0,0,0,prevent_war,nego_settlement
+181,India,United States,1974,2008,1,exp_part,0,1,1,0,0,0,0,policy_change,success_total
+182,Pakistan,Canada,1974,1976,1,exp_part,0,0,0,0,0,0,0,prevent_war,success_total
+183,Turkey,United States,1974,1978,1,"exp_compl,imp_compl",0,0,0,0,0,0,0,policy_change,failed
+184,Cambodia,Australia,1975,1992,0,,0,0,1,0,0,0,0,"destab_regime,end_war","success_part,success_part"
+185,Cambodia,Germany,1975,1979,0,,0,0,0,0,1,0,0,destab_regime,success_part
+186,Cambodia,Japan,1975,1992,0,,0,0,0,0,1,0,0,"destab_regime,end_war","success_part,success_part"
+187,Cambodia,Japan,1975,1991,0,,0,0,1,0,0,0,0,"destab_regime,end_war","success_part,success_part"
+188,Cambodia,United Kingdom,1975,1991,0,,0,0,0,0,1,0,0,"destab_regime,end_war","success_part,success_part"
+189,Cambodia,United States,1975,1979,1,"exp_compl,imp_compl",0,0,1,0,0,0,0,"end_war,destab_regime","failed,failed"
+190,Chile,United States,1975,1990,0,,0,0,1,0,0,0,0,human_rights,success_total
+191,Laos,Thailand,1975,1976,1,"exp_compl,imp_compl",0,0,0,1,0,0,0,"destab_regime,end_war","failed,failed"
+192,Laos,United States,1975,1995,0,,0,0,1,0,0,0,0,policy_change,nego_settlement
+193,South Africa,Denmark,1975,1992,1,"exp_compl,imp_compl",0,0,1,0,0,0,0,policy_change,success_part
+194,South Africa,United States,1975,1982,1,exp_part,0,0,0,0,0,0,0,prevent_war,failed
+195,South Vietnam,United States,1975,1976,1,"exp_compl,imp_compl",0,0,1,0,0,0,0,destab_regime,failed
+196,Turkey,United States,1975,1978,0,,0,1,0,0,0,0,0,end_war,failed
+197,Chile,United States,1976,1990,0,,0,1,0,0,0,0,0,human_rights,success_total
+198,"Egypt, Arab Rep.",Soviet Union,1976,1984,0,,1,0,1,0,0,0,0,policy_change,failed
+199,League of Arab States,United States,1976,2023,0,,0,0,1,0,0,1,0,policy_change,ongoing
+200,South Vietnam,United States,1976,1998,0,,0,0,1,0,0,0,0,destab_regime,nego_settlement
+201,South Vietnam,United States,1976,1994,1,"exp_compl,imp_compl",0,0,1,0,0,0,0,destab_regime,failed
+202,Taiwan,United States,1976,1977,1,exp_part,0,0,0,0,0,0,0,prevent_war,success_total
+203,Argentina,United States,1977,1989,1,exp_part,1,1,1,0,0,0,0,human_rights,success_total
+204,Cambodia,Thailand,1977,1978,1,exp_part,0,0,0,0,0,0,0,"destab_regime,end_war","success_part,success_part"
+205,EEC,Canada,1977,1978,1,exp_part,0,0,0,0,0,1,0,policy_change,success_total
+206,El Salvador,United States,1977,1980,0,,0,1,1,0,0,0,0,"human_rights,democracy","failed,success_part"
+207,Equatorial Guinea,Spain,1977,1979,0,,0,0,0,0,1,0,0,"human_rights,democracy","failed,failed"
+208,Eritrea,United States,1977,1993,0,,0,0,0,0,1,0,0,policy_change,success_part
+209,Ethiopia (excludes Eritrea),United States,1977,1992,0,,0,1,1,0,0,0,0,"human_rights,destab_regime","failed,success_total"
+210,Germany,United States,1977,1977,1,exp_part,0,0,0,0,0,0,0,policy_change,failed
+211,Guatemala,United States,1977,1986,0,,0,1,0,0,0,0,0,human_rights,success_part
+212,Guatemala,United States,1977,1984,0,,0,0,1,0,0,0,0,human_rights,success_part
+213,Japan,Canada,1977,1978,1,exp_part,0,0,0,0,0,0,0,prevent_war,success_total
+214,Laos,Thailand,1977,1978,1,"exp_compl,imp_compl",0,0,0,1,0,0,0,"destab_regime,end_war","failed,failed"
+215,Nicaragua,United States,1977,1979,1,exp_part,0,1,1,0,0,0,0,destab_regime,success_total
+216,Paraguay,United States,1977,1981,0,,0,1,0,0,0,0,0,human_rights,success_total
+217,South Africa,UN,1977,1994,0,,1,1,0,0,0,0,1,"policy_change,prevent_war","success_total,success_total"
+218,South Vietnam,Cambodia,1977,1988,0,,0,0,0,0,1,0,0,territorial_conflict,success_total
+219,United States,Brazil,1977,1984,0,,0,1,1,0,0,0,0,policy_change,success_total
+220,Uruguay,United States,1977,1981,0,,0,1,1,0,0,0,0,human_rights,success_total
+221,Uruguay,United States,1977,1977,1,exp_part,0,0,0,0,0,0,0,human_rights,failed
+222,Albania,China,1978,1983,1,"exp_compl,imp_compl",0,1,1,1,0,0,0,policy_change,success_total
+223,Bolivia,United States,1978,1978,0,,0,1,0,0,0,0,0,"destab_regime,democracy","nego_settlement,nego_settlement"
+224,Brazil,United States,1978,1981,1,exp_part,0,0,0,0,0,0,0,prevent_war,nego_settlement
+225,"Egypt, Arab Rep.",League of Arab States,1978,1983,1,"exp_part,imp_compl",0,0,1,0,1,0,1,policy_change,success_part
+226,Equatorial Guinea,EU,1978,1979,0,,0,0,1,0,0,0,1,"human_rights,democracy","failed,failed"
+227,Guatemala,United States,1978,1983,0,,1,0,0,0,0,0,0,human_rights,success_part
+228,India,United States,1978,1982,1,exp_part,0,0,0,0,0,0,0,prevent_war,success_part
+229,Libya,United States,1978,2004,1,exp_part,1,0,0,0,0,0,0,terrorism,failed
+230,South Africa,Switzerland,1978,1994,0,,0,0,1,0,0,0,0,policy_change,success_total
+231,South Vietnam,China,1978,1988,1,"exp_compl,imp_compl",0,0,1,1,0,0,0,territorial_conflict,success_part
+232,South Vietnam,China,1978,1991,0,,0,0,0,0,1,0,0,"policy_change,end_war","success_total,success_total"
+233,South Vietnam,France,1978,1981,0,,0,0,1,0,0,0,0,"policy_change,end_war","failed,failed"
+234,Soviet Union,United States,1978,1987,1,exp_part,0,0,0,0,0,0,0,"other,human_rights","success_total,failed"
+235,Uganda,United States,1978,1979,1,"exp_compl,imp_compl",0,0,0,0,0,0,0,human_rights,success_total
+236,Afghanistan,United States,1979,1979,0,,0,1,1,0,0,0,0,human_rights,failed
+237,Bolivia,United States,1979,1982,0,,0,1,1,0,0,0,0,democracy,success_part
+238,Cambodia,United States,1979,1989,1,"exp_compl,imp_compl",0,0,1,0,0,0,0,"destab_regime,end_war","failed,nego_settlement"
+239,Canada,League of Arab States,1979,1979,1,"exp_compl,imp_compl",0,0,1,0,0,0,1,policy_change,success_total
+240,Chile,United States,1979,1990,0,,1,0,1,0,0,0,0,"human_rights,other","success_total,success_total"
+241,"Egypt, Arab Rep.",League of Arab States,1979,1989,0,,0,0,0,0,1,0,1,policy_change,success_part
+242,El Salvador,Germany,1979,1984,0,,0,0,1,0,0,0,0,human_rights,success_part
+243,Iran,United States,1979,1981,1,imp_part,0,0,1,0,0,0,0,other,success_total
+244,Pakistan,United States,1979,1981,0,,0,1,1,0,0,0,0,prevent_war,failed
+245,South Africa,Sweden,1979,1993,0,,0,0,1,0,0,0,0,policy_change,nego_settlement
+246,South Vietnam,Australia,1979,1983,0,,0,0,1,0,0,0,0,"end_war,policy_change","failed,failed"
+247,South Vietnam,EEC,1979,1979,0,,0,0,1,0,0,0,1,end_war,failed
+248,South Vietnam,"Germany, Denmark",1979,1979,0,,0,0,1,0,0,0,1,policy_change,failed
+249,South Vietnam,Japan,1979,1992,0,,0,0,1,0,0,0,0,end_war,success_total
+250,Uganda,United Kingdom,1979,1979,1,exp_part,0,0,0,0,0,0,0,"human_rights,end_war","success_total,success_total"
+251,Bolivia,United States,1980,1982,0,,0,1,0,0,1,0,0,democracy,success_part
+252,Iran,United States,1980,1981,1,imp_part,0,0,0,0,0,0,0,terrorism,failed
+253,Iraq,United States,1980,1990,1,exp_part,0,0,0,0,0,0,0,prevent_war,failed
+254,Soviet Union,United States,1980,1981,1,"exp_part,imp_part",0,0,0,0,1,0,0,policy_change,failed
+255,Libya,United States,1981,2004,1,exp_part,0,0,0,1,0,0,0,prevent_war,success_part
+256,Nicaragua,United States,1981,1989,0,,0,0,1,0,0,0,0,"policy_change,destab_regime","failed,success_part"
+257,Poland,NATO,1981,1984,0,,0,0,0,1,0,0,1,"democracy,human_rights","success_total,success_total"
+258,Poland,United States,1981,1987,1,exp_part,0,0,1,0,0,0,0,"democracy,human_rights","success_total,success_part"
+259,Poland,United States,1981,1984,0,,0,0,0,1,1,0,0,"democracy,human_rights","success_total,success_part"
+260,South Vietnam,France,1981,1989,0,,0,0,1,0,0,0,0,"policy_change,end_war","success_total,success_total"
+261,Soviet Union,"United States, EEC",1981,1983,1,imp_part,0,0,0,1,0,0,1,policy_change,success_total
+262,Turkey,EEC,1981,1986,0,,0,0,1,0,0,0,1,democracy,success_total
+263,Turkey,Germany,1981,1982,0,,0,0,1,0,0,0,0,democracy,nego_settlement
+264,Argentina,Australia,1982,1982,1,imp_compl,0,0,0,0,1,0,0,"territorial_conflict,end_war,human_rights","failed,failed,failed"
+265,Argentina,Canada,1982,1982,1,imp_compl,1,0,1,0,0,0,0,end_war,success_total
+266,Argentina,EEC,1982,1982,1,imp_compl,1,0,0,0,0,0,1,end_war,success_total
+267,Argentina,New Zealand,1982,1982,1,"exp_compl,imp_compl",0,0,0,0,0,0,0,"territorial_conflict,end_war,human_rights","failed,failed,failed"
+268,Argentina,Norway,1982,1982,1,imp_compl,0,0,0,0,0,0,0,end_war,success_total
+269,Argentina,Switzerland,1982,1982,0,,1,0,0,0,0,0,0,"territorial_conflict,end_war,human_rights","failed,failed,failed"
+270,Argentina,United Kingdom,1982,1982,0,,0,0,1,0,0,0,0,territorial_conflict,failed
+271,Argentina,United Kingdom,1982,1985,1,imp_compl,0,0,0,0,0,0,0,territorial_conflict,success_total
+272,Argentina,United Kingdom,1982,1989,0,,0,0,0,0,1,0,0,"territorial_conflict,end_war,human_rights","nego_settlement,nego_settlement,success_total"
+273,Cuba,United States,1982,2015,0,,0,0,1,1,0,0,0,destab_regime,failed
+274,EEC,Argentina,1982,1982,1,imp_compl,0,0,0,0,0,1,0,policy_change,success_total
+275,France,United States,1982,1982,0,,0,0,0,0,1,0,0,policy_change,failed
+276,Israel,United Kingdom,1982,1994,0,,1,0,0,0,0,0,0,end_war,failed
+277,Libya,United States,1982,2004,1,"exp_part,imp_part",0,0,0,0,0,0,0,destab_regime,failed
+278,Nicaragua,United States,1982,1990,0,,1,1,0,0,0,0,0,destab_regime,success_total
+279,Poland,Belgium,1982,1984,0,,0,0,1,1,0,0,0,"democracy,human_rights","success_total,success_total"
+280,Poland,"EEC, Canada",1982,1984,0,,0,0,1,1,0,0,1,"democracy,human_rights","success_total,success_total"
+281,Poland,Germany,1982,1984,0,,0,0,1,1,0,0,0,"democracy,human_rights","success_total,success_total"
+282,Poland,Japan,1982,1984,0,,0,0,1,1,1,0,0,"democracy,human_rights","success_total,success_part"
+283,Poland,United Kingdom,1982,1984,0,,0,0,1,1,0,0,0,"democracy,human_rights","success_total,success_part"
+284,Poland,United States,1982,1984,0,,0,0,0,0,1,0,0,"democracy,human_rights","success_total,success_part"
+285,Poland,United States,1982,1987,1,imp_part,0,0,0,0,0,0,0,"democracy,human_rights","success_total,success_part"
+286,Suriname,Netherlands,1982,1988,0,,0,0,1,0,0,0,0,"democracy,human_rights","success_total,success_total"
+287,Suriname,United States,1982,1988,0,,0,0,1,0,0,0,0,"democracy,human_rights","success_total,success_total"
+288,United Kingdom,Argentina,1982,1983,0,,0,0,1,0,0,0,0,territorial_conflict,failed
+289,United Kingdom,Argentina,1982,1989,1,imp_compl,0,0,0,0,0,0,0,territorial_conflict,failed
+290,France,Australia,1983,1986,1,exp_part,0,0,0,0,0,0,0,prevent_war,failed
+291,Grenada,Organization of Eastern Carribean States,1983,1983,1,"exp_compl,imp_compl",0,0,0,1,1,0,1,democracy,success_total
+292,"Korea, North",Japan,1983,1984,0,,0,0,0,1,1,0,0,"destab_regime,terrorism,prevent_war","failed,failed,failed"
+293,Lesotho,South Africa,1983,1984,1,"exp_compl,imp_compl",1,0,0,0,0,0,0,policy_change,nego_settlement
+294,Nicaragua,United States,1983,1985,1,imp_part,0,0,0,0,0,0,0,policy_change,failed
+295,Zimbabwe,United States,1983,1987,0,,0,0,1,0,0,0,0,policy_change,nego_settlement
+296,France,Australia,1984,1986,1,exp_part,0,0,0,0,0,0,0,prevent_war,failed
+297,Iran,United States,1984,2016,1,exp_part,1,0,1,0,0,0,0,"terrorism,human_rights","failed,failed"
+298,Lebanon,United States,1984,1992,0,,1,1,1,0,0,0,0,end_war,success_total
+299,Libya,United Kingdom,1984,1999,0,,0,0,0,0,1,0,0,other,failed
+300,South Africa,UN,1984,1994,0,,1,0,0,0,0,0,1,"policy_change,prevent_war","success_total,success_total"
+301,Bulgaria,Turkey,1985,1992,0,,0,0,0,0,1,0,0,human_rights,success_total
+302,France,United States,1985,1985,1,imp_part,0,0,0,0,0,0,0,policy_change,failed
+303,Lebanon,United States,1985,1997,0,,0,0,0,1,0,0,0,other,success_total
+304,Nicaragua,United States,1985,1990,1,"exp_compl,imp_compl",0,0,0,0,1,0,0,destab_regime,success_total
+305,South Africa,Australia,1985,1994,1,"exp_part,imp_part",1,0,1,0,0,0,0,policy_change,success_total
+306,South Africa,Commonwealth,1985,1994,1,"exp_part,imp_part",0,1,1,0,1,0,1,policy_change,success_total
+307,South Africa,"Denmark, Finland, Iceland, Norway, Sweden",1985,1994,1,"exp_part,imp_part",1,0,1,0,0,0,1,policy_change,success_total
+308,South Africa,EEC,1985,1992,1,imp_part,0,0,0,0,0,0,1,"policy_change,prevent_war","success_part,success_total"
+309,South Africa,France,1985,1994,0,,0,0,1,0,0,0,0,human_rights,success_total
+310,South Africa,United States,1985,1994,1,"exp_part,imp_part",0,0,0,0,0,0,0,policy_change,success_total
+311,Angola,United States,1986,1992,1,imp_part,1,0,1,0,0,0,0,destab_regime,success_part
+312,Haiti,United States,1986,1986,0,,0,0,1,0,0,0,0,human_rights,success_part
+313,Lesotho,South Africa,1986,1986,1,"exp_compl,imp_compl",0,0,0,1,0,0,0,policy_change,failed
+314,Libya,EEC,1986,1992,0,,1,0,0,1,0,0,1,terrorism,ongoing
+315,Libya,United States,1986,2004,1,"exp_part,imp_part",0,0,1,0,0,0,0,"terrorism,destab_regime","failed,failed"
+316,New Zealand,France,1986,1986,1,imp_part,0,0,0,0,0,0,0,other,success_total
+317,South Africa,Denmark,1986,1994,1,"exp_compl,imp_compl",0,0,0,0,0,0,0,policy_change,success_total
+318,South Africa,EEC,1986,1994,1,imp_part,0,1,1,0,0,0,1,policy_change,success_total
+319,South Africa,France,1986,1994,0,,1,0,0,0,0,0,0,policy_change,success_total
+320,South Africa,Japan,1986,1994,1,"exp_part,imp_part",0,0,0,1,1,0,0,policy_change,success_total
+321,South Africa,UN,1986,1994,1,exp_part,0,0,0,0,0,0,1,"policy_change,democracy,human_rights","success_total,success_total,success_total"
+322,South Africa,United Kingdom,1986,1990,0,,0,0,1,0,0,0,0,policy_change,failed
+323,Syria,EEC,1986,1992,0,,1,0,0,0,0,0,1,terrorism,ongoing
+324,Syria,United States,1986,1987,1,exp_part,0,0,1,0,1,0,0,terrorism,success_part
+325,Turkey,Greece,1986,1999,0,,0,0,1,0,0,0,0,"territorial_conflict,human_rights","success_part,success_part"
+326,Chile,United States,1987,1991,0,,0,0,1,0,0,0,0,human_rights,success_total
+327,Cyprus,Turkey,1987,2023,0,,0,0,0,0,1,0,0,territorial_conflict,ongoing
+328,Cyprus,United States,1987,2020,0,,1,0,0,0,0,0,0,territorial_conflict,failed
+329,Fiji,Australia,1987,1992,0,,0,1,0,0,0,0,0,democracy,success_total
+330,Fiji,Australia,1987,1987,1,exp_compl,0,0,0,1,1,0,0,policy_change,success_part
+331,Fiji,Australia,1987,1988,0,,0,0,1,0,0,0,0,democracy,success_part
+332,Fiji,Commonwealth,1987,1997,0,,0,0,0,0,1,0,1,democracy,success_part
+333,Fiji,India,1987,1998,1,"exp_compl,imp_compl",0,0,0,0,1,0,0,democracy,success_total
+334,Fiji,New Zealand,1987,1988,0,,0,0,1,0,0,0,0,democracy,success_part
+335,Fiji,New Zealand,1987,1992,0,,0,1,0,0,0,0,0,democracy,success_total
+336,Fiji,New Zealand,1987,1987,1,exp_compl,0,0,0,1,1,0,0,policy_change,success_part
+337,Fiji,United States,1987,1988,0,,0,0,1,0,1,0,0,democracy,success_part
+338,Fiji,United States,1987,1992,0,,0,1,0,0,0,0,0,democracy,success_total
+339,Haiti,United States,1987,1990,0,,0,1,1,0,0,0,0,"human_rights,democracy","success_total,success_total"
+340,Iran,United States,1987,1995,1,imp_compl,0,0,0,0,0,0,0,terrorism,failed
+341,Panama,United States,1987,1989,1,imp_part,0,1,1,0,0,0,0,"democracy,destab_regime","success_total,success_total"
+342,Romania,United States,1987,1996,1,imp_part,0,0,0,0,0,0,0,human_rights,success_total
+343,South Africa,"Norway, Sweden",1987,1993,1,"exp_compl,imp_compl",0,0,1,0,0,0,1,policy_change,success_total
+344,France,Australia,1988,1995,1,exp_part,0,0,0,0,0,0,0,prevent_war,success_total
+345,France,Australia,1988,1996,1,exp_part,0,0,0,0,0,0,0,prevent_war,success_total
+346,Myanmar,Japan,1988,1989,0,,0,0,1,0,0,0,0,"human_rights,democracy","success_part,success_total"
+347,Myanmar,United States,1988,2016,0,,1,0,1,0,0,0,0,human_rights,success_total
+348,Panama,United States,1988,1989,0,,0,0,1,0,0,0,0,destab_regime,success_total
+349,Romania,United States,1988,1991,0,,0,0,1,0,0,0,0,human_rights,success_part
+350,Somalia,"United Kingdom, France, Italy",1988,1990,0,,0,0,1,0,0,0,1,human_rights,nego_settlement
+351,Somalia,United States,1988,1990,0,,0,1,1,0,0,0,0,human_rights,nego_settlement
+352,Armenia,Azerbaijan,1989,2023,1,"exp_compl,imp_compl",0,0,0,1,1,0,0,territorial_conflict,ongoing
+353,Bulgaria,Turkey,1989,1992,0,,0,0,0,1,0,0,0,human_rights,success_total
+354,Bulgaria,United States,1989,1990,0,,0,0,0,0,1,0,0,human_rights,success_total
+355,Cambodia,United States,1989,1992,1,"exp_compl,imp_compl",0,0,1,0,0,0,0,"destab_regime,end_war","success_part,success_total"
+356,Chile,United States,1989,1989,1,exp_part,0,0,0,0,0,0,0,other,failed
+357,China,Australia,1989,1989,0,,0,0,1,0,0,0,0,human_rights,failed
+358,China,Canada,1989,1989,0,,0,0,1,0,0,0,0,human_rights,failed
+359,China,EEC,1989,1992,0,,1,1,0,1,0,0,1,human_rights,failed
+360,China,Germany,1989,1989,0,,0,0,1,0,0,0,0,human_rights,failed
+361,China,"Italy, Belgium",1989,1989,0,,0,0,1,0,0,0,1,destab_regime,failed
+362,China,Japan,1989,1990,0,,0,0,1,0,0,0,0,democracy,success_part
+363,China,United States,1989,2023,0,,1,1,0,0,0,0,0,human_rights,ongoing
+364,Myanmar,Germany,1989,2013,0,,0,0,1,0,0,0,0,human_rights,success_part
+365,Myanmar,United States,1989,2016,1,imp_part,0,0,0,0,0,0,0,human_rights,success_total
+366,Nepal,India,1989,1990,1,"exp_compl,imp_compl",0,0,0,0,0,0,0,policy_change,success_total
+367,Panama,United States,1989,1989,0,,0,0,0,0,1,0,0,destab_regime,success_total
+368,Sudan,United States,1989,2023,0,,0,0,1,0,0,0,0,democracy,ongoing
+369,"Congo, Democratic Republic of the",Belgium,1990,1997,0,,0,0,1,0,0,0,0,"democracy,human_rights","success_part,success_part"
+370,"Congo, Democratic Republic of the",United States,1990,1997,0,,0,1,1,0,0,0,0,human_rights,nego_settlement
+371,El Salvador,United States,1990,1993,0,,0,1,0,0,0,0,0,"end_war,policy_change","success_total,success_total"
+372,"Estonia, Latvia, Lithuania",Soviet Union,1990,1990,1,exp_part,0,0,0,0,0,1,0,policy_change,failed
+373,Guatemala,United States,1990,2005,0,,0,1,0,0,1,0,0,human_rights,success_total
+374,Iraq,EU,1990,2003,1,exp_part,1,1,1,0,0,0,1,end_war,success_total
+375,Iraq,UN,1990,2003,1,"exp_compl,imp_compl",1,1,1,0,1,0,1,end_war,success_total
+376,Iraq,United States,1990,2003,0,,0,0,1,0,0,0,0,"terrorism,end_war,prevent_war","success_part,success_total,failed"
+377,Kenya,Norway,1990,2002,0,,0,0,1,0,0,0,0,human_rights,success_total
+378,Kenya,United States,1990,1993,0,,0,1,1,0,0,0,0,"democracy,human_rights","success_total,success_total"
+379,Kuwait,Japan,1990,1991,1,"exp_compl,imp_part",0,0,0,0,0,0,0,end_war,success_total
+380,Kuwait,UN,1990,1991,1,"exp_compl,imp_compl",1,1,1,0,0,0,1,end_war,success_total
+381,Kuwait,United States,1990,1991,1,"exp_part,imp_part",0,0,1,0,0,0,0,end_war,success_total
+382,Lithuania,Soviet Union,1990,1990,1,exp_part,0,0,0,0,0,0,0,"territorial_conflict,policy_change","failed,success_total"
+383,Myanmar,United States,1990,2016,1,imp_compl,0,0,0,0,0,0,0,human_rights,success_part
+384,Pakistan,United States,1990,2001,0,,1,1,1,0,0,0,0,prevent_war,failed
+385,Palestine,Saudi Arabia,1990,1993,0,,0,0,1,0,0,0,0,policy_change,failed
+386,Romania,EEC,1990,1990,0,,0,0,1,0,0,0,1,human_rights,success_total
+387,Romania,United States,1990,1991,0,,0,0,1,0,0,0,0,human_rights,success_part
+388,Soviet Union,Lithuania,1990,1990,1,exp_part,0,0,0,0,0,0,0,"territorial_conflict,policy_change","success_total,failed"
+389,Sudan,EU,1990,2005,0,,0,0,1,0,0,0,1,human_rights,failed
+390,Sudan,United States,1990,2023,0,,0,1,1,0,0,0,0,human_rights,ongoing
+391,Suriname,Netherlands,1990,1991,0,,0,0,1,0,0,0,0,democracy,nego_settlement
+392,Suriname,Venezuela,1990,1991,1,"exp_compl,imp_compl",0,0,0,0,1,0,0,"democracy,human_rights","success_part,success_part"
+393,Transjordan,Saudi Arabia,1990,1991,1,exp_part,0,0,1,0,1,0,0,policy_change,failed
+394,Transjordan,United States,1990,1993,0,,0,1,1,0,0,0,0,policy_change,success_total
+395,"Yemen, North","Saudi Arabia, Kuwait",1990,1991,0,,0,0,1,0,0,0,1,policy_change,success_total
+396,"Yemen, North",United Kingdom,1990,1990,0,,0,0,1,0,0,0,0,policy_change,success_total
+397,"Yemen, North",United States,1990,1991,0,,0,1,1,0,0,0,0,policy_change,success_total
+398,Cambodia,Paris Agreement Signatories,1991,1998,0,,1,1,0,0,0,0,1,end_war,success_part
+399,"Congo, Democratic Republic of the",Canada,1991,1998,0,,0,0,1,0,0,0,0,human_rights,failed
+400,"Congo, Democratic Republic of the",France,1991,1997,0,,0,0,1,0,0,0,0,"democracy,human_rights","success_part,success_part"
+401,Haiti,Canada,1991,1994,1,"exp_compl,imp_compl",0,0,0,0,0,0,0,democracy,success_total
+402,Haiti,France,1991,1994,0,,0,0,1,0,0,0,0,"human_rights,democracy","success_total,success_total"
+403,Haiti,Organization of American States,1991,1994,1,"exp_compl,imp_compl",1,1,1,0,0,0,1,democracy,success_total
+404,Haiti,United States,1991,1994,1,"exp_compl,imp_compl",1,1,1,0,0,0,0,democracy,success_total
+405,Haiti,Venezuela,1991,1994,1,exp_part,0,0,0,0,0,0,0,democracy,success_total
+406,Indonesia,Canada,1991,1991,0,,0,0,1,0,0,0,0,human_rights,nego_settlement
+407,Indonesia,Denmark,1991,1991,0,,0,0,1,0,0,0,0,human_rights,nego_settlement
+408,Indonesia,Netherlands,1991,1996,0,,0,0,1,0,0,0,0,human_rights,nego_settlement
+409,Iraq,UN,1991,2003,1,"exp_compl,imp_compl",1,1,1,0,1,0,1,prevent_war,failed
+410,Kenya,Denmark,1991,1993,0,,0,0,1,0,0,0,0,"other,democracy","nego_settlement,success_total"
+411,Myanmar,Australia,1991,2018,0,,1,0,1,1,0,0,0,democracy,success_total
+412,Myanmar,EEC,1991,1992,0,,1,0,1,0,0,0,1,human_rights,ongoing
+413,Soviet Union,EEC,1991,1991,0,,0,0,1,0,0,0,1,policy_change,failed
+414,Soviet Union,Japan,1991,1991,0,,0,0,1,0,0,0,0,policy_change,failed
+415,Soviet Union,United Kingdom,1991,1991,0,,0,0,1,0,0,0,0,policy_change,failed
+416,Soviet Union,United States,1991,1991,0,,0,0,1,0,0,0,0,democracy,success_total
+417,Thailand,United States,1991,1992,0,,0,1,1,0,0,0,0,democracy,success_total
+418,Turkmenistan,Soviet Union,1991,1991,1,exp_part,0,0,0,0,0,0,0,"human_rights,policy_change","ongoing,ongoing"
+419,Yugoslavia,EEC,1991,1992,0,,1,0,1,0,0,1,1,end_war,failed
+420,Yugoslavia,UN,1991,1996,0,,1,0,0,0,0,1,1,end_war,success_total
+421,Yugoslavia,United States,1991,1991,0,,0,0,1,0,0,1,0,human_rights,failed
+422,Yugoslavia,United States,1991,1996,0,,1,0,1,0,0,1,0,end_war,success_total
+423,Algeria,EU,1992,1994,1,exp_part,0,0,1,0,0,0,1,"human_rights,democracy,terrorism","success_part,success_part,failed"
+424,Algeria,United States,1992,2002,0,,1,1,0,0,0,0,0,"human_rights,democracy,terrorism","success_part,success_part,failed"
+425,Armenia,CSCE,1992,1994,0,,1,0,0,0,0,0,1,end_war,ongoing
+426,Azerbaijan,CSCE,1992,1994,0,,1,0,0,0,0,0,1,end_war,ongoing
+427,Azerbaijan,United States,1992,2002,0,,0,1,1,0,0,0,0,end_war,failed
+428,Cambodia,UN,1992,1992,1,"exp_part,imp_part",0,0,0,0,0,0,1,end_war,failed
+429,Cameroon,Germany,1992,1993,0,,0,0,1,0,0,0,0,human_rights,failed
+430,Cameroon,United States,1992,1998,1,imp_part,0,0,1,0,0,0,0,human_rights,failed
+431,China,EU,1992,2023,0,,1,1,0,0,0,0,1,human_rights,ongoing
+432,"Congo, Democratic Republic of the",EU,1992,1997,0,,0,0,1,0,0,0,1,"democracy,human_rights","success_part,success_part"
+433,"Congo, Democratic Republic of the",Japan,1992,1997,0,,0,0,1,0,0,0,0,democracy,failed
+434,Cuba,United States,1992,2023,0,,0,0,1,1,0,0,0,destab_regime,ongoing
+435,Equatorial Guinea,EU,1992,1993,0,,0,0,1,0,0,0,1,"democracy,human_rights","nego_settlement,failed"
+436,Equatorial Guinea,United States,1992,1997,0,,0,0,1,0,0,0,0,"human_rights,democracy","success_part,success_part"
+437,Estonia,Russia,1992,1992,0,,0,0,1,0,0,0,0,policy_change,failed
+438,Estonia,Russia,1992,1998,1,"exp_part,imp_part",0,0,0,0,0,0,0,policy_change,success_total
+439,Estonia,Russia,1992,1993,1,exp_part,0,0,0,0,0,0,0,policy_change,failed
+440,France,China,1992,1994,0,,0,0,0,0,1,0,0,other,success_part
+441,Indonesia,United States,1992,1995,0,,0,1,0,0,0,0,0,human_rights,nego_settlement
+442,Kenya,Canada,1992,1993,0,,0,0,1,0,0,0,0,"other,democracy","nego_settlement,success_total"
+443,Kenya,"France, Germany, United Kingdom",1992,1993,0,,0,0,1,0,0,0,1,"other,democracy","nego_settlement,success_total"
+444,Kenya,Japan,1992,1993,0,,0,0,1,0,0,0,0,"other,democracy","nego_settlement,success_total"
+445,Latvia,Russia,1992,1998,1,"exp_part,imp_part",0,0,0,0,0,0,0,human_rights,success_total
+446,Liberia,ECOWAS,1992,1997,1,imp_part,1,0,1,1,1,0,1,end_war,success_total
+447,Liberia,UN,1992,2001,0,,1,0,0,0,0,0,1,end_war,failed
+448,Libya,EU,1992,2004,0,,1,0,0,1,0,0,1,terrorism,nego_settlement
+449,Libya,UN,1992,2003,1,exp_part,1,1,0,1,1,0,1,policy_change,success_total
+450,Lithuania,Russia,1992,1992,1,exp_part,0,0,0,0,0,0,0,other,failed
+451,Malawi,Canada,1992,1993,0,,0,0,1,0,0,0,0,democracy,success_total
+452,Malawi,"Denmark, France, Germany, Portugal, Italy",1992,1993,0,,0,0,1,0,0,0,1,democracy,success_total
+453,Malawi,Japan,1992,1993,0,,0,0,1,0,0,0,0,democracy,success_total
+454,Malawi,United Kingdom,1992,1993,0,,0,0,1,0,0,0,0,democracy,success_total
+455,Malawi,United States,1992,1993,0,,0,0,1,0,0,0,0,democracy,success_total
+456,Myanmar,EU,1992,1996,0,,1,0,1,0,0,0,1,human_rights,failed
+457,Nicaragua,United States,1992,1995,0,,0,0,1,0,0,0,0,destab_regime,success_part
+458,Peru,Canada,1992,1992,0,,0,0,1,0,1,0,0,democracy,success_total
+459,Peru,"Germany, Spain",1992,1993,0,,0,0,1,0,0,0,1,democracy,success_total
+460,Peru,Japan,1992,1992,0,,0,0,1,0,0,0,0,democracy,success_total
+461,Peru,United States,1992,1994,0,,0,1,1,0,0,0,0,"democracy,human_rights","success_total,success_part"
+462,Peru,Venezuela,1992,1992,0,,0,0,0,0,1,0,0,democracy,success_total
+463,Somalia,UN,1992,2023,0,,1,0,0,0,0,0,1,"end_war,human_rights","ongoing,ongoing"
+464,Sudan,United States,1992,2017,0,,1,0,0,0,0,0,0,"territorial_conflict,end_war","failed,failed"
+465,Syria,EU,1992,1994,0,,1,0,0,0,0,0,1,terrorism,nego_settlement
+466,Togo,France,1992,1994,0,,0,1,0,0,0,0,0,"democracy,other","failed,failed"
+467,Togo,United States,1992,2001,0,,0,1,0,0,0,0,0,"democracy,human_rights","nego_settlement,nego_settlement"
+468,Turkmenistan,Russia,1992,1992,1,exp_part,0,0,0,0,0,0,0,"human_rights,policy_change","success_part,success_total"
+469,Yugoslavia,EU,1992,2006,0,,1,0,0,0,0,1,1,end_war,success_total
+470,Yugoslavia,UN,1992,1996,1,"exp_compl,imp_compl",0,1,1,1,1,1,1,end_war,success_total
+471,Angola,UN,1993,2002,1,exp_part,1,1,0,0,0,0,1,end_war,success_total
+472,Angola,United States,1993,2003,1,"exp_part,imp_part",1,0,1,0,0,0,0,"human_rights,democracy,end_war","success_part,success_part,success_total"
+473,Armenia,Turkey,1993,2023,1,"exp_compl,imp_compl",0,0,0,1,1,0,0,end_war,ongoing
+474,Cameroon,France,1993,1993,0,,0,0,1,0,0,0,0,other,success_total
+475,China,United States,1993,1994,1,exp_part,0,0,0,0,0,0,0,policy_change,success_total
+476,"Congo, Democratic Republic of the",Canada,1993,1997,0,,0,0,0,0,1,0,0,"human_rights,democracy","success_part,success_part"
+477,"Congo, Democratic Republic of the",EU,1993,1997,0,,1,0,0,1,0,0,1,"democracy,destab_regime","failed,success_total"
+478,"Congo, Democratic Republic of the",United States,1993,1997,0,,1,0,1,1,0,0,0,"destab_regime,democracy","success_total,success_part"
+479,Equatorial Guinea,EU,1993,2000,0,,0,0,1,0,0,0,1,"democracy,human_rights","nego_settlement,failed"
+480,Estonia,Russia,1993,1993,1,exp_part,0,0,0,0,0,0,0,policy_change,failed
+481,France,China,1993,1994,1,imp_part,0,0,0,0,0,0,0,prevent_war,success_part
+482,Guatemala,EU,1993,1993,0,,0,0,1,0,0,0,1,democracy,success_total
+483,Guatemala,Germany,1993,1993,0,,0,0,1,0,0,0,0,democracy,success_total
+484,Guatemala,Japan,1993,1993,0,,0,0,1,0,0,0,0,democracy,success_total
+485,Guatemala,United States,1993,1993,0,,0,1,1,0,0,0,0,democracy,success_total
+486,Haiti,UN,1993,1994,1,exp_part,1,1,1,0,0,0,1,democracy,success_total
+487,Haiti,United States,1993,1994,0,,0,0,1,1,0,0,0,democracy,success_total
+488,Libya,UN,1993,2003,1,exp_part,0,0,1,0,0,0,1,policy_change,success_total
+489,Nigeria,Canada,1993,1999,0,,0,1,0,0,0,0,0,democracy,success_total
+490,Nigeria,EU,1993,1998,0,,0,0,0,1,0,0,1,democracy,success_total
+491,Nigeria,EU,1993,1999,0,,0,1,0,0,0,0,1,democracy,success_total
+492,Nigeria,United Kingdom,1993,1999,0,,0,1,1,1,0,0,0,democracy,success_total
+493,Nigeria,United States,1993,1999,0,,1,1,1,0,1,0,0,democracy,success_total
+494,Nigeria,United States,1993,1998,0,,0,0,0,1,0,0,0,democracy,success_part
+495,Pakistan,United States,1993,1995,1,exp_part,0,0,0,0,0,0,0,policy_change,success_part
+496,Russia,Ukraine,1993,1996,1,imp_part,0,1,0,0,0,0,0,policy_change,nego_settlement
+497,Sudan,United States,1993,2020,0,,0,0,1,0,0,0,0,terrorism,success_part
+498,Togo,EU,1993,2007,0,,0,0,1,0,0,0,1,"democracy,human_rights","success_total,success_total"
+499,Togo,France,1993,2008,0,,0,0,1,0,0,0,0,"human_rights,democracy,end_war","success_total,success_total,success_total"
+500,Togo,Germany,1993,2011,0,,0,0,1,0,0,0,0,democracy,success_total
+501,Togo,Japan,1993,1996,0,,0,0,1,0,0,0,0,democracy,failed
+502,Turkmenistan,Russia,1993,1995,1,imp_part,0,0,0,0,0,0,0,policy_change,nego_settlement
+503,Ukraine,Russia,1993,1996,1,exp_part,0,0,0,0,0,0,0,territorial_conflict,nego_settlement
+504,Albania,Greece,1994,1994,0,,0,1,1,0,1,0,0,human_rights,success_total
+505,Bosnia and Herzegovina,FRY,1994,1995,1,"exp_compl,imp_compl",1,0,0,1,0,0,0,prevent_war,success_total
+506,"Gambia, The",EU,1994,1998,0,,0,1,1,0,0,0,1,democracy,success_part
+507,"Gambia, The",Japan,1994,1997,0,,0,0,1,0,0,0,0,democracy,success_part
+508,"Gambia, The",United Kingdom,1994,1995,0,,0,1,1,1,0,0,0,democracy,nego_settlement
+509,"Gambia, The",United States,1994,2002,0,,0,1,1,0,0,0,0,democracy,success_total
+510,Haiti,UN,1994,1994,0,,0,0,0,1,1,0,1,democracy,success_total
+511,Haiti,United States,1994,1994,0,,0,0,1,0,0,0,0,democracy,success_total
+512,Haiti,United States,1994,2023,0,,1,1,0,0,0,0,0,"democracy,policy_change","ongoing,ongoing"
+513,Indonesia,United States,1994,1997,0,,1,0,0,0,0,0,0,human_rights,failed
+514,Kazakhstan,Russia,1994,1995,1,"exp_part,imp_part",0,0,0,0,0,0,0,other,success_total
+515,Macedonia,Greece,1994,1995,1,"exp_compl,imp_compl",0,0,0,0,0,0,0,territorial_conflict,nego_settlement
+516,Nigeria,United States,1994,1999,0,,0,0,1,0,0,0,0,other,success_part
+517,Rwanda,EU,1994,2000,0,,0,0,1,0,0,0,1,human_rights,nego_settlement
+518,Rwanda,UN,1994,1996,0,,1,0,0,0,0,0,1,"end_war,human_rights","success_total,success_part"
+519,South Vietnam,United States,1994,1998,0,,0,0,1,0,0,0,0,other,success_total
+520,Sudan,"EU, Turkey, Croatia, Macedonia, Montenegro, Iceland, Albania, Serbia, Liechtenstein, Norway, Armenia",1994,2004,0,,1,0,0,0,0,0,1,end_war,failed
+521,Taiwan,United States,1994,1995,1,imp_part,0,0,0,0,0,0,0,policy_change,success_part
+522,Armenia,OSCE,1995,2023,0,,1,0,0,0,0,0,1,end_war,ongoing
+523,Australia,France,1995,1995,0,,0,0,1,0,0,0,0,policy_change,failed
+524,Azerbaijan,OSCE,1995,2023,0,,1,0,0,0,0,0,1,end_war,ongoing
+525,Burundi,United States,1995,1999,0,,0,0,1,0,0,0,0,end_war,nego_settlement
+526,Canada,Spain,1995,1995,0,,0,0,0,1,0,0,0,other,success_part
+527,China,Japan,1995,1997,0,,0,0,1,0,0,0,0,policy_change,success_total
+528,Colombia,United States,1995,2014,1,"exp_part,imp_part",0,0,1,0,0,0,0,other,success_total
+529,Ecuador,United States,1995,1998,0,,1,0,0,0,0,0,0,end_war,success_part
+530,Ecuador,United States,1995,1995,0,,1,1,0,0,0,0,0,end_war,success_part
+531,France,Australia,1995,1996,1,imp_part,0,1,0,0,0,0,0,prevent_war,success_total
+532,France,Denmark,1995,1995,1,imp_part,0,0,0,0,0,0,0,policy_change,success_total
+533,France,Japan,1995,1995,1,imp_part,0,0,0,0,0,0,0,prevent_war,success_part
+534,France,Kiribati,1995,1995,0,,0,0,0,0,1,0,0,prevent_war,success_part
+535,France,Nauru,1995,1997,0,,0,0,0,0,1,0,0,prevent_war,success_total
+536,France,New Zealand,1995,1996,1,imp_part,0,1,0,0,0,0,0,prevent_war,success_total
+537,France,"Norway, Sweden",1995,1995,1,imp_part,0,0,0,0,0,0,1,prevent_war,success_part
+538,France,United Kingdom,1995,1996,1,imp_part,0,0,0,0,0,0,0,policy_change,success_total
+539,France,United States,1995,1996,1,imp_part,0,0,0,0,0,0,0,policy_change,success_total
+540,Iran,United States,1995,2016,1,"exp_compl,imp_compl",0,0,0,0,0,0,0,"prevent_war,terrorism","success_total,failed"
+541,Lebanon,Israel,1995,1995,1,"exp_part,imp_part",0,0,0,1,1,0,0,"territorial_conflict,end_war","failed,failed"
+542,Nigeria,Commonwealth,1995,1999,0,,0,0,0,0,1,0,1,"democracy,human_rights","success_total,success_part"
+543,Nigeria,EU,1995,1999,0,,1,0,1,0,0,0,1,"democracy,human_rights","success_total,success_total"
+544,Peru,United States,1995,1998,0,,1,0,0,0,0,0,0,end_war,success_total
+545,Peru,United States,1995,1995,0,,1,1,0,0,0,0,0,end_war,nego_settlement
+546,Ukraine,Russia,1995,1996,1,imp_part,0,0,0,0,0,0,0,territorial_conflict,nego_settlement
+547,Afghanistan,"EU, Cyprus, Malta, Turkey, Croatia, Macedonia, Montenegro, Iceland, Albania, Serbia, Bosnia and Herzegovina, Liechtenstein, Norway, Ukraine, Moldova, Armenia, Georgia, Switzerland",1996,2001,0,,1,1,0,0,0,0,1,"terrorism,end_war","failed,failed"
+548,Afghanistan,UN,1996,2000,0,,1,0,0,0,0,0,1,"terrorism,end_war","failed,failed"
+549,Afghanistan,United States,1996,2002,0,,1,0,0,0,0,0,0,"terrorism,end_war","failed,success_part"
+550,Burundi,Belgium,1996,2005,0,,0,1,0,0,0,0,0,"end_war,democracy,human_rights","success_total,success_total,success_total"
+551,Burundi,"Congo, Democratic Republic of the, Eritrea, Ethiopia (excludes Eritrea), Kenya, Rwanda, Tanzania, Uganda, Zambia",1996,1999,1,"exp_compl,imp_compl",1,0,0,0,0,0,1,"democracy,human_rights","nego_settlement,nego_settlement"
+552,Burundi,EU,1996,1999,0,,0,0,1,0,0,0,1,end_war,nego_settlement
+553,Burundi,France,1996,2005,0,,0,1,0,0,0,0,0,"end_war,democracy,human_rights","success_total,success_total,success_total"
+554,Burundi,Organisation of African Unity,1996,1999,1,"exp_compl,imp_compl",0,0,1,0,0,0,1,"democracy,human_rights","nego_settlement,nego_settlement"
+555,Burundi,United States,1996,1999,0,,0,0,1,0,0,0,0,democracy,nego_settlement
+556,Central African Republic,United States,1996,1998,0,,0,0,0,0,1,0,0,democracy,success_part
+557,Colombia,United States,1996,1998,0,,0,0,1,0,0,0,0,other,failed
+558,Cuba,United States,1996,2023,0,,0,0,1,1,0,0,0,destab_regime,ongoing
+559,EU,Canada,1996,2015,1,imp_part,0,0,0,0,0,1,0,other,success_total
+560,Iran,United States,1996,2023,1,exp_part,0,0,0,0,0,0,0,terrorism,ongoing
+561,Libya,United States,1996,2023,1,exp_part,0,0,0,0,0,0,0,terrorism,ongoing
+562,Myanmar,"EU, Croatia, Macedonia, Montenegro, Iceland, Albania, Bosnia and Herzegovina, Liechtenstein, Norway, Moldova, Armenia",1996,2000,0,,1,0,1,1,0,0,1,human_rights,failed
+563,Niger,Canada,1996,1997,0,,0,0,1,0,0,0,0,democracy,success_part
+564,Niger,"Denmark, Germany",1996,1997,0,,0,0,1,0,0,0,1,democracy,success_part
+565,Niger,EU,1996,1996,0,,0,0,1,0,0,0,1,democracy,success_part
+566,Niger,France,1996,1996,0,,0,1,1,0,0,0,0,democracy,success_part
+567,Niger,United States,1996,2000,0,,0,1,1,0,0,0,0,democracy,success_total
+568,Nigeria,Commonwealth,1996,1999,0,,1,0,1,1,0,0,1,"democracy,human_rights","success_total,success_total"
+569,Rwanda,South Africa,1996,1997,0,,1,0,0,0,0,0,0,human_rights,failed
+570,Rwanda,UN,1996,2008,0,,1,1,0,0,0,0,1,"end_war,human_rights","success_total,success_part"
+571,Sudan,UN,1996,2001,0,,0,0,0,1,1,0,1,"other,terrorism","success_total,success_total"
+572,Zambia,"United Kingdom, Denmark, Sweden, Norway, Netherlands, Japan",1996,1998,0,,0,0,1,0,0,0,1,democracy,success_part
+573,Zambia,United States,1996,1998,0,,0,0,1,0,0,0,0,democracy,success_part
+574,Angola,UN,1997,2002,1,exp_part,0,0,0,1,1,0,1,end_war,success_total
+575,Belize,United States,1997,2004,1,imp_part,0,0,0,0,0,0,0,other,success_total
+576,Burundi,EU,1997,2001,0,,0,0,1,0,0,0,1,"end_war,democracy,human_rights","success_total,success_total,success_total"
+577,Cambodia,Australia,1997,1997,0,,0,1,1,0,0,0,0,democracy,success_part
+578,Cambodia,EU,1997,1999,0,,0,0,1,0,0,0,1,"human_rights,democracy","success_part,success_part"
+579,Cambodia,Germany,1997,1997,0,,0,0,1,0,0,0,0,democracy,success_part
+580,Cambodia,Japan,1997,1997,0,,0,0,1,0,0,0,0,"human_rights,democracy","success_part,success_part"
+581,Cambodia,Netherlands,1997,1997,0,,0,0,1,0,0,0,0,democracy,success_part
+582,Cambodia,Norway,1997,1997,0,,0,0,1,0,0,0,0,democracy,success_part
+583,Cambodia,United States,1997,2007,0,,0,0,1,0,0,0,0,human_rights,failed
+584,Congo (Brazzaville),EU,1997,2001,0,,0,0,1,0,0,0,1,end_war,success_part
+585,"Congo, Democratic Republic of the",EU,1997,2003,0,,1,0,0,0,0,0,1,democracy,failed
+586,EU,Turkey,1997,1998,0,,0,0,0,0,1,1,0,policy_change,success_total
+587,Iraq,UN,1997,1998,0,,0,0,0,1,0,0,1,policy_change,success_total
+588,Iraq,United States,1997,2009,0,,0,0,0,1,0,0,0,"terrorism,end_war,prevent_war","success_total,success_total,success_total"
+589,Myanmar,United States,1997,2016,0,,0,0,1,1,0,0,0,human_rights,success_total
+590,Sierra Leone,Commonwealth,1997,1998,0,,0,0,0,0,1,0,1,democracy,success_total
+591,Sierra Leone,ECOWAS,1997,2003,1,"exp_compl,imp_compl",0,0,1,1,0,0,1,end_war,success_total
+592,Sierra Leone,UN,1997,2010,0,,1,0,0,1,0,0,1,"end_war,prevent_war","success_total,success_total"
+593,Sierra Leone,UN,1997,1998,1,exp_part,0,0,0,0,0,0,1,"democracy,human_rights,end_war","success_part,success_part,failed"
+594,Sudan,United States,1997,2017,1,"exp_compl,imp_compl",0,0,1,0,0,0,0,"terrorism,human_rights","success_part,success_part"
+595,Angola,UN,1998,2002,1,imp_part,0,0,1,0,0,0,1,end_war,success_total
+596,Belarus,"EU, Bulgaria, Cyprus, Czech Republic, Estonia, Hungary, Iceland, Norway, Romania, Slovakia, Slovenia",1998,1999,0,,0,0,0,1,0,0,1,policy_change,success_part
+597,Belarus,United States,1998,1999,0,,0,0,0,0,1,0,0,policy_change,success_part
+598,Cote d'Ivoire,EU,1998,2002,0,,0,0,1,0,0,0,1,democracy,success_part
+599,ECOWAS,ECOWAS,1998,2023,0,,1,0,0,0,0,1,1,prevent_war,ongoing
+600,Ethiopia (excludes Eritrea),Eritrea,1998,2018,0,,0,0,0,1,1,0,0,end_war,success_total
+601,France,United States,1998,2017,1,imp_part,0,0,0,0,0,0,0,other,success_total
+602,India,Australia,1998,2001,0,,0,1,1,0,0,0,0,prevent_war,failed
+603,India,Canada,1998,2001,0,,1,0,0,0,0,0,0,prevent_war,failed
+604,India,"Denmark, Netherlands,  Sweden, Germany",1998,2001,0,,0,0,1,0,0,0,1,prevent_war,failed
+605,India,G8,1998,1999,0,,0,0,1,0,0,0,1,prevent_war,failed
+606,India,Japan,1998,2001,0,,0,0,1,0,0,0,0,prevent_war,failed
+607,India,United States,1998,2001,1,exp_part,1,1,1,0,0,0,0,prevent_war,failed
+608,Ireland,United States,1998,2014,1,imp_part,0,0,0,0,0,0,0,other,success_total
+609,Italy,Turkey,1998,1999,1,imp_part,0,0,0,0,0,0,0,other,success_total
+610,Kyrgyzstan,Uzbekistan,1998,1998,1,exp_part,0,0,0,0,0,0,0,other,failed
+611,Pakistan,Australia,1998,2001,0,,0,1,1,0,0,0,0,prevent_war,failed
+612,Pakistan,"Canada, Germany",1998,2001,0,,1,0,1,0,0,0,1,prevent_war,failed
+613,Pakistan,G8,1998,1999,0,,0,0,1,0,0,0,1,prevent_war,failed
+614,Pakistan,Japan,1998,2001,0,,0,0,1,0,0,0,0,prevent_war,failed
+615,Pakistan,Netherlands,1998,2008,0,,1,0,1,0,0,0,0,prevent_war,failed
+616,Pakistan,United States,1998,2001,0,,1,1,1,0,0,0,0,prevent_war,failed
+617,Sierra Leone,EU,1998,2010,0,,1,0,0,1,0,0,1,"end_war,prevent_war","success_total,success_total"
+618,Suriname,Netherlands,1998,2000,0,,0,0,1,0,0,0,0,"democracy,human_rights","success_total,success_total"
+619,Yugoslavia,EU,1998,2001,1,"exp_part,imp_part",0,0,1,1,0,1,1,"end_war,human_rights,terrorism","success_total,success_total,success_total"
+620,Yugoslavia,UN,1998,2001,0,,1,1,0,0,0,1,1,"end_war,human_rights","success_total,success_total"
+621,Yugoslavia,United States,1998,2001,0,,0,0,1,0,0,1,0,human_rights,success_total
+622,Afghanistan,"EU, Turkey, Croatia, Macedonia, Montenegro, Iceland, Albania, Bosnia and Herzegovina, Serbia, Liechtenstein, Norway, Ukraine, Moldova, Armenia, Georgia",1999,2001,0,,0,0,1,0,1,0,1,"terrorism,end_war","failed,failed"
+623,Afghanistan,UN,1999,2002,0,,0,0,1,0,1,0,1,"terrorism,human_rights","failed,failed"
+624,Afghanistan,United States,1999,2002,1,"exp_part,imp_part",0,0,1,0,1,0,0,terrorism,success_part
+625,Eritrea,EU,1999,2001,0,,1,0,0,0,0,0,1,end_war,nego_settlement
+626,Ethiopia (excludes Eritrea),EU,1999,2001,0,,1,0,0,0,0,0,1,end_war,nego_settlement
+627,Indonesia,EU,1999,2000,1,exp_part,1,1,0,0,0,0,1,human_rights,success_part
+628,Indonesia,United States,1999,2010,0,,0,1,0,0,0,0,0,"human_rights,democracy","failed,failed"
+629,Indonesia,United States,1999,2005,0,,1,1,0,0,0,0,0,human_rights,failed
+630,Kyrgyzstan,Uzbekistan,1999,2000,1,exp_part,0,0,0,0,0,0,0,other,failed
+631,Niger,France,1999,2000,0,,0,0,1,0,0,0,0,democracy,success_total
+632,Pakistan,Commonwealth,1999,2004,0,,0,0,0,0,1,0,1,democracy,success_total
+633,Pakistan,South Africa,1999,2001,0,,1,0,0,0,0,0,0,"democracy,human_rights","success_total,success_total"
+634,Pakistan,United Kingdom,1999,2000,0,,1,0,1,0,0,0,0,democracy,failed
+635,Pakistan,United States,1999,2001,0,,0,0,1,0,0,0,0,democracy,failed
+636,Yugoslavia,EU,1999,2000,1,exp_part,0,0,0,0,0,1,1,"end_war,human_rights,terrorism","success_part,success_part,success_part"
+637,Yugoslavia,Switzerland,1999,2001,0,,1,1,1,0,0,1,0,end_war,success_total
+638,Yugoslavia,United States,1999,2000,1,exp_part,0,0,0,0,0,1,0,human_rights,success_part
+639,Afghanistan,UN,2000,2002,1,exp_part,1,1,1,1,1,0,1,terrorism,failed
+640,Austria,EU,2000,2000,0,,0,0,0,0,1,0,1,destab_regime,failed
+641,Austria,United States,2000,2000,0,,0,0,0,0,1,0,0,destab_regime,failed
+642,Cote d'Ivoire,Canada,2000,2001,0,,0,0,1,0,0,0,0,democracy,success_part
+643,Cote d'Ivoire,France,2000,2002,0,,0,1,1,0,0,0,0,democracy,success_part
+644,Cote d'Ivoire,United States,2000,2002,0,,1,0,1,0,0,0,0,democracy,success_part
+645,Eritrea,UN,2000,2001,0,,1,1,0,0,0,0,1,end_war,nego_settlement
+646,Ethiopia (excludes Eritrea),UN,2000,2001,0,,1,1,0,0,0,0,1,end_war,nego_settlement
+647,Fiji,Australia,2000,2001,0,,0,1,1,1,0,0,0,democracy,success_part
+648,Fiji,Australia,2000,2000,1,exp_compl,0,0,0,1,1,0,0,democracy,success_part
+649,Fiji,Commonwealth,2000,2001,0,,0,0,0,0,1,0,1,democracy,success_total
+650,Fiji,EU,2000,2003,0,,0,0,1,0,0,0,1,democracy,success_total
+651,Fiji,New Zealand,2000,2000,1,exp_compl,0,0,0,1,1,0,0,democracy,success_part
+652,Fiji,New Zealand,2000,2001,0,,0,1,1,1,0,0,0,democracy,success_total
+653,Fiji,United Kingdom,2000,2003,1,exp_part,1,0,0,0,0,0,0,democracy,success_total
+654,Fiji,United Kingdom,2000,2001,0,,0,1,1,0,0,0,0,democracy,success_part
+655,Fiji,United States,2000,2014,0,,1,1,1,1,1,0,0,democracy,success_total
+656,Kyrgyzstan,Uzbekistan,2000,2000,1,exp_part,0,0,0,0,0,0,0,other,failed
+657,Myanmar,"EU, Croatia, Macedonia, Montenegro, Iceland, Albania, Bosnia and Herzegovina, Liechtenstein, Norway, Moldova, Armenia",2000,2003,1,exp_part,1,1,1,1,0,0,1,human_rights,failed
+658,Myanmar,Switzerland,2000,2006,1,exp_part,1,1,0,1,0,0,0,human_rights,failed
+659,Sierra Leone,UN,2000,2003,1,exp_part,0,0,0,0,0,0,1,end_war,success_total
+660,Yugoslavia,EU,2000,2014,0,,0,0,1,1,0,1,1,democracy,success_total
+661,Afghanistan,"EU, Cyprus, Malta, Turkey, Croatia, Macedonia, Montenegro, Iceland, Albania, Serbia, Bosnia and Herzegovina, Liechtenstein, Norway, Ukraine, Moldova, Armenia, Georgia, Switzerland",2001,2002,1,exp_part,1,1,1,1,1,0,1,"terrorism,end_war,other","failed,nego_settlement,failed"
+662,Antigua and Barbuda,United States,2001,2003,0,,0,0,1,0,0,0,0,other,success_total
+663,Balkans,United States,2001,2023,0,,0,0,1,0,0,1,0,prevent_war,ongoing
+664,Belize,EU,2001,2004,1,imp_part,0,0,0,0,0,0,1,other,success_total
+665,Brazil,NAFTA,2001,2001,1,imp_part,0,0,0,0,0,0,1,other,failed
+666,Costa Rica,United States,2001,2006,0,,0,1,0,0,0,0,0,other,success_total
+667,Haiti,EU,2001,2005,0,,0,0,1,0,0,0,1,democracy,failed
+668,Haiti,United States,2001,2004,0,,0,0,1,0,0,0,0,human_rights,success_total
+669,Kyrgyzstan,Uzbekistan,2001,2001,1,exp_part,0,0,0,0,0,0,0,other,failed
+670,Liberia,EU,2001,2016,1,imp_part,1,1,0,1,0,0,1,end_war,success_total
+671,Liberia,UN,2001,2003,0,,1,1,0,1,0,0,1,end_war,success_total
+672,Liberia,UN,2001,2007,1,imp_part,0,0,0,0,0,0,1,end_war,success_total
+673,Malawi,"EU, United States, Norway",2001,2003,0,,0,0,1,0,0,0,1,policy_change,success_total
+674,Pakistan,India,2001,2002,0,,0,0,0,0,1,0,0,other,nego_settlement
+675,Sierra Leone,Liberia,2001,2003,1,imp_part,1,1,1,1,0,0,0,end_war,success_total
+676,Yugoslavia,Switzerland,2001,2016,0,,0,0,1,0,0,1,0,democracy,success_total
+677,Afghanistan,"EU, Cyprus, Czech Republic, Estonia, Hungary, Latvia, Lithuania, Malta, Poland, Slovakia,  Slovenia, Bulgaria, Romania, Turkey, Iceland, Liechtenstein, Norway",2002,2023,0,,1,1,1,1,1,0,1,"terrorism,end_war","ongoing,ongoing"
+678,Afghanistan,UN,2002,2023,0,,1,1,1,1,1,0,1,"terrorism,end_war","ongoing,ongoing"
+679,Belarus,"Belgium, France, Germany, Italy, Luxembourg, Netherlands, Denmark, Ireland, United Kingdom, Greece, Spain, Austria, Finland, Sweden",2002,2003,0,,0,0,0,1,0,0,1,"human_rights,democracy","failed,failed"
+680,Belarus,United States,2002,2003,0,,0,0,0,1,0,0,0,"human_rights,democracy","failed,failed"
+681,Central African Republic,United States,2002,2005,0,,0,0,0,0,1,0,0,democracy,success_total
+682,Colombia,EU,2002,2016,0,,0,0,1,0,0,0,1,terrorism,success_total
+683,"Congo, Democratic Republic of the",EU,2002,2005,0,,1,1,0,1,0,0,1,end_war,failed
+684,Guinea,EU,2002,2006,0,,0,0,1,0,0,0,1,human_rights,success_part
+685,ICC Rome Statute Signatories,United States,2002,2008,0,,0,1,0,0,0,1,0,policy_change,failed
+686,"Korea, North",United States,2002,2006,1,exp_part,0,0,0,0,0,0,0,prevent_war,failed
+687,Malawi,Sweden,2002,2005,0,,0,0,1,0,0,0,0,other,success_total
+688,Philippines,"EU, United States",2002,2023,0,,0,0,1,0,0,0,1,terrorism,ongoing
+689,Somalia,"EU, Turkey, Croatia, Macedonia, Montenegro, Iceland, Albania, Bosnia and Herzegovina, Serbia, Liechtenstein, Norway, Ukraine, Moldova, Armenia",2002,2009,0,,1,0,0,0,0,0,1,"end_war,human_rights","failed,failed"
+690,Terrorist Organizations (Taliban and Al-Qaeda),UN,2002,2011,0,,1,1,1,1,0,1,1,terrorism,failed
+691,Zimbabwe,Australia,2002,2023,0,,1,1,1,1,0,0,0,democracy,ongoing
+692,Zimbabwe,Commonwealth,2002,2003,0,,0,0,0,0,1,0,1,democracy,failed
+693,Zimbabwe,EU,2002,2015,0,,0,0,1,0,0,0,1,"democracy,human_rights","success_part,success_part"
+694,Zimbabwe,"EU, Turkey, Croatia, Macedonia, Montenegro, Iceland, Albania, Bosnia and Herzegovina, Liechtenstein, Norway, Ukraine, Moldova, Armenia, Georgia, Serbia",2002,2023,1,exp_part,1,1,1,1,0,0,1,"democracy,human_rights","ongoing,ongoing"
+695,Zimbabwe,Switzerland,2002,2023,1,exp_part,1,1,1,1,0,0,0,"democracy,human_rights","ongoing,ongoing"
+696,Zimbabwe,United Kingdom,2002,2009,0,,0,0,1,0,0,0,0,"democracy,human_rights","success_part,success_part"
+697,Zimbabwe,United Kingdom,2002,2023,1,exp_part,0,1,0,0,0,0,0,"democracy,human_rights","ongoing,ongoing"
+698,Argentina,Iran,2003,2007,1,exp_part,0,0,0,0,0,0,0,terrorism,success_total
+699,Benin,United States,2003,2005,0,,0,1,0,0,0,0,0,policy_change,success_total
+700,Canada,China,2003,2016,1,imp_part,0,0,0,0,0,0,0,other,success_total
+701,Canada,Japan,2003,2006,1,imp_part,0,0,0,0,0,0,0,other,failed
+702,Canada,Mexico,2003,2016,1,imp_part,0,0,0,0,0,0,0,other,success_total
+703,Canada,United States,2003,2005,1,imp_part,0,0,0,0,0,0,0,other,failed
+704,Central African Republic,African Union,2003,2005,0,,0,0,0,0,1,0,1,human_rights,success_total
+705,Central African Republic,EU,2003,2005,0,,0,0,1,0,0,0,1,human_rights,success_total
+706,Central African Republic,United States,2003,2005,0,,0,0,1,0,0,0,0,human_rights,success_total
+707,Colombia,United States,2003,2003,0,,0,1,0,0,0,0,0,other,success_total
+708,"Congo, Democratic Republic of the",UN,2003,2022,0,,1,1,0,0,0,0,1,end_war,success_part
+709,Costa Rica,United States,2003,2016,0,,0,1,0,0,0,0,0,other,success_total
+710,Croatia,United States,2003,2008,0,,0,1,0,0,0,0,0,other,failed
+711,Croatia,United States,2003,2006,0,,0,1,0,0,0,0,0,other,failed
+712,Dominica,United States,2003,2004,0,,0,1,0,0,0,0,0,other,success_total
+713,Fiji,United States,2003,2003,0,,0,1,0,0,0,0,0,other,success_total
+714,France,United States,2003,2003,1,imp_part,0,0,0,0,0,0,0,policy_change,success_total
+715,Guinea,United States,2003,2004,0,,0,1,0,0,0,0,0,other,success_total
+716,Guinea-Bissau,United States,2003,2004,0,,0,1,0,0,0,0,0,democracy,success_total
+717,Iraq,EU,2003,2004,0,,1,0,0,0,0,0,1,prevent_war,success_total
+718,Iraq,UN,2003,2004,0,,1,0,1,0,0,0,1,prevent_war,success_total
+719,Lebanon,Libya,2003,2012,0,,0,0,0,0,1,0,0,other,failed
+720,Lesotho,United States,2003,2006,0,,0,1,0,0,0,0,0,other,success_total
+721,Liberia,UN,2003,2015,0,,1,1,0,1,0,0,1,prevent_war,success_total
+722,Liberia,UN,2003,2006,1,imp_part,0,0,0,0,0,0,1,"policy_change,human_rights,prevent_war","success_part,success_part,success_part"
+723,Malawi,United States,2003,2003,0,,0,1,0,0,0,0,0,other,success_total
+724,Moldova,"EU, Turkey, Croatia, Macedonia, Montenegro, Albania, Bosnia and Herzegovina, Serbia, Liechtenstein, Norway, Armenia, Georgia, Azerbaijan",2003,2023,0,,0,0,0,1,0,0,1,policy_change,ongoing
+725,Myanmar,"EU, Croatia, Macedonia, Montenegro, Iceland, Albania, Bosnia and Herzegovina, Liechtenstein, Norway, Moldova, Armenia",2003,2010,1,exp_part,1,1,1,1,0,0,1,human_rights,failed
+726,Myanmar,United States,2003,2016,1,exp_part,0,0,1,0,0,0,0,human_rights,success_total
+727,Nigeria,United States,2003,2023,0,,0,1,0,0,0,0,0,other,ongoing
+728,United States,Brazil,2003,2016,1,imp_part,0,0,0,0,0,0,0,other,success_total
+729,United States,Canada,2003,2006,1,imp_part,0,0,0,0,0,0,0,other,success_total
+730,United States,Japan,2003,2013,1,imp_part,0,0,0,0,0,0,0,other,success_total
+731,Uzbekistan,United States,2003,2012,0,,0,1,0,0,0,0,0,human_rights,failed
+732,Yugoslavia,EU,2003,2014,0,,0,0,1,0,0,1,1,democracy,success_total
+733,Zimbabwe,United States,2003,2023,0,,0,0,1,0,0,0,0,"democracy,human_rights","ongoing,ongoing"
+734,Belarus,United States,2004,2006,0,,0,0,1,0,0,0,0,"human_rights,democracy","failed,failed"
+735,Cote d'Ivoire,UN,2004,2016,0,,1,1,1,1,0,0,1,"end_war,human_rights","success_total,success_total"
+736,Iraq,EU,2004,2023,0,,1,0,0,0,0,0,1,"terrorism,end_war,prevent_war","ongoing,ongoing,ongoing"
+737,Iraq,UN,2004,2010,0,,1,0,1,0,0,0,1,prevent_war,success_total
+738,Liberia,UN,2004,2015,0,,0,0,1,0,0,0,1,"prevent_war,democracy","success_part,success_total"
+739,Liberia,United States,2004,2015,1,"exp_part,imp_part",0,0,1,0,0,0,0,prevent_war,success_total
+740,Sudan,EU,2004,2005,0,,1,1,0,0,0,0,1,end_war,failed
+741,Sudan,UN,2004,2023,0,,1,1,0,0,0,0,1,"human_rights,end_war","ongoing,ongoing"
+742,Syria,United States,2004,2023,1,"exp_part,imp_part",0,0,1,0,1,0,0,"terrorism,end_war,prevent_war","ongoing,ongoing,ongoing"
+743,"Thailand, South Vietnam",Cambodia,2004,2007,1,imp_part,0,0,0,0,0,1,0,other,success_total
+744,"Congo, Democratic Republic of the",EU,2005,2023,0,,1,1,1,1,0,0,1,end_war,ongoing
+745,"Congo, Democratic Republic of the",UN,2005,2023,0,,0,0,1,1,0,0,1,end_war,ongoing
+746,Cote d'Ivoire,Canada,2005,2017,0,,1,1,1,1,0,0,0,end_war,success_total
+747,Cote d'Ivoire,"EU, Turkey, Croatia, Macedonia, Montenegro, Iceland, Albania, Bosnia and Herzegovina, Serbia, Liechtenstein, Norway, Ukraine, Moldova, Armenia, Georgia",2005,2016,1,exp_part,1,0,1,1,0,0,1,"end_war,human_rights","success_total,success_total"
+748,Cote d'Ivoire,UN,2005,2014,1,"exp_part,imp_part",0,0,0,0,0,0,1,"end_war,human_rights","success_part,success_part"
+749,Kyrgyzstan,Uzbekistan,2005,2006,1,exp_part,0,0,0,0,0,0,0,other,failed
+750,Lebanon,UN,2005,2007,0,,0,0,1,1,0,0,1,terrorism,failed
+751,Mauritania,African Union,2005,2007,0,,0,0,0,0,1,0,1,democracy,success_total
+752,Mauritania,EU,2005,2006,0,,0,0,1,0,0,0,1,"democracy,human_rights","success_total,success_total"
+753,Nepal,India,2005,2005,0,,1,1,0,0,0,0,0,"democracy,human_rights","success_part,success_part"
+754,Nepal,United Kingdom,2005,2005,0,,1,1,0,0,0,0,0,"democracy,human_rights","success_part,success_part"
+755,Nepal,United States,2005,2005,0,,1,1,0,0,0,0,0,"democracy,human_rights","success_part,success_part"
+756,Sudan,"EU, Turkey, Croatia, Macedonia, Montenegro, Iceland, Albania, Serbia, Liechtenstein, Norway, Armenia",2005,2023,0,,1,1,1,1,0,0,1,"end_war,human_rights","ongoing,ongoing"
+757,Sudan,UN,2005,2023,0,,0,0,1,1,0,0,1,"human_rights,end_war","ongoing,ongoing"
+758,Syria,UN,2005,2007,0,,0,0,1,1,0,0,1,"terrorism,policy_change","failed,success_total"
+759,Togo,African Union,2005,2005,0,,1,0,0,0,1,0,1,democracy,success_total
+760,Togo,ECOWAS,2005,2005,0,,1,0,0,1,1,0,1,democracy,success_total
+761,Togo,Nigeria,2005,2005,0,,0,0,0,0,1,0,0,democracy,nego_settlement
+762,Uganda,"United Kingdom, Norway, Ireland, Netherlands, Sweden",2005,2007,0,,0,0,1,0,0,0,1,human_rights,success_part
+763,Uzbekistan,EU,2005,2009,1,exp_part,1,1,0,1,0,0,1,human_rights,success_part
+764,Belarus,Canada,2006,2016,1,exp_part,0,0,0,0,0,0,0,human_rights,success_total
+765,Belarus,"EU, Croatia, Macedonia, Montenegro, Bosnia and Herzegovina, Iceland, Albania, Serbia, Liechtenstein, Norway",2006,2011,0,,0,0,1,1,0,0,1,"democracy,human_rights","failed,failed"
+766,Belarus,Switzerland,2006,2016,0,,0,0,1,1,0,0,0,"democracy,human_rights","success_total,success_part"
+767,Belarus,United States,2006,2023,1,"exp_part,imp_part",0,0,1,1,0,0,0,"democracy,human_rights","ongoing,ongoing"
+768,"Congo, Democratic Republic of the",United States,2006,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,"end_war,democracy,human_rights","ongoing,ongoing,ongoing"
+769,Cote d'Ivoire,United States,2006,2017,0,,0,0,1,0,0,0,0,"end_war,human_rights","success_total,success_total"
+770,Fiji,Australia,2006,2014,0,,0,1,0,1,0,0,0,democracy,success_total
+771,Fiji,Commonwealth,2006,2014,0,,0,0,0,0,1,0,1,democracy,success_total
+772,Fiji,New Zealand,2006,2014,0,,0,1,1,1,0,0,0,democracy,success_part
+773,Fiji,United States,2006,2014,0,,0,1,1,0,0,0,0,democracy,success_total
+774,Georgia,Russia,2006,2013,1,imp_part,0,0,0,0,0,0,0,"other,policy_change","success_total,success_total"
+775,Georgia,Russia,2006,2011,1,"exp_compl,imp_compl",0,0,0,1,1,0,0,"other,policy_change","nego_settlement,nego_settlement"
+776,Iran,Japan,2006,2016,1,imp_part,0,0,0,0,0,0,0,prevent_war,success_part
+777,Iran,UN,2006,2016,1,"exp_part,imp_part",0,0,1,1,0,0,1,prevent_war,success_total
+778,"Korea, North",Australia,2006,2023,1,"exp_part,imp_part",1,1,1,1,1,0,0,prevent_war,ongoing
+779,"Korea, North",EU,2006,2023,1,exp_part,1,1,1,1,0,0,1,prevent_war,ongoing
+780,"Korea, North",Japan,2006,2023,1,imp_compl,0,0,1,0,1,0,0,prevent_war,ongoing
+781,"Korea, North",Japan,2006,2008,0,,0,0,0,1,0,0,0,prevent_war,failed
+782,"Korea, North",UN,2006,2023,1,"exp_part,imp_part",1,1,1,1,1,0,1,prevent_war,ongoing
+783,Lebanon,EU,2006,2023,0,,1,1,0,0,0,0,1,end_war,ongoing
+784,Lebanon,Israel,2006,2006,1,"exp_part,imp_part",0,0,0,1,1,0,0,"territorial_conflict,end_war","failed,failed"
+785,Lebanon,UN,2006,2023,0,,1,1,0,0,0,0,1,end_war,ongoing
+786,Malagasy Republic,United States,2006,2014,0,,0,0,1,0,0,0,0,"democracy,human_rights,end_war","success_total,success_total,success_total"
+787,Moldova,Russia,2006,2007,1,imp_part,0,0,0,0,0,0,0,"other,policy_change","failed,failed"
+788,Myanmar,Switzerland,2006,2012,1,exp_part,1,1,1,1,0,0,0,human_rights,success_part
+789,Palestine,EU,2006,2007,0,,0,0,1,0,0,0,1,"policy_change,prevent_war,terrorism","success_total,nego_settlement,failed"
+790,Palestine,United States,2006,2007,0,,0,0,1,0,0,0,0,"policy_change,prevent_war,terrorism","success_total,nego_settlement,failed"
+791,Sudan,United States,2006,2017,1,exp_part,0,0,1,0,0,0,0,"territorial_conflict,end_war","success_part,success_part"
+792,Sudan,United States,2006,2023,1,"exp_part,imp_part",0,0,1,1,0,0,0,"human_rights,end_war","ongoing,ongoing"
+793,Syria,United States,2006,2023,0,,0,0,1,0,0,0,0,terrorism,ongoing
+794,Thailand,United States,2006,2008,0,,0,1,0,0,0,0,0,"democracy,human_rights","success_total,success_total"
+795,Ukraine,Russia,2006,2006,1,exp_part,0,0,0,0,0,0,0,policy_change,failed
+796,Uzbekistan,Switzerland,2006,2009,1,exp_part,1,1,0,1,0,0,0,human_rights,success_part
+797,Venezuela,United States,2006,2023,0,,1,0,0,0,0,0,0,policy_change,ongoing
+798,Afghanistan,New Zealand,2007,2023,0,,1,1,0,1,0,0,0,"terrorism,end_war","ongoing,ongoing"
+799,Eritrea,United States,2007,2023,0,,0,0,0,1,1,0,0,policy_change,ongoing
+800,Fiji,EU,2007,2015,1,exp_part,0,0,1,0,0,0,1,democracy,success_part
+801,Iran,EU,2007,2016,0,,1,0,0,0,0,0,1,prevent_war,success_total
+802,Iran,UN,2007,2016,0,,1,0,0,0,0,0,1,prevent_war,success_total
+803,Lebanon,United States,2007,2023,0,,0,0,1,0,0,0,0,democracy,ongoing
+804,Myanmar,Canada,2007,2012,1,"exp_compl,imp_compl",1,0,1,0,1,0,0,human_rights,success_part
+805,Myanmar,Japan,2007,2008,0,,0,0,1,0,0,0,0,"democracy,human_rights","failed,failed"
+806,Myanmar,United States,2007,2016,1,"exp_part,imp_part",0,0,1,0,0,0,0,human_rights,success_part
+807,Pakistan,Commonwealth,2007,2008,0,,0,0,0,0,1,0,1,democracy,success_total
+808,Pakistan,Netherlands,2007,2008,0,,0,0,1,0,0,0,0,"democracy,human_rights","success_total,success_total"
+809,South Vietnam,United States,2007,2016,0,,1,0,0,0,0,0,0,"prevent_war,human_rights","nego_settlement,nego_settlement"
+810,Sudan,United States,2007,2017,1,"exp_part,imp_part",0,0,1,0,0,0,0,"territorial_conflict,end_war","success_part,success_part"
+811,Bulgaria,EU,2008,2009,0,,0,0,1,0,0,0,1,other,success_part
+812,Guinea,EU,2008,2013,0,,0,0,1,0,0,0,1,human_rights,success_total
+813,Iran,Australia,2008,2016,1,"exp_part,imp_part",1,1,1,1,0,0,0,prevent_war,success_total
+814,Iran,UN,2008,2016,0,,0,0,0,1,0,0,1,prevent_war,success_total
+815,"Korea, North",United States,2008,2023,1,exp_part,0,0,1,0,0,0,0,prevent_war,ongoing
+816,Mauritania,African Union,2008,2009,0,,0,0,0,0,1,0,1,democracy,success_total
+817,Mauritania,United States,2008,2009,0,,0,0,1,1,0,0,0,"democracy,human_rights","success_total,success_total"
+818,Myanmar,United States,2008,2016,1,imp_part,0,0,0,0,0,0,0,human_rights,success_total
+819,Russia,Georgia,2008,2011,0,,0,0,0,0,1,0,0,end_war,success_total
+820,Somalia,UN,2008,2023,0,,1,1,1,1,0,0,1,"end_war,human_rights,prevent_war","ongoing,ongoing,ongoing"
+821,Venezuela,United States,2008,2023,0,,0,0,1,0,0,0,0,terrorism,ongoing
+822,Zimbabwe,Canada,2008,2023,0,,1,1,1,0,1,0,0,democracy,ongoing
+823,Benin,EU,2009,2017,0,,0,0,0,0,1,0,1,other,success_total
+824,Eritrea,Russia,2009,2018,1,exp_part,0,1,0,0,0,0,0,end_war,success_total
+825,Eritrea,UN,2009,2018,0,,1,1,1,1,0,0,1,end_war,success_total
+826,Fiji,"Australia, New Zealand",2009,2012,0,,0,0,0,1,1,0,1,"human_rights,democracy","success_part,success_part"
+827,Fiji,Pacific Islands Forum,2009,2014,0,,0,0,0,0,1,0,1,democracy,success_total
+828,Georgia,Russia,2009,2011,1,exp_part,1,0,0,0,0,0,0,prevent_war,success_part
+829,Guinea,African Union,2009,2010,0,,0,0,1,1,1,0,1,democracy,success_total
+830,Guinea,ECOWAS,2009,2011,0,,1,0,0,0,1,0,1,"democracy,human_rights","success_total,success_total"
+831,Guinea,"EU, Turkey, Croatia, Macedonia, Montenegro, Albania, Bosnia and Herzegovina, Serbia, Liechtenstein, Norway, Ukraine, Moldova, Armenia, Georgia, Iceland",2009,2014,1,exp_part,1,1,1,1,0,0,1,human_rights,success_total
+832,Guinea,Switzerland,2009,2010,0,,1,0,0,1,0,0,0,human_rights,failed
+833,Guinea,United States,2009,2010,0,,0,0,1,0,0,0,0,democracy,success_total
+834,Guinea,United States,2009,2011,0,,0,0,1,1,0,0,0,democracy,success_total
+835,Honduras,EU,2009,2009,0,,0,0,1,0,1,0,1,democracy,success_part
+836,Honduras,Organization of American States,2009,2011,0,,0,0,0,0,1,0,1,democracy,success_total
+837,Honduras,United States,2009,2009,0,,0,1,1,1,0,0,0,democracy,success_part
+838,Honduras,Venezuela,2009,2009,1,exp_part,0,0,0,0,0,0,0,human_rights,nego_settlement
+839,"Korea, North",Japan,2009,2023,1,exp_compl,0,0,0,0,0,0,0,prevent_war,ongoing
+840,Malagasy Republic,African Union,2009,2014,0,,0,0,0,0,1,0,1,democracy,success_total
+841,Malagasy Republic,SADC,2009,2014,0,,0,0,0,0,1,0,1,democracy,success_total
+842,Mauritania,African Union,2009,2009,0,,0,0,1,1,0,0,1,"democracy,human_rights","success_total,success_total"
+843,Mauritania,EU,2009,2009,0,,0,0,1,0,0,0,1,"democracy,human_rights","success_total,success_total"
+844,Mauritania,United States,2009,2009,0,,0,0,1,0,0,0,0,end_war,success_total
+845,Niger,ECOWAS,2009,2011,0,,0,0,1,0,1,0,1,democracy,success_total
+846,Niger,EU,2009,2011,0,,0,0,1,0,0,0,1,democracy,success_total
+847,Niger,United States,2009,2011,0,,0,0,1,1,0,0,0,destab_regime,success_total
+848,Somalia,"EU, Turkey, Croatia, Macedonia, Montenegro, Iceland, Albania, Bosnia and Herzegovina, Serbia, Liechtenstein, Norway, Ukraine, Moldova, Armenia",2009,2023,0,,1,1,1,1,0,0,1,"end_war,human_rights","ongoing,ongoing"
+849,Somalia,Switzerland,2009,2023,1,imp_part,1,1,1,1,0,0,0,"end_war,human_rights","ongoing,ongoing"
+850,Tajikistan,Uzbekistan,2009,2009,1,exp_part,0,0,0,0,0,0,0,other,failed
+851,Ukraine,Russia,2009,2009,1,exp_part,0,0,0,0,0,0,0,policy_change,failed
+852,Belarus,Russia,2010,2010,1,exp_part,0,0,0,0,0,0,0,other,success_total
+853,Colombia,United States,2010,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,other,ongoing
+854,Cote d'Ivoire,African Union,2010,2011,0,,0,0,0,0,1,0,1,"end_war,democracy","success_total,success_total"
+855,Cote d'Ivoire,ECOWAS,2010,2011,0,,0,0,0,0,1,0,1,end_war,success_total
+856,Eritrea,EU,2010,2018,0,,1,1,1,1,0,0,1,end_war,success_total
+857,Guinea,Switzerland,2010,2014,1,exp_part,1,1,1,1,0,0,0,human_rights,success_part
+858,Iran,Canada,2010,2016,1,exp_part,1,0,1,0,0,0,0,prevent_war,success_total
+859,Iran,"Korea, South",2010,2012,1,imp_part,0,0,0,0,0,0,0,prevent_war,failed
+860,Iran,UN,2010,2016,1,exp_part,0,0,1,0,0,0,1,prevent_war,success_total
+861,Iran,UN,2010,2020,0,,1,1,0,0,0,0,1,prevent_war,success_total
+862,Iraq,UN,2010,2023,0,,1,0,0,0,0,0,1,prevent_war,ongoing
+863,"Korea, North","Korea, South",2010,2023,1,"exp_compl,imp_compl",0,0,0,1,1,0,0,"end_war,human_rights,democracy","ongoing,ongoing,ongoing"
+864,"Korea, North",United States,2010,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,prevent_war,ongoing
+865,Kyrgyzstan,Uzbekistan,2010,2010,1,exp_part,0,0,0,0,0,0,0,other,failed
+866,Malagasy Republic,African Union,2010,2013,0,,0,0,1,1,0,0,1,democracy,success_total
+867,Malagasy Republic,EU,2010,2014,0,,0,0,1,0,0,0,1,democracy,success_total
+868,Myanmar,"EU, Croatia, Macedonia, Montenegro, Iceland, Albania, Bosnia and Herzegovina, Liechtenstein, Norway, Moldova, Armenia",2010,2013,1,"exp_part,imp_part",1,1,1,1,0,0,1,human_rights,success_part
+869,Niger,African Union,2010,2011,0,,0,0,0,0,1,0,1,democracy,success_total
+870,Norway,China,2010,2018,1,imp_part,0,0,0,1,0,0,0,policy_change,failed
+871,Norway,China,2010,2017,0,,0,0,0,0,1,0,0,"democracy,human_rights","success_part,success_part"
+872,Somalia,United States,2010,2023,1,imp_part,0,0,1,0,0,0,0,"end_war,prevent_war","ongoing,ongoing"
+873,Sudan,UN,2010,2023,0,,0,1,0,0,0,0,1,"human_rights,end_war","ongoing,ongoing"
+874,Switzerland,Libya,2010,2011,1,"exp_compl,imp_compl",0,0,0,0,0,0,0,policy_change,failed
+875,Tajikistan,Uzbekistan,2010,2010,1,exp_part,0,0,0,0,0,0,0,other,failed
+876,Afghanistan,"EU, Turkey, Croatia, Macedonia, Montenegro, Iceland, Albania, Bosnia and Herzegovina, Serbia, Liechtenstein, Norway, Ukraine, Moldova, Armenia, Georgia",2011,2023,0,,1,1,1,1,0,0,1,terrorism,ongoing
+877,Afghanistan,United States,2011,2023,0,,1,1,0,0,0,0,0,terrorism,ongoing
+878,Belarus,"EU, Croatia, Macedonia, Montenegro, Bosnia and Herzegovina, Iceland, Albania, Serbia, Liechtenstein, Norway",2011,2016,1,exp_part,1,1,1,1,0,0,1,"democracy,human_rights","success_total,success_part"
+879,Belize,United States,2011,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,other,ongoing
+880,Bolivia,United States,2011,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,other,ongoing
+881,Bosnia and Herzegovina,"EU, Turkey, Montenegro, Albania, Liechtenstein, Armenia, Georgia, Iceland, Norway",2011,2023,0,,0,0,1,1,0,0,1,prevent_war,ongoing
+882,Colombia,United States,2011,2014,1,"exp_part,imp_part",0,0,1,0,0,0,0,other,success_total
+883,Costa Rica,United States,2011,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,other,ongoing
+884,Cote d'Ivoire,"EU, Turkey, Croatia, Macedonia, Montenegro, Iceland, Albania, Bosnia and Herzegovina, Serbia, Liechtenstein, Norway, Ukraine, Moldova, Armenia, Georgia",2011,2016,0,,0,0,1,1,0,0,1,"end_war,human_rights","success_total,success_total"
+885,Dominican Republic,United States,2011,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,other,ongoing
+886,"Egypt, Arab Rep.",Canada,2011,2016,0,,0,0,1,0,0,0,0,other,success_part
+887,"Egypt, Arab Rep.","EU, Croatia, Macedonia, Albania, Montenegro, Iceland, Bosnia and Herzegovina, Serbia, Liechtenstein, Norway, Moldova, Georgia",2011,2021,0,,0,0,1,0,0,0,1,other,success_total
+888,"Egypt, Arab Rep.",Switzerland,2011,2017,0,,0,0,1,0,0,0,0,other,failed
+889,Eritrea,UN,2011,2018,1,imp_part,0,0,0,0,0,0,1,end_war,success_total
+890,Fiji,Australia,2011,2014,0,,1,0,0,0,0,0,0,democracy,success_total
+891,Guatemala,United States,2011,2023,0,,0,0,1,0,0,0,0,other,ongoing
+892,Indonesia,Australia,2011,2011,1,exp_part,0,0,0,0,0,0,0,other,success_total
+893,Indonesia,United States,2011,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,terrorism,ongoing
+894,Iran,Canada,2011,2016,1,exp_part,0,0,0,0,0,0,0,prevent_war,success_total
+895,Iran,"EU, Croatia, Macedonia, Montenegro, Iceland, Liechtenstein, Norway, Moldova",2011,2016,0,,0,0,1,1,0,0,1,human_rights,failed
+896,Iran,Switzerland,2011,2016,1,"exp_part,imp_part",0,0,1,1,0,0,0,prevent_war,success_total
+897,Jamaica,United States,2011,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,other,ongoing
+898,"Korea, North",Canada,2011,2023,1,"exp_compl,imp_compl",0,0,1,0,1,0,0,prevent_war,ongoing
+899,"Korea, North",United States,2011,2023,1,imp_compl,0,0,0,0,0,0,0,prevent_war,ongoing
+900,Libya,Australia,2011,2023,0,,1,1,1,1,0,0,0,human_rights,ongoing
+901,Libya,Canada,2011,2023,1,"exp_part,imp_part",1,1,1,0,0,0,0,"human_rights,destab_regime","ongoing,ongoing"
+902,Libya,EU,2011,2017,0,,0,0,1,1,0,0,1,human_rights,failed
+903,Libya,"EU, Croatia, Macedonia, Montenegro, Iceland, Albania, Bosnia and Herzegovina, Serbia, Liechtenstein, Norway, Moldova, Armenia, Georgia",2011,2023,1,exp_part,0,0,1,1,0,0,1,human_rights,ongoing
+904,Libya,"Gambia, The",2011,2012,0,,0,0,1,0,0,0,0,"destab_regime,democracy,human_rights","success_total,success_total,success_total"
+905,Libya,League of Arab States,2011,2011,0,,0,0,0,0,1,0,1,human_rights,success_total
+906,Libya,Switzerland,2011,2023,1,exp_part,0,0,1,1,0,0,0,human_rights,ongoing
+907,Libya,UN,2011,2023,0,,1,1,1,1,1,0,1,human_rights,ongoing
+908,Libya,United States,2011,2023,0,,0,0,1,0,1,0,0,human_rights,ongoing
+909,Malawi,United Kingdom,2011,2012,0,,0,0,1,0,0,0,0,human_rights,success_total
+910,Panama,United States,2011,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,other,ongoing
+911,South Sudan,"EU, Turkey, Croatia, Macedonia, Montenegro, Iceland, Albania, Serbia, Liechtenstein, Norway, Armenia",2011,2023,0,,1,1,1,1,0,0,1,"human_rights,end_war","ongoing,ongoing"
+912,Syria,Australia,2011,2023,1,"exp_part,imp_part",1,1,1,1,0,0,0,human_rights,ongoing
+913,Syria,Canada,2011,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,human_rights,ongoing
+914,Syria,"EU, Croatia, Macedonia, Montenegro, Iceland, Albania, Serbia, Liechtenstein, Norway, Moldova",2011,2013,1,"exp_part,imp_part",1,1,1,1,0,0,1,"human_rights,end_war","failed,failed"
+915,Syria,League of Arab States,2011,2023,1,"exp_part,imp_part",1,0,1,1,1,0,1,human_rights,ongoing
+916,Syria,Switzerland,2011,2012,1,exp_part,1,1,1,1,0,0,0,human_rights,failed
+917,Syria,United States,2011,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,"human_rights,destab_regime","ongoing,ongoing"
+918,Terrorist Organizations (Al-Qaeda),UN,2011,2023,0,,1,1,1,1,0,1,1,terrorism,ongoing
+919,Terrorist Organizations (Taliban),UN,2011,2023,0,,1,1,1,1,0,1,1,terrorism,ongoing
+920,Tunisia,Canada,2011,2023,0,,0,0,1,0,0,0,0,other,ongoing
+921,Tunisia,"EU, Croatia, Macedonia, Montenegro, Iceland, Albania, Bosnia and Herzegovina, Serbia, Liechtenstein, Norway, Moldova, Armenia",2011,2023,0,,0,0,1,0,0,0,1,other,ongoing
+922,Tunisia,Switzerland,2011,2023,0,,0,0,1,0,0,0,0,other,ongoing
+923,Belize,United States,2012,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,other,ongoing
+924,Central African Republic,United States,2012,2014,0,,0,0,0,0,1,0,0,democracy,success_total
+925,"Congo, Democratic Republic of the",United States,2012,2023,0,,0,0,1,1,0,0,0,end_war,ongoing
+926,Guinea-Bissau,African Union,2012,2014,0,,0,0,0,0,1,0,1,democracy,success_total
+927,Guinea-Bissau,ECOWAS,2012,2023,0,,0,0,1,1,1,0,1,democracy,ongoing
+928,Guinea-Bissau,EU,2012,2014,0,,0,0,1,1,0,0,1,democracy,success_total
+929,Guinea-Bissau,Switzerland,2012,2023,0,,0,0,1,1,0,0,0,democracy,ongoing
+930,Guinea-Bissau,UN,2012,2023,0,,0,0,0,1,0,0,1,democracy,ongoing
+931,Guinea-Bissau,United States,2012,2014,0,,0,0,1,0,0,0,0,democracy,success_total
+932,Iran,Canada,2012,2016,1,"exp_part,imp_part",0,0,1,0,1,0,0,"terrorism,prevent_war,human_rights","failed,success_total,failed"
+933,Iran,EU,2012,2016,1,exp_part,0,0,0,0,0,0,1,human_rights,failed
+934,Iran,"EU, Croatia, Macedonia, Montenegro, Iceland, Albania, Bosnia and Herzegovina, Liechtenstein, Norway, Ukraine, Moldova",2012,2016,1,"exp_part,imp_part",0,0,1,0,0,0,1,human_rights,failed
+935,Iran,United States,2012,2023,0,,0,0,1,0,0,0,0,prevent_war,ongoing
+936,Kenya,UN,2012,2014,0,,1,1,1,1,0,0,1,terrorism,failed
+937,Mali,African Union,2012,2012,0,,0,0,0,0,1,0,1,democracy,success_part
+938,Mali,Algeria,2012,2012,0,,0,1,0,0,0,0,0,"democracy,human_rights","success_part,success_part"
+939,Mali,Canada,2012,2014,0,,0,0,1,0,0,0,0,democracy,success_total
+940,Mali,ECOWAS,2012,2012,0,,0,0,1,1,1,0,1,democracy,success_part
+941,Mali,EU,2012,2013,0,,0,0,1,0,0,0,1,democracy,success_part
+942,Mali,France,2012,2012,0,,0,1,0,0,0,0,0,democracy,success_part
+943,Mali,United States,2012,2013,0,,0,1,1,1,0,0,0,democracy,success_part
+944,Myanmar,Australia,2012,2023,0,,1,1,1,0,0,0,0,human_rights,ongoing
+945,Myanmar,Canada,2012,2023,0,,1,1,1,0,0,0,0,human_rights,ongoing
+946,Myanmar,Switzerland,2012,2023,0,,1,1,0,0,0,0,0,human_rights,ongoing
+947,Pakistan,United States,2012,2013,0,,0,1,1,0,0,0,0,"democracy,human_rights","success_total,success_total"
+948,Palestine,United States,2012,2016,1,"exp_part,imp_part",0,0,1,0,0,0,0,terrorism,success_part
+949,Paraguay,MERCOSUR,2012,2013,0,,0,0,0,0,1,0,1,democracy,success_total
+950,Paraguay,UNASUR,2012,2013,0,,0,0,0,0,1,0,1,"democracy,human_rights","success_total,success_total"
+951,Rwanda,EU,2012,2013,0,,0,0,1,0,0,0,1,"policy_change,democracy,human_rights","success_total,success_total,success_total"
+952,Rwanda,"Germany, Netherlands, Sweden",2012,2013,0,,0,0,1,0,0,0,1,"policy_change,democracy,human_rights","success_total,success_total,success_total"
+953,Rwanda,United Kingdom,2012,2012,0,,0,0,1,0,0,0,0,"policy_change,democracy,human_rights","success_total,success_total,success_total"
+954,Rwanda,United States,2012,2013,0,,0,1,0,0,0,0,0,"policy_change,democracy,human_rights","success_total,success_total,success_total"
+955,Somalia,"EU, Turkey, Croatia, Macedonia, Montenegro, Iceland, Albania, Bosnia and Herzegovina, Serbia, Liechtenstein, Norway, Ukraine, Moldova, Armenia",2012,2023,1,imp_part,0,0,0,0,0,0,1,"end_war,human_rights,terrorism","ongoing,ongoing,ongoing"
+956,Somalia,UN,2012,2023,1,imp_part,0,0,0,0,0,0,1,"end_war,human_rights,terrorism","ongoing,ongoing,ongoing"
+957,Somalia,United States,2012,2023,1,imp_part,0,0,0,0,0,0,0,"territorial_conflict,democracy,human_rights","ongoing,ongoing,ongoing"
+958,Syria,Canada,2012,2023,1,exp_part,0,0,1,1,0,0,0,"human_rights,destab_regime","ongoing,ongoing"
+959,Syria,OIC,2012,2023,0,,0,0,0,0,1,0,1,human_rights,ongoing
+960,Syria,Switzerland,2012,2023,1,exp_part,1,1,1,1,1,0,0,"human_rights,end_war","ongoing,ongoing"
+961,Tajikistan,Uzbekistan,2012,2012,1,exp_part,0,0,0,0,0,0,0,other,failed
+962,"Yemen, North",United States,2012,2023,0,,0,0,1,0,0,0,0,prevent_war,ongoing
+963,Belize,United States,2013,2023,1,imp_part,0,0,0,0,0,0,0,other,ongoing
+964,Central African Republic,African Union,2013,2016,0,,0,0,1,1,1,0,1,"human_rights,prevent_war","success_total,success_total"
+965,Central African Republic,Kimberly Process Participants,2013,2016,1,imp_part,0,0,0,0,0,0,1,end_war,failed
+966,Central African Republic,UN,2013,2023,0,,1,0,0,0,0,0,1,"end_war,human_rights","nego_settlement,nego_settlement"
+967,Ecuador,United States,2013,2014,0,,0,0,1,0,0,0,0,destab_regime,failed
+968,"Egypt, Arab Rep.",African Union,2013,2014,0,,0,0,0,0,1,0,1,democracy,success_total
+969,"Egypt, Arab Rep.","EU, Croatia, Macedonia, Albania, Bosnia and Herzegovina, Serbia, Liechtenstein, Norway, Moldova, Georgia",2013,2023,1,exp_part,1,0,0,0,0,0,1,"human_rights,democracy","ongoing,ongoing"
+970,"Egypt, Arab Rep.",United States,2013,2015,0,,1,1,1,0,0,0,0,"human_rights,democracy","success_part,success_part"
+971,Eritrea,Russia,2013,2018,0,,1,0,0,0,0,0,0,end_war,success_total
+972,Greece,United States,2013,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,policy_change,ongoing
+973,Iran,Canada,2013,2016,1,"exp_compl,imp_compl",0,0,1,0,0,0,0,prevent_war,success_total
+974,"Korea, North",UN,2013,2023,0,,0,0,1,0,0,0,1,prevent_war,ongoing
+975,Kyrgyzstan,Uzbekistan,2013,2014,1,exp_part,0,0,0,0,0,0,0,other,failed
+976,Lithuania,Russia,2013,2014,1,imp_part,0,0,0,0,0,0,0,other,failed
+977,Mali,United States,2013,2013,1,"exp_part,imp_part",0,0,1,0,0,0,0,terrorism,success_total
+978,Moldova,Russia,2013,2021,1,imp_part,0,0,0,0,0,0,0,policy_change,nego_settlement
+979,Myanmar,"EU, Croatia, Macedonia, Montenegro, Iceland, Serbia, Albania, Bosnia and Herzegovina, Liechtenstein, Norway, Moldova, Armenia",2013,2023,1,exp_part,1,1,0,0,0,0,1,human_rights,ongoing
+980,Nigeria,United States,2013,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,"territorial_conflict,terrorism,democracy,human_rights","ongoing,ongoing,ongoing,ongoing"
+981,Philippines,Taiwan,2013,2013,0,,0,0,0,1,0,0,0,other,success_total
+982,Somalia,Switzerland,2013,2023,1,imp_part,0,0,0,0,0,0,0,"end_war,human_rights,terrorism","ongoing,ongoing,ongoing"
+983,Syria,Canada,2013,2023,1,exp_part,0,0,0,0,0,0,0,human_rights,ongoing
+984,Syria,"EU, Croatia, Macedonia, Montenegro, Iceland, Albania, Serbia, Liechtenstein, Norway, Moldova",2013,2023,1,"exp_part,imp_part",1,0,1,0,0,0,1,"human_rights,end_war","ongoing,ongoing"
+985,Taiwan,United States,2013,2021,1,"exp_part,imp_part",0,0,1,0,0,0,0,policy_change,success_part
+986,Armenia,United Kingdom,2014,2023,1,exp_part,0,0,0,0,0,0,0,end_war,ongoing
+987,Australia,Russia,2014,2023,1,imp_part,0,0,0,0,0,0,0,policy_change,ongoing
+988,Azerbaijan,United Kingdom,2014,2023,1,exp_part,0,0,0,0,0,0,0,end_war,ongoing
+989,Belize,EU,2014,2014,1,imp_part,0,0,0,0,0,0,1,other,success_total
+990,Canada,Russia,2014,2023,1,imp_part,0,0,0,1,0,0,0,policy_change,ongoing
+991,Central African Republic,EU,2014,2023,0,,1,1,1,1,0,0,1,"end_war,human_rights","ongoing,ongoing"
+992,Central African Republic,UN,2014,2023,0,,0,0,1,1,0,0,1,"end_war,human_rights","ongoing,ongoing"
+993,Central African Republic,United States,2014,2023,0,,0,0,1,1,0,0,0,"end_war,human_rights","ongoing,ongoing"
+994,Colombia,United States,2014,2018,1,"exp_part,imp_part",0,0,1,0,0,0,0,other,success_total
+995,EU,Russia,2014,2023,1,imp_part,0,0,0,0,0,1,0,policy_change,ongoing
+996,"Gambia, The",EU,2014,2017,0,,0,0,1,0,0,0,1,human_rights,success_total
+997,Guinea,"EU, Turkey, Croatia, Macedonia, Montenegro, Albania, Bosnia and Herzegovina, Serbia, Liechtenstein, Norway, Ukraine, Moldova, Armenia, Georgia, Iceland",2014,2023,0,,0,0,1,1,0,0,1,human_rights,ongoing
+998,Guinea,Switzerland,2014,2023,0,,0,0,1,1,0,0,0,human_rights,ongoing
+999,Israel,"Spain, United Kingdom",2014,2023,1,exp_part,1,0,0,0,0,0,1,prevent_war,ongoing
+1000,Kyrgyzstan,Uzbekistan,2014,2014,1,exp_part,0,0,0,0,0,0,0,other,failed
+1001,Malawi,United Kingdom,2014,2023,0,,0,0,1,0,0,0,0,other,ongoing
+1002,Nigeria,UN,2014,2023,0,,1,0,1,1,0,0,1,"territorial_conflict,terrorism","ongoing,ongoing"
+1003,Norway,Russia,2014,2023,1,imp_part,0,0,0,0,0,0,0,policy_change,ongoing
+1004,Russia,Australia,2014,2023,1,exp_part,1,1,1,1,0,0,0,policy_change,ongoing
+1005,Russia,Canada,2014,2023,1,exp_part,0,0,1,0,0,0,0,policy_change,ongoing
+1006,Russia,EU,2014,2023,1,"exp_part,imp_part",1,1,1,0,0,0,1,policy_change,ongoing
+1007,Russia,"EU, Montenegro, Iceland, Albania, Liechtenstein, Norway, Ukraine",2014,2023,1,imp_part,0,0,1,1,0,0,1,policy_change,ongoing
+1008,Russia,Japan,2014,2023,1,imp_part,0,1,1,1,0,0,0,policy_change,ongoing
+1009,Russia,New Zealand,2014,2023,0,,0,0,1,1,1,0,0,policy_change,ongoing
+1010,Russia,Switzerland,2014,2023,1,"exp_part,imp_part",1,1,1,0,0,0,0,policy_change,ongoing
+1011,Russia,United States,2014,2023,1,"exp_part,imp_part",0,0,1,1,0,0,0,"policy_change,prevent_war","ongoing,ongoing"
+1012,South Sudan,Canada,2014,2023,0,,0,0,1,0,0,0,0,"human_rights,end_war","ongoing,ongoing"
+1013,South Sudan,EU,2014,2023,0,,0,0,1,1,0,0,1,"territorial_conflict,end_war","ongoing,ongoing"
+1014,South Sudan,United States,2014,2023,0,,0,0,1,1,0,0,0,"human_rights,prevent_war,end_war","ongoing,ongoing,ongoing"
+1015,Tanzania,"Canada, EU, Japan, Norway",2014,2015,0,,0,0,1,0,0,0,1,other,success_part
+1016,Terrorist Organizations (ISIL and ANF),UN,2014,2023,0,,1,1,1,1,0,1,1,terrorism,ongoing
+1017,Thailand,EU,2014,2017,0,,0,0,0,0,1,0,1,"democracy,human_rights","success_total,success_total"
+1018,Thailand,United States,2014,2019,0,,0,0,1,0,0,0,0,"democracy,human_rights","success_total,success_total"
+1019,Uganda,Sweden,2014,2014,0,,0,0,1,0,0,0,0,human_rights,success_total
+1020,Ukraine,Australia,2014,2023,0,,0,0,1,1,0,0,0,policy_change,ongoing
+1021,Ukraine,Canada,2014,2023,1,"exp_part,imp_part",0,0,1,1,1,0,0,policy_change,ongoing
+1022,Ukraine,EU,2014,2023,0,,0,0,1,1,0,0,1,other,ongoing
+1023,Ukraine,"EU, Montenegro, Iceland, Albania, Liechtenstein, Norway, Moldova",2014,2014,1,exp_part,0,0,1,1,0,0,1,human_rights,success_total
+1024,Ukraine,"EU, Montenegro, Iceland, Albania, Liechtenstein, Norway, Moldova",2014,2023,1,"exp_part,imp_part",0,0,1,1,1,0,1,policy_change,ongoing
+1025,Ukraine,Japan,2014,2023,1,imp_part,1,1,1,1,0,0,0,policy_change,ongoing
+1026,Ukraine,Russia,2014,2014,1,exp_part,0,0,0,0,0,0,0,policy_change,failed
+1027,Ukraine,Switzerland,2014,2014,0,,0,0,1,0,0,0,0,human_rights,success_total
+1028,Ukraine,Switzerland,2014,2023,1,"exp_part,imp_part",1,0,1,0,0,0,0,policy_change,ongoing
+1029,Ukraine,United States,2014,2023,1,"exp_part,imp_part",0,0,1,1,0,0,0,policy_change,ongoing
+1030,United States,Russia,2014,2023,1,imp_part,0,0,0,0,0,0,0,policy_change,ongoing
+1031,"Yemen, North",UN,2014,2023,0,,0,0,1,1,0,0,1,"end_war,terrorism,human_rights","ongoing,ongoing,ongoing"
+1032,Afghanistan,UN,2015,2017,0,,1,0,1,1,0,0,1,terrorism,success_total
+1033,"Albania, Montenegro, Liechtenstein, Iceland",Russia,2015,2023,1,imp_part,0,0,0,0,0,1,0,policy_change,ongoing
+1034,Burundi,Belgium,2015,2021,0,,0,0,1,0,0,0,0,"human_rights,democracy,end_war","success_part,success_part,success_part"
+1035,Burundi,EU,2015,2022,0,,0,0,1,1,0,0,0,"human_rights,democracy,end_war","success_part,success_part,success_part"
+1036,Burundi,United States,2015,2021,0,,0,0,1,1,0,0,0,"human_rights,democracy,end_war","success_part,success_part,success_part"
+1037,Canada,"Korea, South",2015,2016,1,imp_part,0,0,0,0,0,0,0,other,success_total
+1038,Canada,Taiwan,2015,2016,1,imp_part,0,0,0,0,0,0,0,other,success_total
+1039,Ceylon,EU,2015,2016,1,imp_part,0,0,0,0,0,0,1,other,success_total
+1040,"Korea, North",United States,2015,2023,1,"exp_part,imp_part",0,0,1,1,0,0,0,prevent_war,ongoing
+1041,Liberia,UN,2015,2016,0,,1,1,0,0,0,0,1,prevent_war,success_total
+1042,Nepal,India,2015,2016,1,exp_part,0,0,0,0,0,0,0,"democracy,human_rights","success_part,success_part"
+1043,South Sudan,UN,2015,2023,0,,0,0,1,1,0,0,1,"territorial_conflict,end_war","ongoing,ongoing"
+1044,Ukraine,South Vietnam,2015,2018,1,imp_part,0,0,0,0,0,0,0,other,success_total
+1045,Venezuela,United States,2015,2023,1,"exp_part,imp_part",0,0,1,1,0,0,0,"human_rights,democracy","ongoing,ongoing"
+1046,"Yemen, North",EU,2015,2023,0,,1,1,1,1,0,0,1,"end_war,terrorism,human_rights","ongoing,ongoing,ongoing"
+1047,"Yemen, North",UN,2015,2023,0,,1,1,0,0,0,0,1,"end_war,terrorism,human_rights","ongoing,ongoing,ongoing"
+1048,Burundi,EU,2016,2022,0,,0,0,1,0,0,0,0,"human_rights,democracy,end_war","success_part,success_part,success_part"
+1049,Burundi,United States,2016,2021,0,,0,0,1,0,0,0,0,"human_rights,democracy,end_war","success_part,success_part,success_part"
+1050,"Congo, Democratic Republic of the",United States,2016,2023,0,,0,0,1,0,0,0,0,"democracy,human_rights","ongoing,ongoing"
+1051,"Egypt, Arab Rep.",Saudi Arabia,2016,2017,1,exp_part,0,0,0,0,0,0,0,democracy,failed
+1052,"Gambia, The",United States,2016,2017,0,,0,0,0,1,0,0,0,policy_change,success_total
+1053,Iran,Australia,2016,2023,1,exp_part,1,1,1,1,0,0,0,prevent_war,ongoing
+1054,Iran,Canada,2016,2023,1,exp_part,0,0,1,0,0,0,0,prevent_war,ongoing
+1055,Iran,Djibouti,2016,2023,0,,0,0,0,0,1,0,0,policy_change,success_total
+1056,Iran,Switzerland,2016,2016,1,exp_part,0,0,0,1,0,0,0,prevent_war,success_total
+1057,Iran,UN,2016,2023,0,,1,1,0,0,0,0,1,prevent_war,ongoing
+1058,"Korea, North",United States,2016,2023,1,exp_compl,0,0,1,1,0,0,0,prevent_war,ongoing
+1059,Lebanon,Saudi Arabia,2016,2023,0,,0,1,0,0,0,0,0,terrorism,ongoing
+1060,Liberia,Canada,2016,2017,0,,1,1,1,1,0,0,0,prevent_war,success_total
+1061,Libya,United States,2016,2023,0,,0,0,0,1,0,0,0,human_rights,ongoing
+1062,Panama,United States,2016,2017,0,,0,0,1,0,0,0,0,other,ongoing
+1063,Tanzania,United States,2016,2016,0,,0,0,1,0,0,0,0,"democracy,human_rights","success_total,success_total"
+1064,Cambodia,EU,2017,2018,0,,0,0,1,0,0,0,1,"democracy,human_rights","success_part,success_part"
+1065,Cambodia,United States,2017,2023,0,,0,0,0,1,0,0,0,policy_change,ongoing
+1066,Chad,United States,2017,2018,0,,0,0,0,1,0,0,0,terrorism,failed
+1067,China,United States,2017,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,policy_change,ongoing
+1068,"Egypt, Arab Rep.",United States,2017,2018,0,,0,1,0,0,0,0,0,"human_rights,democracy","success_part,success_part"
+1069,Eritrea,United States,2017,2023,0,,0,0,0,1,0,0,0,policy_change,ongoing
+1070,"Gambia, The",United States,2017,2023,0,,0,0,1,0,0,0,0,human_rights,ongoing
+1071,Guinea,United States,2017,2018,0,,0,0,0,1,0,0,0,policy_change,success_total
+1072,Iran,United States,2017,2021,0,,0,0,0,1,0,0,0,terrorism,failed
+1073,Iraq,United States,2017,2017,0,,0,0,0,1,0,0,0,terrorism,failed
+1074,Kenya,United States,2017,2023,0,,0,0,1,0,0,0,0,other,ongoing
+1075,"Korea, North",Burkina Faso,2017,2023,1,imp_compl,0,0,0,0,0,0,0,policy_change,ongoing
+1076,"Korea, North",United States,2017,2023,1,"exp_part,imp_part",0,0,1,1,1,0,0,prevent_war,ongoing
+1077,Libya,United States,2017,2023,0,,0,0,0,1,0,0,0,terrorism,ongoing
+1078,Mali,UN,2017,2023,0,,0,0,1,1,0,0,1,"democracy,human_rights","ongoing,ongoing"
+1079,Qatar,Chad,2017,2018,0,,0,0,0,0,1,0,0,"terrorism,policy_change","failed,failed"
+1080,Qatar,Maldives,2017,2019,0,,0,0,0,0,1,0,0,"terrorism,policy_change","failed,failed"
+1081,Qatar,"Mauritania, Djibouti, Comoros, Jordan, Libya, Yemen, North, Niger",2017,2021,0,,0,0,0,0,1,0,1,"terrorism,policy_change","failed,failed"
+1082,Qatar,"Saudi Arabia, United Arab Emirates, Bahrain, Egypt, Arab Rep.",2017,2021,0,,0,0,0,1,1,0,1,"terrorism,policy_change","failed,failed"
+1083,Qatar,Senegal,2017,2017,0,,0,0,0,0,1,0,0,"terrorism,policy_change","failed,failed"
+1084,Russia,United States,2017,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,policy_change,ongoing
+1085,Sierra Leone,United States,2017,2021,0,,0,0,0,1,0,0,0,policy_change,failed
+1086,Somalia,United States,2017,2023,0,,0,0,0,1,0,0,0,terrorism,ongoing
+1087,Sudan,United States,2017,2017,0,,0,0,0,1,0,0,0,terrorism,failed
+1088,Syria,United States,2017,2023,0,,0,0,0,1,0,0,0,terrorism,ongoing
+1089,Venezuela,Canada,2017,2023,0,,0,0,1,1,0,0,0,"democracy,human_rights","ongoing,ongoing"
+1090,Venezuela,"EU, Macedonia, Montenegro, Albania, Bosnia and Herzegovina, Iceland, Liechtenstein,  Norway, Moldova, Georgia",2017,2023,1,exp_part,1,1,1,1,0,0,1,"democracy,human_rights","ongoing,ongoing"
+1091,Venezuela,Peru,2017,2023,0,,0,0,0,0,1,0,0,"democracy,human_rights","ongoing,ongoing"
+1092,Venezuela,United States,2017,2023,0,,0,0,1,1,0,0,0,"democracy,human_rights,terrorism","ongoing,ongoing,ongoing"
+1093,"Yemen, North",United States,2017,2023,0,,0,0,0,1,0,0,0,terrorism,ongoing
+1094,Belize,United States,2018,2023,0,,0,0,1,0,0,0,0,"human_rights,other","ongoing,ongoing"
+1095,Burkina Faso,United States,2018,2023,0,,0,0,1,0,0,0,0,terrorism,ongoing
+1096,Cambodia,Australia,2018,2023,0,,0,0,1,0,0,0,0,"democracy,human_rights","ongoing,ongoing"
+1097,Cambodia,United States,2018,2023,0,,0,1,1,0,0,0,0,"democracy,human_rights","ongoing,ongoing"
+1098,China,United States,2018,2018,1,"exp_part,imp_part",0,0,0,0,0,0,0,policy_change,success_total
+1099,China,United States,2018,2023,1,"exp_part,imp_part",1,0,1,0,0,0,0,policy_change,ongoing
+1100,Colombia,United States,2018,2023,0,,0,0,1,0,0,0,0,other,ongoing
+1101,Dominican Republic,United States,2018,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,other,ongoing
+1102,Ghana,United States,2018,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,terrorism,ongoing
+1103,Guinea-Bissau,ECOWAS,2018,2023,0,,0,0,1,1,0,0,1,policy_change,ongoing
+1104,Indonesia,Australia,2018,2023,0,,0,0,1,0,0,0,0,"democracy,human_rights","ongoing,ongoing"
+1105,Iran,"Korea, South",2018,2023,1,imp_part,0,0,0,0,0,0,0,prevent_war,ongoing
+1106,Iran,United States,2018,2023,1,"exp_part,imp_part",0,0,1,1,0,0,0,terrorism,ongoing
+1107,"Korea, North",United States,2018,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,prevent_war,ongoing
+1108,Laos,United States,2018,2023,0,,0,0,0,1,0,0,0,policy_change,failed
+1109,Lebanon,United States,2018,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,terrorism,ongoing
+1110,Myanmar,Switzerland,2018,2023,0,,0,0,1,1,0,0,0,"human_rights,democracy","ongoing,ongoing"
+1111,Myanmar,United States,2018,2023,0,,0,0,0,1,0,0,0,other,ongoing
+1112,Nicaragua,United States,2018,2023,1,"exp_part,imp_part",0,0,1,1,0,0,0,"human_rights,democracy,other","ongoing,ongoing,ongoing"
+1113,Pakistan,United States,2018,2019,0,,0,1,0,0,0,0,0,"terrorism,end_war","nego_settlement,nego_settlement"
+1114,Palestine,United States,2018,2021,0,,0,0,1,0,0,0,0,policy_change,success_part
+1115,Saudi Arabia,"United States, France, Germany, Canada",2018,2023,1,"exp_part,imp_part",0,0,1,1,0,0,1,"democracy,human_rights","ongoing,ongoing"
+1116,Sierra Leone,United States,2018,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,terrorism,ongoing
+1117,South Sudan,EU,2018,2023,0,,0,0,1,1,0,0,1,"human_rights,end_war","ongoing,ongoing"
+1118,South Sudan,UN,2018,2023,0,,1,0,0,0,0,0,1,"territorial_conflict,end_war","ongoing,ongoing"
+1119,South Sudan,United States,2018,2023,0,,1,0,0,0,0,0,0,"territorial_conflict,end_war","ongoing,ongoing"
+1120,Tanzania,Denmark,2018,2023,0,,0,0,1,0,0,0,0,human_rights,ongoing
+1121,Tanzania,EU,2018,2023,0,,0,0,1,0,1,0,1,human_rights,ongoing
+1122,Turkey,United States,2018,2018,1,"exp_part,imp_part",0,0,1,1,0,0,0,"democracy,human_rights,other","success_total,success_total,success_total"
+1123,Venezuela,Switzerland,2018,2023,1,exp_part,1,0,1,1,0,0,0,"democracy,human_rights","ongoing,ongoing"
+1124,Zambia,United Kingdom,2018,2019,0,,0,0,1,0,0,0,0,other,success_part
+1125,Argentina,United States,2019,2023,0,,0,0,1,0,0,0,0,other,ongoing
+1126,Cambodia,United States,2019,2023,0,,0,0,1,1,0,0,0,"democracy,human_rights","ongoing,ongoing"
+1127,Cameroon,United States,2019,2023,0,,0,0,1,0,0,0,0,democracy,ongoing
+1128,China,United States,2019,2023,1,"exp_part,imp_part",0,0,0,1,0,0,0,human_rights,ongoing
+1129,Dominican Republic,United States,2019,2023,0,,0,0,1,0,0,0,0,other,ongoing
+1130,El Salvador,United States,2019,2019,0,,0,0,1,0,0,0,0,policy_change,success_total
+1131,El Salvador,United States,2019,2020,0,,0,0,1,0,0,0,0,policy_change,success_total
+1132,"Gambia, The",United States,2019,2021,0,,0,0,0,1,0,0,0,policy_change,failed
+1133,Ghana,United States,2019,2020,0,,0,0,0,1,0,0,0,policy_change,success_total
+1134,Guatemala,United States,2019,2020,0,,0,0,1,0,0,0,0,policy_change,success_total
+1135,Guatemala,United States,2019,2019,0,,0,0,1,0,0,0,0,policy_change,success_total
+1136,Honduras,United States,2019,2019,0,,0,0,1,0,0,0,0,policy_change,success_total
+1137,Honduras,United States,2019,2020,0,,0,0,1,0,0,0,0,policy_change,success_total
+1138,Iran,United States,2019,2023,0,,0,0,1,0,0,0,0,terrorism,ongoing
+1139,Iraq,United States,2019,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,"democracy,human_rights,other","ongoing,ongoing,ongoing"
+1140,Kenya,United States,2019,2023,0,,0,0,0,1,0,0,0,other,ongoing
+1141,Latvia,United States,2019,2019,0,,0,0,1,0,0,0,0,other,nego_settlement
+1142,Latvia,United States,2019,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,other,ongoing
+1143,Lebanon,Argentina,2019,2023,0,,0,0,0,1,0,0,0,terrorism,ongoing
+1144,Lesotho,United States,2019,2021,0,,0,0,0,1,0,0,0,other,failed
+1145,Mali,United States,2019,2023,0,,0,0,1,1,0,0,0,"democracy,human_rights,terrorism","ongoing,ongoing,ongoing"
+1146,Myanmar,United States,2019,2023,0,,0,0,1,0,0,0,0,human_rights,ongoing
+1147,Nicaragua,Canada,2019,2023,1,"exp_part,imp_part",0,0,1,1,0,0,0,human_rights,ongoing
+1148,Nigeria,United States,2019,2021,0,,0,0,0,1,0,0,0,terrorism,failed
+1149,Nigeria,United States,2019,2023,0,,0,0,0,1,0,0,0,"democracy,human_rights","ongoing,ongoing"
+1150,Pakistan,United States,2019,2023,0,,0,0,0,1,0,0,0,policy_change,ongoing
+1151,Palestine,Switzerland,2019,2019,0,,0,0,1,0,0,0,0,other,success_total
+1152,Saudi Arabia,Italy,2019,2023,0,,1,0,0,0,0,0,0,end_war,success_part
+1153,South Africa,United States,2019,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,other,ongoing
+1154,South Sudan,United States,2019,2023,1,"exp_part,imp_part",0,0,1,1,0,0,0,"territorial_conflict,end_war","ongoing,ongoing"
+1155,"Syria, Russia, Iran",United States,2019,2023,0,,0,0,1,1,0,1,0,"end_war,human_rights","ongoing,ongoing"
+1156,Turkey,EU,2019,2023,0,,0,0,1,1,0,0,1,policy_change,ongoing
+1157,Turkey,Finland,2019,2023,0,,1,0,0,0,0,0,0,terrorism,nego_settlement
+1158,Turkey,Sweden,2019,2022,0,,1,0,0,0,0,0,0,terrorism,nego_settlement
+1159,Venezuela,United States,2019,2019,0,,0,0,1,0,0,0,0,democracy,success_total
+1160,Venezuela,United States,2019,2023,1,imp_part,0,0,1,0,1,0,0,"human_rights,democracy","ongoing,ongoing"
+1161,Afghanistan,United Kingdom,2020,2023,0,,1,1,1,1,1,0,0,"terrorism,end_war","ongoing,ongoing"
+1162,Belarus,Canada,2020,2023,1,"exp_part,imp_part",0,0,1,0,1,0,0,"democracy,human_rights","ongoing,ongoing"
+1163,Belarus,EU,2020,2023,0,,0,0,1,1,0,0,1,"democracy,human_rights","ongoing,ongoing"
+1164,Belarus,"Lithuania, Latvia, Estonia",2020,2023,0,,0,0,0,1,0,0,1,"democracy,human_rights","ongoing,ongoing"
+1165,Burundi,United States,2020,2023,0,,0,0,0,1,0,0,0,policy_change,ongoing
+1166,Central African Republic,United States,2020,2023,1,"exp_part,imp_part",0,0,1,1,0,0,0,human_rights,ongoing
+1167,Ceylon,United States,2020,2023,0,,0,0,0,1,0,0,0,human_rights,ongoing
+1168,China,United States,2020,2023,1,"exp_part,imp_part",0,0,1,1,0,0,0,"human_rights,other","ongoing,ongoing"
+1169,El Salvador,United States,2020,2023,0,,0,0,1,1,0,0,0,human_rights,ongoing
+1170,"Estonia, Latvia, Lithuania",Belarus,2020,2023,0,,0,0,0,1,0,1,0,policy_change,ongoing
+1171,Ethiopia (excludes Eritrea),EU,2020,2023,0,,0,0,1,0,0,0,1,end_war,nego_settlement
+1172,Ethiopia (excludes Eritrea),EU,2020,2023,0,,0,0,0,1,0,0,1,end_war,ongoing
+1173,Ethiopia (excludes Eritrea),United States,2020,2023,0,,0,0,0,1,0,0,0,end_war,ongoing
+1174,"Gambia, The",United States,2020,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,other,ongoing
+1175,"Gambia, The",United States,2020,2021,0,,0,0,1,0,0,0,0,policy_change,failed
+1176,"Gambia, The, Russia, Venezuela, Pakistan",United Kingdom,2020,2023,0,,0,0,1,1,0,1,0,human_rights,ongoing
+1177,Guyana,United States,2020,2023,0,,0,0,0,1,0,0,0,democracy,ongoing
+1178,Haiti,United States,2020,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,human_rights,ongoing
+1179,Hong Kong,United States,2020,2023,0,,0,0,1,0,0,0,0,policy_change,ongoing
+1180,Iran,United States,2020,2023,1,"exp_part,imp_part",0,0,1,1,0,0,0,"terrorism,policy_change","ongoing,ongoing"
+1181,Jamaica,United States,2020,2023,0,,0,0,1,1,0,0,0,human_rights,ongoing
+1182,Kyrgyzstan,Russia,2020,2020,0,,0,0,1,0,0,0,0,destab_regime,nego_settlement
+1183,Kyrgyzstan,United States,2020,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,other,ongoing
+1184,Lebanon,EU,2020,2023,0,,0,0,0,1,0,0,1,terrorism,ongoing
+1185,Lebanon,Lithuania,2020,2023,0,,0,0,0,1,0,0,0,terrorism,ongoing
+1186,Lebanon,United States,2020,2023,1,"exp_part,imp_part",0,0,1,1,0,0,0,terrorism,ongoing
+1187,Lesotho,United States,2020,2021,1,"exp_part,imp_part",0,0,1,0,0,0,0,other,failed
+1188,Liberia,United States,2020,2023,1,"exp_part,imp_part",0,0,1,1,0,0,0,other,ongoing
+1189,Libya,EU,2020,2023,0,,0,0,1,1,0,0,1,"policy_change,human_rights","ongoing,ongoing"
+1190,Libya,United States,2020,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,"other,destab_regime","ongoing,ongoing"
+1191,Mali,United States,2020,2023,0,,0,1,0,0,0,0,0,"end_war,democracy","ongoing,ongoing"
+1192,Malta,United States,2020,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,"other,destab_regime","ongoing,ongoing"
+1193,Moldova,United States,2020,2023,0,,0,0,0,1,0,0,0,other,ongoing
+1194,Nicaragua,EU,2020,2023,0,,0,0,1,1,0,0,1,human_rights,ongoing
+1195,Nicaragua,United Kingdom,2020,2023,0,,0,0,1,1,0,0,0,human_rights,ongoing
+1196,Nigeria,United States,2020,2023,0,,0,0,1,0,0,0,0,other,ongoing
+1197,Russia,United States,2020,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,human_rights,ongoing
+1198,South Vietnam,United States,2020,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,policy_change,ongoing
+1199,Syria,United States,2020,2023,0,,0,0,1,0,0,0,0,end_war,ongoing
+1200,Tanzania,United States,2020,2023,0,,0,0,0,1,0,0,0,human_rights,ongoing
+1201,Turkey,United States,2020,2023,1,"exp_part,imp_part",0,0,1,1,0,0,0,policy_change,ongoing
+1202,United Kingdom,Russia,2020,2023,0,,0,0,0,1,0,0,0,policy_change,ongoing
+1203,Venezuela,United States,2020,2023,1,"exp_compl,imp_part",0,0,1,0,0,0,0,democracy,ongoing
+1204,"Yemen, North",United States,2020,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,human_rights,ongoing
+1205,Afghanistan,Czech Republic,2021,2023,0,,0,0,1,0,0,0,0,terrorism,ongoing
+1206,Afghanistan,Finland,2021,2023,0,,0,0,1,0,0,0,0,terrorism,ongoing
+1207,Afghanistan,Germany,2021,2023,0,,0,0,1,0,0,0,0,terrorism,ongoing
+1208,Afghanistan,United Kingdom,2021,2023,0,,1,1,1,1,0,0,0,terrorism,ongoing
+1209,Afghanistan,United States,2021,2023,0,,0,0,1,0,0,0,0,terrorism,ongoing
+1210,Albania,United States,2021,2023,0,,0,0,0,1,0,0,0,other,ongoing
+1211,"Albania, Bosnia and Herzegovina, Croatia, Kosovo, Montenegro, Macedonia, Serbia, Slovenia",United States,2021,2023,0,,0,0,1,1,0,1,0,"human_rights,democracy,other","ongoing,ongoing,ongoing"
+1212,Angola,United States,2021,2023,1,"exp_part,imp_part",0,0,1,1,0,0,0,other,ongoing
+1213,Bangladesh,United States,2021,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,"human_rights,other","ongoing,ongoing"
+1214,Belarus,Canada,2021,2023,1,exp_part,0,0,1,0,0,0,0,human_rights,ongoing
+1215,Belarus,EU,2021,2023,0,,0,0,1,1,0,0,1,"democracy,human_rights","ongoing,ongoing"
+1216,Belarus,"EU, Macedonia, Montenegro, Serbia, Albania",2021,2023,0,,0,0,0,1,1,0,1,"democracy,human_rights","ongoing,ongoing"
+1217,Belarus,New Zealand,2021,2023,0,,1,1,0,1,0,0,0,"democracy,human_rights","ongoing,ongoing"
+1218,Belarus,United Kingdom,2021,2023,0,,0,0,1,1,0,0,0,"democracy,human_rights","ongoing,ongoing"
+1219,Belarus,United Kingdom,2021,2023,1,exp_part,0,0,1,0,0,0,0,human_rights,ongoing
+1220,Belarus,United States,2021,2023,0,,0,0,1,1,0,0,0,"democracy,human_rights","ongoing,ongoing"
+1221,Brazil,United States,2021,2023,0,,0,0,1,0,0,0,0,other,ongoing
+1222,Bulgaria,United States,2021,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,other,ongoing
+1223,Burundi,United Kingdom,2021,2022,0,,0,0,1,0,0,0,0,"human_rights,democracy,end_war","success_part,success_part,success_part"
+1224,Cambodia,United States,2021,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,"human_rights,other","ongoing,ongoing"
+1225,Cambodia,United States,2021,2023,0,,1,0,0,0,0,0,0,"policy_change,human_rights,other","ongoing,ongoing,ongoing"
+1226,Cameroon,United Kingdom,2021,2023,0,,0,0,1,0,0,0,0,other,ongoing
+1227,Cameroon,United States,2021,2023,0,,0,0,0,1,0,0,0,"end_war,human_rights","ongoing,ongoing"
+1228,Central African Republic,EU,2021,2023,0,,0,1,0,0,0,0,1,"policy_change,prevent_war","ongoing,ongoing"
+1229,Central African Republic,United Kingdom,2021,2023,0,,1,1,1,1,0,0,0,"end_war,human_rights,other","ongoing,ongoing,ongoing"
+1230,Central African Republic,United States,2021,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,human_rights,ongoing
+1231,Ceylon,United States,2021,2023,0,,0,0,0,1,0,0,0,human_rights,ongoing
+1232,China,Canada,2021,2023,0,,0,0,1,1,0,0,0,human_rights,ongoing
+1233,China,EU,2021,2023,0,,0,0,1,1,0,0,1,"policy_change,human_rights","ongoing,ongoing"
+1234,China,United Kingdom,2021,2023,0,,1,1,1,1,0,0,0,human_rights,ongoing
+1235,China,United States,2021,2023,0,,0,0,1,1,0,0,0,human_rights,ongoing
+1236,China,United States,2021,2023,0,,0,0,1,0,0,0,0,democracy,ongoing
+1237,"Congo, Democratic Republic of the",United Kingdom,2021,2023,0,,1,1,1,1,0,0,0,"end_war,human_rights,democracy","ongoing,ongoing,ongoing"
+1238,"Congo, Democratic Republic of the",United States,2021,2023,1,"exp_part,imp_part",0,0,1,1,0,0,0,"terrorism,other","ongoing,ongoing"
+1239,EU,China,2021,2023,1,"exp_part,imp_part",0,0,0,1,0,1,0,policy_change,ongoing
+1240,EU,Russia,2021,2023,0,,0,0,0,1,0,1,0,policy_change,ongoing
+1241,"Egypt, Arab Rep.",United Kingdom,2021,2023,1,exp_part,1,0,0,0,0,0,0,"human_rights,democracy","ongoing,ongoing"
+1242,"Egypt, Arab Rep.",United Kingdom,2021,2021,0,,0,0,1,0,0,0,0,other,success_total
+1243,"Egypt, Arab Rep.",United States,2021,2023,0,,0,0,1,0,0,0,0,human_rights,ongoing
+1244,El Salvador,United States,2021,2023,0,,0,0,1,1,0,0,0,"policy_change,democracy,other","ongoing,ongoing,ongoing"
+1245,Equatorial Guinea,United Kingdom,2021,2023,0,,0,0,1,1,0,0,0,other,ongoing
+1246,Eritrea,United States,2021,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,human_rights,ongoing
+1247,"Gambia, The",EU,2021,2023,0,,0,0,0,1,0,0,1,policy_change,ongoing
+1248,Guatemala,United States,2021,2023,0,,0,0,0,1,0,0,0,"democracy,other","ongoing,ongoing"
+1249,Guatemala,"United States, United Kingdom",2021,2023,1,"exp_part,imp_part",0,0,1,0,0,0,1,"human_rights,other","ongoing,ongoing"
+1250,Guinea,African Union,2021,2023,0,,0,0,0,0,1,0,1,"end_war,democracy","ongoing,ongoing"
+1251,Guinea,ECOWAS,2021,2023,0,,0,0,1,1,1,0,1,"end_war,democracy","ongoing,ongoing"
+1252,Guinea,United Kingdom,2021,2023,0,,0,0,1,1,0,0,0,human_rights,ongoing
+1253,Guinea,United States,2021,2023,0,,0,0,1,0,0,0,0,"end_war,democracy","ongoing,ongoing"
+1254,Honduras,United States,2021,2023,0,,0,0,0,1,0,0,0,"democracy,other","ongoing,ongoing"
+1255,Iran,United States,2021,2023,1,"exp_part,imp_part",1,1,1,0,0,0,0,"terrorism,policy_change","ongoing,ongoing"
+1256,Iran,United States,2021,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,policy_change,ongoing
+1257,Iraq,United Kingdom,2021,2023,0,,1,0,1,0,0,0,0,"terrorism,end_war,prevent_war,other","ongoing,ongoing,ongoing,ongoing"
+1258,Iraq,United States,2021,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,"human_rights,other","ongoing,ongoing"
+1259,Kuwait,United States,2021,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,terrorism,ongoing
+1260,Lebanon,Australia,2021,2023,0,,0,0,1,0,0,0,0,terrorism,ongoing
+1261,Lebanon,Saudi Arabia,2021,2023,1,imp_compl,0,0,0,0,1,0,0,terrorism,ongoing
+1262,Lebanon,United Kingdom,2021,2023,0,,1,1,1,1,0,0,0,"terrorism,end_war,other","ongoing,ongoing,ongoing"
+1263,Lebanon,United States,2021,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,terrorism,ongoing
+1264,Liberia,United States,2021,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,other,ongoing
+1265,Libya,United Kingdom,2021,2023,1,exp_part,0,0,1,1,0,0,0,"human_rights,other","ongoing,ongoing"
+1266,Libya,United States,2021,2023,0,,0,0,1,0,0,0,0,human_rights,ongoing
+1267,Lithuania,China,2021,2023,1,"exp_part,imp_part",0,0,0,0,1,0,0,policy_change,ongoing
+1268,Mali,ECOWAS,2021,2023,0,,0,0,0,0,1,0,1,"end_war,democracy","ongoing,ongoing"
+1269,Mali,France,2021,2021,0,,0,1,0,0,0,0,0,end_war,failed
+1270,Mali,United Kingdom,2021,2023,0,,0,0,1,0,0,0,0,other,ongoing
+1271,Moldova,United Kingdom,2021,2023,0,,0,0,0,1,0,0,0,policy_change,ongoing
+1272,Morocco,Algeria,2021,2023,0,,0,0,0,0,1,0,0,terrorism,ongoing
+1273,Mozambique,United States,2021,2023,1,"exp_part,imp_part",0,0,1,1,0,0,0,terrorism,ongoing
+1274,Myanmar,EU,2021,2023,0,,0,0,1,1,0,0,1,"human_rights,democracy,end_war","ongoing,ongoing,ongoing"
+1275,Myanmar,Switzerland,2021,2023,0,,0,0,1,1,0,0,0,"human_rights,democracy","ongoing,ongoing"
+1276,Myanmar,United Kingdom,2021,2023,1,exp_part,1,1,1,1,0,0,0,"human_rights,democracy,end_war","ongoing,ongoing,ongoing"
+1277,Myanmar,United States,2021,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,"human_rights,democracy,end_war","ongoing,ongoing,ongoing"
+1278,Nicaragua,Ukraine,2021,2023,1,"exp_part,imp_part",0,0,1,0,1,0,0,policy_change,ongoing
+1279,Nicaragua,United Kingdom,2021,2023,0,,0,0,1,1,0,0,0,"human_rights,democracy,other","ongoing,ongoing,ongoing"
+1280,Nicaragua,United States,2021,2023,0,,0,0,1,0,0,0,0,"human_rights,democracy,other","ongoing,ongoing,ongoing"
+1281,Palestine,United Kingdom,2021,2023,0,,0,0,1,0,0,0,0,terrorism,ongoing
+1282,Paraguay,United States,2021,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,"human_rights,other","ongoing,ongoing"
+1283,Philippines,United Kingdom,2021,2023,0,,0,0,1,0,0,0,0,terrorism,ongoing
+1284,Russia,United Kingdom,2021,2023,1,"exp_part,imp_part",1,1,1,1,0,0,0,policy_change,ongoing
+1285,Rwanda,UN,2021,2023,0,,0,0,1,0,0,0,1,other,ongoing
+1286,Saudi Arabia,United States,2021,2023,1,"exp_part,imp_part",0,0,1,1,0,0,0,"democracy,human_rights","ongoing,ongoing"
+1287,"Saudi Arabia, United Arab Emirates",Italy,2021,2021,0,,1,0,0,0,0,1,0,"end_war,human_rights","failed,failed"
+1288,Somalia,United Kingdom,2021,2023,1,imp_part,1,1,1,1,0,0,0,"end_war,human_rights,terrorism","ongoing,ongoing,ongoing"
+1289,South Sudan,United Kingdom,2021,2023,0,,1,1,1,1,0,0,0,"human_rights,end_war,territorial_conflict","ongoing,ongoing,ongoing"
+1290,South Sudan,United States,2021,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,other,ongoing
+1291,Sudan,United Kingdom,2021,2023,0,,1,1,1,1,0,0,0,"end_war,human_rights","ongoing,ongoing"
+1292,Sudan,United States,2021,2023,0,,0,0,1,0,0,0,0,end_war,failed
+1293,Syria,United Kingdom,2021,2023,1,"exp_part,imp_part",1,0,1,0,0,0,0,"human_rights,end_war","ongoing,ongoing"
+1294,Taiwan,China,2021,2023,1,"exp_part,imp_part",0,0,0,0,0,0,0,policy_change,ongoing
+1295,Taiwan,Hong Kong,2021,2023,0,,0,0,0,1,0,0,0,policy_change,ongoing
+1296,Tanzania,United States,2021,2023,1,"exp_part,imp_part",0,0,1,1,0,0,0,"terrorism,democracy","ongoing,ongoing"
+1297,Transjordan,United Kingdom,2021,2023,0,,0,0,1,0,0,0,0,other,ongoing
+1298,Tunisia,United Kingdom,2021,2023,0,,0,0,1,0,0,0,0,other,ongoing
+1299,Turkey,United Kingdom,2021,2023,0,,0,0,1,1,0,0,0,policy_change,ongoing
+1300,Uganda,United States,2021,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,human_rights,ongoing
+1301,Ukraine,United Kingdom,2021,2023,1,"exp_part,imp_part",0,0,1,1,1,0,0,"policy_change,other","ongoing,ongoing"
+1302,Ukraine,United States,2021,2023,1,"exp_part,imp_part",0,0,1,1,0,0,0,other,ongoing
+1303,United States,China,2021,2023,0,,0,0,1,1,0,0,0,policy_change,ongoing
+1304,United States,Hong Kong,2021,2023,0,,0,0,1,1,0,0,0,policy_change,ongoing
+1305,Venezuela,United Kingdom,2021,2023,1,exp_part,1,1,1,1,0,0,0,"democracy,human_rights","ongoing,ongoing"
+1306,"Yemen, North",United Kingdom,2021,2023,0,,1,1,1,1,0,0,0,"end_war,terrorism,human_rights","ongoing,ongoing,ongoing"
+1307,Zimbabwe,United Kingdom,2021,2023,1,exp_part,1,1,1,1,0,0,0,"democracy,human_rights","ongoing,ongoing"
+1308,"Albania, Bosnia and Herzegovina, Macedonia, Montenegro",United States,2022,2023,0,,0,0,1,0,0,1,0,other,ongoing
+1309,Australia,Russia,2022,2023,0,,0,0,0,1,0,0,0,policy_change,ongoing
+1310,Belarus,Australia,2022,2023,0,,0,0,1,1,0,0,0,"policy_change,end_war","ongoing,ongoing"
+1311,Belarus,Canada,2022,2023,1,"exp_part,imp_part",1,0,1,0,1,0,0,"policy_change,end_war","ongoing,ongoing"
+1312,Belarus,EU,2022,2023,1,"exp_part,imp_part",0,0,1,0,1,0,1,"policy_change,end_war","ongoing,ongoing"
+1313,Belarus,Japan,2022,2023,1,exp_part,0,0,1,0,0,0,0,"policy_change,end_war","ongoing,ongoing"
+1314,Belarus,"Korea, South",2022,2023,1,exp_part,0,0,0,0,0,0,0,"policy_change,end_war","ongoing,ongoing"
+1315,Belarus,New Zealand,2022,2023,0,,0,0,1,1,0,0,0,"policy_change,end_war","ongoing,ongoing"
+1316,Belarus,Switzerland,2022,2023,1,"exp_part,imp_part",0,0,1,0,1,0,0,"policy_change,end_war","ongoing,ongoing"
+1317,Belarus,United Kingdom,2022,2023,1,"exp_part,imp_part",0,0,1,1,1,0,0,"policy_change,end_war","ongoing,ongoing"
+1318,Belarus,United States,2022,2023,1,"exp_part,imp_part",0,0,1,0,1,0,0,"policy_change,end_war","ongoing,ongoing"
+1319,"Belarus, Russia",Poland,2022,2023,1,imp_part,0,0,0,0,0,1,0,"policy_change,end_war","ongoing,ongoing"
+1320,Belize,United States,2022,2023,0,,0,0,0,1,0,0,0,other,ongoing
+1321,Bosnia and Herzegovina,Germany,2022,2023,0,,0,0,1,0,0,0,0,policy_change,ongoing
+1322,Bosnia and Herzegovina,United Kingdom,2022,2023,0,,0,0,1,1,0,0,0,prevent_war,ongoing
+1323,Bosnia and Herzegovina,United States,2022,2023,0,,0,0,1,1,0,0,0,other,ongoing
+1324,Bosnia and Herzegovina,United States,2022,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,democracy,ongoing
+1325,Bulgaria,Russia,2022,2023,1,exp_part,0,0,0,0,0,0,0,policy_change,ongoing
+1326,Burkina Faso,African Union,2022,2023,0,,0,0,0,0,1,0,1,democracy,ongoing
+1327,Burkina Faso,Denmark,2022,2023,0,,0,0,1,0,0,0,0,"democracy,end_war",ongoing
+1328,Burkina Faso,ECOWAS,2022,2023,0,,0,0,0,0,1,0,1,democracy,ongoing
+1329,Burkina Faso,United States,2022,2023,0,,0,0,1,0,0,0,0,democracy,ongoing
+1330,Burkina Faso,United States,2022,2023,0,,0,0,1,0,0,0,0,end_war,ongoing
+1331,Canada,Iran,2022,2023,0,,0,0,1,1,0,0,0,"policy_change,terrorism","ongoing,ongoing"
+1332,China,United States,2022,2023,0,,0,0,0,1,0,0,0,policy_change,ongoing
+1333,China,United States,2022,2023,1,exp_part,0,0,0,0,0,0,0,policy_change,ongoing
+1334,China,United States,2022,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,"human_rights,other","ongoing,ongoing"
+1335,China,United States,2022,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,human_rights,ongoing
+1336,"Congo, Democratic Republic of the",United States,2022,2023,0,,0,0,1,0,0,0,0,"prevent_war,other","ongoing,ongoing"
+1337,Dominican Republic,United States,2022,2023,0,,0,0,1,0,0,0,0,other,ongoing
+1338,EEU,Russia,2022,2023,1,exp_part,0,0,0,0,0,1,0,policy_change,ongoing
+1339,EU,Russia,2022,2023,1,"exp_part,imp_part",0,0,1,1,1,1,0,policy_change,ongoing
+1340,Ecuador,United States,2022,2023,0,,0,0,1,0,0,0,0,other,ongoing
+1341,"Egypt, Arab Rep.",United States,2022,2023,0,,0,1,0,0,0,0,0,human_rights,failed
+1342,El Salvador,United States,2022,2023,1,"exp_part,imp_part",0,0,1,1,0,0,0,other,ongoing
+1343,Ethiopia (excludes Eritrea),United States,2022,2023,1,"exp_part,imp_part",0,0,1,1,0,0,0,"human_rights,end_war,other","ongoing,ongoing,ongoing"
+1344,Guatemala,United States,2022,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,other,ongoing
+1345,Guatemala,United States,2022,2023,0,,0,0,1,0,0,0,0,other,ongoing
+1346,Guinea,United States,2022,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,human_rights,ongoing
+1347,Guinea,United States,2022,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,"terrorism,other","ongoing,ongoing"
+1348,Haiti,Canada,2022,2023,0,,0,0,1,0,0,0,0,policy_change,ongoing
+1349,Haiti,UN,2022,2023,0,,1,0,1,1,0,0,1,human_rights,ongoing
+1350,Haiti,United States,2022,2023,0,,0,0,1,0,0,0,0,other,ongoing
+1351,Honduras,United States,2022,2023,0,,0,0,0,1,0,0,0,"democracy,other","ongoing,ongoing"
+1352,Indonesia,United States,2022,2023,0,,0,0,0,1,0,0,0,terrorism,ongoing
+1353,Iran,Canada,2022,2023,0,,0,0,1,1,0,0,0,"human_rights,terrorism","ongoing,ongoing"
+1354,Iran,EU,2022,2023,1,exp_part,0,0,1,1,0,0,1,human_rights,ongoing
+1355,Iran,EU,2022,2023,0,,0,0,1,1,0,0,1,end_war,ongoing
+1356,Iran,New Zealand,2022,2023,0,,0,0,0,1,0,0,0,policy_change,ongoing
+1357,Iran,United States,2022,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,human_rights,ongoing
+1358,Iran,United States,2022,2023,0,,0,0,1,0,0,0,0,"prevent_war,terrorism","ongoing,ongoing"
+1359,Iraq,United States,2022,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,terrorism,ongoing
+1360,"Korea, North",Japan,2022,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,prevent_war,ongoing
+1361,"Korea, North",United States,2022,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,prevent_war,ongoing
+1362,"Korea, North",United States,2022,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,human_rights,ongoing
+1363,"Korea, North",United States,2022,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,prevent_war,ongoing
+1364,"Korea, North, El Salvador, Guatemala, Haiti, Mali, Ukraine, Azerbaijan, Burundi, Guinea, Indonesia, Iran, China, Peru, Philippines, Russia, Ceylon, South Vietnam",United States,2022,2023,0,,0,0,1,1,0,1,0,"human_rights,other","ongoing,ongoing"
+1365,"Korea, North, Singapore, Taiwan","Korea, South",2022,2023,1,"exp_part,imp_part",0,0,1,0,0,1,0,prevent_war,ongoing
+1366,"Kosovo, Serbia, Moldova, Iran, Russia, Pakistan, Uganda, Nicaragua, South Sudan, Mali, Myanmar",United Kingdom,2022,2023,0,,0,0,1,1,0,1,0,human_rights,ongoing
+1367,Lebanon,United States,2022,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,terrorism,ongoing
+1368,Liberia,United States,2022,2023,0,,0,0,1,0,0,0,0,other,ongoing
+1369,Mali,Denmark,2022,2023,0,,0,0,1,0,0,0,0,policy_change,ongoing
+1370,Mali,ECOWAS,2022,2022,1,"exp_part,imp_part",0,0,1,1,1,0,1,democracy,success_total
+1371,Mali,EU,2022,2023,0,,0,0,1,1,0,0,1,democracy,ongoing
+1372,Mali,France,2022,2023,0,,0,0,1,0,0,0,0,democracy,ongoing
+1373,Mali,United States,2022,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,other,ongoing
+1374,Mexico,United States,2022,2023,0,,0,0,1,0,0,0,0,other,ongoing
+1375,Moldova,United States,2022,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,other,ongoing
+1376,Mozambique,United States,2022,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,terrorism,ongoing
+1377,New Zealand,Russia,2022,2023,0,,0,0,0,1,0,0,0,policy_change,ongoing
+1378,Nicaragua,EU,2022,2023,0,,0,0,1,1,0,0,1,"human_rights,democracy","ongoing,ongoing"
+1379,Nicaragua,United States,2022,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,"human_rights,democracy","ongoing,ongoing"
+1380,Nicaragua,United States,2022,2023,0,,0,0,1,1,0,0,0,"human_rights,democracy","ongoing,ongoing"
+1381,Nigeria,United States,2022,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,terrorism,ongoing
+1382,Palestine,Israel,2022,2023,0,,0,0,0,1,0,0,0,terrorism,ongoing
+1383,Paraguay,United States,2022,2023,0,,0,0,0,1,0,0,0,other,ongoing
+1384,Philippines,United States,2022,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,human_rights,ongoing
+1385,Poland,Russia,2022,2023,1,exp_part,0,0,0,0,0,0,0,policy_change,ongoing
+1386,"Poland, Hungary",EU,2022,2023,0,,0,0,1,0,0,1,1,democracy,ongoing
+1387,Russia,Australia,2022,2023,1,"exp_part,imp_part",0,0,1,1,1,0,0,"policy_change,prevent_war,end_war,democracy","ongoing,ongoing,ongoing,ongoing"
+1388,Russia,Canada,2022,2023,1,"exp_part,imp_compl",0,0,1,1,1,0,0,end_war,ongoing
+1389,Russia,"EU, Macedonia, Albania, Kosovo",2022,2023,1,"exp_part,imp_part",0,0,1,1,1,0,1,"policy_change,prevent_war,end_war","ongoing,ongoing,ongoing"
+1390,Russia,"G7, EU",2022,2023,1,"exp_part,imp_part",0,0,1,0,0,0,1,end_war,ongoing
+1391,Russia,Germany,2022,2023,1,imp_part,0,0,0,0,1,0,0,"policy_change,prevent_war","ongoing,ongoing"
+1392,Russia,Iceland,2022,2023,1,"exp_part,imp_part",0,0,1,1,1,0,0,end_war,ongoing
+1393,Russia,Japan,2022,2023,1,"exp_part,imp_part",0,0,1,1,0,0,0,"policy_change,prevent_war,end_war","ongoing,ongoing,ongoing"
+1394,Russia,"Korea, South",2022,2023,1,exp_part,0,0,1,0,0,0,0,end_war,ongoing
+1395,Russia,Liechtenstein,2022,2023,0,,0,0,1,0,0,0,0,end_war,ongoing
+1396,Russia,Monaco,2022,2023,0,,0,0,1,0,0,0,0,end_war,ongoing
+1397,Russia,New Zealand,2022,2023,1,exp_part,1,1,0,1,0,0,0,end_war,ongoing
+1398,Russia,Norway,2022,2023,1,"exp_part,imp_part",0,0,1,1,1,0,0,end_war,ongoing
+1399,Russia,Poland,2022,2023,1,exp_part,0,0,1,1,0,0,0,end_war,ongoing
+1400,Russia,Singapore,2022,2023,1,exp_part,0,0,1,0,0,0,0,end_war,ongoing
+1401,Russia,Switzerland,2022,2023,1,"exp_part,imp_part",0,0,1,1,1,0,0,end_war,ongoing
+1402,Russia,Taiwan,2022,2023,1,exp_part,0,0,0,0,0,0,0,end_war,ongoing
+1403,Russia,United Kingdom,2022,2023,1,"exp_part,imp_part",0,0,1,1,1,0,0,"policy_change,prevent_war,end_war,democracy","ongoing,ongoing,ongoing,ongoing"
+1404,Russia,United States,2022,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,human_rights,ongoing
+1405,Russia,United States,2022,2023,1,"exp_part,imp_part",0,0,1,1,1,0,0,"policy_change,prevent_war,end_war","ongoing,ongoing,ongoing"
+1406,Russia,"United States, EU, United Kingdom, Canada, France, Germany, Italy, Japan",2022,2023,0,,0,0,1,0,1,0,1,end_war,ongoing
+1407,Russia,"United States, United Kingdom, Canada",2022,2023,0,,0,0,1,0,0,0,1,end_war,ongoing
+1408,Russia,"United States, United Kingdom, Japan, Canada",2022,2023,1,imp_part,0,0,0,0,0,0,1,end_war,ongoing
+1409,Somalia,United States,2022,2023,0,,0,0,1,0,0,0,0,terrorism,ongoing
+1410,Somalia,United States,2022,2023,0,,0,0,0,1,0,0,0,democracy,ongoing
+1411,South Africa,United States,2022,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,terrorism,ongoing
+1412,Spain,Algeria,2022,2023,1,imp_compl,0,0,0,0,1,0,0,policy_change,ongoing
+1413,Sudan,United States,2022,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,"human_rights,democracy","ongoing,ongoing"
+1414,Syria,United States,2022,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,terrorism,ongoing
+1415,"Syria, Iraq, Mozambique",United States,2022,2023,1,"exp_part,imp_part",0,0,1,0,0,1,0,terrorism,ongoing
+1416,Taiwan,"China, Hong Kong",2022,2023,0,,0,0,1,1,0,0,1,policy_change,ongoing
+1417,Tanzania,United States,2022,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,terrorism,ongoing
+1418,Uganda,United States,2022,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,policy_change,ongoing
+1419,Ukraine,Canada,2022,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,territorial_conflict,ongoing
+1420,Ukraine,United Kingdom,2022,2023,0,,0,0,1,0,0,0,0,end_war,ongoing
+1421,United Arab Emirates,United States,2022,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,terrorism,ongoing
+1422,United Kingdom,Russia,2022,2023,0,,0,0,0,1,0,0,0,policy_change,ongoing
+1423,United States,China,2022,2023,0,,0,0,0,1,0,0,0,policy_change,ongoing
+1424,United States,Iran,2022,2023,0,,0,0,1,1,0,0,0,"policy_change,terrorism","ongoing,ongoing"
+1425,United States,Russia,2022,2023,1,"exp_part,imp_part",0,0,1,1,1,0,0,policy_change,ongoing
+1426,Uzbekistan,United States,2022,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,policy_change,ongoing
+1427,Afghanistan,EU,2023,2023,0,,0,0,1,0,0,0,1,human_rights,ongoing
+1428,Afghanistan,United States,2023,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,other,ongoing
+1429,Argentina,China,2023,2023,0,,0,0,1,0,0,0,0,policy_change,ongoing
+1430,Azerbaijan,United States,2023,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,terrorism,ongoing
+1431,Belarus,Poland,2023,2023,0,,0,0,1,1,0,0,0,"democracy,human_rights","ongoing,ongoing"
+1432,"Belgium, Mexico",United States,2023,2023,0,,0,0,1,0,0,1,0,other,ongoing
+1433,"Bosnia and Herzegovina, Serbia",United States,2023,2023,1,"exp_part,imp_part",0,0,1,0,0,1,0,policy_change,ongoing
+1434,Bulgaria,"United States, United Kingdom",2023,2023,1,"exp_part,imp_part",0,0,1,0,0,0,1,other,ongoing
+1435,Burkina Faso,France,2023,2023,0,,0,0,1,0,0,0,0,democracy,ongoing
+1436,Cambodia,United States,2023,2023,0,,0,0,1,0,0,0,0,"policy_change,human_rights,democracy","ongoing,ongoing,ongoing"
+1437,Cambodia,United States,2023,2023,0,,0,0,1,1,0,0,0,democracy,ongoing
+1438,"Cambodia, Laos, Myanmar, Belarus, Haiti, Iran, Syria","United Kingdom, United States, Canada",2023,2023,0,,0,0,1,1,0,1,1,human_rights,ongoing
+1439,Cameroon,EU,2023,2023,1,imp_part,0,0,0,0,0,0,1,other,ongoing
+1440,Central African Republic,United States,2023,2023,0,,0,0,1,0,0,0,0,policy_change,ongoing
+1441,Ceylon,Canada,2023,2023,0,,0,0,1,1,0,0,0,human_rights,ongoing
+1442,Ceylon,United States,2023,2023,0,,0,0,0,1,0,0,0,human_rights,ongoing
+1443,Chad,EU,2023,2023,0,,0,1,0,0,0,0,1,democracy,success_total
+1444,China,United States,2023,2023,0,,0,0,1,1,0,0,0,human_rights,ongoing
+1445,Colombia,Israel,2023,2023,0,,1,1,0,0,0,0,0,policy_change,ongoing
+1446,"Congo, Democratic Republic of the",EU,2023,2023,0,,0,0,1,1,0,0,1,human_rights,ongoing
+1447,"Congo, Democratic Republic of the",United States,2023,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,human_rights,ongoing
+1448,Costa Rica,United States,2023,2023,0,,0,0,1,0,0,0,0,other,ongoing
+1449,EU,Iran,2023,2023,0,,0,0,1,1,0,0,0,"policy_change,terrorism","ongoing,ongoing"
+1450,"El Salvador, Guatemala, Nicaragua, Honduras",United States,2023,2023,0,,0,0,0,1,0,1,0,"democracy,other","ongoing,ongoing"
+1451,"Estonia, Latvia, Lithuania",Russia,2023,2023,0,,0,0,0,1,0,1,0,policy_change,ongoing
+1452,Ethiopia (excludes Eritrea),United States,2023,2023,0,,0,0,1,0,0,0,0,other,success_part
+1453,Gabon,African Union,2023,2023,0,,0,0,0,1,1,0,1,democracy,ongoing
+1454,Gabon,United States,2023,2023,0,,0,0,1,0,0,0,0,democracy,ongoing
+1455,Guatemala,United States,2023,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,other,ongoing
+1456,Guatemala,United States,2023,2023,0,,0,0,0,1,0,0,0,"democracy,other",ongoing
+1457,Haiti,United States,2023,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,other,ongoing
+1458,Iran,Australia,2023,2023,0,,0,0,1,1,0,0,0,"human_rights,policy_change","ongoing,ongoing"
+1459,Iran,Canada,2023,2023,0,,0,0,1,0,0,0,0,human_rights,ongoing
+1460,Iran,"EU, Macedonia, Montenegro, Albania, Ukraine, Moldova, Bosnia and Herzegovina,Iceland, Liechtenstein, Norway",2023,2023,1,exp_part,0,0,1,1,0,0,1,policy_change,ongoing
+1461,Iran,United Kingdom,2023,2023,1,exp_part,0,0,1,1,0,0,0,policy_change,ongoing
+1462,Iran,United States,2023,2023,1,"exp_part,imp_part",0,0,0,0,0,0,0,policy_change,ongoing
+1463,"Iran, Malaya, Indonesia, Hong Kong",United States,2023,2023,1,"exp_part,imp_part",0,0,1,0,0,1,0,policy_change,ongoing
+1464,Iraq,United States,2023,2023,0,,0,0,1,0,0,0,0,other,ongoing
+1465,Israel,Bahrain,2023,2023,0,,0,0,0,0,1,0,0,end_war,ongoing
+1466,Israel,Belize,2023,2023,0,,0,0,0,0,1,0,0,end_war,ongoing
+1467,Israel,Bolivia,2023,2023,0,,0,0,0,0,1,0,0,end_war,ongoing
+1468,Israel,Chile,2023,2023,0,,0,0,0,0,1,0,0,end_war,ongoing
+1469,Israel,Colombia,2023,2023,0,,0,0,0,0,1,0,0,end_war,ongoing
+1470,Israel,Honduras,2023,2023,0,,0,0,0,0,1,0,0,end_war,ongoing
+1471,Israel,Jordan,2023,2023,0,,0,0,0,0,1,0,0,end_war,ongoing
+1472,Israel,South Africa,2023,2023,0,,0,0,0,0,1,0,0,end_war,ongoing
+1473,Israel,Turkey,2023,2023,0,,0,0,0,0,1,0,0,end_war,ongoing
+1474,Israel,Ukraine,2023,2023,0,,0,0,0,0,1,0,0,end_war,ongoing
+1475,Israel,United States,2023,2023,0,,0,0,0,1,0,0,0,"end_war,human_rights","ongoing,ongoing"
+1476,Israel,United States,2023,2023,0,,0,0,1,1,0,0,0,terrorism,ongoing
+1477,"Korea, North",Japan,2023,2023,0,,0,0,1,0,0,0,0,prevent_war,ongoing
+1478,"Korea, North","Korea, South",2023,2023,1,exp_part,0,0,1,0,0,0,0,prevent_war,ongoing
+1479,"Korea, North","Korea, South, United States, Japan, Australia",2023,2023,1,"exp_part,imp_part",0,0,1,0,0,0,1,prevent_war,ongoing
+1480,"Korea, South, Tajikistan, Turkey, United Arab Emirates, China, Switzerland, Singapore, Kyrgyzstan, Maldives, Russia",United States,2023,2023,1,"exp_part,imp_part",0,0,1,0,0,1,0,policy_change,ongoing
+1481,Kyrgyzstan,United States,2023,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,policy_change,ongoing
+1482,"Laos, Cambodia, Myanmar","United States, Canada, United Kingdom",2023,2023,0,,0,0,1,1,0,1,1,"human_rights,other","ongoing,ongoing"
+1483,Lebanon,United States,2023,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,terrorism,ongoing
+1484,Lebanon,United States,2023,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,terrorism,ongoing
+1485,Lebanon,"United States, United Kingdom, Canada",2023,2023,0,,0,0,1,1,0,0,1,other,ongoing
+1486,Liberia,United States,2023,2023,0,,0,0,0,1,0,0,0,democracy,ongoing
+1487,Liberia,United States,2023,2023,1,"exp_part,imp_part",0,0,1,1,0,0,0,"human_rights,other","ongoing,ongoing"
+1488,"Malaya, Indonesia",United States,2023,2023,1,"exp_part,imp_part",0,0,1,0,0,1,0,policy_change,ongoing
+1489,"Malaya, Singapore",United States,2023,2023,1,"exp_part,imp_part",0,0,1,0,0,1,0,policy_change,ongoing
+1490,Mali,United States,2023,2023,1,"exp_part,imp_part",0,0,1,1,0,0,0,policy_change,ongoing
+1491,Marshall Islands,United States,2023,2023,0,,0,0,0,1,0,0,0,other,ongoing
+1492,Mexico,United States,2023,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,other,ongoing
+1493,Moldova,Canada,2023,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,"human_rights,other","ongoing,ongoing"
+1494,Moldova,EU,2023,2023,0,,0,0,1,1,0,0,1,"policy_change,end_war","ongoing,ongoing"
+1495,Mozambique,United States,2023,2023,0,,0,0,1,1,0,0,0,"terrorism,human_rights","ongoing,ongoing"
+1496,Myanmar,EU,2023,2023,0,,0,0,1,1,0,0,1,"human_rights,democracy","ongoing,ongoing"
+1497,Myanmar,United States,2023,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,"human_rights,democracy","ongoing,ongoing"
+1498,Nicaragua,United States,2023,2023,0,,0,0,0,1,0,0,0,"human_rights,democracy","ongoing,ongoing"
+1499,Niger,African Union,2023,2023,0,,0,0,0,0,1,0,1,democracy,ongoing
+1500,Niger,Canada,2023,2023,0,,0,0,1,0,0,0,0,democracy,ongoing
+1501,Niger,ECOWAS,2023,2023,1,"exp_part,imp_part",0,0,1,1,1,0,1,democracy,ongoing
+1502,Niger,EU,2023,2023,0,,0,0,1,0,0,0,1,democracy,ongoing
+1503,Niger,France,2023,2023,0,,0,0,1,0,0,0,0,democracy,ongoing
+1504,Niger,Netherlands,2023,2023,0,,0,0,1,0,0,0,0,democracy,ongoing
+1505,Niger,United States,2023,2023,0,,0,0,1,0,0,0,0,democracy,ongoing
+1506,Nigeria,United States,2023,2023,0,,0,0,0,1,0,0,0,"democracy,other","ongoing,ongoing"
+1507,Palestine,Austria,2023,2023,0,,0,0,1,0,0,0,0,terrorism,failed
+1508,Palestine,Canada,2023,2023,0,,0,0,1,0,0,0,0,terrorism,ongoing
+1509,Palestine,Denmark,2023,2023,0,,0,0,1,0,0,0,0,terrorism,failed
+1510,Palestine,Germany,2023,2023,0,,0,0,1,0,0,0,0,terrorism,failed
+1511,Palestine,Sweden,2023,2023,0,,0,0,1,0,0,0,0,terrorism,ongoing
+1512,Palestine,Sweden,2023,2023,0,,0,0,1,0,0,0,0,terrorism,failed
+1513,Palestine,Switzerland,2023,2023,0,,0,0,1,0,0,0,0,terrorism,ongoing
+1514,Palestine,"United States, United Kingdom",2023,2023,0,,1,0,1,1,0,0,1,terrorism,ongoing
+1515,Panama,United States,2023,2023,0,,0,0,0,1,0,0,0,other,ongoing
+1516,Paraguay,United States,2023,2023,0,,0,0,1,0,0,0,0,"democracy,other","ongoing,ongoing"
+1517,Paraguay,United States,2023,2023,0,,0,0,1,0,0,0,0,"terrorism,other","ongoing,ongoing"
+1518,Russia,Czech Republic,2023,2023,0,,0,0,1,0,0,0,0,end_war,ongoing
+1519,Russia,Kazakhstan,2023,2023,1,exp_part,0,0,0,0,0,0,0,end_war,ongoing
+1520,Russia,"Latvia, Lithuania, Estonia",2023,2023,0,,0,0,0,1,0,0,1,end_war,ongoing
+1521,Russia,Ukraine,2023,2023,1,"exp_part,imp_part",0,0,1,1,0,0,0,territorial_conflict,ongoing
+1522,Russia,"United States, United Kingdom",2023,2023,0,,0,0,1,0,0,0,1,other,ongoing
+1523,"Russia, Belarus","EU, Macedonia, Montenegro, Albania, Ukraine, Bosnia and Herzegovina, Iceland, Liechtenstein, Norway, Switzerland",2023,2023,1,"exp_part,imp_part",0,0,1,1,1,1,1,end_war,ongoing
+1524,"Russia, Belarus",Ukraine,2023,2023,1,"exp_part,imp_part",0,0,1,1,1,1,0,territorial_conflict,ongoing
+1525,Rwanda,EU,2023,2023,0,,0,0,1,1,0,0,1,human_rights,ongoing
+1526,Rwanda,United States,2023,2023,0,,0,0,1,0,0,0,0,policy_change,ongoing
+1527,Rwanda,United States,2023,2023,0,,0,1,0,0,0,0,0,policy_change,ongoing
+1528,"Serbia, Bosnia and Herzegovina,  Montenegro, Macedonia",United States,2023,2023,1,"exp_part,imp_part",0,0,1,0,0,1,0,policy_change,ongoing
+1529,Sierra Leone,United States,2023,2023,0,,0,0,0,1,0,0,0,democracy,ongoing
+1530,Somalia,EU,2023,2023,0,,0,0,1,0,0,0,1,other,ongoing
+1531,Somalia,United States,2023,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,terrorism,ongoing
+1532,South Sudan,EU,2023,2023,0,,0,0,1,1,0,0,1,end_war,ongoing
+1533,South Sudan,United States,2023,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,human_rights,ongoing
+1534,Sudan,United Kingdom,2023,2023,0,,0,0,1,0,0,0,0,end_war,ongoing
+1535,Sudan,United States,2023,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,"end_war,democracy","ongoing,ongoing"
+1536,Sudan,United States,2023,2023,0,,0,0,1,1,0,0,0,"democracy,prevent_war","ongoing,ongoing"
+1537,Sweden,Morocco,2023,2023,0,,0,0,0,0,1,0,0,policy_change,ongoing
+1538,Syria,United States,2023,2023,0,,0,0,1,0,0,0,0,human_rights,ongoing
+1539,Taiwan,"China, Hong Kong",2023,2023,0,,0,0,0,1,0,0,1,policy_change,ongoing
+1540,Tanzania,EU,2023,2023,0,,0,0,1,1,0,0,1,human_rights,ongoing
+1541,Uganda,United States,2023,2023,0,,0,0,0,1,0,0,0,human_rights,ongoing
+1542,Uganda,United States,2023,2023,0,,0,0,1,1,0,0,0,"democracy,prevent_war","ongoing,ongoing"
+1543,Ukraine,Slovakia,2023,2023,0,,1,1,0,0,0,0,0,end_war,ongoing
+1544,United Arab Emirates,United States,2023,2023,1,"exp_part,imp_part",0,0,1,0,0,0,0,policy_change,ongoing
+1545,United Kingdom,Russia,2023,2023,0,,0,0,0,1,0,0,0,policy_change,ongoing
+1546,Zimbabwe,EU,2023,2023,0,,0,0,1,0,0,0,1,democracy,ongoing
+1547,Zimbabwe,United States,2023,2023,0,,0,0,1,1,0,0,0,"democracy,prevent_war","ongoing,ongoing"

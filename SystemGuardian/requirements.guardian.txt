@@ -1,0 +1,8 @@
+pytesseract==0.3.13
+beautifulsoup4==4.14.3
+ddgs==9.10.0
+sentence-transformers==5.2.3
+chromadb==1.5.1
+spacy==3.8.11
+pandas==3.0.1
+faiss-cpu==1.13.2

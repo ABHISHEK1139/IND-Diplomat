@@ -1,0 +1,59 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Environments and secrets
+.venv/
+venv/
+env/
+.env
+.env.*
+!.env.example
+
+# IDE and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Logs and temporary artifacts
+logs/
+*.log
+runtime/
+reports/
+dump/
+LATEST_RUN/
+
+# Data and generated outputs
+# Keep most raw data ignored, but fully track canonical global-risk source data.
+data/*
+!data/global_risk/
+!data/global_risk/**
+!data/legal_memory/
+data/legal_memory/**
+!data/legal_memory/**/
+!data/legal_memory/**/*.csv
+knowledge/
+/legal_memory/
+assessments/
+SAVED DATA/
+Layer5_Output/
+engine/Layer4_Analysis/data/
+
+# Databases and binaries
+*.db
+*.sqlite
+*.sqlite3
+*.bak
+*.tmp
+
+# Build / cache
+build/
+dist/
+.cache/
+github_upload/

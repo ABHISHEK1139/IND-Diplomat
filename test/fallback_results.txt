@@ -1,0 +1,101 @@
+﻿python : Traceback (most 
+recent call last):
+At line:1 char:1
++ python -m 
+test.test_fallback 2>&1 | 
+Out-File -Encoding utf8 
+test\fall ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~
+    + CategoryInfo        
+      : NotSpecified: (T  
+  raceback (most recent   
+  call last)::String)     
+[], RemoteException
+    + FullyQualifiedError 
+   Id : NativeCommandErr  
+  or
+ 
+  File "<frozen runpy>", 
+line 198, in 
+_run_module_as_main
+  File "<frozen runpy>", 
+line 88, in _run_code
+  File "C:\Users\ak612\One
+Drive\Desktop\dip\New fold
+er\DIP_6\test\test_fallbac
+k.py", line 169, in 
+<module>
+    sys.exit(asyncio.run(m
+ain()))
+             
+^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\W
+indowsApps\PythonSoftwareF
+oundation.Python.3.12_3.12
+.2800.0_x64__qbz5n2kfra8p0
+\Lib\asyncio\runners.py", 
+line 195, in run
+    return 
+runner.run(main)
+           
+^^^^^^^^^^^^^^^^
+  File "C:\Program Files\W
+indowsApps\PythonSoftwareF
+oundation.Python.3.12_3.12
+.2800.0_x64__qbz5n2kfra8p0
+\Lib\asyncio\runners.py", 
+line 118, in run
+    return self._loop.run_
+until_complete(task)
+           ^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\W
+indowsApps\PythonSoftwareF
+oundation.Python.3.12_3.12
+.2800.0_x64__qbz5n2kfra8p0
+\Lib\asyncio\base_events.p
+y", line 691, in 
+run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\ak612\One
+Drive\Desktop\dip\New fold
+er\DIP_6\test\test_fallbac
+k.py", line 140, in main
+    print("\u2554\u2550\u2
+550\u2550\u2550\u2550\u255
+0\u2550\u2550\u2550\u2550\
+u2550\u2550\u2550\u2550\u2
+550\u2550\u2550\u2550\u255
+0\u2550\u2550\u2550\u2550\
+u2550\u2550\u2550\u2550\u2
+550\u2550\u2550\u2550\u255
+0\u2550\u2550\u2550\u2550\
+u2550\u2550\u2550\u2550\u2
+550\u2550\u2550\u2550\u255
+0\u2550\u2550\u2550\u2550\
+u2550\u2550\u2550\u2550\u2
+550\u2550\u2550\u2550\u255
+0\u2550\u2550\u2550\u2550\
+u2550\u2550\u2550\u2550\u2
+550\u2550\u2550\u2550\u255
+7")
+  File "C:\Program Files\W
+indowsApps\PythonSoftwareF
+oundation.Python.3.12_3.12
+.2800.0_x64__qbz5n2kfra8p0
+\Lib\encodings\cp1252.py",
+ line 19, in encode
+    return codecs.charmap_
+encode(input,self.errors,e
+ncoding_table)[0]
+           ^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^
+UnicodeEncodeError: 
+'charmap' codec can't 
+encode characters in 
+position 0-71: character 
+maps to <undefined>
+

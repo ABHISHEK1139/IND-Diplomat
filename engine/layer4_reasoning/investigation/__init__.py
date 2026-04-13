@@ -1,0 +1,4 @@
+"""
+Signal-driven investigation helpers.
+"""
+

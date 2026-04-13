@@ -1,0 +1,3 @@
+ollama==0.16.2
+deepseek-r1:8b==6995872bfe4c
+tesseract-ocr==5.x (manual install: https://github.com/UB-Mannheim/tesseract/wiki)

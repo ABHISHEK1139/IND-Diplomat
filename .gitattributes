@@ -1,0 +1,13 @@
+* text=auto
+*.py text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.json text eol=lf
+*.sh text eol=lf
+*.bat text eol=crlf
+# Large datasets managed via Git LFS.
+data/global_risk/Archigos_Leaders.csv filter=lfs diff=lfs merge=lfs -text
+data/global_risk/V-Dem-CY-FullOthers-v15_csv/V-Dem-CY-Full+Others-v15.csv filter=lfs diff=lfs merge=lfs -text
+data/global_risk/ged251-csv/GEDEvent_v25_1.csv filter=lfs diff=lfs merge=lfs -text
+data/global_risk/global[[:space:]]Sanction[[:space:]]db_v4/GSDB_V4_dyadic.dta filter=lfs diff=lfs merge=lfs -text
