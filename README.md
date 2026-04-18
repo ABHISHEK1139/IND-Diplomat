@@ -13,6 +13,8 @@
 
 IND-Diplomat is a research-oriented decision-support system that transforms raw geopolitical data into structured, evidence-backed intelligence assessments. It combines **15+ structured data providers**, **Bayesian conflict-state classification**, **multi-agent council reasoning**, and **deterministic assessment gating** into a transparent, auditable pipeline.
 
+> **Technical Transferability** — The core engineering of this system — probabilistic state transitions via Hidden Markov Models, posterior belief updates under uncertainty, multi-source signal fusion, and pipeline-based decision architecture — is directly transferable to scientific data systems, detector event classification, and any domain requiring structured reasoning over noisy, heterogeneous inputs.
+
 ### Key Capabilities
 
 - **Bayesian Conflict-State Model** — 5-state Hidden Markov Model with adaptive transition matrices and per-country prior persistence
