@@ -6,6 +6,7 @@ __pycache__/
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
+*.egg-info/
 
 # Environments and secrets
 .venv/
@@ -57,3 +58,7 @@ build/
 dist/
 .cache/
 github_upload/
+
+# Docker volumes (local)
+chroma-data/
+redis-data/

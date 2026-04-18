@@ -1,0 +1,57 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Environments
+.venv/
+venv/
+env/
+.env
+.env.*
+!.env.example
+
+# IDE
+.vscode/
+.idea/
+
+# Git
+.git/
+.gitattributes
+
+# Logs and runtime artifacts
+logs/
+*.log
+runtime/
+reports/
+dump/
+LATEST_RUN/
+
+# Data (built at runtime)
+data/
+knowledge/
+assessments/
+
+# Databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Build artifacts
+build/
+dist/
+.cache/
+github_upload/
+
+# Docs (not needed in container)
+docs/internal/
+PROJECT_BLUEPRINT.md
+*.md
+!README.md
+
+# OS
+.DS_Store
+Thumbs.db

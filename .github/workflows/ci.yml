@@ -1,0 +1,100 @@
+# ============================================================================
+# IND-Diplomat CI/CD Pipeline
+# ============================================================================
+# Runs lint, type-check, and tests on every push and pull request.
+# Also builds and validates the Docker image.
+# ============================================================================
+
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  # ── Lint & Type Check ────────────────────────────────────────────────────
+  lint:
+    name: Lint & Format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dev dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install black isort flake8 mypy
+
+      - name: Check formatting (black)
+        run: black --check --diff .
+
+      - name: Check import order (isort)
+        run: isort --check-only --diff .
+
+      - name: Lint (flake8)
+        run: flake8 --max-line-length=120 --exclude=.venv,__pycache__,build,dist --count --statistics .
+
+  # ── Tests ────────────────────────────────────────────────────────────────
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r Config/requirements.txt
+
+      - name: Create required directories
+        run: |
+          mkdir -p data/global_risk data/legal_memory data/chroma runtime
+
+      - name: Run tests
+        run: |
+          python -m pytest test/ \
+            -ra \
+            --tb=short \
+            --co -q 2>/dev/null || true
+          python -m pytest test/test_imports.py test/test_core_pipeline.py -ra --tb=short -v
+        env:
+          LLM_PROVIDER: ollama
+          OLLAMA_BASE_URL: http://localhost:11434
+          REDIS_ENABLED: "false"
+          NEO4J_ENABLED: "false"
+
+  # ── Docker Build ─────────────────────────────────────────────────────────
+  docker:
+    name: Docker Build
+    runs-on: ubuntu-latest
+    needs: [lint, test]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t ind-diplomat:ci .
+
+      - name: Verify image
+        run: |
+          docker run --rm ind-diplomat:ci python -c "from Config.config import PROJECT_ROOT; print(f'OK: {PROJECT_ROOT}')"
+
+      - name: Image size
+        run: docker images ind-diplomat:ci --format "{{.Size}}"

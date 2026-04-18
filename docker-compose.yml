@@ -1,0 +1,85 @@
+# ============================================================================
+# IND-Diplomat — Development Stack
+# ============================================================================
+# Starts the application with optional infrastructure services.
+#
+# Quick start:
+#   docker compose up --build
+#
+# With full infra (Redis + ChromaDB):
+#   docker compose --profile infra up --build
+# ============================================================================
+
+services:
+  # ── Application ──────────────────────────────────────────────────────────
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ind-diplomat
+    ports:
+      - "${APP_PORT:-8000}:8000"
+    env_file:
+      - .env
+    environment:
+      - PYTHONUNBUFFERED=1
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - CHROMA_HOST=chromadb
+      - CHROMA_PORT=8100
+    volumes:
+      - app-data:/app/data
+      - app-runtime:/app/runtime
+    depends_on:
+      redis:
+        condition: service_healthy
+        required: false
+      chromadb:
+        condition: service_started
+        required: false
+    restart: unless-stopped
+    networks:
+      - diplomat-net
+
+  # ── Redis (Cache + Session) ──────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: ind-diplomat-redis
+    profiles: ["infra"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+    networks:
+      - diplomat-net
+
+  # ── ChromaDB (Vector Store) ──────────────────────────────────────────────
+  chromadb:
+    image: chromadb/chroma:latest
+    container_name: ind-diplomat-chroma
+    profiles: ["infra"]
+    ports:
+      - "8100:8000"
+    volumes:
+      - chroma-data:/chroma/chroma
+    environment:
+      - IS_PERSISTENT=TRUE
+    restart: unless-stopped
+    networks:
+      - diplomat-net
+
+volumes:
+  app-data:
+  app-runtime:
+  redis-data:
+  chroma-data:
+
+networks:
+  diplomat-net:
+    driver: bridge

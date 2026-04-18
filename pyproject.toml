@@ -1,0 +1,86 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ind-diplomat"
+version = "4.0.0"
+description = "Layered geopolitical intelligence engine with Bayesian state modeling, multi-agent deliberation, and evidence-backed reporting."
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+authors = [
+    {name = "Abhishek", email = "abhishek@example.com"},
+]
+keywords = [
+    "geopolitical-intelligence",
+    "bayesian-inference",
+    "monte-carlo",
+    "multi-agent-systems",
+    "natural-language-processing",
+    "fastapi",
+    "risk-assessment",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+]
+
+[project.urls]
+Homepage = "https://github.com/ABHISHEK1139/IND-Diplomat"
+Repository = "https://github.com/ABHISHEK1139/IND-Diplomat"
+Documentation = "https://github.com/ABHISHEK1139/IND-Diplomat/blob/main/docs/architecture.md"
+Issues = "https://github.com/ABHISHEK1139/IND-Diplomat/issues"
+
+[project.scripts]
+ind-diplomat = "run:main"
+
+# ── Tool Configuration ────────────────────────────────────────────────────
+
+[tool.pytest.ini_options]
+testpaths = ["test"]
+addopts = "-ra --tb=short"
+norecursedirs = ["runtime", "reports", "data", ".pytest_cache", "__pycache__"]
+asyncio_mode = "auto"
+
+[tool.black]
+line-length = 120
+target-version = ["py310", "py311", "py312"]
+
+[tool.isort]
+profile = "black"
+line_length = 120
+known_first_party = ["engine", "Config", "Core", "Frontend", "Utils"]
+
+[tool.flake8]
+max-line-length = 120
+exclude = [".venv", "__pycache__", "build", "dist", ".git"]
+extend-ignore = ["E203", "W503"]
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true
+exclude = ["build", "dist", ".venv"]
+
+[tool.coverage.run]
+source = ["."]
+omit = [
+    "test/*",
+    ".venv/*",
+    "Scripts/*",
+    "docs/*",
+]
+
+[tool.coverage.report]
+show_missing = true
+skip_empty = true
+fail_under = 20
