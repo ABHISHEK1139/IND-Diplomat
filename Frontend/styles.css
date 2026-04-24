@@ -187,3 +187,15 @@ body{background:radial-gradient(ellipse at 10% 0%,rgba(79,143,247,.07) 0%,transp
   .query-controls{flex-direction:column}.submit-btn{width:100%;margin-left:0}
   .risk-value{font-size:32px}
 }
+
+/* ═══ AUDIT TRAIL ═══ */
+.audit-meta{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-bottom:14px}
+.audit-field{background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:10px 12px}
+.audit-field-label{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--dim);display:block}
+.audit-field-value{font-size:14px;font-family:'JetBrains Mono',monospace;font-weight:600;margin-top:3px;display:block;word-break:break-all}
+.audit-actions{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.audit-btn{background:linear-gradient(135deg,var(--gold),var(--orange));border:none;border-radius:10px;color:#fff;font-weight:700;font-size:13px;padding:10px 20px;cursor:pointer;transition:all .2s}
+.audit-btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(212,162,31,.25)}
+.audit-btn.secondary{background:var(--s2);border:1px solid var(--border);color:var(--t2)}
+.audit-btn.secondary:hover{border-color:var(--gold);color:var(--gold);box-shadow:none}
+.audit-pre{background:#050810;border:1px solid var(--border);border-radius:10px;padding:16px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--t2);max-height:500px;overflow:auto;white-space:pre-wrap;word-break:break-word;margin-top:8px}

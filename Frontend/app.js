@@ -67,7 +67,7 @@ function finish(r){
   // Re-trigger fade animations
   $$('.results .fade').forEach((el,i)=>{el.style.animation='none';el.offsetHeight;el.style.animation='';el.style.animationDelay=(i*0.06)+'s'});
 
-  renderSources(r);renderSignals(r);renderClassify(r);renderCouncil(r);renderVerify(r);renderGate(r);renderFinal(r);renderEvidence(r);renderReasoning(r);
+  renderSources(r);renderSignals(r);renderClassify(r);renderCouncil(r);renderVerify(r);renderGate(r);renderFinal(r);renderEvidence(r);renderReasoning(r);renderAudit(r);
   checkHealth();
   // Scroll to results
   $('results').scrollIntoView({behavior:'smooth',block:'start'});
@@ -198,3 +198,39 @@ function renderReasoning(r){
 function showError(msg){$('progressWrap').style.display='none';$('results').style.display='flex';$('emptyHero').style.display='none';$('riskValue').textContent='ERROR';$('briefing').innerHTML=`<span style="color:var(--red)"><strong>Error:</strong> ${esc(msg)}</span>`;const btn=$('submitBtn');btn.disabled=false;$('btnText').textContent='Run Assessment';$('btnSpinner').style.display='none';stopPolling();resetPipeline()}
 function formatAnswer(t){if(!t)return'';return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\*(.*?)\*/g,'<em>$1</em>').replace(/^### (.+)$/gm,'<h3 style="margin:12px 0 6px;font-size:15px;color:var(--t1)">$1</h3>').replace(/^## (.+)$/gm,'<h2 style="margin:14px 0 6px;font-size:17px;color:var(--t1)">$1</h2>').replace(/\n\n/g,'<br><br>').replace(/\n/g,'<br>')}
 function stopPolling(){clearInterval(state.pollTimer);clearInterval(state.elapsedTimer);state.pollTimer=state.elapsedTimer=null}
+
+// ── Audit Trail ──
+let _lastRawResult=null;
+function renderAudit(r){
+  _lastRawResult=r;
+  const now=new Date().toISOString();
+  const elapsed=state.startTime?fmtE(Math.round((Date.now()-state.startTime)/1000)):'—';
+  const fields=[
+    {l:'Timestamp',v:now},
+    {l:'Trace ID',v:r.job_id||'—'},
+    {l:'Query',v:r.query||$('queryInput').value.trim()||'—'},
+    {l:'Country',v:$('paramCountry').value||'—'},
+    {l:'Risk Level',v:r.risk_level||'—'},
+    {l:'Confidence',v:pct(r.confidence||0)},
+    {l:'Outcome',v:r.outcome||'—'},
+    {l:'Elapsed',v:elapsed},
+    {l:'Evidence Count',v:String((r.evidence_chain||[]).length)},
+    {l:'Gate Decision',v:r.gate_verdict?.decision||'—'},
+  ];
+  $('auditMeta').innerHTML=fields.map(f=>`<div class="audit-field"><span class="audit-field-label">${f.l}</span><span class="audit-field-value">${esc(f.v)}</span></div>`).join('');
+  $('auditRaw').textContent=JSON.stringify(r,null,2);
+}
+function downloadAuditJSON(){
+  if(!_lastRawResult)return;
+  const blob=new Blob([JSON.stringify(_lastRawResult,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download=`ind-diplomat-audit-${_lastRawResult.job_id||'unknown'}-${Date.now()}.json`;
+  document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
+}
+function copyAuditJSON(){
+  if(!_lastRawResult)return;
+  navigator.clipboard.writeText(JSON.stringify(_lastRawResult,null,2)).then(()=>{
+    const btn=$('copyJsonBtn');btn.textContent='✓ Copied!';setTimeout(()=>{btn.textContent='📋 Copy to Clipboard'},2000);
+  });
+}

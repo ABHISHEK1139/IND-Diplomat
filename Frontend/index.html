@@ -182,6 +182,23 @@
     <div class="reasoning-chain" id="reasoningChain"></div>
   </section>
 
+  <!-- AUDIT TRAIL -->
+  <section class="card fade" id="stepAudit" style="border-color:rgba(212,162,31,.25);background:rgba(212,162,31,.02)">
+    <div class="card-head">
+      <h3>🔒 Audit Trail — full reproducibility</h3>
+    </div>
+    <p class="explain">Every assessment is fully auditable. Download the raw machine-readable response below to independently verify any claim made above.</p>
+    <div class="audit-meta" id="auditMeta"></div>
+    <div class="audit-actions">
+      <button class="audit-btn" id="downloadJsonBtn" onclick="downloadAuditJSON()">📥 Download Raw JSON</button>
+      <button class="audit-btn secondary" id="copyJsonBtn" onclick="copyAuditJSON()">📋 Copy to Clipboard</button>
+    </div>
+    <details class="audit-raw">
+      <summary style="cursor:pointer;font-size:13px;color:var(--dim);padding:8px 0">▶ View raw response</summary>
+      <pre class="audit-pre" id="auditRaw"></pre>
+    </details>
+  </section>
+
 </main>
 
 <!-- ═══ EMPTY STATE (before first query) ═══ -->
