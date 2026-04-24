@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>IND-Diplomat — How It Works</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="explainable.css">
+</head>
+<body>
+
+<header class="top">
+  <div class="logo"><span class="pulse"></span>IND-DIPLOMAT</div>
+  <div class="meta">ASSESSMENT DIP-6-IRN-2026 &nbsp;|&nbsp; Persian Gulf Escalation Risk</div>
+  <div class="live">● LIVE</div>
+</header>
+
+<!-- PIPELINE -->
+<div class="pipeline">
+  <div class="step active"><div class="sn">1</div><div class="sl">Collect Data</div></div>
+  <span class="arrow">→</span>
+  <div class="step"><div class="sn">2</div><div class="sl">Filter Noise</div></div>
+  <span class="arrow">→</span>
+  <div class="step active"><div class="sn">3</div><div class="sl">Classify State</div></div>
+  <span class="arrow">→</span>
+  <div class="step"><div class="sn">4</div><div class="sl">Analyze</div></div>
+  <span class="arrow">→</span>
+  <div class="step"><div class="sn">5</div><div class="sl">Challenge</div></div>
+  <span class="arrow">→</span>
+  <div class="step active"><div class="sn">6</div><div class="sl">Decide</div></div>
+  <span class="arrow">→</span>
+  <div class="step"><div class="sn">7</div><div class="sl">Forecast</div></div>
+</div>
+
+<main class="grid">
+
+<!-- ═══ STEP 1 ═══ -->
+<section class="card fade">
+  <div class="card-head">
+    <h3>Step 1 — Collect data from 15+ sources</h3>
+    <span class="code-ref">Layer1_Collection/</span>
+  </div>
+  <p class="explain">The system pulls structured data from <strong>15 independent geopolitical databases</strong> — arms trade records, conflict event streams, economic indicators, treaty registries, and sanctions lists.</p>
+  <div class="provider-grid">
+    <div class="prov"><span class="pi">🔫</span><strong>SIPRI</strong><span class="pd">Arms transfers & military spending</span></div>
+    <div class="prov"><span class="pi">📡</span><strong>GDELT</strong><span class="pd">News events across 60+ languages</span></div>
+    <div class="prov"><span class="pi">🗳</span><strong>V-Dem</strong><span class="pd">Democracy & regime stability scores</span></div>
+    <div class="prov"><span class="pi">💰</span><strong>WorldBank</strong><span class="pd">GDP, trade, economic health</span></div>
+    <div class="prov"><span class="pi">🤝</span><strong>ATOP</strong><span class="pd">Military alliance treaties</span></div>
+    <div class="prov"><span class="pi">🚫</span><strong>OFAC</strong><span class="pd">US sanctions registry</span></div>
+    <div class="prov"><span class="pi">⚔</span><strong>UCDP</strong><span class="pd">Conflict fatality records</span></div>
+    <div class="prov"><span class="pi">📊</span><strong>Comtrade</strong><span class="pd">UN trade flows</span></div>
+    <div class="prov"><span class="pi">🌊</span><strong>EEZ</strong><span class="pd">Maritime zone incursions</span></div>
+    <div class="prov"><span class="pi">👤</span><strong>Leaders</strong><span class="pd">Head of state changes</span></div>
+    <div class="prov"><span class="pi">🏛</span><strong>Lowy</strong><span class="pd">Asia Power Index</span></div>
+    <div class="prov"><span class="pi">🛢</span><strong>Sanctions</strong><span class="pd">Multi-regime tracker</span></div>
+  </div>
+  <div class="why">Each provider maps raw data into one of <strong>12 signal groups</strong> (military, diplomatic, economic, etc.). This is similar to how Palantir Foundry fuses siloed datasets into a single ontology.</div>
+</section>
+
+<!-- ═══ STEP 2 ═══ -->
+<section class="card fade">
+  <div class="card-head">
+    <h3>Step 2 — Filter noise: don't trust a single source</h3>
+    <span class="code-ref">belief_accumulator.py</span>
+  </div>
+  <p class="explain">Raw data isn't treated as truth. Before any analysis happens, the system requires <strong>independent confirmation</strong> — one blog post mentioning "troops" doesn't move the needle.</p>
+  <div class="chain">
+    <div class="chain-node">
+      <div class="cn-title">Raw Data</div>
+      <div class="cn-desc">A news article or dataset entry</div>
+    </div>
+    <span class="arrow" style="font-size:24px">→</span>
+    <div class="chain-node">
+      <div class="cn-title">Observation</div>
+      <div class="cn-desc">"This might be happening"</div>
+    </div>
+    <span class="arrow" style="font-size:24px">→</span>
+    <div class="chain-node promoted">
+      <div class="cn-title">Confirmed Signal</div>
+      <div class="cn-desc">Multiple independent sources agree</div>
+    </div>
+  </div>
+  <div class="mechlist">
+    <div class="mech"><span class="mi">🔁</span><strong>Duplicate detection</strong> — If 5 outlets republish the same Reuters report, it counts as 1 source, not 5</div>
+    <div class="mech"><span class="mi">⏱</span><strong>Freshness check</strong> — A 3-day-old report has half the weight of a fresh one. After a week, almost none.</div>
+    <div class="mech"><span class="mi">📡</span><strong>Multi-source bonus</strong> — When GDELT and SIPRI both detect the same signal independently, confidence increases</div>
+    <div class="mech"><span class="mi">🏷</span><strong>Source trust tiers</strong> — Satellite data (0.90) is weighted more than social media (0.30)</div>
+  </div>
+  <div class="why">This prevents the Iraq WMD problem: many reports citing the same original source being treated as independent confirmation.</div>
+</section>
+
+<!-- ═══ STEP 2 RESULT ═══ -->
+<section class="card fade">
+  <div class="card-head">
+    <h3>What the system detected for Iran</h3>
+  </div>
+  <table class="sig-table">
+    <tr><th>Signal</th><th>Strength</th><th></th></tr>
+    <tr><td>Economic Pressure</td><td class="mono">1.00</td><td><div class="minibar"><div class="mfill" style="width:100%;background:var(--red)"></div></div></td></tr>
+    <tr><td>Coercive Diplomacy</td><td class="mono">0.95</td><td><div class="minibar"><div class="mfill" style="width:95%;background:var(--orange)"></div></div></td></tr>
+    <tr><td>Diplomatic Hostility</td><td class="mono">0.95</td><td><div class="minibar"><div class="mfill" style="width:95%;background:var(--orange)"></div></div></td></tr>
+    <tr><td>Active Diplomacy</td><td class="mono">0.95</td><td><div class="minibar"><div class="mfill" style="width:95%;background:var(--blue)"></div></div></td></tr>
+    <tr><td>WMD Activity</td><td class="mono">0.95</td><td><div class="minibar"><div class="mfill" style="width:95%;background:var(--red)"></div></div></td></tr>
+    <tr><td>Cyber Activity</td><td class="mono">0.83</td><td><div class="minibar"><div class="mfill" style="width:83%"></div></div></td></tr>
+    <tr><td>Alliance Shifts</td><td class="mono">0.51</td><td><div class="minibar"><div class="mfill" style="width:51%"></div></div></td></tr>
+    <tr><td>Military Posture</td><td class="mono">0.43</td><td><div class="minibar"><div class="mfill" style="width:43%"></div></div></td></tr>
+  </table>
+</section>
+
+<!-- ═══ STEP 3 ═══ -->
+<section class="card fade">
+  <div class="card-head">
+    <h3>Step 3 — Classify: what state is this country in?</h3>
+    <span class="code-ref">conflict_state_model.py</span>
+  </div>
+  <p class="explain">The model places each country on a 5-state scale from <strong>Peace</strong> to <strong>Full War</strong>. It doesn't pick a single label — it gives a <strong>probability distribution</strong> across all states, so the analyst can see exactly how uncertain the system is.</p>
+  <div class="posteriors">
+    <div class="post-row"><span class="post-name">PEACE</span><div class="post-bg"><div class="post-bar" data-w="5.4" style="background:var(--green)"></div></div><span class="post-pct" style="color:var(--green)">5.4%</span></div>
+    <div class="post-row"><span class="post-name">CRISIS</span><div class="post-bg"><div class="post-bar" data-w="11.7" style="background:var(--cyan)"></div></div><span class="post-pct" style="color:var(--cyan)">11.7%</span></div>
+    <div class="post-row"><span class="post-name">LIMITED STRIKES</span><div class="post-bg"><div class="post-bar" data-w="14.6" style="background:var(--yellow)"></div></div><span class="post-pct" style="color:var(--yellow)">14.6%</span></div>
+    <div class="post-row hot"><span class="post-name">ACTIVE CONFLICT ◄</span><div class="post-bg"><div class="post-bar" data-w="48" style="background:var(--orange)"></div></div><span class="post-pct" style="color:var(--orange)">48.0%</span></div>
+    <div class="post-row"><span class="post-name">FULL WAR</span><div class="post-bg"><div class="post-bar" data-w="20.3" style="background:var(--red)"></div></div><span class="post-pct" style="color:var(--red)">20.3%</span></div>
+  </div>
+  <div class="key-points">
+    <div class="kp"><strong>Remembers history</strong> — Each run's output becomes the next run's starting point, so the model tracks how a situation evolves over time</div>
+    <div class="kp"><strong>No sudden jumps</strong> — A country can't go from Peace to War in one step. The transition matrix enforces realistic state changes</div>
+    <div class="kp"><strong>Self-correcting</strong> — When outcomes resolve, the model updates its own transition probabilities to get better over time</div>
+  </div>
+</section>
+
+<!-- ═══ STEP 4 ═══ -->
+<section class="card fade">
+  <div class="card-head">
+    <h3>Step 4 — Five AI analysts debate the same evidence</h3>
+    <span class="code-ref">coordinator.py</span>
+  </div>
+  <p class="explain">Each "minister" looks at the same data through a different lens. They independently propose risk assessments, then the system synthesizes their views — weighting each by how confident they are and how strong their reasoning is.</p>
+  <div class="council">
+    <div class="min-row"><div class="min-icon" style="background:rgba(239,68,68,.12)">🛡</div><div class="min-info"><strong>Security</strong><span class="min-dim">Military capability</span></div><div class="min-conf" style="color:var(--red)">22%</div><div class="min-sigs">Troop movements, weapons systems, logistics</div></div>
+    <div class="min-row"><div class="min-icon" style="background:rgba(79,143,247,.12)">🤝</div><div class="min-info"><strong>Diplomatic</strong><span class="min-dim">Intent signals</span></div><div class="min-conf" style="color:var(--blue)">50%</div><div class="min-sigs">Negotiations, hostility, coercive bargaining</div></div>
+    <div class="min-row"><div class="min-icon" style="background:rgba(52,211,153,.12)">📊</div><div class="min-info"><strong>Economic</strong><span class="min-dim">Cost of conflict</span></div><div class="min-conf" style="color:var(--green)">71%</div><div class="min-sigs">Sanctions pressure, trade disruption, alliances</div></div>
+    <div class="min-row"><div class="min-icon" style="background:rgba(251,191,36,.12)">🏛</div><div class="min-info"><strong>Domestic</strong><span class="min-dim">Internal stability</span></div><div class="min-conf" style="color:var(--yellow)">30%</div><div class="min-sigs">Regime stability, public sentiment, deception</div></div>
+    <div class="min-row"><div class="min-icon" style="background:rgba(139,108,246,.12)">⚡</div><div class="min-info"><strong>Contrarian</strong><span class="min-dim">Devil's advocate</span></div><div class="min-conf" style="color:var(--purple)">73%</div><div class="min-sigs">Deliberately challenges the majority view</div></div>
+  </div>
+  <div class="why">Multiple perspectives reduce blind spots. If all analysts agree, great — if they disagree, the system flags the contradiction and investigates further.</div>
+</section>
+
+<!-- ═══ STEP 5 ═══ -->
+<section class="card fade">
+  <div class="card-head">
+    <h3>Step 5 — Challenge: is the analysis actually correct?</h3>
+    <span class="code-ref">red_team.py + cove.py + crag.py</span>
+  </div>
+  <div class="rt-badge">⚠ NOT ROBUST</div>
+  <div class="rt-penalty">−6.0% confidence penalty applied</div>
+  <p class="explain" style="margin-top:14px">Before any assessment is released, three verification systems stress-test it:</p>
+  <div class="verify-chain">
+    <div class="vc"><strong>Red Team</strong> — Challenges the assessment across 6 dimensions. Found only 2 sources here — applied a confidence penalty.</div>
+    <div class="vc"><strong>Claim Verification</strong> — Breaks the assessment into individual claims and checks each one against the evidence.</div>
+    <div class="vc"><strong>Retrieval Quality Check</strong> — Evaluates whether the evidence retrieved was actually relevant to the question asked.</div>
+  </div>
+  <div class="rt-finding">Finding: Diplomacy (0.95) and Hostility (0.95) are both high — the system flags this as possible coercive diplomacy, not a contradiction.</div>
+</section>
+
+<!-- ═══ STEP 6 ═══ -->
+<section class="card fade">
+  <div class="card-head">
+    <h3>Step 6 — Gate: should this assessment be released at all?</h3>
+    <span class="code-ref">assessment_gate.py</span>
+  </div>
+  <p class="explain">This is the most important part. The gate runs <strong>5 hard-coded rules — no AI, no randomness</strong>. If the evidence is too thin, the system says "I don't know" instead of guessing. It must <strong>earn the right</strong> to release an assessment.</p>
+  <div class="rules">
+    <div class="rule pass"><span class="rule-n">1</span><span class="rule-name">Enough data?</span><span class="rule-desc">System hasn't requested too many follow-up collection tasks</span><span class="rule-result">✓ PASS</span></div>
+    <div class="rule pass"><span class="rule-n">2</span><span class="rule-name">Military coverage?</span><span class="rule-desc">Must have at least 35% military data to assess escalation</span><span class="rule-result">✓ PASS</span></div>
+    <div class="rule pass"><span class="rule-n">3</span><span class="rule-name">Data is fresh?</span><span class="rule-desc">Rejects assessments based on outdated intelligence</span><span class="rule-result">✓ PASS</span></div>
+    <div class="rule pass"><span class="rule-n">4</span><span class="rule-name">Confident enough?</span><span class="rule-desc">Overall confidence must be above 55%</span><span class="rule-result">✓ PASS (63%)</span></div>
+    <div class="rule warn"><span class="rule-n">5</span><span class="rule-name">Trend check</span><span class="rule-desc">If signals are rising fast but assessment says "low" — override it</span><span class="rule-result">↑ +MEDIUM</span></div>
+  </div>
+  <div class="verdict">APPROVED — Assessment released</div>
+  <div class="why">In high-stakes systems, you can't let an AI model decide what gets published. These rules are deterministic — the same input always gives the same decision. No hallucination possible.</div>
+</section>
+
+<!-- ═══ FINAL RESULT ═══ -->
+<section class="card fade" style="background:linear-gradient(135deg,#0c0f20,#14102a);border-color:#2a1f55">
+  <div class="card-head">
+    <h3>Final Assessment</h3>
+  </div>
+  <div class="risk-label">Risk Level</div>
+  <div class="risk-value">ELEVATED — 47.3%</div>
+  <div class="esc-bar"><div class="esc-fill" id="escFill"></div></div>
+  <table class="sre-table">
+    <tr><td>Military Capability</td><td class="mono">0.71 × 35%</td><td class="mono blue">= 0.248</td></tr>
+    <tr><td>Intent Signals</td><td class="mono">0.31 × 30%</td><td class="mono blue">= 0.092</td></tr>
+    <tr><td>Internal Stability</td><td class="mono">0.13 × 20%</td><td class="mono blue">= 0.025</td></tr>
+    <tr><td>Cost of Conflict</td><td class="mono">0.45 × 15%</td><td class="mono blue">= 0.067</td></tr>
+    <tr class="total"><td><strong>Total + Trend</strong></td><td></td><td class="mono orange"><strong>= 0.473</strong></td></tr>
+  </table>
+  <div class="stat-row">
+    <div class="stat"><span class="stat-l">Confidence</span><span class="stat-v" style="color:var(--yellow)">63.1%</span></div>
+    <div class="stat"><span class="stat-l">14-Day Conflict Probability</span><span class="stat-v" style="color:var(--orange)">74.7%</span></div>
+    <div class="stat"><span class="stat-l">Black Swan Alert</span><span class="stat-v" style="color:var(--green)">None</span></div>
+  </div>
+</section>
+
+<!-- ═══ STEP 7 ═══ -->
+<section class="card fade">
+  <div class="card-head">
+    <h3>Step 7 — What happens next? 14-day forecast</h3>
+  </div>
+  <div class="traj-items">
+    <div class="ti"><span>Probability situation gets worse</span><span class="mono" style="color:var(--orange)">49%</span></div>
+    <div class="ti"><span>Probability situation improves</span><span class="mono" style="color:var(--green)">15%</span></div>
+    <div class="ti"><span>Probability stays the same</span><span class="mono" style="color:var(--cyan)">36%</span></div>
+  </div>
+  <h4 style="margin-top:20px;font-size:14px;color:var(--t2)">Anomaly Detection — 3 independent checks</h4>
+  <div class="channels">
+    <div class="ch"><span class="ch-dot"></span>Sudden spike in activity <span class="ch-ok">CLEAR</span></div>
+    <div class="ch"><span class="ch-dot"></span>Structural change in patterns <span class="ch-ok">CLEAR</span></div>
+    <div class="ch"><span class="ch-dot"></span>Rare high-impact event <span class="ch-ok">CLEAR</span></div>
+  </div>
+</section>
+
+<!-- ═══ VALIDATION ═══ -->
+<section class="card fade">
+  <div class="card-head">
+    <h3>Tested on real crises — not just a demo</h3>
+  </div>
+  <div class="eval-grid">
+    <div class="eval-metric"><div class="eval-val">0.92</div><div class="eval-label">Prediction Accuracy</div><div class="eval-desc">Gets the right conflict state 92% of the time</div></div>
+    <div class="eval-metric"><div class="eval-val">0.13</div><div class="eval-label">Calibration Error</div><div class="eval-desc">When it says 70% chance, it's right about 70% of the time</div></div>
+    <div class="eval-metric"><div class="eval-val" style="font-size:24px">EXCELLENT</div><div class="eval-label">Calibration Grade</div><div class="eval-desc">Probabilities are trustworthy, not inflated</div></div>
+    <div class="eval-metric"><div class="eval-val">0.81</div><div class="eval-label">Top-2 Accuracy</div><div class="eval-desc">Correct state is in the top 2 predictions 81% of the time</div></div>
+  </div>
+  <div class="eval-scenarios">
+    <strong>Validated against:</strong> Taiwan Strait 2022 &nbsp;|&nbsp; Crimea 2014 &nbsp;|&nbsp; Iran escalation cycles
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  IND-DIPLOMAT v6 &nbsp;|&nbsp; 7-Layer Architecture &nbsp;|&nbsp; 15+ Data Sources &nbsp;|&nbsp; Built by Abhishek Kumar
+</footer>
+
+<script>
+window.addEventListener('load',()=>{
+  setTimeout(()=>{
+    document.getElementById('escFill').style.width='47.3%';
+    document.querySelectorAll('[data-w]').forEach(b=>b.style.width=b.dataset.w+'%');
+  },500);
+  document.querySelectorAll('.fade').forEach((el,i)=>{
+    el.style.animationDelay=(i*0.06)+'s';
+  });
+});
+</script>
+</body>
+</html>

@@ -8,7 +8,7 @@ from typing import List
 
 import requests
 from bs4 import BeautifulSoup
-from ddgs import DDGS
+from duckduckgo_search import DDGS
 
 
 def fail(reason: str) -> int:

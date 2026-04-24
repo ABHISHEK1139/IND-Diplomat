@@ -16,8 +16,8 @@ from engine.Layer4_Analysis.schema import ThreatLevel, AssessmentReport
 
 class TestCoordinatorAnomaly(unittest.TestCase):
     
-    @patch('Layer4_Analysis.coordinator.ThreatSynthesizer')
-    @patch('Layer4_Analysis.coordinator.AnomalySentinel')
+    @patch('engine.Layer4_Analysis.coordinator.ThreatSynthesizer')
+    @patch('engine.Layer4_Analysis.coordinator.AnomalySentinel')
     def test_anomaly_override(self, MockSentinel, MockSynthesizer):
         """Test that AnomalySentinel overrides the assessment."""
         from engine.Layer4_Analysis.coordinator import CouncilCoordinator
@@ -33,7 +33,7 @@ class TestCoordinatorAnomaly(unittest.TestCase):
         session = CouncilSession(
             session_id="test_anomaly",
             question="q",
-            state_context=StateContext(meta={}, evidence={})
+            state_context=StateContext.from_dict({"meta": {}, "evidence": {}})
         )
         
         # 2. Setup Mock Assessment (Normal)
@@ -61,8 +61,8 @@ class TestCoordinatorAnomaly(unittest.TestCase):
         self.assertIn("[ANOMALY DETECTED]", session.assessment_report.summary)
         self.assertEqual(session.assessment_report.confidence_score, 0.1)
         
-    @patch('Layer4_Analysis.coordinator.ThreatSynthesizer')
-    @patch('Layer4_Analysis.coordinator.AnomalySentinel')
+    @patch('engine.Layer4_Analysis.coordinator.ThreatSynthesizer')
+    @patch('engine.Layer4_Analysis.coordinator.AnomalySentinel')
     def test_investigation_trigger_low_coverage(self, MockSentinel, MockSynthesizer):
         """Test that low evidence coverage triggers investigation."""
         from engine.Layer4_Analysis.coordinator import CouncilCoordinator
@@ -73,7 +73,7 @@ class TestCoordinatorAnomaly(unittest.TestCase):
         session = CouncilSession(
             session_id="test_investigation",
             question="q",
-            state_context=StateContext(meta={}, evidence={})
+            state_context=StateContext.from_dict({"meta": {}, "evidence": {}})
         )
         
         report = MinisterReport(

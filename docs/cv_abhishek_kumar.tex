@@ -1,0 +1,219 @@
+\documentclass[10pt,a4paper]{extarticle}
+
+\usepackage[utf8]{inputenc}
+\usepackage[margin=0.42in, top=0.32in, bottom=0.25in]{geometry}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{paracol}
+\usepackage{hyperref}
+\usepackage{titlesec}
+\usepackage{fontawesome5}
+
+% ── CERN-inspired colour palette ────────────────────────────────────────
+\definecolor{headerbg}{RGB}{22, 42, 72}
+\definecolor{accent}{RGB}{0, 83, 155}
+\definecolor{rulecolor}{RGB}{40, 100, 170}
+\definecolor{subtlegray}{RGB}{80, 80, 80}
+
+\hypersetup{colorlinks=true, urlcolor=accent}
+\urlstyle{same}
+\setlength{\columnsep}{0.04\textwidth}
+\columnratio{0.26}
+
+\setlist[itemize]{noitemsep, topsep=1pt, parsep=0pt, partopsep=0pt, leftmargin=10pt, label={\color{accent}\textbullet}}
+
+\titleformat{\section}
+  {\color{accent}\bfseries\scshape}
+  {}{0pt}{}
+  [\vspace{0.5pt}{\color{rulecolor}\titlerule[0.5pt]}\vspace{1.5pt}]
+\titlespacing{\section}{0pt}{5pt}{2pt}
+
+\pagestyle{empty}
+
+\begin{document}
+
+% ═══════════════════════════════════════════════════════════════════════════
+% HEADER
+% ═══════════════════════════════════════════════════════════════════════════
+\begin{center}
+\colorbox{headerbg}{%
+\begin{minipage}{\dimexpr\textwidth-2\fboxsep}
+\vspace{7pt}
+\hspace{10pt}{\LARGE \bfseries \color{white} Abhishek Kumar}\hfill
+{\small \color{white!85!headerbg}
+  \faEnvelope\ \href{mailto:ak612520208365@gmail.com}{\color{white!85!headerbg}ak612520208365@gmail.com}
+  \quad \faPhone\ +91\,7004256214}\hspace{8pt}\\[2pt]
+\hspace{10pt}{\small \color{white!90!headerbg} Computer Science Engineering\;\textbar\;KL University, Vijayawada}\hfill
+{\small
+  \href{https://github.com/ABHISHEK1139}{\color{white!85!headerbg}\faGithub\ ABHISHEK1139}
+  \quad
+  \href{https://linkedin.com/in/abhishek-kumar-02a7b62ab}{\color{white!85!headerbg}\faLinkedin\ abhishek-kumar}}\hspace{8pt}
+\vspace{7pt}
+\end{minipage}%
+}
+\end{center}
+\vspace{-1pt}
+
+% ═══════════════════════════════════════════════════════════════════════════
+% TWO-COLUMN LAYOUT
+% ═══════════════════════════════════════════════════════════════════════════
+\begin{paracol}{2}
+
+% ───────────────────────────────────────────────────────────────────────────
+% LEFT COLUMN
+% ───────────────────────────────────────────────────────────────────────────
+\begin{leftcolumn}
+\raggedright
+
+\section*{Technical Skills}
+{\small
+\textbf{Languages}\\
+Python, C++, Java, JavaScript, SQL\\[3pt]
+\textbf{ML \& Scientific Computing}\\
+PyTorch, PyTorch Geometric,\\
+TensorFlow, XGBoost, scikit-learn,\\
+Hugging Face Transformers\\[3pt]
+\textbf{Data Engineering}\\
+Apache Kafka, Spark, Dask,\\
+PostgreSQL, MongoDB, ChromaDB\\[3pt]
+\textbf{Infrastructure \& DevOps}\\
+Docker, Kubernetes, Ansible,\\
+GitHub Actions, CI/CD pipelines\\[3pt]
+\textbf{Scientific Tools}\\
+Uproot, ROOT (CERN Open Data),\\
+NumPy, SciPy, Matplotlib, Pytest\\[3pt]
+\textbf{Model Deployment}\\
+FastAPI, Streamlit, REST APIs,\\
+containerised inference stacks
+}
+
+\section*{Education}
+{\small
+\textbf{B.Tech --- CSE}\hfill 2023\,--\,27\\
+KL University, Vijayawada\\
+CGPA: \textbf{8.80}\,/\,10.0\\[4pt]
+\textbf{Class XII (CBSE)}\hfill 2023\\
+Chasnalla Academy, Jharkhand\\
+78.2\,\%
+}
+
+\section*{Certifications}
+{\small
+\begin{itemize}
+  \item Oracle OCI Certified Pro
+  \item OCI 2025 Generative AI
+  \item Aviatrix ACE Multi-Cloud
+  \item IBM Exploratory DA \& ML
+  \item Linguaskill B2 (Cambridge)
+\end{itemize}
+}
+
+\section*{Languages}
+{\small
+English\;\textbar\;B2 Upper-Intermediate\\
+{\scriptsize (Cambridge Linguaskill certified)}\\
+Hindi\;\textbar\;Native
+}
+
+\section*{Interests}
+{\small
+\begin{itemize}
+  \item HEP data pipelines \& triggers
+  \item Bayesian \& probabilistic methods
+  \item GPU-accelerated inference
+  \item Distributed scientific computing
+  \item Generative deep learning
+  \item Open-source development
+\end{itemize}
+}
+
+\section*{Open-Source}
+{\small
+5 repos on \href{https://github.com/ABHISHEK1139}{\color{accent}GitHub/ABHISHEK1139}\\[2pt]
+{\footnotesize
+\texttt{real-time-particle-event-filter}\\
+\texttt{wgan-ecg-generator}\\
+\texttt{IND-Diplomat}\\
+\texttt{mri-inference-stack}}
+}
+
+\end{leftcolumn}
+
+% ───────────────────────────────────────────────────────────────────────────
+% RIGHT COLUMN
+% ───────────────────────────────────────────────────────────────────────────
+\begin{rightcolumn}
+
+\section*{Profile}
+{\small
+Computer Science student specialising in ML systems, probabilistic modelling, and scientific computing. Built end-to-end pipelines on CERN Open Data (\texttt{.root} format), trained generative models backed by a peer-reviewed publication (under review), and deployed Dockerised inference stacks with Kubernetes orchestration. Targeting CERN's real-time computing infrastructure and HL-LHC data challenges.}
+
+\section*{Research Publication {\normalfont\small\color{subtlegray}(Under Review)}}
+{\small
+\textbf{Conditional WGAN-GP for Synthetic ECG Waveform Generation: A Comprehensive Framework for Privacy-Preserving Cardiac Anomaly Detection}\\[1pt]
+Devarapalli D., \textbf{Kumar A.}, et al.\ --- Dept.\ of CSE, KLEF, India.\ \textit{Submitted Apr 2026.}\\[1pt]
+{\color{subtlegray}IS:\,7.23\quad FD:\,18.34\quad MI Recall\,$\uparrow$11.3\%\quad Similarity:\,9\% (Turnitin)}
+}
+
+\section*{Work Experience}
+{\small
+\textbf{AI/ML Research Intern} \hfill Jul\,--\,Sep 2025\\
+\textit{EduSkills \& AICTE\;---\;Google for Developers}
+\begin{itemize}
+  \item Implemented and benchmarked WGAN-GP, CGAN, and Vanilla GAN on PTB-XL and MIT-BIH datasets; findings contributed directly to the manuscript currently under review.
+  \item Evaluated \textit{Excellent} by programme supervisors; selected among top performers for research publication co-authorship.
+\end{itemize}
+}
+
+\section*{Projects}
+
+{\small
+\textbf{WGAN-GP Synthetic ECG Generator}\;\textit{\color{subtlegray}(Research Under~Review)}\hfill{\href{https://github.com/ABHISHEK1139/wgan-ecg-generator}{\color{accent}\faGithub}}\\
+\textit{\color{subtlegray}Python, PyTorch, Docker, Kubernetes, FastAPI, Streamlit}
+\begin{itemize}
+  \item Conditional WGAN-GP (1D-CNN, $\lambda_{\mathrm{gp}}\!=\!10$) on PTB-XL for 5 cardiac conditions; \textbf{IS:\,7.23, FD:\,18.34}\;---\;outperforms LSTM-GAN (FD:\,32.15) and RNN-GAN (FD:\,45.67).
+  \item Downstream 1D-ResNet: \textbf{+11.3\% MI Recall, +6.5\% accuracy} on 2,750 held-out clinical records; 1,500 epochs, zero mode collapse.
+  \item Production: FastAPI + Streamlit + Kubernetes; \textbf{1,190 ECGs/sec} (RTX 3090), \textbf{493 ECGs/sec} (Jetson Xavier NX).
+\end{itemize}
+}
+
+\vspace{2pt}
+{\small
+\textbf{IND-Diplomat\;---\;Geopolitical Bayesian Intelligence Engine}\hfill{\href{https://github.com/ABHISHEK1139/IND-Diplomat}{\color{accent}\faGithub}}\\
+\textit{\color{subtlegray}Python, Bayesian HMM, NLP, Apache Kafka, FastAPI, ChromaDB, Docker}
+\begin{itemize}
+  \item 5-state HMM (Peace\,$\to$\,War) with live posterior updates from 15+ OSINT streams (SIPRI, GDELT, ACLED) via Kafka; multi-agent council with 7 specialist reasoners.
+  \item RAG reasoning over ChromaDB; deterministic 5-rule assessment gate ensuring reproducible, auditable outputs without LLM dependency.
+  \item Backtested on 2 crises: \textbf{MAP\,0.92, Brier\,0.13}; HMM state inference and signal fusion transferable to detector-state modelling and event classification.
+\end{itemize}
+}
+
+\vspace{2pt}
+{\small
+\textbf{High-Energy Physics ML Trigger Prototype}\hfill{\href{https://github.com/ABHISHEK1139/real-time-particle-event-filter}{\color{accent}\faGithub}}\\
+\textit{\color{subtlegray}Python, PyTorch Geometric, XGBoost, Uproot, Pytest, Docker, GitHub Actions}
+\begin{itemize}
+  \item Event filter isolating $Z\!\to\!\mu^+\mu^-$ decays from CERN Open Data \texttt{.root} TTrees via Uproot; fully reproducible pipeline on real LHC collision records.
+  \item XGBoost vs.\ naive threshold at \textbf{5\% background leakage}: \textbf{+4.48\% Signal Efficiency}\;---\;mirrors CERN L1 hardware trigger optimisation methodology.
+  \item Type-safe modules, full unit-test coverage, \textbf{Dockerised CI/CD} (GitHub Actions); deterministic re-runs across all environments.
+\end{itemize}
+}
+
+\vspace{2pt}
+{\small
+\textbf{MRI Inference Stack\;---\;Brain Tumour Detection \& Classification}\hfill{\href{https://github.com/ABHISHEK1139/mri-inference-stack}{\color{accent}\faGithub}}\\
+\textit{\color{subtlegray}Python, TensorFlow, Docker, Kubernetes, Ansible, Streamlit, GitHub Actions}
+\begin{itemize}
+  \item 4-track modular ML system (detection, classification, segmentation, GAN) with calibrated threshold; \textbf{Detection F1:\,0.9889, Classifier AUC:\,0.9998}.
+  \item Docker Compose + Ansible + Kubernetes with liveness/readiness probes; CI enforces Ruff lint and compile checks on every push.
+  \item Preflight readiness checks, Git LFS model tracking, adaptive low-VRAM runtime profile for resource-constrained computing environments.
+\end{itemize}
+}
+
+\end{rightcolumn}
+\end{paracol}
+
+\vfill
+\centerline{\textcolor{rulecolor!40}{\rule{\textwidth}{0.3pt}}}
+
+\end{document}
