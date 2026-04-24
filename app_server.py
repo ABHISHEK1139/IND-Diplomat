@@ -709,6 +709,24 @@ async def serve_analyst_js():
     return FileResponse(str(FRONTEND_DIR / "analyst.js"), media_type="application/javascript")
 
 
+@app.get("/how-it-works", response_class=HTMLResponse)
+async def serve_explainable():
+    html_path = FRONTEND_DIR / "explainable.html"
+    if html_path.exists():
+        return HTMLResponse(html_path.read_text(encoding="utf-8"))
+    return HTMLResponse("<h1>explainable.html not found</h1>", status_code=404)
+
+
+@app.get("/explainable.css")
+async def serve_explainable_css():
+    return FileResponse(str(FRONTEND_DIR / "explainable.css"), media_type="text/css")
+
+
+@app.get("/styles_fixes.css")
+async def serve_styles_fixes():
+    return FileResponse(str(FRONTEND_DIR / "styles_fixes.css"), media_type="text/css")
+
+
 # ═══════════════════════════════════════════════════════════════════════
 # Routes — V2 Quick Query (used by app.js)
 # ═══════════════════════════════════════════════════════════════════════

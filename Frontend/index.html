@@ -1,73 +1,208 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IND-Diplomat Chat</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IND-Diplomat — Intelligence Dashboard</title>
+<meta name="description" content="Policy-grade geopolitical intelligence platform with Bayesian state models, council-style reasoning, and safety-gated risk forecasts.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="screen-backdrop" id="screenBackdrop"></div>
 
-    <div class="shell">
-        <aside class="sidebar" id="historySidebar">
-            <div class="brand-block">
-                <p class="brand-kicker">IND-Diplomat</p>
-                <h1 class="brand-title">Strategic Chat</h1>
-                <p class="brand-subtitle">Minimal analyst workspace</p>
-            </div>
+<!-- ═══ TOP BAR ═══ -->
+<header class="top-bar">
+  <div class="top-left">
+    <span class="pulse-dot"></span>
+    <span class="brand">IND-DIPLOMAT</span>
+  </div>
+  <nav class="top-nav">
+    <a href="/" class="nav-link active">Dashboard</a>
+    <a href="/how-it-works" class="nav-link">How It Works</a>
+    <a href="/docs" class="nav-link" target="_blank">API Docs</a>
+  </nav>
+  <div class="top-right">
+    <span class="status-chip" id="apiChip">● Checking…</span>
+    <span class="status-chip" id="modelChip">● Checking…</span>
+  </div>
+</header>
 
-            <button class="new-chat-btn" id="newChatBtn" type="button">New Chat</button>
+<!-- ═══ PIPELINE TRACKER ═══ -->
+<div class="pipeline-bar" id="pipelineBar">
+  <div class="pipe-step" data-phase="SCOPE_CHECK"><div class="pipe-num">1</div><div class="pipe-label">Scope</div></div>
+  <span class="pipe-arrow">→</span>
+  <div class="pipe-step" data-phase="SENSORS"><div class="pipe-num">2</div><div class="pipe-label">Sensors</div></div>
+  <span class="pipe-arrow">→</span>
+  <div class="pipe-step" data-phase="BELIEF"><div class="pipe-num">3</div><div class="pipe-label">Belief</div></div>
+  <span class="pipe-arrow">→</span>
+  <div class="pipe-step" data-phase="COUNCIL"><div class="pipe-num">4</div><div class="pipe-label">Council</div></div>
+  <span class="pipe-arrow">→</span>
+  <div class="pipe-step" data-phase="GATE"><div class="pipe-num">5</div><div class="pipe-label">Gate</div></div>
+  <span class="pipe-arrow">→</span>
+  <div class="pipe-step" data-phase="REPORT"><div class="pipe-num">6</div><div class="pipe-label">Report</div></div>
+</div>
 
-            <div class="history-block">
-                <p class="history-label">History</p>
-                <ul class="history-list" id="historyList"></ul>
-            </div>
+<!-- ═══ MAIN CONTENT ═══ -->
+<main class="main-grid">
 
-            <div class="sidebar-footer">
-                <label class="field-label" for="countryInput">Country Code</label>
-                <input id="countryInput" class="field-input" type="text" value="IND" maxlength="5" spellcheck="false">
+  <!-- LEFT: Query + Briefing -->
+  <section class="col-left">
 
-                <div class="status-row">
-                    <span class="status-chip" id="apiStatus">API: checking</span>
-                    <span class="status-chip" id="modelStatus">Model: checking</span>
-                </div>
-            </div>
-        </aside>
-
-        <section class="workspace">
-            <header class="workspace-header">
-                <button class="history-toggle" id="historyToggle" type="button" aria-label="Toggle history panel">History</button>
-                <div class="workspace-title-wrap">
-                    <p class="workspace-kicker">Live Session</p>
-                    <h2 class="workspace-title" id="workspaceTitle">New strategic thread</h2>
-                </div>
-                <button class="clear-chat-btn" id="clearChatBtn" type="button">Clear</button>
-            </header>
-
-            <main class="chat-feed" id="chatFeed">
-                <div class="empty-state" id="emptyState">
-                    <h3>Start a diplomatic assessment</h3>
-                    <p>Ask one focused question. Responses are stored in local chat history on this device.</p>
-                </div>
-            </main>
-
-            <form class="composer" id="composerForm">
-                <textarea
-                    id="promptInput"
-                    class="composer-input"
-                    placeholder="Ask IND-Diplomat (example: Assess India-Pakistan escalation risk in 30 days.)"
-                    rows="1"
-                    required
-                ></textarea>
-                <button id="sendBtn" class="send-btn" type="submit">Send</button>
-            </form>
-        </section>
+    <!-- QUERY CARD -->
+    <div class="card query-card">
+      <h2 class="card-title">Intelligence Query</h2>
+      <form id="queryForm" autocomplete="off">
+        <textarea id="queryInput" class="query-textarea" rows="3" placeholder="e.g. Assess India-Pakistan escalation risk over the next 30 days" required></textarea>
+        <div class="query-controls">
+          <div class="param-row">
+            <label class="param-label">Country
+              <input id="paramCountry" class="param-input" type="text" value="IND" maxlength="5" spellcheck="false">
+            </label>
+            <label class="param-label">Horizon
+              <select id="paramHorizon" class="param-input">
+                <option value="7d">7 days</option>
+                <option value="14d">14 days</option>
+                <option value="30d" selected>30 days</option>
+                <option value="90d">90 days</option>
+              </select>
+            </label>
+            <label class="param-label">Depth
+              <select id="paramDepth" class="param-input">
+                <option value="fast">Fast</option>
+                <option value="standard" selected>Standard</option>
+                <option value="deep">Deep</option>
+              </select>
+            </label>
+          </div>
+          <button id="submitBtn" class="submit-btn" type="submit">
+            <span class="btn-text">Run Assessment</span>
+            <span class="btn-spinner" style="display:none"></span>
+          </button>
+        </div>
+      </form>
     </div>
 
-    <script src="app.js"></script>
+    <!-- PROGRESS CARD (hidden until running) -->
+    <div class="card progress-card" id="progressCard" style="display:none">
+      <div class="progress-header">
+        <span class="progress-label">Processing…</span>
+        <span class="progress-elapsed" id="progressElapsed">0s</span>
+      </div>
+      <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill"></div></div>
+      <div class="progress-detail" id="progressDetail">Queued…</div>
+    </div>
+
+    <!-- RESULT: RISK OVERVIEW -->
+    <div class="card result-card" id="resultCard" style="display:none">
+      <div class="risk-header">
+        <div>
+          <div class="risk-kicker">ASSESSMENT RESULT</div>
+          <div class="risk-level" id="riskLevel">—</div>
+        </div>
+        <div class="risk-stats">
+          <div class="r-stat"><span class="r-stat-label">Confidence</span><span class="r-stat-val" id="confValue">—</span></div>
+          <div class="r-stat"><span class="r-stat-label">Outcome</span><span class="r-stat-val" id="outcomeValue">—</span></div>
+          <div class="r-stat"><span class="r-stat-label">Trace</span><span class="r-stat-val mono" id="traceValue">—</span></div>
+          <div class="r-stat"><span class="r-stat-label">Elapsed</span><span class="r-stat-val mono" id="elapsedValue">—</span></div>
+        </div>
+      </div>
+      <div class="esc-bar"><div class="esc-fill" id="escFill"></div></div>
+    </div>
+
+    <!-- BRIEFING -->
+    <div class="card" id="briefingCard" style="display:none">
+      <h3 class="card-title">Intelligence Briefing</h3>
+      <div class="briefing-text" id="briefingText"></div>
+    </div>
+
+    <!-- SOURCES -->
+    <div class="card" id="sourcesCard" style="display:none">
+      <h3 class="card-title">Sources</h3>
+      <div id="sourcesList" class="sources-list"></div>
+    </div>
+
+  </section>
+
+  <!-- RIGHT: SRE + Council + Gate + Evidence -->
+  <section class="col-right">
+
+    <!-- TAB BAR -->
+    <div class="tab-bar" id="tabBar" style="display:none">
+      <button class="tab-btn active" data-tab="sre">SRE Radar</button>
+      <button class="tab-btn" data-tab="council">Council</button>
+      <button class="tab-btn" data-tab="gate">Gate</button>
+      <button class="tab-btn" data-tab="evidence">Evidence</button>
+      <button class="tab-btn" data-tab="reasoning">Reasoning</button>
+    </div>
+
+    <!-- SRE TAB -->
+    <div class="card tab-panel active" id="sre-panel" style="display:none">
+      <h3 class="card-title">Strategic Risk Escalation</h3>
+      <div class="sre-gauge">
+        <div class="gauge-ring" id="gaugeRing">
+          <div class="gauge-inner">
+            <div class="gauge-val" id="gaugeVal">—</div>
+            <div class="gauge-risk" id="gaugeRisk">—</div>
+          </div>
+        </div>
+      </div>
+      <div class="sre-domains">
+        <div class="sre-row"><span class="sre-name">Capability</span><div class="sre-track"><div class="sre-fill cap" id="sreCap"></div></div><span class="sre-val" id="sreCapVal">—</span></div>
+        <div class="sre-row"><span class="sre-name">Intent</span><div class="sre-track"><div class="sre-fill int" id="sreInt"></div></div><span class="sre-val" id="sreIntVal">—</span></div>
+        <div class="sre-row"><span class="sre-name">Stability</span><div class="sre-track"><div class="sre-fill stab" id="sreStab"></div></div><span class="sre-val" id="sreStabVal">—</span></div>
+        <div class="sre-row"><span class="sre-name">Cost</span><div class="sre-track"><div class="sre-fill cost" id="sreCost"></div></div><span class="sre-val" id="sreCostVal">—</span></div>
+      </div>
+    </div>
+
+    <!-- COUNCIL TAB -->
+    <div class="card tab-panel" id="council-panel" style="display:none">
+      <h3 class="card-title">Council of Ministers</h3>
+      <div id="councilList" class="council-list">
+        <div class="empty-hint">Submit a query to see minister deliberation</div>
+      </div>
+    </div>
+
+    <!-- GATE TAB -->
+    <div class="card tab-panel" id="gate-panel" style="display:none">
+      <h3 class="card-title">Assessment Gate</h3>
+      <div id="gateContent" class="gate-content">
+        <div class="empty-hint">Gate verdict will appear after assessment</div>
+      </div>
+    </div>
+
+    <!-- EVIDENCE TAB -->
+    <div class="card tab-panel" id="evidence-panel" style="display:none">
+      <h3 class="card-title">Evidence Chain</h3>
+      <div id="evidenceContent" class="evidence-content">
+        <div class="empty-hint">Evidence atoms will appear here</div>
+      </div>
+    </div>
+
+    <!-- REASONING TAB -->
+    <div class="card tab-panel" id="reasoning-panel" style="display:none">
+      <h3 class="card-title">Reasoning Chain</h3>
+      <div id="reasoningContent" class="reasoning-content">
+        <div class="empty-hint">Pipeline reasoning steps will appear here</div>
+      </div>
+    </div>
+
+    <!-- PAST ASSESSMENTS -->
+    <div class="card past-card">
+      <div class="past-header" id="pastHeader">
+        <h3 class="card-title" style="margin:0">Past Assessments</h3>
+        <span class="past-toggle" id="pastToggle">▼</span>
+      </div>
+      <div class="past-list" id="pastList" style="display:none"></div>
+    </div>
+
+  </section>
+
+</main>
+
+<footer class="footer">
+  IND-DIPLOMAT &nbsp;|&nbsp; 7-Layer Architecture &nbsp;|&nbsp; 15+ Data Sources &nbsp;|&nbsp; Bayesian State Model &nbsp;|&nbsp; Built by Abhishek Kumar
+</footer>
+
+<script src="app.js"></script>
 </body>
 </html>
