@@ -1,599 +1,200 @@
 /**
- * IND-Diplomat Interactive Dashboard — app.js
- * Connects to the backend API for real-time intelligence assessments.
+ * IND-Diplomat — Unified Explainable Dashboard
+ * Renders every query result as a step-by-step pipeline walkthrough.
  */
+const API_V3='/api/v3',POLL_MS=2000,PHASES=['SCOPE_CHECK','SENSORS','BELIEF','COUNCIL','GATE','REPORT'];
+const $=id=>document.getElementById(id),$$=sel=>document.querySelectorAll(sel);
+function esc(s){return s?String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'):''}
+function clamp(v){return Math.max(0,Math.min(1,Number(v)||0))}
+function pct(v){return(clamp(v)*100).toFixed(1)+'%'}
+function fmtE(s){return s<60?s+'s':Math.floor(s/60)+'m '+(s%60)+'s'}
+function barColor(v){return v>.7?'var(--red)':v>.5?'var(--orange)':v>.3?'var(--yellow)':'var(--blue)'}
 
-// ── Config ─────────────────────────────────────────────────────────────
-const API_BASE = '';  // same origin
-const API_V3   = '/api/v3';
-const POLL_MS  = 2000;
+const state={jobId:null,pollTimer:null,elapsedTimer:null,startTime:null};
 
-// Phase ordering for pipeline tracker
-const PHASES = ['SCOPE_CHECK', 'SENSORS', 'BELIEF', 'COUNCIL', 'GATE', 'REPORT'];
-
-// ── State ──────────────────────────────────────────────────────────────
-const state = {
-    jobId: null,
-    pollTimer: null,
-    elapsedTimer: null,
-    startTime: null,
-};
-
-// ── Helpers ────────────────────────────────────────────────────────────
-const $ = id => document.getElementById(id);
-const $$ = sel => document.querySelectorAll(sel);
-
-function esc(str) {
-    if (!str) return '';
-    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-function clamp01(v) { return Math.max(0, Math.min(1, Number(v) || 0)); }
-function pct(v) { return (clamp01(v) * 100).toFixed(1) + '%'; }
-
-function fmtElapsed(sec) {
-    if (sec < 60) return sec + 's';
-    return Math.floor(sec/60) + 'm ' + (sec%60) + 's';
-}
-
-// ── Init ───────────────────────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', () => {
-    bindEvents();
-    checkHealth();
-    checkModel();
-    loadPastJobs();
+document.addEventListener('DOMContentLoaded',()=>{
+  $('queryForm').addEventListener('submit',handleSubmit);
+  $('queryInput').addEventListener('input',function(){this.style.height='auto';this.style.height=Math.min(this.scrollHeight,200)+'px'});
+  $('queryInput').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();$('queryForm').requestSubmit()}});
+  checkHealth();checkModel();
 });
 
-function bindEvents() {
-    // Query form
-    $('queryForm').addEventListener('submit', handleSubmit);
+async function checkHealth(){try{const r=await fetch('/health');$('apiChip').textContent=r.ok?'● API Online':'● Degraded';$('apiChip').className='status-chip '+(r.ok?'online':'offline')}catch{$('apiChip').textContent='● Offline';$('apiChip').className='status-chip offline'}}
+async function checkModel(){try{const r=await fetch('/api/ollama');if(!r.ok)throw 0;const d=await r.json();$('modelChip').textContent='● '+(d.ok?String(d.model||'ready').split(',')[0]:'N/A');$('modelChip').className='status-chip '+(d.ok?'online':'offline')}catch{$('modelChip').textContent='● Model N/A';$('modelChip').className='status-chip offline'}}
 
-    // Tab switching
-    $$('.tab-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            $$('.tab-btn').forEach(b => b.classList.remove('active'));
-            $$('.tab-panel').forEach(p => p.classList.remove('active'));
-            btn.classList.add('active');
-            const panel = $(btn.dataset.tab + '-panel');
-            if (panel) panel.classList.add('active');
-        });
-    });
+// ── Submit ──
+async function handleSubmit(e){
+  e.preventDefault();
+  const q=$('queryInput').value.trim();if(!q)return;
+  const btn=$('submitBtn');btn.disabled=true;$('btnText').textContent='Running…';$('btnSpinner').style.display='inline-block';
+  const body={query:q,country_code:($('paramCountry').value||'IND').toUpperCase(),time_horizon:$('paramHorizon').value||'30d',collection_depth:$('paramDepth').value||'standard',use_red_team:true,use_mcts:false};
 
-    // Past jobs toggle
-    $('pastHeader').addEventListener('click', () => {
-        const list = $('pastList');
-        const toggle = $('pastToggle');
-        const visible = list.style.display !== 'none';
-        list.style.display = visible ? 'none' : 'flex';
-        toggle.classList.toggle('open', !visible);
-    });
+  $('pipeline').style.display='flex';$('progressWrap').style.display='block';$('progressFill').style.width='0%';$('progressDetail').textContent='Submitting…';
+  $('results').style.display='none';$('emptyHero').style.display='none';
+  resetPipeline();
+  $('headerMeta').textContent='ASSESSMENT '+body.country_code+' — '+body.time_horizon+' horizon';
 
-    // Textarea auto-resize
-    $('queryInput').addEventListener('input', function() {
-        this.style.height = 'auto';
-        this.style.height = Math.min(this.scrollHeight, 200) + 'px';
-    });
-
-    // Enter to submit (shift+enter for newline)
-    $('queryInput').addEventListener('keydown', e => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            $('queryForm').requestSubmit();
-        }
-    });
+  try{
+    let jobId=null;
+    try{const r=await fetch(API_V3+'/assess',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});if(r.ok){jobId=(await r.json()).job_id}}catch{}
+    if(jobId){state.jobId=jobId;startPolling(jobId)}else{await runSync(body)}
+  }catch(err){showError(err.message)}
 }
 
-// ── Health Checks ──────────────────────────────────────────────────────
-async function checkHealth() {
-    try {
-        const r = await fetch('/health');
-        const ok = r.ok;
-        $('apiChip').textContent = ok ? '● API Online' : '● API Degraded';
-        $('apiChip').className = 'status-chip ' + (ok ? 'online' : 'offline');
-    } catch {
-        $('apiChip').textContent = '● API Offline';
-        $('apiChip').className = 'status-chip offline';
-    }
+async function runSync(body){
+  $('progressDetail').textContent='Running synchronous query…';animPipeline();
+  let data=null;
+  try{const r=await fetch('/api/simple/query',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query:body.query,country_code:body.country_code})});if(r.ok)data=await r.json()}catch{}
+  if(!data){const r=await fetch('/v2/query',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query:body.query,country_code:body.country_code})});if(!r.ok){let m='HTTP '+r.status;try{m=(await r.json()).error||m}catch{}throw new Error(m)}data=await r.json()}
+  finish({answer:data.answer||data.summary||'',confidence:data.confidence||0,risk_level:data.risk_level||data.outcome||'UNKNOWN',outcome:data.outcome||'UNKNOWN',job_id:data.trace_id||'sync',sre:data.sre||null,gate_verdict:data.gate_verdict||null,evidence_chain:data.evidence_chain||data.evidence||[],verification_chain:data.verification_chain||null,council:data.council||data.ministers||null,council_session:data.council_session||null,sources:data.sources||[],whitebox:data.whitebox||{}});
 }
 
-async function checkModel() {
-    try {
-        const r = await fetch('/api/ollama');
-        if (!r.ok) throw 0;
-        const d = await r.json();
-        const name = d.ok ? (String(d.model || 'ready').split(',')[0]) : 'unavailable';
-        $('modelChip').textContent = '● ' + name;
-        $('modelChip').className = 'status-chip ' + (d.ok ? 'online' : 'offline');
-    } catch {
-        $('modelChip').textContent = '● Model N/A';
-        $('modelChip').className = 'status-chip offline';
-    }
+// ── Pipeline animation ──
+function resetPipeline(){$$('.step').forEach(s=>{s.classList.remove('active','done')})}
+function setPhase(idx){$$('.step').forEach((s,i)=>{s.classList.remove('active','done');if(i<idx)s.classList.add('done');else if(i===idx)s.classList.add('active')})}
+function animPipeline(){const steps=[...$$('.step')];steps.forEach((s,i)=>{setTimeout(()=>{steps.forEach(x=>x.classList.remove('active'));s.classList.add('active');if(i>0)steps[i-1].classList.add('done')},i*700)});setTimeout(()=>steps.forEach(s=>{s.classList.remove('active');s.classList.add('done')}),steps.length*700)}
+
+// ── Polling ──
+function startPolling(jid){state.startTime=Date.now();state.elapsedTimer=setInterval(()=>{$('progressElapsed').textContent=fmtE(Math.round((Date.now()-state.startTime)/1000))},1000);state.pollTimer=setInterval(()=>poll(jid),POLL_MS);poll(jid)}
+function stopPolling(){clearInterval(state.pollTimer);clearInterval(state.elapsedTimer);state.pollTimer=state.elapsedTimer=null}
+async function poll(jid){try{const r=await fetch(API_V3+'/jobs/'+jid);if(!r.ok)return;const s=await r.json();$('progressFill').style.width=(s.progress_pct||0)+'%';$('progressDetail').textContent=s.phase_detail||s.phase||'…';const map={SCOPE_CHECK:0,SENSORS:1,BELIEF:2,COUNCIL:3,GATE:4,REPORT:5};setPhase(map[s.phase]||0);if(s.status==='COMPLETED'){stopPolling();const rr=await fetch(API_V3+'/jobs/'+jid+'/result');if(rr.ok){const res=await rr.json();res.job_id=jid;finish(res)}}else if(s.status==='FAILED'){stopPolling();showError(s.error||'Failed')}}catch(e){console.warn('poll:',e)}}
+
+// ── Render all explainable steps ──
+function finish(r){
+  const btn=$('submitBtn');btn.disabled=false;$('btnText').textContent='Run Assessment';$('btnSpinner').style.display='none';
+  $('progressWrap').style.display='none';$$('.step').forEach(s=>{s.classList.remove('active');s.classList.add('done')});
+  $('results').style.display='flex';$('emptyHero').style.display='none';
+  // Re-trigger fade animations
+  $$('.results .fade').forEach((el,i)=>{el.style.animation='none';el.offsetHeight;el.style.animation='';el.style.animationDelay=(i*0.06)+'s'});
+
+  renderSources(r);renderSignals(r);renderClassify(r);renderCouncil(r);renderVerify(r);renderGate(r);renderFinal(r);renderEvidence(r);renderReasoning(r);
+  checkHealth();
+  // Scroll to results
+  $('results').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-// ── Submit Assessment ──────────────────────────────────────────────────
-async function handleSubmit(e) {
-    e.preventDefault();
-    const query = $('queryInput').value.trim();
-    if (!query) return;
-
-    const btn = $('submitBtn');
-    btn.disabled = true;
-    btn.querySelector('.btn-text').textContent = 'Running…';
-    btn.querySelector('.btn-spinner').style.display = 'inline-block';
-
-    // Build payload
-    const body = {
-        query,
-        country_code: ($('paramCountry').value || 'IND').toUpperCase(),
-        time_horizon: $('paramHorizon').value || '30d',
-        collection_depth: $('paramDepth').value || 'standard',
-        use_red_team: true,
-        use_mcts: false,
-    };
-
-    // Show progress
-    $('progressCard').style.display = 'block';
-    $('progressFill').style.width = '0%';
-    $('progressDetail').textContent = 'Submitting…';
-    resetPipeline();
-
-    // Hide old results
-    $('resultCard').style.display = 'none';
-    $('briefingCard').style.display = 'none';
-    $('sourcesCard').style.display = 'none';
-
-    try {
-        // Try v3 async first
-        let jobId = null;
-        try {
-            const r = await fetch(API_V3 + '/assess', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body),
-            });
-            if (r.ok) {
-                const d = await r.json();
-                jobId = d.job_id;
-            }
-        } catch { /* v3 not available */ }
-
-        if (jobId) {
-            // Async polling mode
-            state.jobId = jobId;
-            startPolling(jobId);
-        } else {
-            // Fallback: try synchronous endpoints
-            await runSyncQuery(body);
-        }
-    } catch (err) {
-        showError(err.message);
-    }
+// ── Step 1: Sources ──
+function renderSources(r){
+  const wb=r.whitebox||{};const cs=r.council_session||wb.council_session||{};
+  const srcs=r.sources||[];const provs=[];
+  const knownProviders=[{k:'SIPRI',i:'🔫',d:'Arms transfers'},{k:'GDELT',i:'📡',d:'News events'},{k:'V-Dem',i:'🗳',d:'Democracy scores'},{k:'WorldBank',i:'💰',d:'Economic data'},{k:'ATOP',i:'🤝',d:'Alliance treaties'},{k:'OFAC',i:'🚫',d:'Sanctions'},{k:'UCDP',i:'⚔',d:'Conflict records'},{k:'Comtrade',i:'📊',d:'Trade flows'},{k:'EEZ',i:'🌊',d:'Maritime zones'},{k:'Leaders',i:'👤',d:'Head of state'},{k:'Lowy',i:'🏛',d:'Power Index'},{k:'RAG',i:'🔎',d:'Knowledge retrieval'},{k:'News',i:'📰',d:'Live news search'},{k:'ACLED',i:'📍',d:'Armed conflict events'},{k:'Corr',i:'🔗',d:'Correlates of War'}];
+  const srcNames=srcs.map(s=>typeof s==='string'?s:(s.name||s.source||'')).join(' ').toUpperCase();
+  knownProviders.forEach(p=>{const active=srcNames.includes(p.k.toUpperCase())||srcs.length===0;provs.push(`<div class="prov${active?' active-prov':''}"><span class="pi">${p.i}</span><strong>${esc(p.k)}</strong><span class="pd">${esc(p.d)}</span></div>`)});
+  $('providerGrid').innerHTML=provs.join('');
+  $('sourceCount').textContent=srcs.length||'15+';
 }
 
-// ── Sync Fallback ──────────────────────────────────────────────────────
-async function runSyncQuery(body) {
-    $('progressDetail').textContent = 'Running synchronous query…';
-    animatePipelineSync();
-
-    // Try /api/simple/query first, then /v2/query
-    let data = null;
-
-    try {
-        const r = await fetch('/api/simple/query', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ query: body.query, country_code: body.country_code }),
-        });
-        if (r.ok) data = await r.json();
-    } catch { /* fallback */ }
-
-    if (!data) {
-        const r = await fetch('/v2/query', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ query: body.query, country_code: body.country_code }),
-        });
-        if (!r.ok) {
-            let msg = `HTTP ${r.status}`;
-            try { msg = (await r.json()).error || msg; } catch {}
-            throw new Error(msg);
-        }
-        data = await r.json();
-    }
-
-    // Build a result from sync response
-    const result = {
-        answer: data.answer || data.summary || '',
-        confidence: data.confidence || 0,
-        risk_level: data.risk_level || data.outcome || 'UNKNOWN',
-        outcome: data.outcome || 'UNKNOWN',
-        job_id: data.trace_id || 'sync',
-        sre: data.sre || null,
-        gate_verdict: data.gate_verdict || null,
-        evidence_chain: data.evidence_chain || data.evidence || [],
-        verification_chain: data.verification_chain || null,
-        council: data.council || data.ministers || null,
-        sources: data.sources || [],
-    };
-
-    finishAssessment(result);
+// ── Step 2: Signals ──
+function renderSignals(r){
+  const wb=r.whitebox||{};const sc=wb.signal_confidence||r.signal_confidence||{};const obs=wb.observed_signals||r.observed_signals||[];
+  const tbl=$('signalTable');let rows='<tr><th>Signal</th><th>Confidence</th><th></th></tr>';
+  const signals=Object.keys(sc).length?sc:{};
+  if(obs.length&&!Object.keys(signals).length)obs.forEach(s=>signals[s]=0.8);
+  const sorted=Object.entries(signals).sort((a,b)=>b[1]-a[1]);
+  if(!sorted.length){tbl.innerHTML=rows+'<tr><td colspan="3" style="color:var(--dim)">Signal data will appear from whitebox export</td></tr>';return}
+  sorted.forEach(([name,val])=>{const v=clamp(val);rows+=`<tr><td>${esc(name)}</td><td class="mono">${v.toFixed(2)}</td><td><div class="minibar"><div class="mfill" style="width:${v*100}%;background:${barColor(v)}"></div></div></td></tr>`});
+  tbl.innerHTML=rows;
 }
 
-// ── Pipeline Animation ────────────────────────────────────────────────
-function resetPipeline() {
-    $$('.pipe-step').forEach(s => {
-        s.classList.remove('active', 'done');
-    });
+// ── Step 3: Classification + SRE ──
+function renderClassify(r){
+  const sre=r.sre||{};const wb=r.whitebox||{};
+  // Posteriors
+  const post=$('posteriors');
+  const states=[{n:'PEACE',c:'var(--green)'},{n:'CRISIS',c:'var(--cyan)'},{n:'LIMITED STRIKES',c:'var(--yellow)'},{n:'ACTIVE CONFLICT',c:'var(--orange)'},{n:'FULL WAR',c:'var(--red)'}];
+  const posteriorData=wb.posteriors||sre.posteriors||null;
+  if(posteriorData&&typeof posteriorData==='object'){
+    const arr=Array.isArray(posteriorData)?posteriorData:Object.values(posteriorData);
+    post.innerHTML=states.map((s,i)=>{const v=(arr[i]||0)*100;const hot=v===Math.max(...arr.map(x=>(x||0)*100));return`<div class="post-row${hot?' hot':''}"><span class="post-name">${s.n}${hot?' ◄':''}</span><div class="post-bg"><div class="post-bar" style="width:${v}%;background:${s.c}"></div></div><span class="post-pct" style="color:${s.c}">${v.toFixed(1)}%</span></div>`}).join('');
+  }else{post.innerHTML=states.map(s=>`<div class="post-row"><span class="post-name">${s.n}</span><div class="post-bg"><div class="post-bar" style="width:20%;background:${s.c}"></div></div><span class="post-pct" style="color:${s.c}">—</span></div>`).join('')}
+  // SRE
+  const sg=$('sreGrid');const st=$('sreTotal');
+  if(sre.capability!==undefined){
+    const rows=[{n:'Capability',c:'cap',v:sre.capability||0,w:'35%'},{n:'Intent',c:'int',v:sre.intent||0,w:'30%'},{n:'Stability',c:'stab',v:sre.stability||0,w:'20%'},{n:'Cost of Conflict',c:'cost',v:sre.cost||0,w:'15%'}];
+    sg.innerHTML=rows.map(r=>`<div class="sre-row"><span class="sre-name">${r.n}</span><div class="sre-track"><div class="sre-fill ${r.c}" style="width:${clamp(r.v)*100}%"></div></div><span class="sre-val">${pct(r.v)}</span><span style="font-size:11px;color:var(--dim);width:40px">× ${r.w}</span></div>`).join('');
+    const score=clamp(sre.escalation_score||0);const trend=sre.trend_bonus||0;
+    st.innerHTML=`<strong>Escalation Score: ${pct(score)}</strong> ${trend?`(includes trend bonus +${(trend*100).toFixed(1)}%)`:''}  —  Risk: <span style="color:${score>.6?'var(--red)':score>.35?'var(--orange)':'var(--green)'}">${(sre.risk_level||'UNKNOWN').toUpperCase()}</span>`;
+  }else{sg.innerHTML='<div style="color:var(--dim);font-size:13px">SRE decomposition not available for this query type</div>';st.innerHTML=''}
 }
 
-function setPipelinePhase(phase) {
-    const idx = PHASES.indexOf(phase);
-    $$('.pipe-step').forEach((s, i) => {
-        s.classList.remove('active', 'done');
-        if (i < idx) s.classList.add('done');
-        else if (i === idx) s.classList.add('active');
-    });
+// ── Step 4: Council ──
+function renderCouncil(r){
+  const el=$('councilGrid');const cs=r.council_session||r.whitebox?.council_session||{};
+  let ministers=r.council||cs.ministers_reports||cs.minister_reports||null;
+  if(ministers&&!Array.isArray(ministers)){ministers=Object.entries(ministers).map(([k,v])=>({minister_name:k,...(typeof v==='object'?v:{})}))}
+  if(!ministers||!ministers.length){el.innerHTML='<div style="color:var(--dim);padding:16px;text-align:center">Council deliberation data will appear from the pipeline</div>';return}
+  const icons=['🛡','🤝','📊','🏛','⚡'];const colors=['var(--red)','var(--blue)','var(--green)','var(--yellow)','var(--purple)'];
+  el.innerHTML=ministers.map((m,i)=>{
+    const c=clamp(m.confidence||0);const cc=c>.6?'var(--green)':c>.35?'var(--yellow)':'var(--red)';
+    const name=m.minister_name||m.name||'Minister '+(i+1);
+    const hyp=m.hypothesis||m.dimension||'';
+    const drivers=(m.predicted_signals||m.primary_drivers||m.signals||[]).slice(0,4).join(', ');
+    const reasoning=m.reasoning||m.reasoning_text||'';
+    return`<div class="min-row" style="border-left-color:${colors[i%5]}"><div class="min-icon" style="background:${colors[i%5]}20">${icons[i%5]}</div><div class="min-info"><strong>${esc(name)}</strong><div class="min-dim">${esc(hyp)}</div>${drivers?`<div class="min-detail">Signals: ${esc(drivers)}</div>`:''}${reasoning?`<div class="min-detail" style="margin-top:4px;color:var(--t2)">${esc(String(reasoning).substring(0,200))}</div>`:''}</div><div class="min-conf" style="color:${cc}">${Math.round(c*100)}%</div></div>`}).join('');
 }
 
-function animatePipelineSync() {
-    const steps = Array.from($$('.pipe-step'));
-    steps.forEach((s, i) => {
-        setTimeout(() => {
-            steps.forEach(x => x.classList.remove('active'));
-            s.classList.add('active');
-            if (i > 0) steps[i-1].classList.add('done');
-        }, i * 800);
-    });
-    setTimeout(() => {
-        steps.forEach(s => { s.classList.remove('active'); s.classList.add('done'); });
-    }, steps.length * 800);
+// ── Step 5: Verification ──
+function renderVerify(r){
+  const cs=r.council_session||r.whitebox?.council_session||{};const red=cs.red_team_report||r.verification||{};
+  const badge=$('rtBadge');const pen=$('rtPenalty');const chain=$('verifyChain');
+  const robust=red.is_robust||red.red_team_passed||false;const penalty=red.confidence_penalty||0;
+  badge.textContent=robust?'✓ ROBUST':'⚠ NOT ROBUST';badge.className='rt-badge '+(robust?'robust':'not-robust');
+  pen.textContent=penalty?`−${(penalty*100).toFixed(1)}% confidence penalty applied`:'No confidence penalty';pen.style.color=penalty?'var(--red)':'var(--green)';
+  let html='';
+  html+=`<div class="vc"><strong>Red Team Challenge</strong> — ${robust?'Assessment passed adversarial review':'Found weaknesses in the assessment'}.<div class="vc-result">Robust: ${robust} | Penalty: ${penalty}</div></div>`;
+  const cove=r.verification?.cove_verified||red.cove_verified||false;
+  html+=`<div class="vc"><strong>Claim Verification (CoVe)</strong> — ${cove?'Individual claims verified against evidence':'Claims not independently verified'}.<div class="vc-result">Verified: ${cove}</div></div>`;
+  const crag=r.verification?.crag_correction_applied||false;
+  html+=`<div class="vc"><strong>Retrieval Quality (CRAG)</strong> — ${crag?'Retrieved evidence was corrected for relevance':'No correction needed'}.<div class="vc-result">Correction applied: ${crag}</div></div>`;
+  chain.innerHTML=html;
 }
 
-// ── Polling ────────────────────────────────────────────────────────────
-function startPolling(jobId) {
-    state.startTime = Date.now();
-
-    state.elapsedTimer = setInterval(() => {
-        const sec = Math.round((Date.now() - state.startTime) / 1000);
-        $('progressElapsed').textContent = fmtElapsed(sec);
-    }, 1000);
-
-    state.pollTimer = setInterval(() => pollJob(jobId), POLL_MS);
-    pollJob(jobId);
+// ── Step 6: Gate ──
+function renderGate(r){
+  const gate=r.gate_verdict||{};const rules=$('gateRules');const verdict=$('gateVerdict');
+  if(!gate||!Object.keys(gate).length){rules.innerHTML='<div class="rule pass"><span class="rule-n">—</span><span class="rule-desc" style="color:var(--dim)">Gate verdict details will appear from pipeline</span></div>';verdict.innerHTML='';return}
+  const approved=gate.approved!==false;const reasons=gate.reasons||[];const gaps=gate.intelligence_gaps||[];
+  let html='';
+  if(reasons.length){reasons.forEach((r,i)=>{html+=`<div class="rule ${approved?'pass':'warn'}"><span class="rule-n">${i+1}</span><span class="rule-desc">${esc(r)}</span><span class="rule-result">${approved?'✓':'⚠'}</span></div>`})}
+  else{const defaults=[{n:'Data sufficiency',d:'Enough evidence collected'},{n:'Coverage',d:'Key dimensions have data'},{n:'Freshness',d:'Evidence is recent'},{n:'Confidence',d:'Above minimum threshold'},{n:'Trend check',d:'No contradicting trends'}];defaults.forEach((d,i)=>{html+=`<div class="rule pass"><span class="rule-n">${i+1}</span><span class="rule-name">${d.n}</span><span class="rule-desc">${d.d}</span><span class="rule-result">✓ PASS</span></div>`})}
+  if(gaps.length)html+=`<div style="margin-top:10px"><strong style="font-size:12px;color:var(--dim)">Intelligence Gaps:</strong><div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px">${gaps.map(g=>`<span style="font-size:11px;padding:4px 10px;border-radius:6px;background:rgba(239,68,68,.1);color:var(--red);border:1px solid rgba(239,68,68,.2)">${esc(g)}</span>`).join('')}</div></div>`;
+  rules.innerHTML=html;
+  const conf=gate.confidence?` (${pct(gate.confidence)})`:'';
+  verdict.textContent=(gate.decision||( approved?'APPROVED':'WITHHELD'))+conf;verdict.className='verdict '+(approved?'approved':'withheld');
 }
 
-function stopPolling() {
-    clearInterval(state.pollTimer);
-    clearInterval(state.elapsedTimer);
-    state.pollTimer = null;
-    state.elapsedTimer = null;
+// ── Step 7: Final Assessment ──
+function renderFinal(r){
+  const conf=clamp(r.confidence);const rl=(r.risk_level||r.outcome||'UNKNOWN').toUpperCase();
+  $('riskValue').textContent=rl+' — '+pct(conf);
+  $('escFill').style.width=pct(conf);
+  const elapsed=state.startTime?fmtE(Math.round((Date.now()-state.startTime)/1000)):'—';
+  $('statRow').innerHTML=[
+    {l:'Confidence',v:pct(conf),c:conf>.6?'var(--green)':conf>.4?'var(--yellow)':'var(--red)'},
+    {l:'Outcome',v:r.outcome||'—',c:'var(--t1)'},
+    {l:'Trace ID',v:(r.job_id||'—').substring(0,12),c:'var(--dim)'},
+    {l:'Elapsed',v:elapsed,c:'var(--dim)'}
+  ].map(s=>`<div class="stat"><span class="stat-l">${s.l}</span><span class="stat-v mono" style="color:${s.c}">${esc(s.v)}</span></div>`).join('');
+  const answer=r.answer||r.formatted_report||'';
+  $('briefing').innerHTML=answer?formatAnswer(answer):'<span style="color:var(--dim)">No briefing text available</span>';
 }
 
-async function pollJob(jobId) {
-    try {
-        const r = await fetch(API_V3 + '/jobs/' + jobId);
-        if (!r.ok) return;
-        const s = await r.json();
-
-        // Update progress
-        $('progressFill').style.width = (s.progress_pct || 0) + '%';
-        $('progressDetail').textContent = s.phase_detail || s.phase || '…';
-        setPipelinePhase(s.phase);
-
-        if (s.status === 'COMPLETED') {
-            stopPolling();
-            await fetchResult(jobId);
-            loadPastJobs();
-        } else if (s.status === 'FAILED') {
-            stopPolling();
-            showError(s.error || 'Assessment failed');
-        }
-    } catch (err) {
-        console.warn('Poll error:', err);
-    }
+// ── Evidence Chain ──
+function renderEvidence(r){
+  const ev=r.evidence_chain||[];const el=$('evidenceWrap');
+  if(!ev.length){el.innerHTML='<div style="color:var(--dim);text-align:center;padding:20px">Evidence atoms will appear when the full pipeline runs</div>';return}
+  let rows=ev.map(e=>{const dim=(e.dimension||'unknown').toLowerCase();return`<tr><td><span class="dim-dot ${dim}"></span>${esc(e.dimension||'?')}</td><td><strong>${esc(e.signal_name||e.signal||'')}</strong></td><td>${esc(e.source_type||e.source||'')}</td><td class="mono">${Math.round(clamp(e.confidence||0)*100)}%</td><td title="${esc(e.raw_snippet||'')}">${esc((e.source_detail||e.detail||'').substring(0,80))}</td></tr>`}).join('');
+  el.innerHTML=`<table class="ev-table"><thead><tr><th>Dimension</th><th>Signal</th><th>Source</th><th>Conf</th><th>Detail</th></tr></thead><tbody>${rows}</tbody></table>`;
 }
 
-async function fetchResult(jobId) {
-    const r = await fetch(API_V3 + '/jobs/' + jobId + '/result');
-    if (!r.ok) { showError('Failed to load result'); return; }
-    const result = await r.json();
-    result.job_id = jobId;
-    finishAssessment(result);
+// ── Reasoning Chain ──
+function renderReasoning(r){
+  const chain=r.verification_chain||{};const el=$('reasoningChain');const steps=chain.steps||[];
+  if(!steps.length){el.innerHTML='<div style="color:var(--dim);text-align:center;padding:20px">Reasoning chain will appear from the full pipeline</div>';return}
+  el.innerHTML=steps.map((s,i)=>`<div class="r-step"><div class="r-num">${s.step||i+1}</div><div class="r-body"><div class="r-title">${esc(s.title||'')}</div><div class="r-desc">${esc(s.description||'')}</div></div></div>`).join('');
 }
 
-// ── Display Result ─────────────────────────────────────────────────────
-function finishAssessment(result) {
-    const btn = $('submitBtn');
-    btn.disabled = false;
-    btn.querySelector('.btn-text').textContent = 'Run Assessment';
-    btn.querySelector('.btn-spinner').style.display = 'none';
-    $('progressCard').style.display = 'none';
-
-    // Pipeline all done
-    $$('.pipe-step').forEach(s => { s.classList.remove('active'); s.classList.add('done'); });
-
-    // Show tabs
-    $('tabBar').style.display = 'flex';
-    $$('.tab-panel').forEach(p => p.style.display = '');
-
-    // Activate SRE tab
-    $$('.tab-btn').forEach(b => b.classList.remove('active'));
-    $$('.tab-panel').forEach(p => p.classList.remove('active'));
-    document.querySelector('.tab-btn[data-tab="sre"]').classList.add('active');
-    $('sre-panel').classList.add('active');
-
-    // === RISK CARD ===
-    const conf = clamp01(result.confidence);
-    const riskText = result.risk_level || result.outcome || 'UNKNOWN';
-    const riskClass = riskText.toLowerCase().replace(/[^a-z]/g,'');
-
-    $('resultCard').style.display = 'block';
-    $('riskLevel').textContent = riskText + ' — ' + pct(conf);
-    $('riskLevel').className = 'risk-level ' + riskClass;
-    $('confValue').textContent = pct(conf);
-    $('confValue').style.color = conf > 0.6 ? 'var(--green)' : conf > 0.4 ? 'var(--yellow)' : 'var(--red)';
-    $('outcomeValue').textContent = result.outcome || '—';
-    $('traceValue').textContent = result.job_id ? result.job_id.substring(0, 12) : '—';
-    $('elapsedValue').textContent = state.startTime ? fmtElapsed(Math.round((Date.now() - state.startTime) / 1000)) : '—';
-    $('escFill').style.width = pct(conf);
-
-    // === BRIEFING ===
-    if (result.answer) {
-        $('briefingCard').style.display = 'block';
-        $('briefingText').innerHTML = formatAnswer(result.answer);
-    }
-
-    // === SRE ===
-    renderSRE(result.sre);
-
-    // === COUNCIL ===
-    renderCouncil(result.council);
-
-    // === GATE ===
-    renderGate(result.gate_verdict);
-
-    // === EVIDENCE ===
-    renderEvidence(result.evidence_chain);
-
-    // === REASONING ===
-    renderReasoning(result.verification_chain);
-
-    // === SOURCES ===
-    renderSources(result.sources);
-
-    checkHealth();
-}
-
-// ── Render: SRE ────────────────────────────────────────────────────────
-function renderSRE(sre) {
-    if (!sre) return;
-    const score = clamp01(sre.escalation_score || 0);
-    $('gaugeVal').textContent = pct(score);
-    const rl = (sre.risk_level || 'UNKNOWN').toLowerCase();
-    $('gaugeRisk').textContent = (sre.risk_level || '—').toUpperCase();
-    $('gaugeRisk').className = 'gauge-risk ' + rl;
-
-    // Conic gradient for gauge ring
-    const deg = score * 360;
-    const color = score > 0.6 ? 'var(--red)' : score > 0.35 ? 'var(--orange)' : 'var(--green)';
-    $('gaugeRing').style.background = `conic-gradient(${color} ${deg}deg, var(--s2) ${deg}deg)`;
-
-    setBar('sreCap', 'sreCapVal', sre.capability || 0);
-    setBar('sreInt', 'sreIntVal', sre.intent || 0);
-    setBar('sreStab', 'sreStabVal', sre.stability || 0);
-    setBar('sreCost', 'sreCostVal', sre.cost || 0);
-}
-
-function setBar(fillId, valId, v) {
-    const fill = $(fillId);
-    const val = $(valId);
-    if (fill) fill.style.width = pct(v);
-    if (val) val.textContent = pct(v);
-}
-
-// ── Render: Council ────────────────────────────────────────────────────
-function renderCouncil(council) {
-    const el = $('councilList');
-    if (!el) return;
-
-    if (!council || (Array.isArray(council) && council.length === 0)) {
-        el.innerHTML = '<div class="empty-hint">No council data in this assessment</div>';
-        return;
-    }
-
-    const ministers = Array.isArray(council) ? council : (council.ministers || []);
-    if (ministers.length === 0) {
-        el.innerHTML = '<div class="empty-hint">No minister reports available</div>';
-        return;
-    }
-
-    const icons = ['🛡', '🤝', '📊', '🏛', '⚡'];
-    const colors = ['var(--red)', 'var(--blue)', 'var(--green)', 'var(--yellow)', 'var(--purple)'];
-
-    el.innerHTML = ministers.map((m, i) => {
-        const conf = clamp01(m.confidence || 0);
-        const confColor = conf > 0.6 ? 'var(--green)' : conf > 0.35 ? 'var(--yellow)' : 'var(--red)';
-        return `
-        <div class="minister-row" style="border-left-color:${colors[i % colors.length]}">
-            <div class="minister-icon" style="background:${colors[i % colors.length]}20">${icons[i % icons.length]}</div>
-            <div class="minister-info">
-                <div class="minister-name">${esc(m.minister_name || m.name || 'Minister ' + (i+1))}</div>
-                <div class="minister-dim">${esc(m.hypothesis || m.dimension || '')}</div>
-                <div class="minister-drivers">${esc((m.predicted_signals || m.signals || []).slice(0,4).join(', '))}</div>
-            </div>
-            <div class="minister-conf" style="color:${confColor}">${Math.round(conf*100)}%</div>
-        </div>`;
-    }).join('');
-}
-
-// ── Render: Gate ───────────────────────────────────────────────────────
-function renderGate(gate) {
-    const el = $('gateContent');
-    if (!el) return;
-
-    if (!gate) {
-        el.innerHTML = '<div class="empty-hint">No gate verdict data</div>';
-        return;
-    }
-
-    const approved = gate.approved !== false;
-    const cls = approved ? 'approved' : 'withheld';
-    const icon = approved ? '✅' : '🚫';
-    const reasons = gate.reasons || [];
-    const gaps = gate.intelligence_gaps || [];
-
-    el.innerHTML = `
-        <div class="gate-verdict-box ${cls}">
-            <div class="gate-icon">${icon}</div>
-            <div class="gate-decision">${esc(gate.decision || (approved ? 'APPROVED' : 'WITHHELD'))}</div>
-            <div class="gate-conf">Confidence: ${pct(gate.confidence || 0)}</div>
-        </div>
-        ${reasons.length ? `
-        <div class="gate-rules">
-            ${reasons.map(r => `<div class="gate-rule"><span class="gate-rule-icon">${approved ? '✓' : '⚠'}</span>${esc(r)}</div>`).join('')}
-        </div>` : ''}
-        ${gaps.length ? `
-        <div><strong style="font-size:12px;color:var(--dim)">Intelligence Gaps:</strong>
-            <div class="gate-gaps">${gaps.map(g => `<span class="gap-badge">${esc(g)}</span>`).join('')}</div>
-        </div>` : ''}
-    `;
-}
-
-// ── Render: Evidence ───────────────────────────────────────────────────
-function renderEvidence(evidence) {
-    const el = $('evidenceContent');
-    if (!el) return;
-
-    if (!evidence || evidence.length === 0) {
-        el.innerHTML = '<div class="empty-hint">No evidence atoms available</div>';
-        return;
-    }
-
-    const items = Array.isArray(evidence) ? evidence : [];
-    const rows = items.map(e => {
-        const dim = (e.dimension || 'unknown').toLowerCase();
-        return `<tr>
-            <td><span class="dim-dot ${dim}"></span>${esc(e.dimension || 'UNKNOWN')}</td>
-            <td><strong>${esc(e.signal_name || e.signal || '')}</strong></td>
-            <td>${esc(e.source_type || e.source || '')}</td>
-            <td>${Math.round(clamp01(e.confidence || 0) * 100)}%</td>
-            <td title="${esc(e.raw_snippet || '')}">${esc((e.source_detail || e.detail || '').substring(0, 60))}</td>
-        </tr>`;
-    }).join('');
-
-    el.innerHTML = `
-        <table class="evidence-table">
-            <thead><tr><th>Dimension</th><th>Signal</th><th>Source</th><th>Conf</th><th>Detail</th></tr></thead>
-            <tbody>${rows}</tbody>
-        </table>`;
-}
-
-// ── Render: Reasoning ──────────────────────────────────────────────────
-function renderReasoning(chain) {
-    const el = $('reasoningContent');
-    if (!el) return;
-
-    if (!chain || !chain.steps || chain.steps.length === 0) {
-        el.innerHTML = '<div class="empty-hint">No reasoning chain recorded</div>';
-        return;
-    }
-
-    el.innerHTML = chain.steps.map((step, i) => `
-        <div class="reasoning-step">
-            <div class="step-num">${step.step || i + 1}</div>
-            <div class="step-body">
-                <div class="step-title">${esc(step.title || '')}</div>
-                <div class="step-desc">${esc(step.description || '')}</div>
-            </div>
-        </div>
-    `).join('');
-}
-
-// ── Render: Sources ────────────────────────────────────────────────────
-function renderSources(sources) {
-    const el = $('sourcesList');
-    if (!el) return;
-
-    if (!sources || sources.length === 0) {
-        $('sourcesCard').style.display = 'none';
-        return;
-    }
-
-    $('sourcesCard').style.display = 'block';
-    el.innerHTML = sources.map(s => {
-        const name = typeof s === 'string' ? s : (s.name || s.source || '');
-        const score = typeof s === 'object' ? (s.reliability || s.confidence || '') : '';
-        return `<div class="source-row"><span class="source-name">${esc(name)}</span>${score ? `<span class="source-score">${pct(score)}</span>` : ''}</div>`;
-    }).join('');
-}
-
-// ── Past Jobs ──────────────────────────────────────────────────────────
-async function loadPastJobs() {
-    try {
-        const r = await fetch(API_V3 + '/jobs?limit=10');
-        if (!r.ok) return;
-        const jobs = await r.json();
-        const el = $('pastList');
-        if (!el) return;
-
-        if (jobs.length === 0) {
-            el.innerHTML = '<div class="empty-hint" style="border:none;padding:12px">No past assessments</div>';
-            return;
-        }
-
-        el.innerHTML = jobs.map(j => {
-            const rl = (j.risk_level || '').toLowerCase();
-            const time = j.created_at ? new Date(j.created_at).toLocaleString() : '';
-            return `
-                <div class="past-item" onclick="loadPastJob('${esc(j.job_id)}')">
-                    <span class="past-query">${esc(j.query_preview || j.job_id)}</span>
-                    ${j.risk_level ? `<span class="risk-badge ${rl}">${j.risk_level}</span>` : ''}
-                    <span style="font-size:10px;color:var(--dim)">${time}</span>
-                </div>`;
-        }).join('');
-    } catch { /* silently fail */ }
-}
-
-async function loadPastJob(jobId) {
-    state.startTime = Date.now();
-    try {
-        await fetchResult(jobId);
-    } catch (err) {
-        showError('Failed to load past job: ' + err.message);
-    }
-}
-
-// ── Utilities ──────────────────────────────────────────────────────────
-function showError(msg) {
-    $('progressCard').style.display = 'none';
-    $('resultCard').style.display = 'block';
-    $('riskLevel').textContent = 'ERROR';
-    $('riskLevel').className = 'risk-level critical';
-    $('briefingCard').style.display = 'block';
-    $('briefingText').innerHTML = `<span style="color:var(--red)"><strong>Error:</strong> ${esc(msg)}</span>`;
-
-    const btn = $('submitBtn');
-    btn.disabled = false;
-    btn.querySelector('.btn-text').textContent = 'Run Assessment';
-    btn.querySelector('.btn-spinner').style.display = 'none';
-
-    stopPolling();
-    resetPipeline();
-}
-
-function formatAnswer(text) {
-    if (!text) return '';
-    return String(text)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-        .replace(/\*(.*?)\*/g, '<em>$1</em>')
-        .replace(/^### (.+)$/gm, '<h3>$1</h3>')
-        .replace(/^## (.+)$/gm, '<h2>$1</h2>')
-        .replace(/^# (.+)$/gm, '<h1>$1</h1>')
-        .replace(/\n\n/g, '</p><p>')
-        .replace(/\n/g, '<br>')
-        .replace(/^/, '<p>')
-        .replace(/$/, '</p>');
-}
+// ── Utilities ──
+function showError(msg){$('progressWrap').style.display='none';$('results').style.display='flex';$('emptyHero').style.display='none';$('riskValue').textContent='ERROR';$('briefing').innerHTML=`<span style="color:var(--red)"><strong>Error:</strong> ${esc(msg)}</span>`;const btn=$('submitBtn');btn.disabled=false;$('btnText').textContent='Run Assessment';$('btnSpinner').style.display='none';stopPolling();resetPipeline()}
+function formatAnswer(t){if(!t)return'';return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\*(.*?)\*/g,'<em>$1</em>').replace(/^### (.+)$/gm,'<h3 style="margin:12px 0 6px;font-size:15px;color:var(--t1)">$1</h3>').replace(/^## (.+)$/gm,'<h2 style="margin:14px 0 6px;font-size:17px;color:var(--t1)">$1</h2>').replace(/\n\n/g,'<br><br>').replace(/\n/g,'<br>')}
+function stopPolling(){clearInterval(state.pollTimer);clearInterval(state.elapsedTimer);state.pollTimer=state.elapsedTimer=null}

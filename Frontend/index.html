@@ -3,204 +3,204 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IND-Diplomat — Intelligence Dashboard</title>
-<meta name="description" content="Policy-grade geopolitical intelligence platform with Bayesian state models, council-style reasoning, and safety-gated risk forecasts.">
+<title>IND-Diplomat — Explainable Intelligence</title>
+<meta name="description" content="Policy-grade geopolitical intelligence with full explainability — every step verifiable.">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
 <!-- ═══ TOP BAR ═══ -->
-<header class="top-bar">
-  <div class="top-left">
-    <span class="pulse-dot"></span>
-    <span class="brand">IND-DIPLOMAT</span>
-  </div>
-  <nav class="top-nav">
-    <a href="/" class="nav-link active">Dashboard</a>
-    <a href="/how-it-works" class="nav-link">How It Works</a>
-    <a href="/docs" class="nav-link" target="_blank">API Docs</a>
-  </nav>
+<header class="top">
+  <div class="logo"><span class="pulse"></span>IND-DIPLOMAT</div>
+  <div class="meta" id="headerMeta">Explainable Geopolitical Intelligence</div>
   <div class="top-right">
     <span class="status-chip" id="apiChip">● Checking…</span>
     <span class="status-chip" id="modelChip">● Checking…</span>
   </div>
 </header>
 
+<!-- ═══ QUERY INPUT ═══ -->
+<section class="query-section">
+  <form id="queryForm" class="query-form" autocomplete="off">
+    <div class="query-box">
+      <textarea id="queryInput" class="query-input" rows="2"
+        placeholder="Ask a geopolitical question — e.g. Assess India-Pakistan escalation risk over the next 30 days"
+        required></textarea>
+    </div>
+    <div class="query-controls">
+      <label class="ctrl">Country <input id="paramCountry" class="ctrl-input" type="text" value="IND" maxlength="5" spellcheck="false"></label>
+      <label class="ctrl">Horizon
+        <select id="paramHorizon" class="ctrl-input">
+          <option value="7d">7 days</option><option value="14d">14 days</option>
+          <option value="30d" selected>30 days</option><option value="90d">90 days</option>
+        </select>
+      </label>
+      <label class="ctrl">Depth
+        <select id="paramDepth" class="ctrl-input">
+          <option value="fast">Fast</option><option value="standard" selected>Standard</option><option value="deep">Deep</option>
+        </select>
+      </label>
+      <button id="submitBtn" class="submit-btn" type="submit">
+        <span id="btnText">Run Assessment</span>
+        <span id="btnSpinner" class="spinner" style="display:none"></span>
+      </button>
+    </div>
+  </form>
+</section>
+
 <!-- ═══ PIPELINE TRACKER ═══ -->
-<div class="pipeline-bar" id="pipelineBar">
-  <div class="pipe-step" data-phase="SCOPE_CHECK"><div class="pipe-num">1</div><div class="pipe-label">Scope</div></div>
-  <span class="pipe-arrow">→</span>
-  <div class="pipe-step" data-phase="SENSORS"><div class="pipe-num">2</div><div class="pipe-label">Sensors</div></div>
-  <span class="pipe-arrow">→</span>
-  <div class="pipe-step" data-phase="BELIEF"><div class="pipe-num">3</div><div class="pipe-label">Belief</div></div>
-  <span class="pipe-arrow">→</span>
-  <div class="pipe-step" data-phase="COUNCIL"><div class="pipe-num">4</div><div class="pipe-label">Council</div></div>
-  <span class="pipe-arrow">→</span>
-  <div class="pipe-step" data-phase="GATE"><div class="pipe-num">5</div><div class="pipe-label">Gate</div></div>
-  <span class="pipe-arrow">→</span>
-  <div class="pipe-step" data-phase="REPORT"><div class="pipe-num">6</div><div class="pipe-label">Report</div></div>
+<div class="pipeline" id="pipeline" style="display:none">
+  <div class="step" data-idx="0"><div class="sn">1</div><div class="sl">Collect Data</div></div>
+  <span class="arrow">→</span>
+  <div class="step" data-idx="1"><div class="sn">2</div><div class="sl">Filter Noise</div></div>
+  <span class="arrow">→</span>
+  <div class="step" data-idx="2"><div class="sn">3</div><div class="sl">Classify State</div></div>
+  <span class="arrow">→</span>
+  <div class="step" data-idx="3"><div class="sn">4</div><div class="sl">Analyze</div></div>
+  <span class="arrow">→</span>
+  <div class="step" data-idx="4"><div class="sn">5</div><div class="sl">Challenge</div></div>
+  <span class="arrow">→</span>
+  <div class="step" data-idx="5"><div class="sn">6</div><div class="sl">Gate</div></div>
+  <span class="arrow">→</span>
+  <div class="step" data-idx="6"><div class="sn">7</div><div class="sl">Report</div></div>
 </div>
 
-<!-- ═══ MAIN CONTENT ═══ -->
-<main class="main-grid">
+<!-- ═══ PROGRESS BAR ═══ -->
+<div class="progress-wrap" id="progressWrap" style="display:none">
+  <div class="progress-header">
+    <span class="progress-label" id="progressLabel">Processing…</span>
+    <span class="progress-elapsed" id="progressElapsed">0s</span>
+  </div>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-detail" id="progressDetail">Queued…</div>
+</div>
 
-  <!-- LEFT: Query + Briefing -->
-  <section class="col-left">
+<!-- ═══ EXPLAINABLE RESULTS (populated after each run) ═══ -->
+<main class="results" id="results" style="display:none">
 
-    <!-- QUERY CARD -->
-    <div class="card query-card">
-      <h2 class="card-title">Intelligence Query</h2>
-      <form id="queryForm" autocomplete="off">
-        <textarea id="queryInput" class="query-textarea" rows="3" placeholder="e.g. Assess India-Pakistan escalation risk over the next 30 days" required></textarea>
-        <div class="query-controls">
-          <div class="param-row">
-            <label class="param-label">Country
-              <input id="paramCountry" class="param-input" type="text" value="IND" maxlength="5" spellcheck="false">
-            </label>
-            <label class="param-label">Horizon
-              <select id="paramHorizon" class="param-input">
-                <option value="7d">7 days</option>
-                <option value="14d">14 days</option>
-                <option value="30d" selected>30 days</option>
-                <option value="90d">90 days</option>
-              </select>
-            </label>
-            <label class="param-label">Depth
-              <select id="paramDepth" class="param-input">
-                <option value="fast">Fast</option>
-                <option value="standard" selected>Standard</option>
-                <option value="deep">Deep</option>
-              </select>
-            </label>
-          </div>
-          <button id="submitBtn" class="submit-btn" type="submit">
-            <span class="btn-text">Run Assessment</span>
-            <span class="btn-spinner" style="display:none"></span>
-          </button>
-        </div>
-      </form>
+  <!-- STEP 1: Data Collection -->
+  <section class="card fade" id="stepCollect">
+    <div class="card-head">
+      <h3>Step 1 — Data collected from <span id="sourceCount">0</span> sources</h3>
+      <span class="code-ref">Layer1_Collection/</span>
     </div>
-
-    <!-- PROGRESS CARD (hidden until running) -->
-    <div class="card progress-card" id="progressCard" style="display:none">
-      <div class="progress-header">
-        <span class="progress-label">Processing…</span>
-        <span class="progress-elapsed" id="progressElapsed">0s</span>
-      </div>
-      <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill"></div></div>
-      <div class="progress-detail" id="progressDetail">Queued…</div>
-    </div>
-
-    <!-- RESULT: RISK OVERVIEW -->
-    <div class="card result-card" id="resultCard" style="display:none">
-      <div class="risk-header">
-        <div>
-          <div class="risk-kicker">ASSESSMENT RESULT</div>
-          <div class="risk-level" id="riskLevel">—</div>
-        </div>
-        <div class="risk-stats">
-          <div class="r-stat"><span class="r-stat-label">Confidence</span><span class="r-stat-val" id="confValue">—</span></div>
-          <div class="r-stat"><span class="r-stat-label">Outcome</span><span class="r-stat-val" id="outcomeValue">—</span></div>
-          <div class="r-stat"><span class="r-stat-label">Trace</span><span class="r-stat-val mono" id="traceValue">—</span></div>
-          <div class="r-stat"><span class="r-stat-label">Elapsed</span><span class="r-stat-val mono" id="elapsedValue">—</span></div>
-        </div>
-      </div>
-      <div class="esc-bar"><div class="esc-fill" id="escFill"></div></div>
-    </div>
-
-    <!-- BRIEFING -->
-    <div class="card" id="briefingCard" style="display:none">
-      <h3 class="card-title">Intelligence Briefing</h3>
-      <div class="briefing-text" id="briefingText"></div>
-    </div>
-
-    <!-- SOURCES -->
-    <div class="card" id="sourcesCard" style="display:none">
-      <h3 class="card-title">Sources</h3>
-      <div id="sourcesList" class="sources-list"></div>
-    </div>
-
+    <p class="explain">The system pulled data from independent geopolitical databases — arms trade records, conflict events, economic indicators, treaty registries, and live news.</p>
+    <div class="provider-grid" id="providerGrid"></div>
+    <div class="why">Each provider maps raw data into signal groups (military, diplomatic, economic, etc.). Siloed datasets are fused into a single analytical ontology.</div>
   </section>
 
-  <!-- RIGHT: SRE + Council + Gate + Evidence -->
-  <section class="col-right">
-
-    <!-- TAB BAR -->
-    <div class="tab-bar" id="tabBar" style="display:none">
-      <button class="tab-btn active" data-tab="sre">SRE Radar</button>
-      <button class="tab-btn" data-tab="council">Council</button>
-      <button class="tab-btn" data-tab="gate">Gate</button>
-      <button class="tab-btn" data-tab="evidence">Evidence</button>
-      <button class="tab-btn" data-tab="reasoning">Reasoning</button>
+  <!-- STEP 2: Noise Filtering / Signal Beliefs -->
+  <section class="card fade" id="stepFilter">
+    <div class="card-head">
+      <h3>Step 2 — Confirmed signals after noise filtering</h3>
+      <span class="code-ref">belief_accumulator.py</span>
     </div>
+    <p class="explain">Raw data isn't treated as truth. The system requires <strong>independent confirmation</strong> before a signal moves the analysis. Duplicate detection, freshness checks, and multi-source triangulation are applied.</p>
+    <table class="sig-table" id="signalTable">
+      <tr><th>Signal</th><th>Confidence</th><th></th></tr>
+    </table>
+    <div class="why">This prevents single-source bias — many reports citing the same original source are collapsed into one observation. Only independently confirmed signals pass through.</div>
+  </section>
 
-    <!-- SRE TAB -->
-    <div class="card tab-panel active" id="sre-panel" style="display:none">
-      <h3 class="card-title">Strategic Risk Escalation</h3>
-      <div class="sre-gauge">
-        <div class="gauge-ring" id="gaugeRing">
-          <div class="gauge-inner">
-            <div class="gauge-val" id="gaugeVal">—</div>
-            <div class="gauge-risk" id="gaugeRisk">—</div>
-          </div>
-        </div>
-      </div>
-      <div class="sre-domains">
-        <div class="sre-row"><span class="sre-name">Capability</span><div class="sre-track"><div class="sre-fill cap" id="sreCap"></div></div><span class="sre-val" id="sreCapVal">—</span></div>
-        <div class="sre-row"><span class="sre-name">Intent</span><div class="sre-track"><div class="sre-fill int" id="sreInt"></div></div><span class="sre-val" id="sreIntVal">—</span></div>
-        <div class="sre-row"><span class="sre-name">Stability</span><div class="sre-track"><div class="sre-fill stab" id="sreStab"></div></div><span class="sre-val" id="sreStabVal">—</span></div>
-        <div class="sre-row"><span class="sre-name">Cost</span><div class="sre-track"><div class="sre-fill cost" id="sreCost"></div></div><span class="sre-val" id="sreCostVal">—</span></div>
-      </div>
+  <!-- STEP 3: State Classification -->
+  <section class="card fade" id="stepClassify">
+    <div class="card-head">
+      <h3>Step 3 — Conflict state classification</h3>
+      <span class="code-ref">conflict_state_model.py</span>
     </div>
-
-    <!-- COUNCIL TAB -->
-    <div class="card tab-panel" id="council-panel" style="display:none">
-      <h3 class="card-title">Council of Ministers</h3>
-      <div id="councilList" class="council-list">
-        <div class="empty-hint">Submit a query to see minister deliberation</div>
-      </div>
+    <p class="explain">The model places the country on a 5-state scale. It doesn't pick a single label — it gives a <strong>probability distribution</strong> so the analyst sees exactly how uncertain the system is.</p>
+    <div class="posteriors" id="posteriors"></div>
+    <div class="sre-section" id="sreSection">
+      <h4 class="sub-title">Strategic Risk Decomposition (SRE)</h4>
+      <div class="sre-grid" id="sreGrid"></div>
+      <div class="sre-total" id="sreTotal"></div>
     </div>
+  </section>
 
-    <!-- GATE TAB -->
-    <div class="card tab-panel" id="gate-panel" style="display:none">
-      <h3 class="card-title">Assessment Gate</h3>
-      <div id="gateContent" class="gate-content">
-        <div class="empty-hint">Gate verdict will appear after assessment</div>
-      </div>
+  <!-- STEP 4: Council Deliberation -->
+  <section class="card fade" id="stepCouncil">
+    <div class="card-head">
+      <h3>Step 4 — AI analysts debated the evidence</h3>
+      <span class="code-ref">coordinator.py</span>
     </div>
+    <p class="explain">Each "minister" looks at the same data through a different lens. They independently propose risk assessments, then the system synthesizes their views — weighting by confidence and reasoning strength.</p>
+    <div class="council" id="councilGrid"></div>
+    <div class="why" id="councilWhy">Multiple perspectives reduce blind spots. Disagreements are flagged and investigated further.</div>
+  </section>
 
-    <!-- EVIDENCE TAB -->
-    <div class="card tab-panel" id="evidence-panel" style="display:none">
-      <h3 class="card-title">Evidence Chain</h3>
-      <div id="evidenceContent" class="evidence-content">
-        <div class="empty-hint">Evidence atoms will appear here</div>
-      </div>
+  <!-- STEP 5: Verification / Red Team -->
+  <section class="card fade" id="stepVerify">
+    <div class="card-head">
+      <h3>Step 5 — Verification: is the analysis correct?</h3>
+      <span class="code-ref">red_team.py + cove.py + crag.py</span>
     </div>
+    <div id="rtBadge" class="rt-badge"></div>
+    <div id="rtPenalty" class="rt-penalty"></div>
+    <div class="verify-chain" id="verifyChain"></div>
+    <div class="why">Before any assessment is released, three verification systems stress-test it. Red Team challenges across 6 dimensions, CoVe verifies individual claims, CRAG checks retrieval quality.</div>
+  </section>
 
-    <!-- REASONING TAB -->
-    <div class="card tab-panel" id="reasoning-panel" style="display:none">
-      <h3 class="card-title">Reasoning Chain</h3>
-      <div id="reasoningContent" class="reasoning-content">
-        <div class="empty-hint">Pipeline reasoning steps will appear here</div>
-      </div>
+  <!-- STEP 6: Assessment Gate -->
+  <section class="card fade" id="stepGate">
+    <div class="card-head">
+      <h3>Step 6 — Gate: should this assessment be released?</h3>
+      <span class="code-ref">assessment_gate.py</span>
     </div>
+    <p class="explain">The gate runs <strong>hard-coded rules — no AI, no randomness</strong>. If evidence is too thin, the system says "I don't know" instead of guessing. It must <strong>earn the right</strong> to release.</p>
+    <div class="rules" id="gateRules"></div>
+    <div class="verdict" id="gateVerdict"></div>
+    <div class="why">In high-stakes systems, AI can't decide what gets published. These rules are deterministic — same input always gives the same decision. No hallucination possible.</div>
+  </section>
 
-    <!-- PAST ASSESSMENTS -->
-    <div class="card past-card">
-      <div class="past-header" id="pastHeader">
-        <h3 class="card-title" style="margin:0">Past Assessments</h3>
-        <span class="past-toggle" id="pastToggle">▼</span>
-      </div>
-      <div class="past-list" id="pastList" style="display:none"></div>
+  <!-- STEP 7: Final Assessment -->
+  <section class="card fade final-card" id="stepFinal">
+    <div class="card-head">
+      <h3>Final Assessment</h3>
     </div>
+    <div class="risk-label">Risk Level</div>
+    <div class="risk-value" id="riskValue">—</div>
+    <div class="esc-bar"><div class="esc-fill" id="escFill"></div></div>
+    <div class="stat-row" id="statRow"></div>
+    <div class="briefing" id="briefing"></div>
+  </section>
 
+  <!-- Evidence Provenance (full chain) -->
+  <section class="card fade" id="stepEvidence">
+    <div class="card-head">
+      <h3>Full Evidence Chain — every claim is traceable</h3>
+    </div>
+    <p class="explain">Every piece of evidence used in this assessment is listed below with its source, dimension, and confidence. Click any row to see the raw snippet.</p>
+    <div class="evidence-wrap" id="evidenceWrap"></div>
+  </section>
+
+  <!-- Reasoning Chain -->
+  <section class="card fade" id="stepReasoning">
+    <div class="card-head">
+      <h3>Reasoning Chain — how the system reached its conclusion</h3>
+    </div>
+    <div class="reasoning-chain" id="reasoningChain"></div>
   </section>
 
 </main>
 
-<footer class="footer">
-  IND-DIPLOMAT &nbsp;|&nbsp; 7-Layer Architecture &nbsp;|&nbsp; 15+ Data Sources &nbsp;|&nbsp; Bayesian State Model &nbsp;|&nbsp; Built by Abhishek Kumar
+<!-- ═══ EMPTY STATE (before first query) ═══ -->
+<div class="empty-hero" id="emptyHero">
+  <div class="hero-icon">🌐</div>
+  <h2>Explainable Geopolitical Intelligence</h2>
+  <p>Submit a query above. Every step of the analysis pipeline will be shown here — fully transparent, fully verifiable.</p>
+  <div class="hero-features">
+    <div class="hf"><span>📡</span> 15+ data sources</div>
+    <div class="hf"><span>🔍</span> Bayesian signal filtering</div>
+    <div class="hf"><span>🏛</span> Multi-agent council debate</div>
+    <div class="hf"><span>⚠️</span> Red team verification</div>
+    <div class="hf"><span>🚦</span> Deterministic safety gate</div>
+    <div class="hf"><span>📊</span> Calibrated risk scores</div>
+  </div>
+</div>
+
+<footer class="foot">
+  IND-DIPLOMAT v7 &nbsp;|&nbsp; 7-Layer Architecture &nbsp;|&nbsp; 15+ Data Sources &nbsp;|&nbsp; Every Output Explainable &nbsp;|&nbsp; Built by Abhishek Kumar
 </footer>
 
 <script src="app.js"></script>
