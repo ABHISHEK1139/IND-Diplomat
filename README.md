@@ -386,3 +386,50 @@ python run.py --experiment all        # Full validation suite
 ## License
 
 MIT License — see [LICENSE](LICENSE) for details.
+
+
+## Neuro-Symbolic Safety Architecture
+
+IND-Diplomat implements a **Proposer-Verifier** pattern that prevents LLM hallucinations from corrupting intelligence assessments. The LLM acts as a narrative engine; the deterministic layer acts as an immutable arbiter of reality.
+
+### Immutable Facts Injection
+
+Before every LLM call (classification and reasoning), deterministic ground truth — signal states, mobilization levels, telemetry bounds — is injected as an `[IMMUTABLE_FACTS]` block directly into the system prompt. The LLM is explicitly instructed that these constraints are non-negotiable and must be reflected in any output.
+
+```text
+[IMMUTABLE_FACTS — DETERMINISTIC GROUND TRUTH]
+These constraints are MANDATORY. You MUST NOT contradict them.
+
+  MILITARY_ESCALATION    = 0.15  (LOW)
+  MOBILIZATION           = 0.00  (NONE)
+  FORCE_POSTURE          = 0.43  (MODERATE)
+  WMD_RISK               = 0.95  (CRITICAL)
+  ...
+```
+
+### Proposer-Verifier Loop
+
+When the LLM proposes signal classifications, a deterministic verifier checks each proposal against hard constraints. If the LLM claims `MOBILIZATION = HIGH` when raw telemetry shows `0.00`, the proposal is **actively rejected** and the LLM is forced to retry with an explicit correction:
+
+```text
+[DETERMINISTIC VERIFIER REJECTION]
+Your proposal was REJECTED because:
+  - You proposed MOBILIZATION=HIGH but ground truth is 0.00
+You MUST revise your assessment to align with measured reality.
+```
+
+### SRE Score Clamping
+
+The Assessment Gate computes a maximum allowable escalation score from deterministic coverage bounds across all four dimensions (Capability, Intent, Stability, Cost). If the LLM's synthesis produces an SRE score exceeding this ceiling, the score is **clamped to reality** and a `CLAMPED` warning is issued. Massive overshoots (>0.15) trigger a `NEEDS_REVIEW` halt for human audit.
+
+```python
+max_allowed_sre = coverage_bound + trend_bonus
+max_allowed_sre = max(max_allowed_sre, deterministic_sre)
+
+if llm_sre > max_allowed_sre:
+    final_sre = max_allowed_sre  # CLAMPED
+```
+
+### Design Principle
+
+The LLM provides qualitative reasoning (the "why"). The deterministic engine enforces quantitative reality (the "what"). The LLM cannot override physics.
