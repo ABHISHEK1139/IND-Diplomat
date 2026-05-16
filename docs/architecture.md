@@ -169,6 +169,28 @@ Extends single-theater analysis to multi-theater:
 - **Dashboard**: Reasoning, reliability, and explainability tabs in the frontend
 - **Validation**: Crisis replay (Brier scores), signal ablation, lead-time experiments
 - **Learning**: Confidence recalibration, forecast archiving, auto-adjustment loops
+- **Self-directed learning**: Runtime reflection converts evidence gaps, contradictions, gate failures, calibration errors, and reasoning-quality issues into bounded learning goals and proposed experiments. The loop persists memory in `engine/data/self_directed_memory.json`, but it does not edit code, add sources, or change thresholds without existing calibration caps and human approval.
+
+### Self-Directed Learning Loop
+
+The next-generation learning layer lives in `engine/Layer6_Learning/self_directed_learning.py`.
+
+```text
+analysis session
+  -> observe friction signals
+  -> create LearningTrigger records
+  -> rank LearningGoal objects
+  -> propose LearningExperiment objects
+  -> persist bounded memory
+  -> expose self_directed block in the learning report
+```
+
+The loop is deliberately assistive rather than fully autonomous:
+
+- It can decide what it needs to learn next.
+- It can propose evidence collection, replay, calibration, contradiction, and reasoning-quality experiments.
+- It can remember open goals and accepted experiments.
+- It cannot silently rewrite model behavior, bypass the assessment gate, or ingest unapproved sources.
 
 ## Layer Families In The Repo
 

@@ -147,12 +147,15 @@ class LegalReasoner:
             from Core.legal.legal_reasoner_prompt import SYSTEM_PROMPT, build_user_prompt
 
             evidence_block = evidence_to_prompt_block(evidence_items)
+            deterministic_flags = self.evaluate(active_signals or set())
+            
             user_prompt = build_user_prompt(
                 subject_country=subject_country,
                 target_country=target_country,
                 active_signals=active_signals or set(),
                 evidence_block=evidence_block,
                 behaviors_block=behaviors_block,
+                deterministic_flags=deterministic_flags,
             )
         except Exception as e:
             logger.warning("[LEGAL-REASONER] Prompt assembly failed: %s", e)

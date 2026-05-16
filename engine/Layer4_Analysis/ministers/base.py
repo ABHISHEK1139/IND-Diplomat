@@ -488,6 +488,40 @@ class BaseMinister(ABC):
             degradation_reason="generic deterministic classification fallback",
         )
 
+    def _deterministic_verify(self, predicted: List[str], state_context: StateContext) -> List[str]:
+        """
+        Verify that the LLM's proposed signals do not violate basic deterministic facts.
+        """
+        violations = []
+        mobilization = _as_float(
+            _pick(state_context, "military.mobilization", _pick(state_context, "military.mobilization_level", 0.0)),
+            0.0,
+        )
+        hostility = _as_float(
+            _pick(state_context, "diplomatic.hostility", _pick(state_context, "diplomatic.hostility_tone", 0.0)),
+            0.0,
+        )
+        negotiations = _as_float(_pick(state_context, "diplomatic.negotiations", 0.0), 0.0)
+        sanctions = _as_float(
+            _pick(state_context, "economic.sanctions_pressure", _pick(state_context, "economic.sanctions", 0.0)),
+            0.0,
+        )
+        economic_pressure = _as_float(_pick(state_context, "economic.economic_pressure", 0.0), 0.0)
+
+        # Baseline checks: prevent LLM from hallucinating high-severity signals when metrics are completely dormant
+        if "SIG_MIL_ESCALATION" in predicted and mobilization < 0.10:
+            violations.append("Cannot output SIG_MIL_ESCALATION: mobilization metric is too low (<0.10).")
+        if "SIG_MIL_MOBILIZATION" in predicted and mobilization < 0.05:
+            violations.append("Cannot output SIG_MIL_MOBILIZATION: mobilization metric is essentially zero (<0.05).")
+        if "SIG_DIP_HOSTILITY" in predicted and hostility < 0.15:
+            violations.append("Cannot output SIG_DIP_HOSTILITY: hostility tone metric is too low (<0.15).")
+        if "SIG_ECONOMIC_PRESSURE" in predicted and sanctions < 0.10 and economic_pressure < 0.10:
+            violations.append("Cannot output SIG_ECONOMIC_PRESSURE: both sanctions and economic_pressure metrics are too low (<0.10).")
+        if "SIG_NEGOTIATION_BREAKDOWN" in predicted and negotiations > 0.60:
+            violations.append("Cannot output SIG_NEGOTIATION_BREAKDOWN: negotiations metric is very strong (>0.60).")
+
+        return violations
+
     def _deterministic_fallback(self, state_context: StateContext) -> Dict[str, Any]:
         """Fix 4: Lowered thresholds to realistic levels.
 
@@ -678,6 +712,17 @@ class BaseMinister(ABC):
         """
         effort = decide_effort(session, full_context) if session is not None else None
         system_prompt = self._build_reasoning_prompt(synthesis_summary)
+        
+        # --- IMMUTABLE FACTS INJECTION ---
+        if report.predicted_signals:
+            system_prompt += (
+                "\n\n[IMMUTABLE_FACTS] DETERMINISTIC GROUND TRUTH:\n"
+                "The following signals have been verified as active for your domain. You MUST base your narrative around these facts.\n"
+                + "\n".join(f"- {s}" for s in report.predicted_signals) + "\n"
+                "[/IMMUTABLE_FACTS]"
+            )
+        # ---------------------------------
+        
         if effort is not None:
             system_prompt = f"{system_prompt.rstrip()}\n\n{effort.prompt_instruction}"
         reasoning_max_tokens_raw = str(os.getenv("MINISTER_REASONING_MAX_TOKENS", "")).strip()
@@ -1006,6 +1051,18 @@ class BaseMinister(ABC):
         Closed-world classification: strict JSON only, with one retry and deterministic fallback on format breach.
         """
         system_prompt = self._build_system_prompt(self.allowed_signals)
+        
+        # --- IMMUTABLE FACTS INJECTION ---
+        det_output = self._deterministic_fallback(state_context)
+        det_signals = det_output.get("predicted_signals", [])
+        if det_signals:
+            system_prompt += (
+                "\n\n[IMMUTABLE_FACTS] DETERMINISTIC GROUND TRUTH:\n"
+                "The deterministic rule engine has confirmed the following signals are MATHEMATICALLY ACTIVE. You MUST NOT contradict this list or invent signals outside of it.\n"
+                + "\n".join(f"- {s}" for s in det_signals) + "\n"
+                "[/IMMUTABLE_FACTS]"
+            )
+        # ---------------------------------
         attempts: List[str] = []
         parsed: Optional[Dict[str, Any]] = None
         last_prompt_payload: Dict[str, Any] = {}
@@ -1073,6 +1130,28 @@ class BaseMinister(ABC):
                     )
                     parsed = None
                     continue
+
+                # --- PROPOSER-VERIFIER INTEGRATION ---
+                predicted_test = self._normalize_predicted_signals(parsed.get("predicted_signals", []))
+                violations = self._deterministic_verify(predicted_test, state_context)
+                
+                if violations:
+                    logger.warning(
+                        "[Minister:%s] LLM proposal rejected by deterministic verification: %s",
+                        self.name, violations
+                    )
+                    if attempt_idx < 1:
+                        rejection_note = (
+                            "\n\n[DETERMINISTIC VERIFIER REJECTION]\n"
+                            "Your previous classification contained violations:\n"
+                            + "\n".join(f"- {v}" for v in violations) + "\n"
+                            "You MUST correct your `predicted_signals` to comply with these rules."
+                        )
+                        specific_instructions += rejection_note
+                    parsed = None
+                    continue
+                # -------------------------------------
+
                 break
 
             logger.warning(

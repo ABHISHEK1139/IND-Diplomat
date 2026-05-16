@@ -2,7 +2,7 @@
 apply_conflict_state_wire.py — Wire conflict_state into result dicts.
 Adds conflict_state field to council_session in both WITHHELD and APPROVED paths.
 Also adds it to the global_model dict.
-Run once:  python Scripts/apply_conflict_state_wire.py
+Run once:  python scripts/apply_conflict_state_wire.py
 """
 import pathlib, sys
 

@@ -154,22 +154,45 @@ def _serialize_full_context(session: Any) -> Dict[str, Any]:
 
 def _build_learning_block(session: Any) -> Dict[str, Any]:
     """Build the ``learning`` sub-dict for output."""
+    country = str(getattr(session, "learning_country", None) or "") or None
+
+    calibration: Dict[str, Any] = {}
+    adjustments: Dict[str, Any] = {}
+    drift: Dict[str, Any] = {}
+    self_directed: Dict[str, Any] = {}
+
+    try:
+        from engine.Layer6_Learning.calibration_engine import calibration_score
+
+        calibration = calibration_score(country)
+    except Exception as exc:
+        logger.warning("[LEARNING] Calibration block failed: %s", exc)
+
+    try:
+        from engine.Layer6_Learning.auto_adjuster import compute_adjustments, get_drift_report
+
+        adjustments = compute_adjustments()
+        drift = get_drift_report()
+    except Exception as exc:
+        logger.warning("[LEARNING] Adjustment block failed: %s", exc)
+
+    try:
+        from Config.config import ENABLE_SELF_DIRECTED_LEARNING
+
+        if bool(ENABLE_SELF_DIRECTED_LEARNING):
+            from engine.Layer6_Learning.self_directed_learning import assess_self_directed_learning
+
+            self_directed = assess_self_directed_learning(session, persist=True)
+    except Exception as exc:
+        logger.warning("[LEARNING] Self-directed block failed: %s", exc)
+
     return {
         "forecast_summary": dict(getattr(session, "learning_resolution", {}) or {}),
-        "calibration": (
-            (lambda: __import__("Layer6_Learning.calibration_engine", fromlist=["calibration_score"]).calibration_score(
-                str(getattr(session, "learning_country", None) or "") or None
-            ))() if True else {}
-        ),
-        "adjustments": (
-            (lambda: __import__("Layer6_Learning.auto_adjuster", fromlist=["compute_adjustments"]).compute_adjustments())()
-            if True else {}
-        ),
+        "calibration": calibration,
+        "adjustments": adjustments,
         "confidence_multiplier": float(getattr(session, "learning_confidence_multiplier", 1.0) or 1.0),
-        "drift": (
-            (lambda: __import__("Layer6_Learning.auto_adjuster", fromlist=["get_drift_report"]).get_drift_report())()
-            if True else {}
-        ),
+        "drift": drift,
+        "self_directed": self_directed,
     }
 
 

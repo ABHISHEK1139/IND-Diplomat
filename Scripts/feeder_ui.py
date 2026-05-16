@@ -9,7 +9,7 @@ Features:
 
 Run:
     cd IND-Dip
-    streamlit run Scripts/feeder_ui.py
+    streamlit run scripts/feeder_ui.py
 """
 
 import asyncio

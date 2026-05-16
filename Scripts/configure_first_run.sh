@@ -60,7 +60,7 @@ fi
 # ── Step 5: Verify installation ───────────────────────────────────────────
 echo "[5/5] Running verification..."
 python project_root.py
-python -m pytest test/test_imports.py -q --tb=short 2>/dev/null || echo "  ⚠ Some imports may need optional services (Ollama, Redis)"
+python -m pytest tests/test_imports.py -q --tb=short 2>/dev/null || echo "  Some imports may need optional services (Ollama, Redis)"
 
 echo ""
 echo "========================================"
@@ -68,7 +68,7 @@ echo "  ✓ Setup complete!"
 echo "========================================"
 echo ""
 echo "  Activate environment:  source .venv/bin/activate"
-echo "  Start web app:         python app_server.py --port 8000"
+echo "  Start web app:         python -m ind_diplomat.app_server --port 8000"
 echo "  Run tests:             make test"
 echo "  Build Docker:          make docker-build"
 echo ""

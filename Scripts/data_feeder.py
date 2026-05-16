@@ -5,7 +5,7 @@ performs deduplication, archives raw HTML, and reports new documents.
 
 Usage:
     cd IND-Dip
-    python Scripts/data_feeder.py
+    python scripts/data_feeder.py
 """
 
 import asyncio

@@ -27,7 +27,7 @@ except ImportError:
 
 # Layer engine imports
 try:
-    from engine.Layer4_Analysis.core.coordinator import Coordinator
+    from engine.Layer4_Analysis.coordinator import CouncilCoordinator as Coordinator
 except Exception:
     Coordinator = None
 
@@ -496,7 +496,9 @@ async def query(
         session_id=session_id,
         country_code="UNKNOWN", # Should be extracted or passed
         use_mcts=body.use_mcts,
+        use_causal=body.use_causal,
         use_red_team=body.use_red_team,
+        use_multi_perspective=body.use_multi_perspective,
         max_investigation_loops=2
     )
 
@@ -568,6 +570,7 @@ async def query_v2(
             session_id=body.session_id,
             country_code="UNKNOWN",
             use_mcts=body.use_mcts,
+            use_causal=body.use_causal,
             use_red_team=body.use_red_team,
             use_multi_perspective=body.use_multi_perspective,
         )
@@ -644,6 +647,7 @@ async def query_stream(
         session_id=body.session_id,
         country_code="UNKNOWN",
         use_mcts=body.use_mcts,
+        use_causal=body.use_causal,
         use_red_team=body.use_red_team,
         use_multi_perspective=body.use_multi_perspective,
     )

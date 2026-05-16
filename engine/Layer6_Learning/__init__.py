@@ -20,6 +20,10 @@ from engine.Layer6_Learning.calibration_engine import calibration_score, calibra
 from engine.Layer6_Learning.auto_adjuster import compute_adjustments, apply_adjustments
 from engine.Layer6_Learning.confidence_recalibrator import calibration_bonus
 from engine.Layer6_Learning.learning_report import format_learning_section
+from engine.Layer6_Learning.self_directed_learning import (
+    SelfDirectedLearningAgent,
+    assess_self_directed_learning,
+)
 
 __all__ = [
     "record_forecast",
@@ -31,4 +35,6 @@ __all__ = [
     "apply_adjustments",
     "calibration_bonus",
     "format_learning_section",
+    "SelfDirectedLearningAgent",
+    "assess_self_directed_learning",
 ]

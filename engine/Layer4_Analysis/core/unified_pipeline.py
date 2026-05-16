@@ -588,6 +588,24 @@ class UnifiedPipeline:
         readiness_meta["system_health"] = health_report
         readiness_meta["analyst_input_readiness"] = analyst_input.get("readiness")
 
+        noop_flag_messages = {
+            "use_mcts": "use_mcts is accepted but not wired into coordinator logic yet.",
+            "use_causal": "use_causal is accepted but not wired into coordinator logic yet.",
+            "use_multi_perspective": "use_multi_perspective is accepted but not wired into coordinator logic yet.",
+        }
+        if bool(flags.get("enable_mcts") or flags.get("use_mcts")):
+            msg = noop_flag_messages["use_mcts"]
+            if msg not in operational_warnings:
+                operational_warnings.append(msg)
+        if bool(flags.get("enable_causal") or flags.get("use_causal")):
+            msg = noop_flag_messages["use_causal"]
+            if msg not in operational_warnings:
+                operational_warnings.append(msg)
+        if bool(flags.get("enable_debate") or flags.get("use_multi_perspective")):
+            msg = noop_flag_messages["use_multi_perspective"]
+            if msg not in operational_warnings:
+                operational_warnings.append(msg)
+
         # ── Gate 5: Council execution ─────────────────────────────────
         try:
             council = await self.coordinator.process_query(
@@ -631,10 +649,40 @@ class UnifiedPipeline:
 
         # Map Coordinator outcome to canonical three
         king_decision = str(council.get("king_decision", "") or "")
-        council_status = str(council.get("status", "CONCLUDED") or "CONCLUDED")
-        answer = str(council.get("answer", "")) or str((intelligence_report or {}).get("executive_summary", ""))
+        council_session_status = ""
+        if isinstance(session, dict):
+            council_session_status = str(session.get("status", "") or "")
+        council_status = str(council.get("status", council_session_status or "CONCLUDED") or "CONCLUDED")
+        raw_answer = str(council.get("answer", "") or "")
+        answer = raw_answer
+        answer_lower = raw_answer.strip().lower()
+        session_error = ""
+        if isinstance(session, dict):
+            session_error = str(session.get("error", "") or "")
+        failure_statuses = {"FAILED", "COORDINATOR_FAILED", "ERROR", "EXCEPTION"}
+        internal_failure = (
+            council_status.upper() in failure_statuses
+            or council_session_status.upper() in failure_statuses
+            or bool(session_error)
+            or "unexpected system error" in answer_lower
+            or answer_lower.startswith("analysis failed")
+        )
 
-        if king_decision == "INSUFFICIENT_EVIDENCE" or council_status == "REFUSED":
+        if not internal_failure and not answer.strip():
+            answer = str((intelligence_report or {}).get("executive_summary", "") or "")
+            answer_lower = answer.strip().lower()
+
+        if internal_failure:
+            outcome = OUTCOME_INSUFFICIENT_EVIDENCE
+            if not answer.strip():
+                answer = "The system could not complete analysis because an internal error occurred."
+            if "Internal runtime failure during council reasoning." not in operational_warnings:
+                operational_warnings.append("Internal runtime failure during council reasoning.")
+            if session_error:
+                error_line = f"Council error: {session_error[:200]}"
+                if error_line not in operational_warnings:
+                    operational_warnings.append(error_line)
+        elif king_decision == "INSUFFICIENT_EVIDENCE" or council_status == "REFUSED":
             outcome = OUTCOME_INSUFFICIENT_EVIDENCE
         elif not answer.strip():
             outcome = OUTCOME_INSUFFICIENT_EVIDENCE

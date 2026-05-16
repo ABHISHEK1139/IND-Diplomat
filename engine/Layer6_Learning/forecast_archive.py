@@ -19,16 +19,18 @@ from __future__ import annotations
 
 import json
 import logging
-import os
 import threading
 from dataclasses import dataclass, asdict, field
 from datetime import datetime, timezone
+from pathlib import Path
 from typing import Dict, List, Optional
+
+from Config.paths import DATA_DIR
 
 logger = logging.getLogger("Layer6_Learning.forecast_archive")
 
-_DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "data")
-_FORECAST_PATH = os.path.join(_DATA_DIR, "forecast_history.json")
+_DATA_DIR = Path(DATA_DIR)
+_FORECAST_PATH = _DATA_DIR / "forecast_history.json"
 
 _file_lock = threading.Lock()
 
@@ -147,10 +149,10 @@ def count_resolved(country: Optional[str] = None) -> int:
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 def _load_raw() -> list:
     with _file_lock:
-        if not os.path.exists(_FORECAST_PATH):
+        if not _FORECAST_PATH.exists():
             return []
         try:
-            with open(_FORECAST_PATH, "r", encoding="utf-8") as fh:
+            with _FORECAST_PATH.open("r", encoding="utf-8") as fh:
                 data = json.load(fh)
             return data if isinstance(data, list) else []
         except (json.JSONDecodeError, IOError):
@@ -160,6 +162,6 @@ def _load_raw() -> list:
 
 def _save_raw(data: list) -> None:
     with _file_lock:
-        os.makedirs(os.path.dirname(_FORECAST_PATH), exist_ok=True)
-        with open(_FORECAST_PATH, "w", encoding="utf-8") as fh:
+        _FORECAST_PATH.parent.mkdir(parents=True, exist_ok=True)
+        with _FORECAST_PATH.open("w", encoding="utf-8") as fh:
             json.dump(data, fh, indent=2, ensure_ascii=False)

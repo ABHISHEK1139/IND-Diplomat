@@ -12,6 +12,7 @@ __pycache__/
 .venv/
 venv/
 env/
+.local/
 .env
 .env.*
 !.env.example
@@ -58,6 +59,7 @@ build/
 dist/
 .cache/
 github_upload/
+src/*.egg-info/
 
 # Docker volumes (local)
 chroma-data/

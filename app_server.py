@@ -8,8 +8,8 @@ Self-contained web server that:
   4. Maps PipelineResult → the JSON format Frontend/ already consumes
 
 Usage:
-    python app_server.py                 # http://localhost:8000
-    python app_server.py --port 8080     # custom port
+    python -m ind_diplomat.app_server                 # http://localhost:8000
+    python -m ind_diplomat.app_server --port 8080     # custom port
 """
 
 from __future__ import annotations
@@ -35,6 +35,7 @@ import uvicorn
 
 from run import diplomat_query, diplomat_query_sync, _check_ollama, _setup_logging, DiplomatResult
 from Config import config
+from ind_diplomat.paths import RUNTIME_DIR
 
 logger = logging.getLogger("webapp")
 
@@ -128,7 +129,7 @@ class JobStore:
         self._jobs: Dict[str, Job] = {}
         self._order: List[str] = []          # newest first
         self._max = max_jobs
-        self._persist_path = persist_path or (_ROOT / "runtime" / "job_store.json")
+        self._persist_path = persist_path or (RUNTIME_DIR / "job_store.json")
         self._lock = threading.RLock()
         self._load()
 
@@ -906,7 +907,7 @@ async def api_ollama():
 
 def main():
     import argparse
-    parser = argparse.ArgumentParser(description="IND-Diplomat Web App")
+    parser = argparse.ArgumentParser(prog="ind-diplomat-web", description="IND-Diplomat Web App")
     parser.add_argument("--port", type=int, default=8000)
     parser.add_argument("--host", default="127.0.0.1")
     args = parser.parse_args()

@@ -1,7 +1,7 @@
 """
 apply_fix123.py — Surgical patch for FIX 1 + FIX 2 + FIX 3.
 Reads coordinator.py, applies 3 structural corrections, writes back.
-Run once:  python Scripts/apply_fix123.py
+Run once:  python scripts/apply_fix123.py
 """
 import pathlib, sys, re
 

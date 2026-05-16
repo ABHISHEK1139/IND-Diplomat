@@ -100,9 +100,9 @@ When submitting via POST `/api/v3/assess`:
 
 ## Data Persistence
 
-- Jobs stored in SQLite: `runtime/analyst_jobs.db`
-- Trends read from: `runtime/monitor_log.jsonl`
-- Alerts read from: `runtime/alerts/*.json`
+- Jobs stored in SQLite: `.local/runtime/analyst_jobs.db`
+- Trends read from: `.local/runtime/monitor_log.jsonl`
+- Alerts read from: `.local/runtime/alerts/*.json`
 
 ## Files Created
 

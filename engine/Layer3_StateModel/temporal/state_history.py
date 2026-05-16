@@ -9,8 +9,9 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List
 from Config.runtime_clock import RuntimeClock
+from Config.paths import RUNTIME_DIR
 
-HISTORY_DIR = Path("runtime/state_history")
+HISTORY_DIR = Path(RUNTIME_DIR) / "state_history"
 HISTORY_DIR.mkdir(parents=True, exist_ok=True)
 MAX_HISTORY_ROWS = 30
 

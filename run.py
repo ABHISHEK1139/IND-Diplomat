@@ -10,14 +10,14 @@ Key capabilities:
 
 Usage (CLI)::
 
-    python run.py "What is driving India-Pakistan tensions?"
-    python run.py --country IND --date 2025-06-01 "Assess China-Taiwan risk"
-    python run.py --verbose "Why is China near Taiwan?"
-    python run.py --experiment all
+    python -m ind_diplomat.cli "What is driving India-Pakistan tensions?"
+    python -m ind_diplomat.cli --country IND --date 2025-06-01 "Assess China-Taiwan risk"
+    python -m ind_diplomat.cli --verbose "Why is China near Taiwan?"
+    python -m ind_diplomat.cli --experiment all
 
 Usage (import)::
 
-    from run import diplomat_query, diplomat_query_sync
+    from ind_diplomat.cli import diplomat_query, diplomat_query_sync
     result = await diplomat_query("Why is India …?", country_code="IND")
 """
 
@@ -45,6 +45,7 @@ from Config.config import (
     OPENROUTER_MODEL,
     OPENROUTER_URL,
 )
+from ind_diplomat.paths import RUNTIME_DIR
 
 # ── Bootstrap ─────────────────────────────────────────────────────────
 _ROOT = Path(__file__).resolve().parent
@@ -187,7 +188,7 @@ def _llm_runtime_payload() -> Dict[str, Any]:
 
 
 def _llm_trace_payload() -> Dict[str, Any]:
-    default_trace_path = _ROOT / "runtime" / "llm_trace.txt"
+    default_trace_path = RUNTIME_DIR / "llm_trace.txt"
     trace_path = Path(str(os.getenv("LLM_TRACE_PATH", str(default_trace_path)) or str(default_trace_path)))
     tail_chars = int(str(os.getenv("LLM_TRACE_TAIL_CHARS", "30000")).strip() or "30000")
     trace_enabled = _env_truthy("LLM_TRACE_ENABLED", default=False)
@@ -521,15 +522,15 @@ def _run_experiment(name: str) -> None:
 # ── CLI ───────────────────────────────────────────────────────────────
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        prog="run.py",
+        prog="ind-diplomat",
         description="IND-Diplomat: Geopolitical risk assessment engine.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=textwrap.dedent("""\
             examples:
-              python run.py "What is driving India-Pakistan tensions?"
-              python run.py --country IND "Assess South Asian stability"
-              python run.py --no-guardian --verbose "Why is China near Taiwan?"
-              python run.py --experiment all
+              python -m ind_diplomat.cli "What is driving India-Pakistan tensions?"
+              python -m ind_diplomat.cli --country IND "Assess South Asian stability"
+              python -m ind_diplomat.cli --no-guardian --verbose "Why is China near Taiwan?"
+              python -m ind_diplomat.cli --experiment all
         """),
     )
     parser.add_argument(

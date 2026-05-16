@@ -520,16 +520,26 @@ def _ensure_provider_bootstrap(primary_model: str) -> None:
 
         openrouter_ok = _openrouter_startup_available(str(CONFIG_OPENROUTER_API_KEY or "").strip())
         ollama_ok = _ollama_startup_available()
+        explicit_provider = str(os.getenv("LLM_PROVIDER", "")).strip().lower()
+        prefer_cloud = explicit_provider != "ollama"
 
-        if openrouter_ok:
+        if prefer_cloud:
             bootstrap = cloud + local
-            reason = "openrouter_available_on_startup"
-        elif ollama_ok:
-            bootstrap = local + cloud
-            reason = "ollama_only_on_startup"
+            reason = "openrouter_preferred_by_default"
+            if openrouter_ok:
+                reason = "openrouter_preferred_and_available"
+            elif not openrouter_ok and ollama_ok:
+                reason = "openrouter_preferred_fallback_to_local"
         else:
-            bootstrap = ordered
-            reason = "no_provider_probe_success_using_default_chain"
+            if ollama_ok:
+                bootstrap = local + cloud
+                reason = "ollama_forced_and_available"
+            elif openrouter_ok:
+                bootstrap = cloud + local
+                reason = "ollama_forced_cloud_only"
+            else:
+                bootstrap = ordered
+                reason = "no_provider_probe_success_using_default_chain"
 
         deduped: List[Tuple[str, str]] = []
         seen: set[Tuple[str, str]] = set()
@@ -1280,9 +1290,22 @@ class LocalLLM:
                 len(visit_order),
                 "; ".join(e[:120] for e in errors[-3:]),
             )
+            note_llm_deterministic_fallback("llm_provider_chain")
+            prompt_error = ""
+            for entry in errors:
+                if "INPUT_BUDGET_EXCEEDED" in entry or "PROVIDER_WINDOW_EXCEEDED" in entry:
+                    prompt_error = entry
+                    break
+            if not prompt_error:
+                for entry in errors:
+                    if "STRUCTURED_OUTPUT_TRUNCATED" in entry:
+                        prompt_error = entry
+                        break
+            if prompt_error:
+                return f"LLM_ERROR: DETERMINISTIC_FALLBACK prompt_error={prompt_error[:200]}"
             return (
-                f"LLM_ERROR: All {len(visit_order)} fallback candidates failed. "
-                f"Last: {errors[-1][:200] if errors else 'unknown'}"
+                "LLM_ERROR: DETERMINISTIC_FALLBACK provider_chain_failed "
+                f"last={errors[-1][:200] if errors else 'unknown'}"
             )
         finally:
             self.provider = original_provider

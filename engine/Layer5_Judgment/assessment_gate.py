@@ -93,6 +93,11 @@ class AssessmentState:
     black_swan_trigger: bool = False
     black_swan_reasons: List[str] = field(default_factory=list)
 
+    # Phase 8: Assessment Gate Clamping
+    sre_score: float = 0.0
+    trend_bonus: float = 0.0
+    deterministic_sre: float = 0.0
+
 
 # =====================================================================
 # GateVerdict — what the gate returns
@@ -134,6 +139,11 @@ class GateVerdict:
     # Phase 5.2: Black Swan — forced human review
     mandatory_review: bool = False
 
+    # Phase 8: SRE Clamping
+    sre_score: float = 0.0
+    clamped: bool = False
+    clamped_warning: str = ""
+
     def to_dict(self) -> Dict[str, Any]:
         return {
             "approved": self.approved,
@@ -146,6 +156,9 @@ class GateVerdict:
             "proposed_decision": self.proposed_decision,
             "confidence": round(self.confidence, 4),
             "mandatory_review": self.mandatory_review,
+            "sre_score": round(self.sre_score, 4),
+            "clamped": self.clamped,
+            "clamped_warning": self.clamped_warning,
         }
 
 
@@ -305,6 +318,8 @@ def evaluate(state: AssessmentState) -> GateVerdict:
             proposed_decision=state.proposed_decision,
             confidence=capped_conf,
             mandatory_review=True,
+            sre_score=state.sre_score,
+            clamped=False,
         )
 
     # ── Learning rule: relax thresholds if directed collection
@@ -363,11 +378,44 @@ def evaluate(state: AssessmentState) -> GateVerdict:
     # Deduplicate Actionable gaps
     actionable_gaps = list(set(actionable_gaps))
 
+    # ── SRE Score Clamping ──────────────────────────────────────────
+    # Calculate the maximum allowed SRE bound based on coverage
+    coverage_bound = 0.25 # Base allowance
+    coverage_bound += state.capability_coverage * 0.35
+    coverage_bound += state.intent_coverage * 0.30
+    coverage_bound += state.stability_coverage * 0.20
+    coverage_bound += state.cost_coverage * 0.15
+    
+    # The trend bonus is allowed to pass through the coverage bound unclamped
+    max_allowed_sre = min(1.0, coverage_bound + state.trend_bonus)
+    
+    # The clamp is the looser of the coverage bound OR the actual deterministic calculation
+    max_allowed_sre = max(max_allowed_sre, state.deterministic_sre)
+    
+    final_sre = state.sre_score
+    clamped = False
+    clamped_warning = ""
+    
+    if final_sre > max_allowed_sre:
+        clamped = True
+        clamped_warning = (
+            f"CLAMPED: Computed SRE ({final_sre:.3f}) exceeded deterministic bounds ({max_allowed_sre:.3f}). "
+            "LLM synthesis was overly aggressive compared to raw telemetry."
+        )
+        logger.warning("[GATE] %s", clamped_warning)
+        
+        # NEEDS_REVIEW if hallucination overshoot is massive
+        if (final_sre - max_allowed_sre) > 0.15:
+            reasons.append(f"NEEDS_REVIEW: Massive SRE hallucination overshoot by {final_sre - max_allowed_sre:.3f}. Manual review of the LLM synthesis is strongly advised.")
+            logger.error("[GATE] NEEDS_REVIEW triggered by massive SRE overshoot.")
+            
+        final_sre = max_allowed_sre
+
     if not reasons:
         # All rules passed — assessment is authorized.
         logger.info(
-            "[GATE] Assessment APPROVED — decision=%s, confidence=%.3f",
-            state.proposed_decision, state.analytic_confidence,
+            "[GATE] Assessment APPROVED — decision=%s, confidence=%.3f, sre=%.3f",
+            state.proposed_decision, state.analytic_confidence, final_sre
         )
         return GateVerdict(
             approved=True,
@@ -378,6 +426,9 @@ def evaluate(state: AssessmentState) -> GateVerdict:
             intelligence_gaps=actionable_gaps,
             proposed_decision=state.proposed_decision,
             confidence=state.analytic_confidence,
+            sre_score=final_sre,
+            clamped=clamped,
+            clamped_warning=clamped_warning,
         )
 
     # ── WITHHELD ──────────────────────────────────────────────────
@@ -481,6 +532,9 @@ def evaluate(state: AssessmentState) -> GateVerdict:
         collection_tasks=collection_tasks[:20],
         proposed_decision=state.proposed_decision,
         confidence=state.analytic_confidence,
+        sre_score=final_sre,
+        clamped=clamped,
+        clamped_warning=clamped_warning,
     )
 
 
@@ -599,6 +653,21 @@ def build_assessment_state(session: Any) -> AssessmentState:
     except Exception as e:
         logger.debug("Temporal analysis unavailable: %s", e)
 
+    # SRE Extraction
+    sre_score = float(getattr(session, "escalation_score", 0.0) or 0.0)
+    trend_bonus = 0.0
+    sre_domains_info = dict(getattr(session, "sre_domains", {}) or {})
+    if sre_domains_info:
+        trend_bonus = float(sre_domains_info.get("trend_bonus", 0.0) or 0.0)
+    
+    deterministic_sre = (
+        dimensions["CAPABILITY"] * 0.35 +
+        dimensions["INTENT"] * 0.30 +
+        dimensions["STABILITY"] * 0.20 +
+        dimensions["COST"] * 0.15 +
+        trend_bonus
+    )
+
     return AssessmentState(
         capability_coverage=dimensions["CAPABILITY"],
         intent_coverage=dimensions["INTENT"],
@@ -623,6 +692,9 @@ def build_assessment_state(session: Any) -> AssessmentState:
         black_swan_reasons=list(
             getattr(getattr(session, "black_swan_result", None), "reasons", []) or []
         ),
+        sre_score=sre_score,
+        trend_bonus=trend_bonus,
+        deterministic_sre=deterministic_sre,
     )
 
 

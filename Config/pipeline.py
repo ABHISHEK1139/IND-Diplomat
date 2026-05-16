@@ -80,7 +80,7 @@ def initialize():
 
     # ── Layer 1: Collection (sensors) ──────────────────────────────
     try:
-        from layer1_sensors import ObservationRecord
+        from engine.Layer1_Collection import ObservationRecord
         print(f"[Pipeline] Layer-1 OK: ObservationRecord loaded")
     except Exception as e:
         print(f"[Pipeline] Layer-1 ERROR: {e}")
@@ -136,6 +136,8 @@ async def run_query(
     as_of_date: str = None,
     use_red_team: bool = True,
     use_mcts: bool = False,
+    use_causal: bool = False,
+    use_multi_perspective: bool = False,
     max_investigation_loops: int = 2,
     **flags,
 ) -> Dict[str, Any]:
@@ -155,6 +157,8 @@ async def run_query(
         as_of_date: optional YYYY-MM-DD runtime date override for historical replay
         use_red_team: Enable adversarial red team challenge
         use_mcts:    Enable MCTS hypothesis exploration
+        use_causal:  Enable causal hypothesis analysis
+        use_multi_perspective: Enable multi-perspective debate logic
         max_investigation_loops: Max times Layer-4 can request more evidence
 
     Returns:
@@ -174,6 +178,8 @@ async def run_query(
         as_of_date=as_of_date,
         use_red_team=use_red_team,
         use_mcts=use_mcts,
+        use_causal=use_causal,
+        use_multi_perspective=use_multi_perspective,
         max_investigation_loops=max_investigation_loops,
         **flags
     )

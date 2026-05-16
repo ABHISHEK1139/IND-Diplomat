@@ -175,6 +175,13 @@ def compute_escalation_index(
     # ── Phase 6: Apply brakes ───────────────────────────────────
     # adjusted_score = raw_score * (1 - constraint_factor)
     escalation = raw_escalation * (1.0 - constraint_factor)
+
+    # ── Phase 3: Capability floor rule ──────────────────────────
+    cap_floor_applied = False
+    if capability < CAPABILITY_FLOOR:
+        escalation *= CAPABILITY_FLOOR_PENALTY
+        cap_floor_applied = True
+
     escalation = max(0.0, min(escalation, 1.0))
 
     _log.info(

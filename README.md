@@ -74,6 +74,27 @@ flowchart TD
 
 ## Quick Start
 
+### 0. First-Time Configuration (Required)
+
+Before running the pipeline, you MUST configure your environment variables. **Do not commit your API keys.**
+
+1. Copy the example configuration file:
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Open `.env` and set your API keys. At a minimum, you need an OpenRouter or local Ollama instance:
+   ```ini
+   # Required for cloud inference
+   OPENROUTER_API_KEY="sk-or-v1-..."
+   
+   # Optional: If you prefer local inference
+   OLLAMA_BASE_URL="http://localhost:11434"
+   LLM_PROVIDER="openrouter"  # or "ollama"
+   ```
+
+3. **Security Note:** The `.env` file is included in `.gitignore` to prevent accidental credential leaks. Never hardcode keys in the source files.
+
 ### Option A: Docker (Recommended)
 
 ```bash

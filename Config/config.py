@@ -44,11 +44,11 @@ REDIS_ENABLED = os.getenv("REDIS_ENABLED", "false").lower() == "true"
 _RAW_OPENROUTER_API_KEY = str(os.getenv("OPENROUTER_API_KEY", "")).strip()
 _EXPLICIT_LLM_PROVIDER = str(os.getenv("LLM_PROVIDER", "")).strip().lower()
 DEFAULT_OPENROUTER_MODEL = (
-    str(os.getenv("DEFAULT_OPENROUTER_MODEL", "qwen/qwen3.6-plus-preview:free")).strip()
-    or "qwen/qwen3.6-plus-preview:free"
+    str(os.getenv("DEFAULT_OPENROUTER_MODEL", "google/gemma-2-9b-it:free")).strip()
+    or "google/gemma-2-9b-it:free"
 )
 
-LLM_PROVIDER = _EXPLICIT_LLM_PROVIDER or ("openrouter" if _RAW_OPENROUTER_API_KEY else "ollama")
+LLM_PROVIDER = _EXPLICIT_LLM_PROVIDER or "openrouter"
 LLM_MODEL = str(os.getenv("LLM_MODEL", "deepseek-r1:8b")).strip() or "deepseek-r1:8b"
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
 OLLAMA_URL = os.getenv("OLLAMA_URL", f"{OLLAMA_BASE_URL}/api/generate")
@@ -127,6 +127,11 @@ ENABLE_GLOBAL_MODEL = os.getenv("ENABLE_GLOBAL_MODEL", "true").lower() == "true"
 CONTAGION_DECAY_RATE = float(os.getenv("CONTAGION_DECAY_RATE", "0.25"))
 SYSTEMIC_CASCADE_THRESHOLD = float(os.getenv("SYSTEMIC_CASCADE_THRESHOLD", "4.0"))
 CROSS_THEATER_SPILLOVER_FACTOR = float(os.getenv("CROSS_THEATER_SPILLOVER_FACTOR", "0.20"))
+
+# Phase 8.5: bounded self-directed learning.
+# When enabled, each completed assessment can emit and persist learning goals
+# such as evidence gaps, contradiction resolution, and calibration experiments.
+ENABLE_SELF_DIRECTED_LEARNING = os.getenv("ENABLE_SELF_DIRECTED_LEARNING", "true").lower() == "true"
 
 # ── Phase 8: Council Shadow Mode ─────────────────────────────────
 # When True, ministers compute reasoning (R1, R2, groupthink, adjustment)

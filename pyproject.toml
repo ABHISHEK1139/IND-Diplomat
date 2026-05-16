@@ -40,14 +40,22 @@ Documentation = "https://github.com/ABHISHEK1139/IND-Diplomat/blob/main/docs/arc
 Issues = "https://github.com/ABHISHEK1139/IND-Diplomat/issues"
 
 [project.scripts]
-ind-diplomat = "run:main"
+ind-diplomat = "ind_diplomat.cli:main"
+ind-diplomat-web = "ind_diplomat.app_server:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["ind_diplomat*"]
 
 # ── Tool Configuration ────────────────────────────────────────────────────
 
 [tool.pytest.ini_options]
-testpaths = ["test"]
+testpaths = ["tests"]
 addopts = "-ra --tb=short"
-norecursedirs = ["runtime", "reports", "data", ".pytest_cache", "__pycache__"]
+norecursedirs = [".local", "runtime", "reports", "data", ".pytest_cache", "__pycache__"]
 asyncio_mode = "auto"
 
 [tool.black]
@@ -57,7 +65,7 @@ target-version = ["py310", "py311", "py312"]
 [tool.isort]
 profile = "black"
 line_length = 120
-known_first_party = ["engine", "Config", "Core", "Frontend", "Utils"]
+known_first_party = ["ind_diplomat", "engine", "Config", "Core", "Frontend", "Utils"]
 
 [tool.flake8]
 max-line-length = 120
@@ -72,11 +80,11 @@ ignore_missing_imports = true
 exclude = ["build", "dist", ".venv"]
 
 [tool.coverage.run]
-source = ["."]
+source = ["src", "."]
 omit = [
-    "test/*",
+    "tests/*",
     ".venv/*",
-    "Scripts/*",
+    "scripts/*",
     "docs/*",
 ]
 

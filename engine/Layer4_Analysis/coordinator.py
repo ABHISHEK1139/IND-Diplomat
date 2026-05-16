@@ -1,4 +1,4 @@
-﻿"""
+"""
 The King (Coordinator).
 Orchestrates the Council of Ministers and judges hypotheses against evidence.
 
@@ -2724,7 +2724,26 @@ class CouncilCoordinator:
                     continue
 
                 if session.phase == ReasoningPhase.CHALLENGE:
-                    session = self._run_red_team(session)
+                    try:
+                        session = self._run_red_team(session)
+                    except Exception as red_exc:
+                        logger.error("Red-team phase failed: %s", red_exc)
+                        session.status = SessionStatus.FAILED
+                        self._set_phase(session, ReasoningPhase.FAILED)
+                        return {
+                            "answer": "Analysis failed during challenge phase due to a red-team error.",
+                            "sources": [],
+                            "references": [],
+                            "confidence": 0.0,
+                            "status": SessionStatus.FAILED.name,
+                            "council_session": {
+                                "session_id": session.session_id,
+                                "status": session.status.name,
+                                "error": f"Red-team error: {type(red_exc).__name__}: {red_exc}",
+                                "phase_history": list(session.phase_history),
+                                "escalation_trace": escalation_trace,
+                            },
+                        }
 
                     # â”€â”€ Debate Orchestrator Integration â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
                     # If red team found the hypothesis NOT robust, or there are
@@ -2769,7 +2788,7 @@ class CouncilCoordinator:
                                 }
                             except Exception as debate_exc:
                                 logger.warning(f"Debate orchestrator failed: {debate_exc}")
-                            session.debate_result = {"error": str(debate_exc)}
+                                session.debate_result = {"error": str(debate_exc)}
                     # â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
                     session.missing_signals = self._collect_missing_signals(session)
@@ -3015,6 +3034,14 @@ class CouncilCoordinator:
             try:
                 gate_state = gate_build_state(session)
                 gate_verdict: GateVerdict = gate_evaluate(gate_state)
+                
+                if getattr(gate_verdict, "clamped", False):
+                    session.escalation_score = getattr(gate_verdict, "sre_score", session.escalation_score)
+                    session.sre_escalation_score = session.escalation_score
+                    if hasattr(analysis_result, "escalation_score"):
+                        analysis_result.escalation_score = session.escalation_score
+                    logger.info("[COORDINATOR] Applied clamped SRE score: %.3f", session.escalation_score)
+                    
             except Exception as gate_err:
                 logger.error("[GATE] Assessment gate failed: %s â€” defaulting to WITHHELD", gate_err)
                 gate_verdict = GateVerdict(approved=False, withheld=True, decision="WITHHELD",
@@ -3086,4 +3113,3 @@ class CouncilCoordinator:
                     "error": f"Unexpected exception: {type(e).__name__}: {str(e)}",
                 },
             }
-

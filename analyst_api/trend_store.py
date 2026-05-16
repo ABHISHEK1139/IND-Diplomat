@@ -1,6 +1,6 @@
 """
 Trend Store — reads historical escalation data from:
-  1. runtime/monitor_log.jsonl  (continuous monitor output)
+  1. .local/runtime/monitor_log.jsonl  (continuous monitor output)
   2. Layer3 temporal memory snapshots
 
 Returns TrendPoint lists for Chart.js visualization.
@@ -14,10 +14,10 @@ from pathlib import Path
 from typing import List
 
 from .models import TrendPoint
+from ind_diplomat.paths import RUNTIME_DIR
 
-_ROOT = Path(__file__).resolve().parent.parent
-MONITOR_LOG = _ROOT / "runtime" / "monitor_log.jsonl"
-ALERTS_DIR = _ROOT / "runtime" / "alerts"
+MONITOR_LOG = RUNTIME_DIR / "monitor_log.jsonl"
+ALERTS_DIR = RUNTIME_DIR / "alerts"
 
 
 def get_trends(country_code: str, hours_back: float = 72) -> List[TrendPoint]:

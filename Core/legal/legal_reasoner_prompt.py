@@ -82,13 +82,18 @@ State B (target): {target_country}
 TRIGGERING SIGNALS:
 {signals_text}
 
+[IMMUTABLE_FACTS] DETERMINISTIC LEGAL MAPPING:
+The deterministic rule engine has evaluated the triggering signals and GUARANTEES the following legal domain flags are currently ACTIVE. You MUST NOT contradict these facts. Your analysis must align with and explain these flags:
+{deterministic_flags_text}
+[/IMMUTABLE_FACTS]
+
 INFERRED STATE BEHAVIORS:
 The following concrete state behaviors have been inferred from the observed signals.
 Evaluate EACH behavior against the legal evidence provided below.
 {behaviors_block}
 
 QUESTION:
-Based ONLY on the legal evidence below, what legal constraints or justifications exist for EACH of the inferred state behaviors listed above? Match each behavior to the most relevant legal provision in the evidence. If a behavior has no matching evidence, state "no_applicable_authority".
+Based ONLY on the legal evidence below and the IMMUTABLE FACTS above, what legal constraints or justifications exist for EACH of the inferred state behaviors listed above? Match each behavior to the most relevant legal provision in the evidence. If a behavior has no matching evidence, state "no_applicable_authority".
 
 LEGAL EVIDENCE:
 {evidence_block}
@@ -102,6 +107,7 @@ def build_user_prompt(
     active_signals: Set[str],
     evidence_block: str,
     behaviors_block: str = "",
+    deterministic_flags: Set[str] = None,
 ) -> str:
     """
     Assemble the user prompt from dynamic pipeline data.
@@ -119,6 +125,8 @@ def build_user_prompt(
     behaviors_block : str, optional
         Pre-formatted inferred behaviors from ``behaviors_to_prompt_block()``.
         If empty, a default message is used.
+    deterministic_flags : set[str], optional
+        Pre-computed legal signals from the deterministic engine.
 
     Returns
     -------
@@ -126,6 +134,9 @@ def build_user_prompt(
         The complete user prompt ready for LLM submission.
     """
     signals_text = "\n".join(f"- {sig}" for sig in sorted(active_signals)) or "- (none)"
+    
+    det_flags = deterministic_flags or set()
+    deterministic_flags_text = "\n".join(f"- {flag}" for flag in sorted(det_flags)) or "- (none active)"
 
     if not behaviors_block:
         behaviors_block = "(No specific behaviors inferred — evaluate signals against evidence directly.)"
@@ -134,6 +145,7 @@ def build_user_prompt(
         subject_country=subject_country or "UNKNOWN",
         target_country=target_country or "UNKNOWN",
         signals_text=signals_text,
+        deterministic_flags_text=deterministic_flags_text,
         behaviors_block=behaviors_block,
         evidence_block=evidence_block,
     )

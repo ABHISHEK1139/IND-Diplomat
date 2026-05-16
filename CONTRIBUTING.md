@@ -35,7 +35,7 @@ chmod +x scripts/configure_first_run.sh
 source .venv/bin/activate
 
 # Option B: Windows PowerShell
-powershell -ExecutionPolicy Bypass -File .\Scripts\configure_first_run.ps1 -InstallDependencies
+powershell -ExecutionPolicy Bypass -File .\scripts\configure_first_run.ps1 -InstallDependencies
 .\.venv\Scripts\Activate.ps1
 
 # Option C: Docker (no local Python required)
@@ -49,7 +49,7 @@ docker compose up --build  # Build and start
 make verify           # Checks paths, imports, and config
 # or manually:
 python project_root.py
-python -m pytest test/test_imports.py -q
+python -m pytest tests/test_imports.py -q
 ```
 
 ---
@@ -146,7 +146,7 @@ Before making changes, review:
 
 1. Place it in the appropriate `engine/Layer*` directory
 2. Ensure it only imports from layers at or below its level
-3. Add a corresponding test in `test/`
+3. Add a corresponding test in `tests/`
 4. Update `docs/repo-map.md` with the new module
 
 ---
@@ -156,7 +156,7 @@ Before making changes, review:
 ### Test Structure
 
 ```
-test/
+tests/
 ├── test_imports.py             # Smoke test — verifies all critical imports
 ├── test_core_pipeline.py       # Core pipeline unit tests (43 tests)
 ├── test_context.py             # State context construction
@@ -175,15 +175,15 @@ make test-smoke    # Quick validation (imports + core pipeline)
 make test-cov      # Full suite with HTML coverage report
 
 # Run a specific test file
-python -m pytest test/test_core_pipeline.py -v
+python -m pytest tests/test_core_pipeline.py -v
 
 # Run a specific test class
-python -m pytest test/test_core_pipeline.py::TestConfig -v
+python -m pytest tests/test_core_pipeline.py::TestConfig -v
 ```
 
 ### Writing Tests
 
-- Place all tests in the `test/` directory
+- Place all tests in the `tests/` directory
 - Name test files `test_*.py` and test functions `test_*`
 - Use `pytest` fixtures and `tmp_path` for file I/O
 - Tests **must** run without external services — use `unittest.mock` to mock LLM calls, Redis, etc.

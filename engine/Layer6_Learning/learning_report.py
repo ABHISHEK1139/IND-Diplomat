@@ -133,4 +133,38 @@ def format_learning_section(learning_data: Optional[Dict[str, Any]] = None) -> s
             )
         lines.append("")
 
+    # Self-directed learning goals
+    sdl = learning_data.get("self_directed", {})
+    if sdl:
+        lines.append("  SELF-DIRECTED LEARNING")
+        lines.append("  " + "-" * 40)
+        lines.append(f"    Autonomy:           {sdl.get('autonomy_level', 'bounded_assistive')}")
+        lines.append(
+            f"    Human Approval:     {'YES' if sdl.get('human_approval_required', True) else 'NO'}"
+        )
+        memory = sdl.get("memory_summary", {}) or {}
+        lines.append(
+            f"    Open Goals:         {memory.get('open_goals', 0)} "
+            f"(stored={memory.get('stored_goals', 0)})"
+        )
+
+        triggers = list(sdl.get("triggers", []) or [])[:4]
+        if triggers:
+            lines.append("    Triggers:")
+            for trigger in triggers:
+                lines.append(
+                    f"      - {trigger.get('kind', 'unknown')}: "
+                    f"severity={trigger.get('severity', 0)}"
+                )
+
+        goals = list(sdl.get("selected_goals", []) or [])[:4]
+        if goals:
+            lines.append("    Next Learning Goals:")
+            for goal in goals:
+                lines.append(
+                    f"      - {goal.get('kind', 'goal')} "
+                    f"(priority={goal.get('priority', 0)}): {goal.get('objective', '')}"
+                )
+        lines.append("")
+
     return "\n".join(lines)

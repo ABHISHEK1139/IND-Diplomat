@@ -20,6 +20,8 @@ from typing import Any, Callable, Dict, List, Optional
 from Config.config import (
     LLM_MODEL,
     LLM_PROVIDER,
+    OLLAMA_BASE_URL,
+    OLLAMA_FALLBACK_ONLY,
     OPENROUTER_API_KEY,
     OPENROUTER_MODEL,
     OPENROUTER_URL,
@@ -56,6 +58,10 @@ def _safe_float(value: Any, default: float = 0.0) -> float:
         return float(value)
     except Exception:
         return float(default)
+
+
+LLM_PROBE_ATTEMPTS = max(1, _safe_int(os.getenv("LLM_PROBE_ATTEMPTS", "2"), 2))
+LLM_PROBE_BACKOFF_SEC = _safe_float(os.getenv("LLM_PROBE_BACKOFF_SEC", "0.6"), 0.6)
 
 
 def _run_subprocess(command: List[str], timeout_sec: int) -> Dict[str, Any]:
@@ -100,6 +106,105 @@ def _timed_check(fn: Callable[[], Dict[str, Any]]) -> Dict[str, Any]:
     return payload
 
 
+def _probe_with_retries(fn: Callable[[], Dict[str, Any]]) -> Dict[str, Any]:
+    attempts = max(1, int(LLM_PROBE_ATTEMPTS))
+    backoff = max(0.0, float(LLM_PROBE_BACKOFF_SEC))
+    last_payload: Dict[str, Any] = {}
+    for idx in range(attempts):
+        payload = dict(fn() or {})
+        last_payload = payload
+        if bool(payload.get("ok", False)):
+            payload["attempts"] = idx + 1
+            return payload
+        if idx + 1 < attempts and backoff > 0.0:
+            time.sleep(backoff * (2 ** idx))
+    last_payload["attempts"] = attempts
+    return last_payload
+
+
+def _openrouter_models_url(base_url: str) -> str:
+    token = str(base_url or "").strip()
+    if "/chat/completions" in token:
+        return token.replace("/chat/completions", "/models")
+    if token.endswith("/models"):
+        return token
+    if token.endswith("/api/v1"):
+        return f"{token}/models"
+    return "https://openrouter.ai/api/v1/models"
+
+
+def _probe_openrouter(model: str) -> Dict[str, Any]:
+    import urllib.error
+    import urllib.request
+
+    api_key = str(OPENROUTER_API_KEY or "").strip()
+    models_url = _openrouter_models_url(OPENROUTER_URL)
+    result = {
+        "ok": False,
+        "provider": "openrouter",
+        "model": str(OPENROUTER_MODEL or model).strip() or model,
+        "endpoint": models_url,
+    }
+
+    if not api_key:
+        result["error"] = "OPENROUTER_API_KEY is not configured"
+        return result
+
+    try:
+        req = urllib.request.Request(
+            models_url,
+            method="GET",
+            headers={"Authorization": f"Bearer {api_key}"},
+        )
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            data = json.loads(resp.read().decode())
+            models = [m.get("id", "") for m in data.get("data", []) if isinstance(m, dict)]
+            result["ok"] = int(getattr(resp, "status", 500)) < 400
+            result["model_listed"] = result["model"] in models if models else None
+            result["available_models"] = len(models)
+    except urllib.error.HTTPError as exc:
+        detail = exc.read().decode(errors="replace")
+        result["error"] = f"OpenRouter error {exc.code}: {detail[:200]}"
+    except urllib.error.URLError as exc:
+        result["error"] = f"OpenRouter not reachable at {models_url} - {exc.reason}"
+    except Exception as exc:
+        result["error"] = f"OpenRouter check failed: {exc}"
+    return result
+
+
+def _probe_ollama(model: str) -> Dict[str, Any]:
+    import urllib.error
+    import urllib.request
+
+    base_url = str(OLLAMA_BASE_URL or "http://localhost:11434").strip()
+    base_url = base_url.rstrip("/")
+    tags_url = f"{base_url}/api/tags"
+    result = {
+        "ok": False,
+        "provider": "ollama",
+        "model": str(model).strip() or model,
+        "endpoint": tags_url,
+        "binary_present": shutil.which("ollama") is not None,
+    }
+
+    try:
+        req = urllib.request.Request(tags_url, method="GET")
+        with urllib.request.urlopen(req, timeout=6) as resp:
+            data = json.loads(resp.read().decode())
+            models = [m.get("name", "") for m in data.get("models", []) if isinstance(m, dict)]
+            result["ok"] = int(getattr(resp, "status", 500)) < 400
+            result["model_listed"] = result["model"] in models if models else None
+            result["available_models"] = len(models)
+    except urllib.error.HTTPError as exc:
+        detail = exc.read().decode(errors="replace")
+        result["error"] = f"Ollama error {exc.code}: {detail[:200]}"
+    except urllib.error.URLError as exc:
+        result["error"] = f"Ollama not reachable at {tags_url} - {exc.reason}"
+    except Exception as exc:
+        result["error"] = f"Ollama check failed: {exc}"
+    return result
+
+
 def _check_python_runtime() -> Dict[str, Any]:
     return {
         "ok": True,
@@ -114,74 +219,22 @@ def _check_ollama(model_name: str) -> Dict[str, Any]:
     default_model = str(model_name or DEFAULT_OLLAMA_MODEL).strip() or DEFAULT_OLLAMA_MODEL
 
     if provider == "openrouter":
-        import urllib.error
-        import urllib.request
+        primary = _probe_with_retries(lambda: _probe_openrouter(default_model))
+        primary["provider"] = "openrouter"
+        primary["model"] = str(OPENROUTER_MODEL or default_model).strip() or default_model
+        if primary.get("ok", False):
+            return primary
 
-        api_key = str(OPENROUTER_API_KEY or "").strip()
-        base_url = str(OPENROUTER_URL or "https://openrouter.ai/api/v1/chat/completions").strip()
-        models_url = base_url.rsplit("/", 2)[0] + "/models"
-        result = {
-            "ok": False,
-            "provider": provider,
-            "model": str(OPENROUTER_MODEL or default_model).strip() or default_model,
-            "endpoint": models_url,
-        }
+        primary["fallback_allowed"] = bool(OLLAMA_FALLBACK_ONLY)
+        if OLLAMA_FALLBACK_ONLY:
+            fallback = _probe_with_retries(lambda: _probe_ollama(default_model))
+            primary["fallback_ok"] = bool(fallback.get("ok", False))
+            primary["fallback_error"] = fallback.get("error")
+            primary["fallback_provider"] = "ollama"
+            primary["fallback_model_listed"] = fallback.get("model_listed")
+        return primary
 
-        if not api_key:
-            result["error"] = "OPENROUTER_API_KEY is not configured"
-            return result
-
-        try:
-            req = urllib.request.Request(
-                models_url,
-                method="GET",
-                headers={"Authorization": f"Bearer {api_key}"},
-            )
-            with urllib.request.urlopen(req, timeout=10) as resp:
-                data = json.loads(resp.read().decode())
-                models = [m.get("id", "") for m in data.get("data", []) if isinstance(m, dict)]
-                result["ok"] = resp.status < 400
-                result["model_listed"] = result["model"] in models if models else None
-                result["available_models"] = len(models)
-        except urllib.error.HTTPError as exc:
-            detail = exc.read().decode(errors="replace")
-            result["error"] = f"OpenRouter error {exc.code}: {detail[:200]}"
-        except urllib.error.URLError as exc:
-            result["error"] = f"OpenRouter not reachable at {models_url} - {exc.reason}"
-        except Exception as exc:
-            result["error"] = f"OpenRouter check failed: {exc}"
-        return result
-
-    model = default_model
-    if shutil.which("ollama") is None:
-        return {
-            "ok": False,
-            "provider": provider,
-            "model": model,
-            "error": "ollama binary not found on PATH",
-        }
-
-    list_cmd = _run_subprocess(["ollama", "list"], timeout_sec=15)
-    model_listed = model in str(list_cmd.get("stdout", ""))
-
-    infer_cmd = _run_subprocess(
-        ["ollama", "run", model, "Respond with exactly: OK"],
-        timeout_sec=40,
-    )
-    combined = f"{infer_cmd.get('stdout', '')}\n{infer_cmd.get('stderr', '')}".upper()
-    has_ok = "OK" in combined
-    ok = bool(infer_cmd.get("ok", False) and has_ok)
-
-    return {
-        "ok": ok,
-        "provider": provider,
-        "model": model,
-        "model_listed": bool(model_listed),
-        "returncode": infer_cmd.get("returncode", -1),
-        "stdout": infer_cmd.get("stdout", ""),
-        "stderr": infer_cmd.get("stderr", ""),
-        "error": infer_cmd.get("error"),
-    }
+    return _probe_with_retries(lambda: _probe_ollama(default_model))
 
 
 def _check_internet_with_moltbot(query: str, min_results: int) -> Dict[str, Any]:

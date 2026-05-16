@@ -1,16 +1,21 @@
 """
-Config.paths — re-exports from project_root.py (single source of truth).
-
-Every consumer that already does ``from Config.paths import ...`` keeps
-working without any change.  The *real* definitions live in project_root.py.
+Config.paths re-exports the canonical packaged path configuration.
 """
 
-from project_root import (          # noqa: F401  — re-exports
-    PROJECT_ROOT,
+from ind_diplomat.paths import (  # noqa: F401
     DATA_DIR,
-    GLOBAL_RISK_DIR   as GLOBAL_RISK_DATA_PATH,
-    LEGAL_MEMORY_DIR  as LEGAL_MEMORY_PATH,
+    GLOBAL_RISK_DIR as GLOBAL_RISK_DATA_PATH,
+    LEGAL_MEMORY_DIR as LEGAL_MEMORY_PATH,
+    LOCAL_DIR,
+    LOGS_DIR,
+    PACKAGE_ROOT,
+    PROJECT_ROOT,
     RAG_INDEX_DIR,
+    REPORTS_DIR,
+    RUNTIME_DIR,
+    SRC_ROOT,
+    TEST_OUTPUT_ROOT,
+    VAR_DIR,
 )
 
 # External tool paths (Windows defaults)

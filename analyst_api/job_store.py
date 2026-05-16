@@ -1,7 +1,7 @@
 """
 SQLite-backed job persistence for the Analyst API.
 Stores job state, phase transitions, and results.
-DB file: runtime/analyst_jobs.db
+DB file: .local/runtime/analyst_jobs.db
 """
 
 from __future__ import annotations
@@ -11,9 +11,9 @@ import sqlite3
 import threading
 import time
 from datetime import datetime, timezone
-from pathlib import Path
 from typing import Any, Dict, List, Optional
 from uuid import uuid4
+from ind_diplomat.paths import RUNTIME_DIR
 
 from .models import (
     AssessmentRequest,
@@ -26,8 +26,7 @@ from .models import (
 
 # ── DB Location ────────────────────────────────────────────────────────
 
-_ROOT = Path(__file__).resolve().parent.parent
-DB_PATH = _ROOT / "runtime" / "analyst_jobs.db"
+DB_PATH = RUNTIME_DIR / "analyst_jobs.db"
 
 
 def _now_iso() -> str:

@@ -21,7 +21,6 @@ PYTEST     := $(VENV)/bin/pytest
 BLACK      := $(VENV)/bin/black
 ISORT      := $(VENV)/bin/isort
 FLAKE8     := $(VENV)/bin/flake8
-APP        := app_server.py
 PORT       ?= 8000
 
 # Default target
@@ -41,13 +40,13 @@ setup: ## Create virtualenv and install all dependencies
 
 # ── Test ───────────────────────────────────────────────────────────────────
 test: ## Run the test suite with pytest
-	$(PYTEST) test/ -ra --tb=short -v
+	$(PYTEST) tests/ -ra --tb=short -v
 
 test-cov: ## Run tests with coverage report
-	$(PYTEST) test/ -ra --tb=short -v --cov=. --cov-report=term-missing --cov-report=html:reports/coverage
+	$(PYTEST) tests/ -ra --tb=short -v --cov=src --cov-report=term-missing --cov-report=html:.local/reports/coverage
 
 test-smoke: ## Run smoke tests only (fast)
-	$(PYTEST) test/test_imports.py test/test_core_pipeline.py -ra --tb=short -v
+	$(PYTEST) tests/test_imports.py tests/test_core_pipeline.py -ra --tb=short -v
 
 # ── Code Quality ───────────────────────────────────────────────────────────
 lint: ## Run all linters (flake8 + black check + isort check)
@@ -61,14 +60,14 @@ format: ## Auto-format code with black + isort
 
 # ── Run ────────────────────────────────────────────────────────────────────
 run: ## Start the web application
-	$(PYTHON) $(APP) --port $(PORT)
+	$(PYTHON) -m ind_diplomat.app_server --port $(PORT)
 
 run-cli: ## Run a CLI query (usage: make run-cli Q="your question")
-	$(PYTHON) run.py "$(Q)"
+	$(PYTHON) -m ind_diplomat.cli "$(Q)"
 
 verify: ## Verify installation and paths
 	$(PYTHON) project_root.py
-	$(PYTEST) test/test_imports.py -q
+	$(PYTEST) tests/test_imports.py -q
 
 # ── Docker ─────────────────────────────────────────────────────────────────
 docker-build: ## Build the Docker image
@@ -91,5 +90,5 @@ clean: ## Remove generated artifacts
 	find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
 	find . -type d -name ".pytest_cache" -exec rm -rf {} + 2>/dev/null || true
 	find . -type d -name ".mypy_cache" -exec rm -rf {} + 2>/dev/null || true
-	rm -rf build/ dist/ *.egg-info/ reports/coverage/ .cache/
+	rm -rf build/ dist/ *.egg-info/ .local/reports/coverage/ .cache/
 	@echo "✓ Cleaned."

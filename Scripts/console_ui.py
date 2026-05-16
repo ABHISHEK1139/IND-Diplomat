@@ -3,7 +3,7 @@ Knowledge Acquisition Console (Admin Panel)
 
 Run:
     cd IND-Dip
-    streamlit run Scripts/console_ui.py
+    streamlit run scripts/console_ui.py
 """
 
 import os
