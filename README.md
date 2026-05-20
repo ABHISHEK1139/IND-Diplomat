@@ -24,6 +24,11 @@ IND-Diplomat is a research-oriented decision-support system that transforms raw 
 - **Evidence Provenance** — Full chain from raw data source → observation → belief → signal → assessment
 - **White-Box Transparency** — Every reasoning step, minister report, and gate decision is inspectable via API and dashboard
 
+- **Bounded Self-Directed Learning** - Runtime reflection turns evidence gaps, contradictions, calibration errors, and reasoning-quality issues into learning goals, proposed experiments, and persistent memory without bypassing safety gates
+- **Obsidian Memory Vault** — Local-first intelligence storage adapter that saves data as Markdown with YAML frontmatter, seamlessly readable in Obsidian
+- **Auto-Fetch Daemon & TokenJuice** — Standalone background workers and a text-compression layer to continuously ingest and aggressively deduplicate/clean raw signals
+- **Event-Driven Architecture** — Decoupled global Event Bus for asynchronous pub/sub messaging across pipeline layers
+
 ## Technology Stack
 
 ```
@@ -64,36 +69,15 @@ flowchart TD
 
 | Layer | Purpose | Key Components |
 |-------|---------|----------------|
-| **L1 — Collection** | Data ingestion from OSINT sources | GDELT sensor, MoltBot, CAMEO mapper |
+| **L1 — Collection** | Data ingestion from OSINT sources | Auto-Fetch Daemon, TokenJuice, GDELT sensor, MoltBot, CAMEO mapper |
 | **L2 — Knowledge** | Parsing, normalization, retrieval | Vector store, entity registry, multi-index |
 | **L3 — State Model** | World-model construction | Bayesian classifier, belief accumulator, 15+ providers |
 | **L4 — Analysis** | Council reasoning and deliberation | 7 ministers, CoVe, CRAG, Red Team, MCTS |
-| **L5 — Judgment** | Deterministic gating and reporting | 5-rule gate, IAR-format reports |
+| **L5 — Judgment** | Deterministic gating, reporting, and decisions | 5-rule gate, DecisionPipeline, IAR-format reports |
 | **L6 — Presentation** | Briefings, backtesting, learning | Replay engine, calibration, bias detection |
 | **L7 — Global Model** | Multi-theater strategic analysis | 150+ coupling weights, contagion engine |
 
 ## Quick Start
-
-### 0. First-Time Configuration (Required)
-
-Before running the pipeline, you MUST configure your environment variables. **Do not commit your API keys.**
-
-1. Copy the example configuration file:
-   ```bash
-   cp .env.example .env
-   ```
-
-2. Open `.env` and set your API keys. At a minimum, you need an OpenRouter or local Ollama instance:
-   ```ini
-   # Required for cloud inference
-   OPENROUTER_API_KEY="sk-or-v1-..."
-   
-   # Optional: If you prefer local inference
-   OLLAMA_BASE_URL="http://localhost:11434"
-   LLM_PROVIDER="openrouter"  # or "ollama"
-   ```
-
-3. **Security Note:** The `.env` file is included in `.gitignore` to prevent accidental credential leaks. Never hardcode keys in the source files.
 
 ### Option A: Docker (Recommended)
 
@@ -117,12 +101,12 @@ cd IND-Diplomat
 chmod +x scripts/configure_first_run.sh
 ./scripts/configure_first_run.sh
 source .venv/bin/activate
-python app_server.py --port 8000
+python -m ind_diplomat.app_server --port 8000
 
 # Windows PowerShell
-powershell -ExecutionPolicy Bypass -File .\Scripts\configure_first_run.ps1 -InstallDependencies
+powershell -ExecutionPolicy Bypass -File .\scripts\configure_first_run.ps1 -InstallDependencies
 .\.venv\Scripts\Activate.ps1
-python app_server.py --port 8000
+python -m ind_diplomat.app_server --port 8000
 ```
 
 ### Option C: Make (Linux/macOS)
@@ -149,16 +133,16 @@ make lint       # Code quality checks
 ### CLI
 
 ```bash
-python run.py "What is driving India-Pakistan tensions?"
-python run.py --country IND --date 2025-06-01 "Assess escalation risk"
-python run.py --verbose --json --whitebox "Analyze South Asian stability"
-python run.py --experiment all  # Run validation experiments
+python -m ind_diplomat.cli "What is driving India-Pakistan tensions?"
+python -m ind_diplomat.cli --country IND --date 2025-06-01 "Assess escalation risk"
+python -m ind_diplomat.cli --verbose --json --whitebox "Analyze South Asian stability"
+python -m ind_diplomat.cli --experiment all  # Run validation experiments
 ```
 
 ### Python API
 
 ```python
-from run import diplomat_query, diplomat_query_sync
+from ind_diplomat.cli import diplomat_query, diplomat_query_sync
 
 # Async
 result = await diplomat_query(
@@ -187,7 +171,7 @@ curl -X POST http://localhost:8000/v2/query \
 ### CLI Output
 
 ```
-$ python run.py --country IND "Assess India-Pakistan escalation risk"
+$ python -m ind_diplomat.cli --country IND "Assess India-Pakistan escalation risk"
 
 [IND-Diplomat] Checking configured LLM provider...
 [IND-Diplomat] OPENROUTER OK: qwen/qwen3.6-plus-preview:free
@@ -306,7 +290,7 @@ make test-smoke
 make test-cov
 
 # Specific test file
-python -m pytest test/test_core_pipeline.py -v
+python -m pytest tests/test_core_pipeline.py -v
 ```
 
 ## Configuration
@@ -349,7 +333,7 @@ IND-Diplomat/
 ├── Core/                      # Shared infrastructure
 ├── Frontend/                  # Dashboard UI (HTML/CSS/JS)
 ├── API/                       # FastAPI endpoints
-├── test/                      # Test suite
+├── tests/                     # Test suite
 ├── scripts/                   # Setup and utility scripts
 ├── Dockerfile                 # Multi-stage container build
 ├── docker-compose.yml         # Development stack
@@ -377,59 +361,12 @@ The system includes built-in validation tools:
 - **Confidence Calibration** — Auto-adjustment loops for forecast accuracy
 
 ```bash
-python run.py --experiment replay     # Crisis replay validation
-python run.py --experiment ablation   # Signal ablation tests
-python run.py --experiment leadtime   # Lead-time experiments
-python run.py --experiment all        # Full validation suite
+python -m ind_diplomat.cli --experiment replay     # Crisis replay validation
+python -m ind_diplomat.cli --experiment ablation   # Signal ablation tests
+python -m ind_diplomat.cli --experiment leadtime   # Lead-time experiments
+python -m ind_diplomat.cli --experiment all        # Full validation suite
 ```
 
 ## License
 
 MIT License — see [LICENSE](LICENSE) for details.
-
-
-## Neuro-Symbolic Safety Architecture
-
-IND-Diplomat implements a **Proposer-Verifier** pattern that prevents LLM hallucinations from corrupting intelligence assessments. The LLM acts as a narrative engine; the deterministic layer acts as an immutable arbiter of reality.
-
-### Immutable Facts Injection
-
-Before every LLM call (classification and reasoning), deterministic ground truth — signal states, mobilization levels, telemetry bounds — is injected as an `[IMMUTABLE_FACTS]` block directly into the system prompt. The LLM is explicitly instructed that these constraints are non-negotiable and must be reflected in any output.
-
-```text
-[IMMUTABLE_FACTS — DETERMINISTIC GROUND TRUTH]
-These constraints are MANDATORY. You MUST NOT contradict them.
-
-  MILITARY_ESCALATION    = 0.15  (LOW)
-  MOBILIZATION           = 0.00  (NONE)
-  FORCE_POSTURE          = 0.43  (MODERATE)
-  WMD_RISK               = 0.95  (CRITICAL)
-  ...
-```
-
-### Proposer-Verifier Loop
-
-When the LLM proposes signal classifications, a deterministic verifier checks each proposal against hard constraints. If the LLM claims `MOBILIZATION = HIGH` when raw telemetry shows `0.00`, the proposal is **actively rejected** and the LLM is forced to retry with an explicit correction:
-
-```text
-[DETERMINISTIC VERIFIER REJECTION]
-Your proposal was REJECTED because:
-  - You proposed MOBILIZATION=HIGH but ground truth is 0.00
-You MUST revise your assessment to align with measured reality.
-```
-
-### SRE Score Clamping
-
-The Assessment Gate computes a maximum allowable escalation score from deterministic coverage bounds across all four dimensions (Capability, Intent, Stability, Cost). If the LLM's synthesis produces an SRE score exceeding this ceiling, the score is **clamped to reality** and a `CLAMPED` warning is issued. Massive overshoots (>0.15) trigger a `NEEDS_REVIEW` halt for human audit.
-
-```python
-max_allowed_sre = coverage_bound + trend_bonus
-max_allowed_sre = max(max_allowed_sre, deterministic_sre)
-
-if llm_sre > max_allowed_sre:
-    final_sre = max_allowed_sre  # CLAMPED
-```
-
-### Design Principle
-
-The LLM provides qualitative reasoning (the "why"). The deterministic engine enforces quantitative reality (the "what"). The LLM cannot override physics.

@@ -381,6 +381,8 @@ async def diplomat_query(
     use_mcts: bool = False,
     max_investigation_loops: int = 1,
     enable_system_guardian: bool = True,
+    target_layer: Optional[str] = None,
+    resume_trace_id: Optional[str] = None,
     **extra_flags,
 ) -> DiplomatResult:
     """
@@ -415,6 +417,8 @@ async def diplomat_query(
             enable_mcts=use_mcts,
             max_investigation_loops=max_investigation_loops,
             enable_system_guardian=enable_system_guardian,
+            target_layer=target_layer,
+            resume_trace_id=resume_trace_id,
             **extra_flags,
         )
 
@@ -559,6 +563,11 @@ def _build_parser() -> argparse.ArgumentParser:
                         help="Show detailed pipeline execution log.")
     parser.add_argument("--brief", action="store_true",
                         help="Show only the quick summary (no full briefing).")
+    parser.add_argument("--resume", type=str, default=None,
+                        help="Resume a failed pipeline execution using a given trace ID.")
+    parser.add_argument("--target-layer", type=str, default=None,
+                        choices=["scope", "ops_health", "layer3", "layer4_readiness"],
+                        help="Run the pipeline only up to this layer/stage and return early.")
     parser.add_argument("--experiment", "-e", default=None,
                         choices=["replay", "ablation", "leadtime", "all"],
                         help="Run experimental validation instead of a query.")
@@ -673,6 +682,8 @@ async def _async_main(args: argparse.Namespace) -> int:
         use_mcts=args.mcts,
         max_investigation_loops=args.investigation_loops,
         enable_system_guardian=not args.no_guardian,
+        target_layer=args.target_layer,
+        resume_trace_id=args.resume,
     )
 
     whitebox_enabled = bool(args.whitebox or _env_truthy("DIPLOMAT_WHITEBOX_OUTPUT", default=True))

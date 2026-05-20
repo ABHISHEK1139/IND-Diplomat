@@ -34,6 +34,7 @@ from engine.Layer4_Analysis.intake.question_scope_checker import check_question_
 from engine.Layer4_Analysis.intake.epistemic_readiness import check_epistemic_readiness
 from engine.Layer3_StateModel.signal_projection import project_state_to_observed_signals
 from engine.Layer5_Reporting.intelligence_report import generate_report as generate_intelligence_report
+from engine.Core.checkpoint_manager import CheckpointManager
 
 _ops_log = logging.getLogger("diplomat.ops_health")
 
@@ -263,8 +264,14 @@ class UnifiedPipeline:
         query: str,
         user_id: Optional[str] = None,
         session_id: Optional[str] = None,
+        target_layer: Optional[str] = None,
+        resume_trace_id: Optional[str] = None,
         **flags,
     ) -> PipelineResult:
+        # ── Setup Checkpoint Manager ──────────────────────────────────
+        trace_id = resume_trace_id if resume_trace_id else f"council_{uuid.uuid4().hex[:10]}"
+        chk_manager = CheckpointManager(trace_id=trace_id)
+        
         # ── Gate 1: Scope check ───────────────────────────────────────
         scope = check_question_scope(query)
         if not scope.allowed:
@@ -285,14 +292,21 @@ class UnifiedPipeline:
                 },
             )
 
+        if target_layer == "scope":
+            return PipelineResult(
+                answer="Scope check completed.",
+                status="PARTIAL_SUCCESS",
+                outcome=OUTCOME_ASSESSMENT,
+                layer4_allowed=True,
+                layer4_scope=scope.to_dict(),
+            )
+
         try:
             from engine.Layer4_Analysis.core.llm_client import reset_llm_runtime_stats
 
             reset_llm_runtime_stats()
         except Exception:
             pass
-
-        trace_id = f"council_{uuid.uuid4().hex[:10]}"
 
         # ── Gate 2: Operational health (warning-only, except LLM) ─────
         operational_warnings: List[str] = []
@@ -378,7 +392,16 @@ class UnifiedPipeline:
                     },
                 )
 
-            # All other failures demoted to warnings
+        if target_layer == "ops_health":
+            return PipelineResult(
+                answer="Ops health check completed.",
+                status="PARTIAL_SUCCESS",
+                outcome=OUTCOME_ASSESSMENT,
+                operational_warnings=operational_warnings,
+                layer4_readiness={"system_health": health_report},
+            )
+
+        # All other failures demoted to warnings
             non_llm_failures = [name for name in failed if name != "ollama"]
             if non_llm_failures:
                 blocker_lines = summarize_blockers(health_report)
@@ -389,120 +412,140 @@ class UnifiedPipeline:
                     operational_warnings.append(line)
                     _ops_log.warning("Operational degradation: %s", line)
 
-        # ── Gate 3: Build Layer-3 StateContext ─────────────────────────
-        #    If the World Monitor has a fresh pre-built state, enrich
-        #    the live build with its cached observations + beliefs.
-        #    The pipeline ALWAYS rebuilds (for query-specific context)
-        #    but merges in the monitor's perception so the start is warm.
-        from engine.Layer3_StateModel.interface.state_provider import build_initial_state
-        country_code_str = str(flags.get("country_code", "UNKNOWN"))
+        # ── Checkpoint Resume ─────────────────────────────────────────
+        initial_context_obj = None
+        if resume_trace_id:
+            initial_context_obj = chk_manager.load_checkpoint("layer3_state")
+            if initial_context_obj:
+                _ops_log.info(f"Resumed from Layer 3 checkpoint for trace {trace_id}")
 
-        initial_context_obj = build_initial_state(
-            query,
-            country_code=country_code_str,
-            as_of_date=flags.get("as_of_date"),
-        )
-
-        # ── Merge pre-built state (World Monitor perception) ──────
-        try:
-            from runtime.world_monitor import get_prebuilt_state, is_state_fresh
-
-            if is_state_fresh(country_code_str, max_age_minutes=120):
-                prebuilt = get_prebuilt_state(country_code_str)
-                if prebuilt and isinstance(prebuilt, dict):
-                    # Merge pre-built signals into the live state
-                    prebuilt_signals = prebuilt.get("signals", [])
-                    for sig in prebuilt_signals:
-                        sig = str(sig).strip().upper()
-                        if sig and sig not in initial_context_obj.observed_signals:
-                            initial_context_obj.observed_signals.add(sig)
-                            # Set a baseline confidence from the monitor
-                            if sig not in initial_context_obj.signal_confidence:
-                                initial_context_obj.signal_confidence[sig] = 0.40
-
-                    # Boost observation quality with monitor coverage
-                    prebuilt_obs_count = int(prebuilt.get("observation_count", 0))
-                    if prebuilt_obs_count > 0:
-                        oq = initial_context_obj.observation_quality
-                        oq.source_count = max(
-                            int(getattr(oq, "source_count", 0) or 0),
-                            prebuilt_obs_count,
-                        )
-                        oq.is_observed = True
-                        oq.sensor_coverage = max(
-                            float(getattr(oq, "sensor_coverage", 0.0) or 0.0),
-                            float(prebuilt.get("sensor_coverage", 0.0)),
-                        )
-
-                    _ops_log.info(
-                        "World Monitor state merged: %d signals, %d obs",
-                        len(prebuilt_signals), prebuilt_obs_count,
-                    )
-        except ImportError:
-            pass  # World Monitor not available — degrade gracefully
-        except Exception as _wm_err:
-            _ops_log.debug("World Monitor merge skipped: %s", _wm_err)
-
-        # ── Gate 3b: Signal Projection (perception bridge) ─────────
-        #    Convert raw Layer-3 state into structured belief signals.
-        #    This is where "perception" happens — the council will reason
-        #    over continuous belief strengths, not boolean flags.
-        #
-        #    PIPELINE FIREWALL: Legal RAG documents are architecturally
-        #    isolated from the empirical analysis pipeline.  We pass an
-        #    empty list so that signal projection operates solely on
-        #    sensor-derived evidence.  RAG runs post-gate only.
-        projected_signals = project_state_to_observed_signals(
-            initial_context_obj, retrieved_docs=[],
-        )
-
-        # Store the projected beliefs on state_context so the coordinator
-        # can consume them directly instead of re-extracting.
-        initial_context_obj.projected_signals = projected_signals
-
-        # Also back-fill observed_signals and signal_confidence from
-        # projected beliefs so downstream code that still reads the
-        # old flat set/dict gets consistent data.
-        for sig_name, obs_sig in projected_signals.items():
-            initial_context_obj.observed_signals.add(sig_name)
-            # Keep the higher confidence if legal/economic reasoning
-            # already set one.
-            existing_conf = initial_context_obj.signal_confidence.get(sig_name, 0.0)
-            initial_context_obj.signal_confidence[sig_name] = max(
-                existing_conf, obs_sig.confidence
+        if not initial_context_obj:
+            # ── Gate 3: Build Layer-3 StateContext ─────────────────────────
+            #    If the World Monitor has a fresh pre-built state, enrich
+            #    the live build with its cached observations + beliefs.
+            #    The pipeline ALWAYS rebuilds (for query-specific context)
+            #    but merges in the monitor's perception so the start is warm.
+            from engine.Layer3_StateModel.interface.state_provider import build_initial_state
+            country_code_str = str(flags.get("country_code", "UNKNOWN"))
+    
+            initial_context_obj = build_initial_state(
+                query,
+                country_code=country_code_str,
+                as_of_date=flags.get("as_of_date"),
             )
-
-        # ── Gate 3c: Inject temporal trend briefing ───────────────
-        #    Ministers must see *direction*, not just snapshots.
-        #    This runs BEFORE the council so deliberation is
-        #    temporally-aware: "capability = 0.30 (rising 4 cycles)".
-        try:
-            from engine.Layer3_StateModel.temporal_memory import analyze_trends
-
-            current_beliefs = dict(initial_context_obj.signal_confidence)
-            trend_analysis = analyze_trends(current_beliefs)
-
-            if trend_analysis.sufficient_history:
-                # Populate trend_briefing on state context
-                for sig, indicator in trend_analysis.indicators.items():
-                    initial_context_obj.trend_briefing[sig] = indicator.to_dict()
-
-                initial_context_obj.escalation_patterns = list(
-                    trend_analysis.trend_overrides
+    
+            # ── Merge pre-built state (World Monitor perception) ──────
+            try:
+                from runtime.world_monitor import get_prebuilt_state, is_state_fresh
+    
+                if is_state_fresh(country_code_str, max_age_minutes=120):
+                    prebuilt = get_prebuilt_state(country_code_str)
+                    if prebuilt and isinstance(prebuilt, dict):
+                        # Merge pre-built signals into the live state
+                        prebuilt_signals = prebuilt.get("signals", [])
+                        for sig in prebuilt_signals:
+                            sig = str(sig).strip().upper()
+                            if sig and sig not in initial_context_obj.observed_signals:
+                                initial_context_obj.observed_signals.add(sig)
+                                # Set a baseline confidence from the monitor
+                                if sig not in initial_context_obj.signal_confidence:
+                                    initial_context_obj.signal_confidence[sig] = 0.40
+    
+                        # Boost observation quality with monitor coverage
+                        prebuilt_obs_count = int(prebuilt.get("observation_count", 0))
+                        if prebuilt_obs_count > 0:
+                            oq = initial_context_obj.observation_quality
+                            oq.source_count = max(
+                                int(getattr(oq, "source_count", 0) or 0),
+                                prebuilt_obs_count,
+                            )
+                            oq.is_observed = True
+                            oq.sensor_coverage = max(
+                                float(getattr(oq, "sensor_coverage", 0.0) or 0.0),
+                                float(prebuilt.get("sensor_coverage", 0.0)),
+                            )
+    
+                        _ops_log.info(
+                            "World Monitor state merged: %d signals, %d obs",
+                            len(prebuilt_signals), prebuilt_obs_count,
+                        )
+            except ImportError:
+                pass  # World Monitor not available — degrade gracefully
+            except Exception as _wm_err:
+                _ops_log.debug("World Monitor merge skipped: %s", _wm_err)
+    
+            # ── Gate 3b: Signal Projection (perception bridge) ─────────
+            #    Convert raw Layer-3 state into structured belief signals.
+            #    This is where "perception" happens — the council will reason
+            #    over continuous belief strengths, not boolean flags.
+            #
+            #    PIPELINE FIREWALL: Legal RAG documents are architecturally
+            #    isolated from the empirical analysis pipeline.  We pass an
+            #    empty list so that signal projection operates solely on
+            #    sensor-derived evidence.  RAG runs post-gate only.
+            projected_signals = project_state_to_observed_signals(
+                initial_context_obj, retrieved_docs=[],
+            )
+    
+            # Store the projected beliefs on state_context so the coordinator
+            # can consume them directly instead of re-extracting.
+            initial_context_obj.projected_signals = projected_signals
+    
+            # Also back-fill observed_signals and signal_confidence from
+            # projected beliefs so downstream code that still reads the
+            # old flat set/dict gets consistent data.
+            for sig_name, obs_sig in projected_signals.items():
+                initial_context_obj.observed_signals.add(sig_name)
+                # Keep the higher confidence if legal/economic reasoning
+                # already set one.
+                existing_conf = initial_context_obj.signal_confidence.get(sig_name, 0.0)
+                initial_context_obj.signal_confidence[sig_name] = max(
+                    existing_conf, obs_sig.confidence
                 )
-                initial_context_obj.trend_snapshot_count = trend_analysis.snapshot_count
+    
+            # ── Gate 3c: Inject temporal trend briefing ───────────────
+            #    Ministers must see *direction*, not just snapshots.
+            #    This runs BEFORE the council so deliberation is
+            #    temporally-aware: "capability = 0.30 (rising 4 cycles)".
+            try:
+                from engine.Layer3_StateModel.temporal_memory import analyze_trends
+    
+                current_beliefs = dict(initial_context_obj.signal_confidence)
+                trend_analysis = analyze_trends(current_beliefs)
+    
+                if trend_analysis.sufficient_history:
+                    # Populate trend_briefing on state context
+                    for sig, indicator in trend_analysis.indicators.items():
+                        initial_context_obj.trend_briefing[sig] = indicator.to_dict()
+    
+                    initial_context_obj.escalation_patterns = list(
+                        trend_analysis.trend_overrides
+                    )
+                    initial_context_obj.trend_snapshot_count = trend_analysis.snapshot_count
+    
+                    _ops_log.info(
+                        "Temporal briefing injected: %d signals, %d snapshots, "
+                        "%d escalation patterns",
+                        len(trend_analysis.indicators),
+                        trend_analysis.snapshot_count,
+                        len(trend_analysis.trend_overrides),
+                    )
+            except ImportError:
+                pass
+            except Exception as _trend_err:
+                _ops_log.debug("Temporal briefing skipped: %s", _trend_err)
+                
+            # Save Checkpoint
+            chk_manager.save_checkpoint("layer3_state", initial_context_obj)
 
-                _ops_log.info(
-                    "Temporal briefing injected: %d signals, %d snapshots, "
-                    "%d escalation patterns",
-                    len(trend_analysis.indicators),
-                    trend_analysis.snapshot_count,
-                    len(trend_analysis.trend_overrides),
-                )
-        except ImportError:
-            pass
-        except Exception as _trend_err:
-            _ops_log.debug("Temporal briefing skipped: %s", _trend_err)
+        if target_layer == "layer3":
+            return PipelineResult(
+                answer="Layer 3 State Construction completed.",
+                status="PARTIAL_SUCCESS",
+                outcome=OUTCOME_ASSESSMENT,
+                operational_warnings=operational_warnings,
+                council_session={"state_context": initial_context_obj},
+            )
 
         # ── Gate 4: Epistemic readiness ───────────────────────────────
         readiness = check_epistemic_readiness(initial_context_obj)
@@ -587,6 +630,17 @@ class UnifiedPipeline:
         readiness_meta = readiness.to_dict()
         readiness_meta["system_health"] = health_report
         readiness_meta["analyst_input_readiness"] = analyst_input.get("readiness")
+
+        if target_layer == "layer4_readiness":
+            return PipelineResult(
+                answer="Epistemic readiness and input prep completed.",
+                status="PARTIAL_SUCCESS",
+                outcome=OUTCOME_ASSESSMENT,
+                sources=sources,
+                operational_warnings=operational_warnings,
+                layer4_readiness=readiness_meta,
+                council_session={"analyst_input": analyst_input},
+            )
 
         noop_flag_messages = {
             "use_mcts": "use_mcts is accepted but not wired into coordinator logic yet.",
@@ -691,6 +745,9 @@ class UnifiedPipeline:
             outcome = OUTCOME_ASSESSMENT
 
         _append_llm_runtime_warnings(operational_warnings)
+
+        if outcome == OUTCOME_ASSESSMENT and not internal_failure:
+            chk_manager.clear_all()
 
         result = PipelineResult(
             answer=answer,

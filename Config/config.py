@@ -61,6 +61,13 @@ OPENROUTER_URL = os.getenv("OPENROUTER_URL", "https://openrouter.ai/api/v1/chat/
 _OPENROUTER_MODEL_DEFAULT = DEFAULT_OPENROUTER_MODEL if LLM_PROVIDER == "openrouter" else LLM_MODEL
 OPENROUTER_MODEL = str(os.getenv("OPENROUTER_MODEL", _OPENROUTER_MODEL_DEFAULT)).strip() or _OPENROUTER_MODEL_DEFAULT
 OPENROUTER_API_KEY = _RAW_OPENROUTER_API_KEY
+
+OPENAI_API_KEY = str(os.getenv("OPENAI_API_KEY", "")).strip()
+OPENAI_MODEL = str(os.getenv("OPENAI_MODEL", "o3-mini")).strip() or "o3-mini"
+
+ANTHROPIC_API_KEY = str(os.getenv("ANTHROPIC_API_KEY", "")).strip()
+ANTHROPIC_MODEL = str(os.getenv("ANTHROPIC_MODEL", "claude-3-7-sonnet-20250219")).strip() or "claude-3-7-sonnet-20250219"
+
 OPENROUTER_SITE_URL = os.getenv("OPENROUTER_SITE_URL", "")
 OPENROUTER_APP_NAME = os.getenv("OPENROUTER_APP_NAME", "IND-Diplomat")
 OPENROUTER_ENABLE_FALLBACK_CHAIN = _env_flag("OPENROUTER_ENABLE_FALLBACK_CHAIN", "false")

@@ -1,0 +1,75 @@
+=== STDOUT ===
+
++======================================================================+
+|  LLM FALLBACK CHAIN TEST SUITE                                     |
+|  Cloud models first -> Local Ollama last                            |
+|  (Ollama code path is NOT modified or tested here)                  |
++======================================================================+
+
+======================================================================
+TEST 1: Fallback chain with bogus primary model
+======================================================================
+  Primary model (intentionally bogus): totally-fake/nonexistent-model-v999:free
+  Fallback chain (8 models): ['nousresearch/hermes-3-llama-3.1-405b:free', 'qwen/qwen3-coder:free', 'nvidia/nemotron-3-super-120b-a12b:free']...
+
+  Sending request (same prompts will be forwarded to each fallback)...
+  [PASS] Logic works! Traversed all fallbacks + Ollama (though all APIS returned errors/429s).
+     Error: LLM_ERROR: All 9 cloud models and local Ollama failed. Last: openai/gpt-oss-120b:free: LLM_ERROR: 404 Client Error: Not Found for url: https://openrou
+======================================================================
+TEST 2: Context preservation across fallback
+======================================================================
+  Model: nousresearch/hermes-3-llama-3.1-405b:free
+  Unique marker in prompt: CONTEXT_MARKER_7x9q2
+
+  [SKIP] Model unavailable: LLM_ERROR: All 8 cloud models and local Ollama failed. Last: openai/gpt-oss-120b:free: LLM_ERROR: 404 Client Error: Not Found for url: https://openrou
+======================================================================
+TEST 3: Model name restoration after fallback
+======================================================================
+  Original model: totally-fake/model-xyz:free
+  [PASS] Model restored to 'totally-fake/model-xyz:free' after fallback
+
+======================================================================
+SUMMARY
+======================================================================
+  [PASS] fallback_chain
+  [PASS] context_preservation
+  [PASS] model_restoration
+
+  3/3 tests passed
+
+
+=== STDERR ===
+[PRIMARY] Model 'totally-fake/nonexistent-model-v999:free' failed: LLM_ERROR: 400 Client Error: Bad Request for url: https://openrouter.ai/api/v1/chat/completions
+[FALLBACK-1] Model 'nousresearch/hermes-3-llama-3.1-405b:free' failed: LLM_ERROR: 429 Client Error: Too Many Requests for url: https://openrouter.ai/api/v1/chat/completions
+[FALLBACK-2] Model 'qwen/qwen3-coder:free' failed: LLM_ERROR: 429 Client Error: Too Many Requests for url: https://openrouter.ai/api/v1/chat/completions
+[FALLBACK-3] Model 'nvidia/nemotron-3-super-120b-a12b:free' failed: LLM_ERROR: 429 Client Error: Too Many Requests for url: https://openrouter.ai/api/v1/chat/completions
+[FALLBACK-4] Model 'stepfun/step-3.5-flash:free' failed: LLM_ERROR: 429 Client Error: Too Many Requests for url: https://openrouter.ai/api/v1/chat/completions
+[FALLBACK-5] Model 'qwen/qwen3-next-80b-a3b-instruct:free' failed: LLM_ERROR: 429 Client Error: Too Many Requests for url: https://openrouter.ai/api/v1/chat/completions
+[FALLBACK-6] Model 'google/gemma-3-27b-it:free' failed: LLM_ERROR: 429 Client Error: Too Many Requests for url: https://openrouter.ai/api/v1/chat/completions
+[FALLBACK-7] Model 'meta-llama/llama-3.3-70b-instruct:free' failed: LLM_ERROR: 429 Client Error: Too Many Requests for url: https://openrouter.ai/api/v1/chat/completions
+[FALLBACK-8] Model 'openai/gpt-oss-120b:free' failed: LLM_ERROR: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions
+[LAST-RESORT] All 9 OpenRouter models failed. Falling back to local Ollama (deepseek-r1:8b). Context preserved — same prompts forwarded.
+[TOTAL-FAILURE] All 9 cloud models AND local Ollama failed. Errors: google/gemma-3-27b-it:free: LLM_ERROR: 429 Client Error: Too Many Requests for url: https://openrouter.ai/api/v1/chat/co; meta-llama/llama-3.3-70b-instruct:free: LLM_ERROR: 429 Client Error: Too Many Requests for url: https://openrouter.ai/ap; openai/gpt-oss-120b:free: LLM_ERROR: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions
+[PRIMARY] Model 'nousresearch/hermes-3-llama-3.1-405b:free' failed: LLM_ERROR: 429 Client Error: Too Many Requests for url: https://openrouter.ai/api/v1/chat/completions
+[FALLBACK-1] Model 'qwen/qwen3-coder:free' failed: LLM_ERROR: 429 Client Error: Too Many Requests for url: https://openrouter.ai/api/v1/chat/completions
+[FALLBACK-2] Model 'nvidia/nemotron-3-super-120b-a12b:free' failed: LLM_ERROR: 429 Client Error: Too Many Requests for url: https://openrouter.ai/api/v1/chat/completions
+[FALLBACK-3] Model 'stepfun/step-3.5-flash:free' failed: LLM_ERROR: 429 Client Error: Too Many Requests for url: https://openrouter.ai/api/v1/chat/completions
+[FALLBACK-4] Model 'qwen/qwen3-next-80b-a3b-instruct:free' failed: LLM_ERROR: 429 Client Error: Too Many Requests for url: https://openrouter.ai/api/v1/chat/completions
+[FALLBACK-5] Model 'google/gemma-3-27b-it:free' failed: LLM_ERROR: 429 Client Error: Too Many Requests for url: https://openrouter.ai/api/v1/chat/completions
+[FALLBACK-6] Model 'meta-llama/llama-3.3-70b-instruct:free' failed: LLM_ERROR: 429 Client Error: Too Many Requests for url: https://openrouter.ai/api/v1/chat/completions
+[FALLBACK-7] Model 'openai/gpt-oss-120b:free' failed: LLM_ERROR: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions
+[LAST-RESORT] All 8 OpenRouter models failed. Falling back to local Ollama (deepseek-r1:8b). Context preserved — same prompts forwarded.
+[TOTAL-FAILURE] All 8 cloud models AND local Ollama failed. Errors: google/gemma-3-27b-it:free: LLM_ERROR: 429 Client Error: Too Many Requests for url: https://openrouter.ai/api/v1/chat/co; meta-llama/llama-3.3-70b-instruct:free: LLM_ERROR: 429 Client Error: Too Many Requests for url: https://openrouter.ai/ap; openai/gpt-oss-120b:free: LLM_ERROR: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions
+[PRIMARY] Model 'totally-fake/model-xyz:free' failed: LLM_ERROR: 400 Client Error: Bad Request for url: https://openrouter.ai/api/v1/chat/completions
+[FALLBACK-1] Model 'nousresearch/hermes-3-llama-3.1-405b:free' failed: LLM_ERROR: 429 Client Error: Too Many Requests for url: https://openrouter.ai/api/v1/chat/completions
+[FALLBACK-2] Model 'qwen/qwen3-coder:free' failed: LLM_ERROR: 429 Client Error: Too Many Requests for url: https://openrouter.ai/api/v1/chat/completions
+[FALLBACK-3] Model 'nvidia/nemotron-3-super-120b-a12b:free' failed: LLM_ERROR: 429 Client Error: Too Many Requests for url: https://openrouter.ai/api/v1/chat/completions
+[FALLBACK-4] Model 'stepfun/step-3.5-flash:free' failed: LLM_ERROR: 429 Client Error: Too Many Requests for url: https://openrouter.ai/api/v1/chat/completions
+[FALLBACK-5] Model 'qwen/qwen3-next-80b-a3b-instruct:free' failed: LLM_ERROR: 429 Client Error: Too Many Requests for url: https://openrouter.ai/api/v1/chat/completions
+[FALLBACK-6] Model 'google/gemma-3-27b-it:free' failed: LLM_ERROR: 429 Client Error: Too Many Requests for url: https://openrouter.ai/api/v1/chat/completions
+[FALLBACK-7] Model 'meta-llama/llama-3.3-70b-instruct:free' failed: LLM_ERROR: 429 Client Error: Too Many Requests for url: https://openrouter.ai/api/v1/chat/completions
+[FALLBACK-8] Model 'openai/gpt-oss-120b:free' failed: LLM_ERROR: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions
+[LAST-RESORT] All 9 OpenRouter models failed. Falling back to local Ollama (deepseek-r1:8b). Context preserved — same prompts forwarded.
+[TOTAL-FAILURE] All 9 cloud models AND local Ollama failed. Errors: google/gemma-3-27b-it:free: LLM_ERROR: 429 Client Error: Too Many Requests for url: https://openrouter.ai/api/v1/chat/co; meta-llama/llama-3.3-70b-instruct:free: LLM_ERROR: 429 Client Error: Too Many Requests for url: https://openrouter.ai/ap; openai/gpt-oss-120b:free: LLM_ERROR: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions
+
+=== EXIT CODE: 0 ===

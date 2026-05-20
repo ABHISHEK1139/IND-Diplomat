@@ -1,0 +1,13 @@
+{
+  "UNKNOWN": {
+    "country": "UNKNOWN",
+    "current_sre": 0.4,
+    "prob_high_14d": 0.4851,
+    "velocity": 0.0,
+    "ndi": 0.0,
+    "expansion_mode": "MEDIUM",
+    "last_updated": "2026-05-20T02:55:26.408313+00:00",
+    "contagion_received": 0.0,
+    "signal_summary": {}
+  }
+}

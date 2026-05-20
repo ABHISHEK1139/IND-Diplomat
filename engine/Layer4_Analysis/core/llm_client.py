@@ -1,4 +1,4 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 import asyncio
 import hashlib
@@ -41,6 +41,10 @@ from Config.config import (
     OPENROUTER_REASONING_MAX_TOKENS as CONFIG_OPENROUTER_REASONING_MAX_TOKENS,
     OPENROUTER_SITE_URL as CONFIG_OPENROUTER_SITE_URL,
     OPENROUTER_URL as CONFIG_OPENROUTER_URL,
+    OPENAI_API_KEY as CONFIG_OPENAI_API_KEY,
+    OPENAI_MODEL as CONFIG_OPENAI_MODEL,
+    ANTHROPIC_API_KEY as CONFIG_ANTHROPIC_API_KEY,
+    ANTHROPIC_MODEL as CONFIG_ANTHROPIC_MODEL,
 )
 
 
@@ -442,6 +446,11 @@ def _ordered_mixed_candidates(primary_model: str) -> List[Tuple[str, str]]:
     for model in cloud_order:
         ordered.append(("openrouter", model))
     # Local models are always last-resort after all cloud attempts.
+    if CONFIG_OPENAI_API_KEY:
+        ordered.append(("openai", CONFIG_OPENAI_MODEL))
+    if CONFIG_ANTHROPIC_API_KEY:
+        ordered.append(("anthropic", CONFIG_ANTHROPIC_MODEL))
+
     for model in _local_fallback_models():
         ordered.append(("ollama", model))
 
@@ -1248,6 +1257,24 @@ class LocalLLM:
                         json_mode=json_mode,
                         max_tokens=candidate_max_tokens,
                     )
+                elif candidate_provider == "openai":
+                    result = self._generate_openai(
+                        system_prompt=system_prompt,
+                        user_prompt=user_prompt,
+                        temperature=temperature,
+                        timeout=timeout,
+                        json_mode=json_mode,
+                        max_tokens=candidate_max_tokens,
+                    )
+                elif candidate_provider == "anthropic":
+                    result = self._generate_anthropic(
+                        system_prompt=system_prompt,
+                        user_prompt=user_prompt,
+                        temperature=temperature,
+                        timeout=timeout,
+                        json_mode=json_mode,
+                        max_tokens=candidate_max_tokens,
+                    )
                 else:
                     local_max_tokens = _resolve_max_tokens("ollama", min(candidate_max_tokens, LOCAL_LLM_MAX_TOKENS))
                     result = self._generate_ollama(
@@ -1563,6 +1590,87 @@ class LocalLLM:
         if trace_enabled:
             _append_trace(trace_entry + f"--- ERROR ---\n{last_error}\n==============================\n\n")
         return last_error
+
+
+    def _generate_openai(
+        self,
+        *,
+        system_prompt: str,
+        user_prompt: str,
+        temperature: float,
+        timeout: int,
+        json_mode: bool,
+        max_tokens: int,
+    ) -> str:
+        if not CONFIG_OPENAI_API_KEY:
+            return "LLM_ERROR: OPENAI_API_KEY is not configured"
+
+        effective_system_prompt = _apply_prompt_control(system_prompt, json_mode)
+        url = "https://api.openai.com/v1/chat/completions"
+        payload = {
+            "model": self.model,
+            "messages": [
+                {"role": "system", "content": effective_system_prompt},
+                {"role": "user", "content": user_prompt},
+            ],
+            "temperature": float(temperature),
+        }
+        if "o1" not in self.model and "o3" not in self.model:
+            payload["max_tokens"] = int(max_tokens)
+        if json_mode and "o1" not in self.model and "o3" not in self.model:
+            payload["response_format"] = {"type": "json_object"}
+
+        headers = {
+            "Authorization": f"Bearer {CONFIG_OPENAI_API_KEY}",
+            "Content-Type": "application/json",
+        }
+
+        try:
+            response = requests.post(url, headers=headers, json=payload, timeout=timeout)
+            response.raise_for_status()
+            data = response.json()
+            return _strip_reasoning_blocks(data["choices"][0]["message"].get("content", ""))
+        except Exception as e:
+            return f"LLM_ERROR: OpenAI failed: {e}"
+
+    def _generate_anthropic(
+        self,
+        *,
+        system_prompt: str,
+        user_prompt: str,
+        temperature: float,
+        timeout: int,
+        json_mode: bool,
+        max_tokens: int,
+    ) -> str:
+        if not CONFIG_ANTHROPIC_API_KEY:
+            return "LLM_ERROR: ANTHROPIC_API_KEY is not configured"
+
+        effective_system_prompt = _apply_prompt_control(system_prompt, json_mode)
+        url = "https://api.anthropic.com/v1/messages"
+        payload = {
+            "model": self.model,
+            "system": effective_system_prompt,
+            "messages": [
+                {"role": "user", "content": user_prompt},
+            ],
+            "temperature": float(temperature),
+            "max_tokens": int(max_tokens),
+        }
+
+        headers = {
+            "x-api-key": CONFIG_ANTHROPIC_API_KEY,
+            "anthropic-version": "2023-06-01",
+            "Content-Type": "application/json",
+        }
+
+        try:
+            response = requests.post(url, headers=headers, json=payload, timeout=timeout)
+            response.raise_for_status()
+            data = response.json()
+            return _strip_reasoning_blocks(data["content"][0].get("text", ""))
+        except Exception as e:
+            return f"LLM_ERROR: Anthropic failed: {e}"
 
 
 class AsyncLLMClient:

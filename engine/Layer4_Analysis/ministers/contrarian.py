@@ -22,6 +22,7 @@ from typing import Any, Dict, List, Optional
 from engine.Layer3_StateModel.schemas.state_context import StateContext
 from engine.Layer4_Analysis.council_session import MinisterReport
 from engine.Layer4_Analysis.ministers.base import BaseMinister, _pick, _as_float
+from engine.Layer6_Learning.reflection_log import format_reflections_for_prompt
 
 logger = logging.getLogger(__name__)
 
@@ -125,13 +126,20 @@ class ContrarianMinister(BaseMinister):
             return pressure_result
 
         # Fallback to LLM-based contrarian analysis
+        country_code = getattr(getattr(ctx, 'actors', None), 'subject_country', "UNKNOWN")
+        reflections_prompt = format_reflections_for_prompt(country_code)
+        
+        instructions = (
+            "You are the CONTRARIAN minister. Your job is to argue the "
+            "OPPOSITE of what the evidence seems to show. If signals suggest "
+            "escalation, find de-escalation indicators. If signals suggest "
+            "stability, find hidden risk factors. Identify signals that "
+            "CONTRADICT the prevailing assessment. This prevents groupthink."
+        )
+        if reflections_prompt:
+            instructions += "\n" + reflections_prompt
+            
         return self._ask_llm(
             state_context=ctx,
-            specific_instructions=(
-                "You are the CONTRARIAN minister. Your job is to argue the "
-                "OPPOSITE of what the evidence seems to show. If signals suggest "
-                "escalation, find de-escalation indicators. If signals suggest "
-                "stability, find hidden risk factors. Identify signals that "
-                "CONTRADICT the prevailing assessment. This prevents groupthink."
-            ),
+            specific_instructions=instructions,
         )

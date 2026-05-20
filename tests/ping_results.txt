@@ -1,0 +1,7 @@
+--- PINGING ALL OPENROUTER MODELS ---
+
+Pinging [ nousresearch/hermes-3-llama-3.1-405b:free ] ... [FAILED] Error: LLM_ERROR: 429 Client Error: Too Many Requests for url: https://openrouter.ai/api/v1/chat/completions
+Pinging [ qwen/qwen3-coder:free ] ... [FAILED] Error: LLM_ERROR: 429 Client Error: Too Many Requests for url: https://openrouter.ai/api/v1/chat/completions
+Pinging [ nvidia/nemotron-3-super-120b-a12b:free ] ... [SUCCESS] Response: PONG
+Pinging [ stepfun/step-3.5-flash:free ] ... [SUCCESS] Response: 
+Pinging [ z-ai/glm-4.5-air:free ] ... [FAILED] Error: LLM_ERROR: 429 Client Error: Too Many Requests for url: https://openrouter.ai/api/v1/chat/completions

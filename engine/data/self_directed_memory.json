@@ -1,0 +1,385 @@
+{
+  "goals": [
+    {
+      "id": "d3a5698d0fc758e3",
+      "kind": "evidence_acquisition",
+      "country": "UNKNOWN",
+      "objective": "Increase coverage for the highest-impact missing signals.",
+      "priority": 0.97,
+      "reason": "Hypothesis coverage or missing signal volume indicates weak evidence.",
+      "target_metric": "avg_hypothesis_coverage",
+      "desired_direction": "increase",
+      "suggested_actions": [
+        "Create VOI-ranked PIRs for the missing signals.",
+        "Require independent provenance before promoting observations to beliefs.",
+        "Re-run the same query after collection and compare coverage delta."
+      ],
+      "safeguards": [
+        "Do not promote single-source claims above the belief threshold.",
+        "Keep collection within configured OSINT/provider boundaries."
+      ],
+      "evidence": {
+        "coverage": 0.130653,
+        "missing_signals": [
+          "SIG_CYBER_ACTIVITY",
+          "SIG_FORCE_POSTURE",
+          "SIG_MIL_ESCALATION"
+        ]
+      },
+      "status": "open",
+      "created_at": "2026-05-16T07:08:31.731302+00:00",
+      "updated_at": "2026-05-20T02:40:10.107608+00:00"
+    },
+    {
+      "id": "2ecae895a89ccad8",
+      "kind": "evidence_acquisition",
+      "country": "UNKNOWN",
+      "objective": "Increase coverage for the highest-impact missing signals.",
+      "priority": 0.9414,
+      "reason": "Hypothesis coverage or missing signal volume indicates weak evidence.",
+      "target_metric": "avg_hypothesis_coverage",
+      "desired_direction": "increase",
+      "suggested_actions": [
+        "Create VOI-ranked PIRs for the missing signals.",
+        "Require independent provenance before promoting observations to beliefs.",
+        "Re-run the same query after collection and compare coverage delta."
+      ],
+      "safeguards": [
+        "Do not promote single-source claims above the belief threshold.",
+        "Keep collection within configured OSINT/provider boundaries."
+      ],
+      "evidence": {
+        "coverage": 0.058571,
+        "missing_signals": [
+          "SIG_COERCIVE_PRESSURE",
+          "SIG_DECEPTION_ACTIVITY",
+          "SIG_DIP_HOSTILITY"
+        ]
+      },
+      "status": "open",
+      "created_at": "2026-05-20T02:41:05.276217+00:00",
+      "updated_at": "2026-05-20T02:41:05.276217+00:00"
+    },
+    {
+      "id": "f49ee4aa74516805",
+      "kind": "evidence_acquisition",
+      "country": "UNKNOWN",
+      "objective": "Increase coverage for the highest-impact missing signals.",
+      "priority": 0.7401,
+      "reason": "Hypothesis coverage or missing signal volume indicates weak evidence.",
+      "target_metric": "avg_hypothesis_coverage",
+      "desired_direction": "increase",
+      "suggested_actions": [
+        "Create VOI-ranked PIRs for the missing signals.",
+        "Require independent provenance before promoting observations to beliefs.",
+        "Re-run the same query after collection and compare coverage delta."
+      ],
+      "safeguards": [
+        "Do not promote single-source claims above the belief threshold.",
+        "Keep collection within configured OSINT/provider boundaries."
+      ],
+      "evidence": {
+        "coverage": 0.259923,
+        "missing_signals": [
+          "SIG_CYBER_ACTIVITY",
+          "SIG_DIP_HOSTILITY",
+          "SIG_MIL_ESCALATION"
+        ]
+      },
+      "status": "open",
+      "created_at": "2026-05-16T10:13:19.561826+00:00",
+      "updated_at": "2026-05-16T10:18:08.672674+00:00"
+    },
+    {
+      "id": "3a51f232f368c40a",
+      "kind": "evidence_acquisition",
+      "country": "UNKNOWN",
+      "objective": "Increase coverage for the highest-impact missing signals.",
+      "priority": 0.7332,
+      "reason": "Hypothesis coverage or missing signal volume indicates weak evidence.",
+      "target_metric": "avg_hypothesis_coverage",
+      "desired_direction": "increase",
+      "suggested_actions": [
+        "Create VOI-ranked PIRs for the missing signals.",
+        "Require independent provenance before promoting observations to beliefs.",
+        "Re-run the same query after collection and compare coverage delta."
+      ],
+      "safeguards": [
+        "Do not promote single-source claims above the belief threshold.",
+        "Keep collection within configured OSINT/provider boundaries."
+      ],
+      "evidence": {
+        "coverage": 0.266793,
+        "missing_signals": [
+          "SIG_DIP_HOSTILITY",
+          "SIG_MIL_ESCALATION",
+          "SIG_MIL_MOBILIZATION"
+        ]
+      },
+      "status": "open",
+      "created_at": "2026-05-16T10:17:19.057281+00:00",
+      "updated_at": "2026-05-16T10:17:19.057281+00:00"
+    },
+    {
+      "id": "e086213c40fc0759",
+      "kind": "active_learning",
+      "country": "UNKNOWN",
+      "objective": "Target uncertainty hotspots that can change the conclusion.",
+      "priority": 0.73,
+      "reason": "Several signals have low confidence and high learning value.",
+      "target_metric": "low_confidence_signal_count",
+      "desired_direction": "decrease",
+      "suggested_actions": [
+        "Pass low-confidence signals through the CuriosityController VOI ranking.",
+        "Collect only signals whose expected information value crosses threshold."
+      ],
+      "safeguards": [
+        "Stop collection when uncertainty reduction stalls across repeated cycles."
+      ],
+      "evidence": {
+        "signals": [
+          "SIG_MIL_MOBILIZATION",
+          "SIG_MIL_ESCALATION",
+          "SIG_FORCE_POSTURE",
+          "SIG_DIP_HOSTILITY",
+          "SIG_DIP_HOSTILE_RHETORIC",
+          "SIG_LOGISTICS_PREP",
+          "SIG_LOGISTICS_SURGE",
+          "SIG_CYBER_ACTIVITY"
+        ]
+      },
+      "status": "open",
+      "created_at": "2026-05-16T07:08:31.731302+00:00",
+      "updated_at": "2026-05-20T02:41:05.276745+00:00"
+    },
+    {
+      "id": "f9003b767b81d386",
+      "kind": "active_learning",
+      "country": "UNKNOWN",
+      "objective": "Target uncertainty hotspots that can change the conclusion.",
+      "priority": 0.73,
+      "reason": "Several signals have low confidence and high learning value.",
+      "target_metric": "low_confidence_signal_count",
+      "desired_direction": "decrease",
+      "suggested_actions": [
+        "Pass low-confidence signals through the CuriosityController VOI ranking.",
+        "Collect only signals whose expected information value crosses threshold."
+      ],
+      "safeguards": [
+        "Stop collection when uncertainty reduction stalls across repeated cycles."
+      ],
+      "evidence": {
+        "signals": [
+          "SIG_MIL_MOBILIZATION",
+          "SIG_MIL_ESCALATION",
+          "SIG_DIP_HOSTILITY",
+          "SIG_DIP_HOSTILE_RHETORIC",
+          "SIG_LOGISTICS_PREP",
+          "SIG_LOGISTICS_SURGE",
+          "SIG_CYBER_ACTIVITY",
+          "SIG_CYBER_PREPARATION"
+        ]
+      },
+      "status": "open",
+      "created_at": "2026-05-16T10:13:19.561826+00:00",
+      "updated_at": "2026-05-16T10:18:08.672674+00:00"
+    },
+    {
+      "id": "7afe61b2b20b32a5",
+      "kind": "contradiction_resolution",
+      "country": "UNKNOWN",
+      "objective": "Resolve contradictory evidence before raising confidence.",
+      "priority": 0.6,
+      "reason": "Contradictory claims or state signals need resolution.",
+      "target_metric": "contradiction_count",
+      "desired_direction": "decrease",
+      "suggested_actions": [
+        "Run a counterfactual pass for each conflicting claim.",
+        "Ask the contrarian minister to explain which source would falsify the consensus.",
+        "Prefer newer, primary, and independently corroborated evidence."
+      ],
+      "safeguards": [
+        "Do not discard minority evidence without provenance review.",
+        "Keep the final confidence penalty until contradictions shrink."
+      ],
+      "evidence": {
+        "contradictions": [
+          "minister_risk_disagreement"
+        ]
+      },
+      "status": "open",
+      "created_at": "2026-05-16T10:17:12.316611+00:00",
+      "updated_at": "2026-05-20T02:41:05.276745+00:00"
+    },
+    {
+      "id": "cb89e604448a7bf6",
+      "kind": "reasoning_quality",
+      "country": "UNKNOWN",
+      "objective": "Improve reasoning discipline for degraded or low-quality stages.",
+      "priority": 0.5,
+      "reason": "Reasoning monitor or LLM degradation detected quality risks.",
+      "target_metric": "reasoning_quality_score",
+      "desired_direction": "increase",
+      "suggested_actions": [
+        "Lower effort for easy stages and raise effort only for uncertain, high-stakes stages.",
+        "Add self-critique only when signal density or contradiction pressure warrants it.",
+        "Compare concise and expanded minister outputs on the same evidence pack."
+      ],
+      "safeguards": [
+        "Do not increase token budgets globally without validation.",
+        "Keep deterministic fallback paths active."
+      ],
+      "evidence": {
+        "issues": [],
+        "degraded_report_count": 4
+      },
+      "status": "open",
+      "created_at": "2026-05-16T07:08:31.731302+00:00",
+      "updated_at": "2026-05-20T02:41:05.276745+00:00"
+    },
+    {
+      "id": "08614293f6a0e484",
+      "kind": "forecast_resolution",
+      "country": "UNKNOWN",
+      "objective": "Accumulate enough resolved forecasts to learn safely.",
+      "priority": 0.42,
+      "reason": "Forecast archive needs more resolved cases before weight learning.",
+      "target_metric": "n_resolved_forecasts",
+      "desired_direction": "increase",
+      "suggested_actions": [
+        "Continue archiving forecasts with explicit horizon and outcome definition.",
+        "Resolve stale forecasts as ground truth becomes available."
+      ],
+      "safeguards": [
+        "Do not auto-adjust from underpowered samples."
+      ],
+      "evidence": {
+        "n_resolved": 10,
+        "min_required": 20
+      },
+      "status": "open",
+      "created_at": "2026-05-16T07:08:31.731302+00:00",
+      "updated_at": "2026-05-20T02:41:05.276745+00:00"
+    }
+  ],
+  "experiments": [
+    {
+      "goal_id": "d3a5698d0fc758e3",
+      "name": "voi_collection_trial",
+      "method": "Collect the top VOI PIRs, rebuild state, and compare hypothesis coverage.",
+      "metric": "avg_hypothesis_coverage",
+      "expected_effect": "Coverage increases and missing signals decrease.",
+      "success_criteria": "Coverage rises by at least 0.10 or one critical PIR is resolved.",
+      "rollback_rule": "Discard new beliefs that lack independent provenance.",
+      "status": "proposed",
+      "created_at": "2026-05-16T07:08:31.731302+00:00",
+      "result": {},
+      "id": "a314b505007db914"
+    },
+    {
+      "goal_id": "e086213c40fc0759",
+      "name": "active_learning_validation",
+      "method": "Run a narrow before/after validation pass for the selected learning goal.",
+      "metric": "low_confidence_signal_count",
+      "expected_effect": "low_confidence_signal_count should decrease.",
+      "success_criteria": "Measured metric moves in the desired direction without safety violations.",
+      "rollback_rule": "Keep previous production behavior if validation fails.",
+      "status": "proposed",
+      "created_at": "2026-05-16T07:08:31.731302+00:00",
+      "result": {},
+      "id": "4114b66e37388947"
+    },
+    {
+      "goal_id": "cb89e604448a7bf6",
+      "name": "reasoning_budget_comparison",
+      "method": "Compare concise versus high-effort reasoning on the same evidence pack.",
+      "metric": "reasoning_quality_score",
+      "expected_effect": "Higher signal density with no loss of grounding.",
+      "success_criteria": "Reasoning quality score improves and hallucination flags do not rise.",
+      "rollback_rule": "Return to previous effort policy if quality does not improve.",
+      "status": "proposed",
+      "created_at": "2026-05-16T07:08:31.731302+00:00",
+      "result": {},
+      "id": "7bf4d230af49f967"
+    },
+    {
+      "goal_id": "08614293f6a0e484",
+      "name": "forecast_resolution_validation",
+      "method": "Run a narrow before/after validation pass for the selected learning goal.",
+      "metric": "n_resolved_forecasts",
+      "expected_effect": "n_resolved_forecasts should increase.",
+      "success_criteria": "Measured metric moves in the desired direction without safety violations.",
+      "rollback_rule": "Keep previous production behavior if validation fails.",
+      "status": "proposed",
+      "created_at": "2026-05-16T07:08:31.731302+00:00",
+      "result": {},
+      "id": "57f670cb0ac08e4d"
+    },
+    {
+      "goal_id": "f49ee4aa74516805",
+      "name": "voi_collection_trial",
+      "method": "Collect the top VOI PIRs, rebuild state, and compare hypothesis coverage.",
+      "metric": "avg_hypothesis_coverage",
+      "expected_effect": "Coverage increases and missing signals decrease.",
+      "success_criteria": "Coverage rises by at least 0.10 or one critical PIR is resolved.",
+      "rollback_rule": "Discard new beliefs that lack independent provenance.",
+      "status": "proposed",
+      "created_at": "2026-05-16T10:13:19.561826+00:00",
+      "result": {},
+      "id": "e5d2f57502b411e3"
+    },
+    {
+      "goal_id": "f9003b767b81d386",
+      "name": "active_learning_validation",
+      "method": "Run a narrow before/after validation pass for the selected learning goal.",
+      "metric": "low_confidence_signal_count",
+      "expected_effect": "low_confidence_signal_count should decrease.",
+      "success_criteria": "Measured metric moves in the desired direction without safety violations.",
+      "rollback_rule": "Keep previous production behavior if validation fails.",
+      "status": "proposed",
+      "created_at": "2026-05-16T10:13:19.561826+00:00",
+      "result": {},
+      "id": "2755cc0adc9d391f"
+    },
+    {
+      "goal_id": "7afe61b2b20b32a5",
+      "name": "counterfactual_contradiction_test",
+      "method": "Run counterfactual and contrarian passes against the conflicting claims.",
+      "metric": "contradiction_count",
+      "expected_effect": "Contradiction count decreases or confidence is correctly penalized.",
+      "success_criteria": "At least one contradiction is resolved with provenance.",
+      "rollback_rule": "Keep contradiction penalty if no side is independently supported.",
+      "status": "proposed",
+      "created_at": "2026-05-16T10:17:12.316611+00:00",
+      "result": {},
+      "id": "542f926d49fa8419"
+    },
+    {
+      "goal_id": "3a51f232f368c40a",
+      "name": "voi_collection_trial",
+      "method": "Collect the top VOI PIRs, rebuild state, and compare hypothesis coverage.",
+      "metric": "avg_hypothesis_coverage",
+      "expected_effect": "Coverage increases and missing signals decrease.",
+      "success_criteria": "Coverage rises by at least 0.10 or one critical PIR is resolved.",
+      "rollback_rule": "Discard new beliefs that lack independent provenance.",
+      "status": "proposed",
+      "created_at": "2026-05-16T10:17:19.057281+00:00",
+      "result": {},
+      "id": "b16cb264082d3528"
+    },
+    {
+      "goal_id": "2ecae895a89ccad8",
+      "name": "voi_collection_trial",
+      "method": "Collect the top VOI PIRs, rebuild state, and compare hypothesis coverage.",
+      "metric": "avg_hypothesis_coverage",
+      "expected_effect": "Coverage increases and missing signals decrease.",
+      "success_criteria": "Coverage rises by at least 0.10 or one critical PIR is resolved.",
+      "rollback_rule": "Discard new beliefs that lack independent provenance.",
+      "status": "proposed",
+      "created_at": "2026-05-20T02:41:05.276217+00:00",
+      "result": {},
+      "id": "debe6f7170857c13"
+    }
+  ],
+  "updated_at": "2026-05-20T02:41:05.296458+00:00"
+}

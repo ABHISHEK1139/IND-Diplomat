@@ -98,6 +98,8 @@ class FullContext:
     escalation_score: float = 0.0
     trend_patterns: Dict[str, Any] = field(default_factory=dict)
     signal_confidence: Dict[str, float] = field(default_factory=dict)
+    analyst_reports: Dict[str, Any] = field(default_factory=dict)
+    decision_state: Dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -108,6 +110,8 @@ class FullContext:
             "contradictions": list(self.contradictions),
             "escalation_score": round(self.escalation_score, 4),
             "signal_confidence": {k: round(v, 3) for k, v in self.signal_confidence.items()},
+            "analyst_reports": dict(self.analyst_reports),
+            "decision_state": dict(self.decision_state),
         }
 
 @dataclass
@@ -124,7 +128,9 @@ class CouncilSession:
     
     # DELIBERATION STAGE: Ministers propose hypotheses
     ministers_reports: List[MinisterReport] = field(default_factory=list)
+    analyst_reports: Dict[str, Any] = field(default_factory=dict)
     hypotheses: List[Hypothesis] = field(default_factory=list)
+    decision_state: Dict[str, Any] = field(default_factory=dict)
     
     # DEBATE STAGE: Conflicts and red team analysis
     identified_conflicts: List[str] = field(default_factory=list)
