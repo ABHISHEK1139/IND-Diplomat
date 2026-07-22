@@ -81,21 +81,32 @@ curl -X POST http://localhost:8000/investigate \
   -d '{"country": "India", "query": "maritime security in the Indian Ocean"}'
 ```
 
-## 🚀 Quick Start
+## 🚀 Quick Start (One-Click Installer)
+
+IND-Diplomat 3.0 provides robust one-click startup scripts for both Windows and Linux/Mac. These scripts automatically handle virtual environments, dependency installation, and provide interactive menus for booting the system.
 
 ```bash
-# 1. Clone and install
+# 1. Clone the repository
 git clone https://github.com/ABHISHEK1139/IND-Diplomat.git
 cd IND-Diplomat
-pip install -e ".[dev]"
 
-# 2. Configure
-cp .env.example .env
-# Edit .env with your API keys (OPENAI_API_KEY, etc.)
-
-# 3. Run
-python -m dip.run --country "India" --topic "border security"
+# 2. Run the interactive startup script
+# On Windows:
+start.bat
+# On Linux/Mac:
+./start.sh
 ```
+
+You will be presented with the following options:
+1. **Run Locally (Auto-Heal enabled)**: Installs dependencies natively and runs the API server. Highly recommended if you are running **Local AI like Ollama** on your machine to prevent GPU crashes.
+2. **Run via Docker (Auto-Heal enabled)**: Builds all 13 microservices (Postgres, Redis, Neo4j, Qdrant, Workers, etc.) into an isolated, auto-healing cluster.
+3. **Exit**
+
+> [!TIP]
+> **Local AI Compatibility:** If you are running Ollama or LM Studio locally on your host machine, we recommend using **Option 1 (Run Locally)**. Running heavy local LLMs alongside Docker's GPU reservations can cause violent Out-of-Memory (OOM) crashes.
+
+> [!IMPORTANT]
+> **Auto-Healing Infrastructure:** Whether you run natively or via Docker, IND-Diplomat features a dedicated Auto-Healer that continuously monitors system health and gracefully restarts any failing agents or microservices without user intervention.
 
 ## Project Structure
 
