@@ -95,11 +95,11 @@ services:
     - .env
     environment:
     - PYTHONUNBUFFERED=1
-    - DATABASE_URL=postgresql://dipadmin:dippassword@postgres:5432/dipdb
+    - DATABASE_URL=postgresql://${POSTGRES_USER:-dipadmin}:${POSTGRES_PASSWORD:-dippassword}@postgres:5432/${POSTGRES_DB:-dipdb}
     - REDIS_URL=redis://redis:6379/0
     - NEO4J_URI=bolt://neo4j:7687
-    - NEO4J_USER=neo4j
-    - NEO4J_PASSWORD=password
+    - NEO4J_USER=${NEO4J_USER:-neo4j}
+    - NEO4J_PASSWORD=${NEO4J_PASSWORD:-password}
     volumes:
     - ./data/app:/app/data
     healthcheck:
@@ -149,11 +149,11 @@ services:
     - .env
     environment:
     - PYTHONUNBUFFERED=1
-    - DATABASE_URL=postgresql://dipadmin:dippassword@postgres:5432/dipdb
+    - DATABASE_URL=postgresql://${POSTGRES_USER:-dipadmin}:${POSTGRES_PASSWORD:-dippassword}@postgres:5432/${POSTGRES_DB:-dipdb}
     - REDIS_URL=redis://redis:6379/0
     - NEO4J_URI=bolt://neo4j:7687
-    - NEO4J_USER=neo4j
-    - NEO4J_PASSWORD=password
+    - NEO4J_USER=${NEO4J_USER:-neo4j}
+    - NEO4J_PASSWORD=${NEO4J_PASSWORD:-password}
     volumes:
     - ./data/app:/app/data
     networks:
@@ -172,7 +172,7 @@ services:
     - .env
     environment:
     - PYTHONUNBUFFERED=1
-    - DATABASE_URL=postgresql://dipadmin:dippassword@postgres:5432/dipdb
+    - DATABASE_URL=postgresql://${POSTGRES_USER:-dipadmin}:${POSTGRES_PASSWORD:-dippassword}@postgres:5432/${POSTGRES_DB:-dipdb}
     volumes:
     - ./data/app:/app/data
     networks:
@@ -207,7 +207,7 @@ services:
     environment:
     - PREFECT_SERVER_API_HOST=0.0.0.0
     - PREFECT_API_URL=http://127.0.0.1:4200/api
-    - PREFECT_API_DATABASE_CONNECTION_URL=postgresql+asyncpg://dipadmin:dippassword@postgres:5432/dipdb
+    - PREFECT_API_DATABASE_CONNECTION_URL=postgresql+asyncpg://${POSTGRES_USER:-dipadmin}:${POSTGRES_PASSWORD:-dippassword}@postgres:5432/${POSTGRES_DB:-dipdb}
     command: prefect server start
     volumes:
     - ./data/prefect:/root/.prefect

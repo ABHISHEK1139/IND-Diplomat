@@ -81,10 +81,3 @@ volumes:
 networks:
   dip2-dev-network:
     driver: bridge
-
-  # ---------------------------------------------------------------------------
-  # PostgreSQL — Same as production, no overrides needed
-  # ---------------------------------------------------------------------------
-  db:
-    ports:
-      - "5432:5432"
