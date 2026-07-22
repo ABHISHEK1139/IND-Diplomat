@@ -24,8 +24,12 @@ case $choice in
         echo "[INFO] Installing dependencies..."
         pip install -r requirements.txt
         pip install -e .
-        echo "[INFO] Starting the IND-Diplomat API Server..."
-        python -m uvicorn dip.api:app --host 0.0.0.0 --port 8000
+        echo "[INFO] Starting the IND-Diplomat API Server (Auto-Heal enabled)..."
+        while true; do
+            python -m uvicorn dip.api:app --host 0.0.0.0 --port 8000
+            echo "[WARNING] Server stopped or crashed! Auto-restarting in 5 seconds..."
+            sleep 5
+        done
         ;;
     2)
         echo "[INFO] Starting Docker Compose..."
