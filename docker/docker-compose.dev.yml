@@ -63,6 +63,17 @@ services:
     networks:
       - dip2-dev-network
 
+  autoheal:
+    image: willfarrell/autoheal
+    container_name: dip2-autoheal-dev
+    restart: always
+    environment:
+      - AUTOHEAL_CONTAINER_LABEL=all
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - dip2-dev-network
+
 volumes:
   dip2-dev-data:
     driver: local
