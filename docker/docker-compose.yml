@@ -114,14 +114,15 @@ services:
       retries: 3
     networks:
     - dip2-network
-    deploy: &id001
-      resources:
-        reservations:
-          devices:
-          - driver: nvidia
-            count: all
-            capabilities:
-            - gpu
+    # Uncomment to use GPU inside docker (will crash local Ollama)
+    # deploy: &id001
+    #   resources:
+    #     reservations:
+    #       devices:
+    #       - driver: nvidia
+    #         count: all
+    #         capabilities:
+    #         - gpu
   frontend:
     build:
       context: ./frontend-next
@@ -157,7 +158,7 @@ services:
     - ./data/app:/app/data
     networks:
     - dip2-network
-    deploy: *id001
+    # deploy: *id001
   scheduler:
     build:
       context: .
@@ -176,7 +177,7 @@ services:
     - ./data/app:/app/data
     networks:
     - dip2-network
-    deploy: *id001
+    # deploy: *id001
   guardian:
     build:
       context: .
@@ -193,7 +194,7 @@ services:
     - ./data/app:/app/data
     networks:
     - dip2-network
-    deploy: *id001
+    # deploy: *id001
   prefect:
     image: prefecthq/prefect:2-python3.11
     container_name: dip2-prefect
@@ -235,6 +236,16 @@ services:
     - ./deploy/grafana/dashboards:/var/lib/grafana/dashboards
     networks:
     - dip2-network
+  autoheal:
+    image: willfarrell/autoheal
+    container_name: dip2-autoheal
+    restart: always
+    environment:
+      - AUTOHEAL_CONTAINER_LABEL=all
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - dip2-network
 networks:
   dip2-network:
     driver: bridge
