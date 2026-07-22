@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dip-api
+  namespace: dip-system
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: dip-api
+  template:
+    metadata:
+      labels:
+        app: dip-api
+    spec:
+      containers:
+      - name: dip-api
+        image: dip-api:latest
+        ports:
+        - containerPort: 8000
+        env:
+        - name: LITELLM_KEY
+          valueFrom:
+            secretKeyRef:
+              name: dip-secrets
+              key: litellm-key
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dip-api-service
+  namespace: dip-system
+spec:
+  selector:
+    app: dip-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
+  type: ClusterIP

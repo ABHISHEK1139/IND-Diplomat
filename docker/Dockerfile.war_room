@@ -1,0 +1,10 @@
+FROM nginx:alpine
+
+# Copy the frontend files into the Nginx html directory
+COPY ./frontend /usr/share/nginx/html
+
+# Expose port 80
+EXPOSE 80
+
+# Default Nginx command
+CMD ["nginx", "-g", "daemon off;"]

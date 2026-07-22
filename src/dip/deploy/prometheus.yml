@@ -1,0 +1,15 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'dip2_pipeline'
+    static_configs:
+      - targets: ['web:8000']
+        labels:
+          application: 'dip2_pipeline'
+
+  - job_name: 'dip2_ministers'
+    static_configs:
+      - targets: ['web:8000']
+        labels:
+          application: 'dip2_ministers'

@@ -1,0 +1,71 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ind-diplomat"
+version = "3.0.0"
+description = "Next-generation geopolitical intelligence and head-of-country advisory system."
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "Proprietary"}
+dependencies = [
+    "pydantic>=2.0.0",
+    "litellm>=1.0.0",
+    "rich>=13.0.0",
+    "python-dotenv>=1.0.0",
+    "networkx>=3.0.0",
+    "fastapi>=0.100.0",
+    "uvicorn[standard]>=0.22.0",
+    "prometheus-client>=0.17.0",
+    "langgraph>=0.0.30",
+    "dspy-ai>=2.4.0",
+    "gliner>=0.1.0",
+    "keybert>=0.8.0",
+    "mem0ai>=0.0.10",
+    "sentence-transformers>=2.0.0",
+    "hdbscan>=0.8.0",
+    "docling>=1.0.0",
+    "transformers>=4.0.0",
+    "neo4j>=5.0.0",
+    "qdrant-client>=1.0.0",
+    "langfuse>=2.0.0",
+    "deepeval>=0.21.0",
+    "ragas>=0.1.0",
+    "mesa>=2.1.0",
+    "causalnex>=0.11.0",
+    "pgmpy>=0.1.24",
+    "pluggy>=1.4.0",
+]
+
+[project.optional-dependencies]
+workflow = ["prefect>=2.10.0"]
+observability = ["opentelemetry-api>=1.24.0", "opentelemetry-sdk>=1.24.0"]
+experiments = ["mlflow>=2.0.0", "evidently>=0.4.0"]
+rag = ["haystack-ai>=2.0.0"]
+intel-sharing = ["stix2>=3.0.0"]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+    "ruff>=0.4.0",
+    "mypy>=1.10.0",
+]
+
+[project.scripts]
+ind-diplomat = "dip3.ind_diplomat:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true

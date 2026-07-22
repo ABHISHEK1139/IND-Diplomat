@@ -1,0 +1,26 @@
+{
+  "title": "DIP 2.0 Pipeline Metrics",
+  "timezone": "browser",
+  "panels": [
+    {
+      "type": "timeseries",
+      "title": "Pipeline Assessments",
+      "targets": [
+        {
+          "expr": "sum(rate(dip_assessments_total[5m])) by (status)",
+          "legendFormat": "{{status}}"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Pipeline Latency (seconds)",
+      "targets": [
+        {
+          "expr": "rate(dip_pipeline_duration_seconds_sum[5m]) / rate(dip_pipeline_duration_seconds_count[5m])",
+          "legendFormat": "Average Latency"
+        }
+      ]
+    }
+  ]
+}

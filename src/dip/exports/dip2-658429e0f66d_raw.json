@@ -1,0 +1,1300 @@
+{
+  "query": "Assess India-Pakistan border tensions",
+  "country": "IN",
+  "goal": {
+    "objective": "Assess India-Pakistan border tensions",
+    "country": "IN",
+    "theater": null,
+    "mode": "situation_brief",
+    "success_criteria": [
+      "evidence-backed situation picture",
+      "explicit uncertainty and blindspots",
+      "ranked options with second-order effects",
+      "clear human review points"
+    ],
+    "constraints": [],
+    "safety_boundaries": [
+      {
+        "name": "human_authority",
+        "rule": "The system advises; accountable humans decide.",
+        "severity": "hard"
+      },
+      {
+        "name": "evidence_first",
+        "rule": "Separate evidence, inference, forecast, and recommendation.",
+        "severity": "hard"
+      },
+      {
+        "name": "no_covert_action",
+        "rule": "Do not plan deception, covert influence, or unlawful operations.",
+        "severity": "hard"
+      },
+      {
+        "name": "legal_humanitarian_review",
+        "rule": "Flag options requiring legal, treaty, humanitarian, or democratic oversight.",
+        "severity": "hard"
+      },
+      {
+        "name": "uncertainty_disclosure",
+        "rule": "Never hide low confidence, source gaps, or contradictory evidence.",
+        "severity": "hard"
+      }
+    ],
+    "risk_tolerance": "low",
+    "trace_id": "dip2-658429e0f66d",
+    "created_at": "2026-07-22T16:53:27.866550+00:00"
+  },
+  "trace_id": "dip2-658429e0f66d",
+  "status": "WITHHELD",
+  "threat_level": "LOW",
+  "verification_score": 0.736,
+  "briefing": {
+    "executive_summary": "Auto-generated summary based on verified facts.",
+    "sections": [
+      "Timeline",
+      "Graph",
+      "Evidence",
+      "Forecast"
+    ]
+  },
+  "head_of_country_briefing": {
+    "goal": {
+      "objective": "Assess India-Pakistan border tensions",
+      "country": "IN",
+      "theater": null,
+      "mode": "situation_brief",
+      "success_criteria": [
+        "evidence-backed situation picture",
+        "explicit uncertainty and blindspots",
+        "ranked options with second-order effects",
+        "clear human review points"
+      ],
+      "constraints": [],
+      "safety_boundaries": [
+        {
+          "name": "human_authority",
+          "rule": "The system advises; accountable humans decide.",
+          "severity": "hard"
+        },
+        {
+          "name": "evidence_first",
+          "rule": "Separate evidence, inference, forecast, and recommendation.",
+          "severity": "hard"
+        },
+        {
+          "name": "no_covert_action",
+          "rule": "Do not plan deception, covert influence, or unlawful operations.",
+          "severity": "hard"
+        },
+        {
+          "name": "legal_humanitarian_review",
+          "rule": "Flag options requiring legal, treaty, humanitarian, or democratic oversight.",
+          "severity": "hard"
+        },
+        {
+          "name": "uncertainty_disclosure",
+          "rule": "Never hide low confidence, source gaps, or contradictory evidence.",
+          "severity": "hard"
+        }
+      ],
+      "risk_tolerance": "low",
+      "trace_id": "dip2-658429e0f66d",
+      "created_at": "2026-07-22T16:53:27.866550+00:00"
+    },
+    "decision_posture": "inform",
+    "executive_summary": "IN risk is LOW. Strategic pulse is stable-watch. Urgency=0.07, uncertainty=0.35, diplomatic_window=0.00.",
+    "evidence_findings": [
+      "Fuzzy SRE driver: TEST_ACTION confidence=0.20",
+      "Signal driver: TEST_ACTION"
+    ],
+    "options": [
+      {
+        "name": "Intensify collection",
+        "posture": "low-risk",
+        "purpose": "Close intelligence gaps before committing policy.",
+        "second_order_effects": [
+          "Slower response",
+          "Higher confidence",
+          "Less escalation risk"
+        ]
+      },
+      {
+        "name": "Open or reinforce diplomatic channel",
+        "posture": "de-escalatory",
+        "purpose": "Preserve bargaining space and reduce miscalculation.",
+        "second_order_effects": [
+          "May be read as restraint",
+          "Creates off-ramp",
+          "Requires message discipline"
+        ]
+      },
+      {
+        "name": "Prepare visible defensive readiness",
+        "posture": "deterrent",
+        "purpose": "Signal resolve while avoiding offensive commitment.",
+        "second_order_effects": [
+          "Can deter",
+          "Can also trigger reciprocal mobilization",
+          "Needs allied coordination"
+        ]
+      }
+    ],
+    "risk_matrix": {
+      "threat_level": "LOW",
+      "pressure": {
+        "tension": 0.156525,
+        "uncertainty": 0.35,
+        "urgency": 0.0726,
+        "fragility": 0.20745624999999998,
+        "surprise": 0.4345,
+        "opportunity": 0.27706624999999996,
+        "constraint": 0.0,
+        "diplomatic_window": 0.0,
+        "drivers": [
+          "TEST_ACTION"
+        ],
+        "blindspots": [
+          "Notice: No diplomatic signals detected. Possible communications blackout.",
+          "Notice: No economic data retrieved."
+        ]
+      },
+      "sre_domains": {
+        "capability": 0.03,
+        "intent": 0.03,
+        "stability": 0.03,
+        "cost": 0.03,
+        "contributors": {
+          "capability": [
+            "TEST_ACTION"
+          ],
+          "intent": [
+            "TEST_ACTION"
+          ],
+          "stability": [
+            "TEST_ACTION"
+          ],
+          "cost": [
+            "TEST_ACTION"
+          ]
+        }
+      },
+      "sre_input": {
+        "base_score": 0.03,
+        "trend_bonus": 0.0,
+        "temporal_spike_bonus": 0.0,
+        "mobilization_trigger": false,
+        "mobilization_bonus": 0.0,
+        "logistics_trigger": false,
+        "logistics_bonus": 0.0,
+        "capability_floor_applied": true,
+        "conflict_floor_applied": false,
+        "confidence_decay": 0.81,
+        "active_conflicts": []
+      },
+      "escalation_trace": [
+        {
+          "step": "domain_fusion",
+          "score": 0.03,
+          "domains": {
+            "capability": 0.03,
+            "intent": 0.03,
+            "stability": 0.03,
+            "cost": 0.03,
+            "contributors": {
+              "capability": [
+                "TEST_ACTION"
+              ],
+              "intent": [
+                "TEST_ACTION"
+              ],
+              "stability": [
+                "TEST_ACTION"
+              ],
+              "cost": [
+                "TEST_ACTION"
+              ]
+            }
+          }
+        },
+        {
+          "step": "temporal_bonus",
+          "delta": 0.0,
+          "score": 0.03
+        },
+        {
+          "step": "capability_floor",
+          "delta": "x0.85",
+          "score": 0.0255
+        },
+        {
+          "step": "risk_band",
+          "risk_level": "LOW",
+          "score": 0.0255
+        }
+      ],
+      "legal_firewall_rejections": [],
+      "knowledge_graph": {
+        "nodes": [
+          {
+            "id": "country:IN",
+            "kind": "country",
+            "label": "IN"
+          },
+          {
+            "id": "assessment:DIP2-658429E0F66D",
+            "kind": "assessment",
+            "risk_level": "LOW",
+            "confidence": 0.736
+          },
+          {
+            "id": "signal:TEST_ACTION",
+            "kind": "signal",
+            "label": "TEST_ACTION",
+            "confidence": 0.8
+          }
+        ],
+        "edges": [
+          {
+            "source": "country:IN",
+            "target": "assessment:DIP2-658429E0F66D",
+            "relation": "HAS_ASSESSMENT"
+          },
+          {
+            "source": "country:IN",
+            "target": "signal:TEST_ACTION",
+            "relation": "OBSERVED",
+            "confidence": 0.8
+          },
+          {
+            "source": "signal:TEST_ACTION",
+            "target": "assessment:DIP2-658429E0F66D",
+            "relation": "SUPPORTS",
+            "confidence": 0.8
+          }
+        ],
+        "centrality": {
+          "country:IN": 1.0,
+          "assessment:DIP2-658429E0F66D": 1.0,
+          "signal:TEST_ACTION": 1.0
+        }
+      }
+    },
+    "uncertainty": [
+      "Notice: No diplomatic signals detected. Possible communications blackout.",
+      "Notice: No economic data retrieved."
+    ],
+    "red_team_challenges": [
+      "No significant biases detected."
+    ],
+    "required_human_decisions": [
+      "Confirm acceptable risk tolerance before any escalatory posture.",
+      "Request legal/humanitarian review for any coercive or force-adjacent option."
+    ],
+    "next_collection_tasks": [
+      "Corroborate top military/logistics indicators.",
+      "Check diplomatic channel status and allied posture.",
+      "Refresh economic pressure and domestic stability indicators."
+    ],
+    "fuzzy_trace": {
+      "fuzzy_memberships": {
+        "TEST_ACTION": {
+          "unknown": 0.5,
+          "mobilization": 0.3846,
+          "hostility": 0.56,
+          "sanctions": 0.5,
+          "negotiation": 0.6,
+          "instability": 0.6,
+          "exercises": 1.0
+        }
+      },
+      "signal_beliefs": [
+        {
+          "signal_code": "TEST_ACTION",
+          "fuzzy_set": "unknown",
+          "membership": 0.5,
+          "reliability": 0.5,
+          "recency": 1.0,
+          "evidence_support": 0.8,
+          "source_agreement": 0.6,
+          "temporal_stability": 1.0,
+          "uncertainty": 0.2,
+          "source_count": 1,
+          "source_types": [
+            "TEST"
+          ],
+          "evidence_refs": [
+            "test"
+          ],
+          "eligible_for_sre": true,
+          "exclusion_reason": null,
+          "fuzzy_memberships": {
+            "unknown": 0.5,
+            "mobilization": 0.3846,
+            "hostility": 0.56,
+            "sanctions": 0.5,
+            "negotiation": 0.6,
+            "instability": 0.6,
+            "exercises": 1.0
+          }
+        }
+      ],
+      "projected_signals": [
+        {
+          "signal_code": "TEST_ACTION",
+          "domain": "capability",
+          "membership": 0.5,
+          "reliability": 0.5,
+          "recency": 1.0,
+          "evidence_support": 0.8,
+          "confidence": 0.2,
+          "fuzzy_memberships": {
+            "unknown": 0.5,
+            "mobilization": 0.3846,
+            "hostility": 0.56,
+            "sanctions": 0.5,
+            "negotiation": 0.6,
+            "instability": 0.6,
+            "exercises": 1.0
+          },
+          "source_refs": [
+            "test"
+          ],
+          "excluded_from_sre": false,
+          "exclusion_reason": null
+        }
+      ],
+      "sre_domains": {
+        "capability": 0.03,
+        "intent": 0.03,
+        "stability": 0.03,
+        "cost": 0.03,
+        "contributors": {
+          "capability": [
+            "TEST_ACTION"
+          ],
+          "intent": [
+            "TEST_ACTION"
+          ],
+          "stability": [
+            "TEST_ACTION"
+          ],
+          "cost": [
+            "TEST_ACTION"
+          ]
+        }
+      },
+      "sre_input": {
+        "base_score": 0.03,
+        "trend_bonus": 0.0,
+        "temporal_spike_bonus": 0.0,
+        "mobilization_trigger": false,
+        "mobilization_bonus": 0.0,
+        "logistics_trigger": false,
+        "logistics_bonus": 0.0,
+        "capability_floor_applied": true,
+        "conflict_floor_applied": false,
+        "confidence_decay": 0.81,
+        "active_conflicts": []
+      },
+      "sre_escalation_score": 0.0255,
+      "risk_level": "LOW",
+      "qualitative_bands": {
+        "capability": "minimal",
+        "intent": "minimal",
+        "stability": "minimal",
+        "cost": "minimal",
+        "escalation": "minimal"
+      },
+      "escalation_trace": [
+        {
+          "step": "domain_fusion",
+          "score": 0.03,
+          "domains": {
+            "capability": 0.03,
+            "intent": 0.03,
+            "stability": 0.03,
+            "cost": 0.03,
+            "contributors": {
+              "capability": [
+                "TEST_ACTION"
+              ],
+              "intent": [
+                "TEST_ACTION"
+              ],
+              "stability": [
+                "TEST_ACTION"
+              ],
+              "cost": [
+                "TEST_ACTION"
+              ]
+            }
+          }
+        },
+        {
+          "step": "temporal_bonus",
+          "delta": 0.0,
+          "score": 0.03
+        },
+        {
+          "step": "capability_floor",
+          "delta": "x0.85",
+          "score": 0.0255
+        },
+        {
+          "step": "risk_band",
+          "risk_level": "LOW",
+          "score": 0.0255
+        }
+      ],
+      "legal_firewall_rejections": []
+    },
+    "blackboard_events": [
+      {
+        "trace_id": "dip2-658429e0f66d",
+        "phase": "goal_intake",
+        "event_type": "goal.created",
+        "payload": {
+          "objective": "Assess India-Pakistan border tensions",
+          "country": "IN"
+        },
+        "source": "dip2.nextgen",
+        "created_at": "2026-07-22T16:53:27.866550+00:00"
+      },
+      {
+        "trace_id": "dip2-658429e0f66d",
+        "phase": "collection",
+        "event_type": "collection.started",
+        "payload": {
+          "country": "IN"
+        },
+        "source": "dip2.nextgen",
+        "created_at": "2026-07-22T16:53:27.871867+00:00"
+      },
+      {
+        "trace_id": "dip2-658429e0f66d",
+        "phase": "collection",
+        "event_type": "collection.completed",
+        "payload": {
+          "observation_count": 76,
+          "iterations": 3
+        },
+        "source": "dip2.nextgen",
+        "created_at": "2026-07-22T16:53:31.023992+00:00"
+      },
+      {
+        "trace_id": "dip2-658429e0f66d",
+        "phase": "fuzzy_projection",
+        "event_type": "state.uncertainty_applied",
+        "payload": {
+          "confidence_decay": 0.81,
+          "blindspots": [
+            "Notice: No diplomatic signals detected. Possible communications blackout.",
+            "Notice: No economic data retrieved."
+          ]
+        },
+        "source": "dip2.nextgen",
+        "created_at": "2026-07-22T16:53:31.024907+00:00"
+      },
+      {
+        "trace_id": "dip2-658429e0f66d",
+        "phase": "sre",
+        "event_type": "nextgen_sre.completed",
+        "payload": {
+          "score": 0.0255,
+          "risk": "LOW",
+          "projected_signal_count": 1,
+          "firewall_rejections": 0
+        },
+        "source": "dip2.nextgen",
+        "created_at": "2026-07-22T16:53:31.030447+00:00"
+      },
+      {
+        "trace_id": "dip2-658429e0f66d",
+        "phase": "sre",
+        "event_type": "sre.available",
+        "payload": {
+          "score": 0.0,
+          "risk": "LOW"
+        },
+        "source": "dip2.nextgen",
+        "created_at": "2026-07-22T16:53:31.030447+00:00"
+      },
+      {
+        "trace_id": "dip2-658429e0f66d",
+        "phase": "council",
+        "event_type": "council.started",
+        "payload": {},
+        "source": "dip2.nextgen",
+        "created_at": "2026-07-22T16:53:31.031451+00:00"
+      },
+      {
+        "trace_id": "dip2-658429e0f66d",
+        "phase": "council",
+        "event_type": "council.completed",
+        "payload": {
+          "hypothesis_count": 3
+        },
+        "source": "dip2.nextgen",
+        "created_at": "2026-07-22T16:54:41.869665+00:00"
+      },
+      {
+        "trace_id": "dip2-658429e0f66d",
+        "phase": "gate",
+        "event_type": "verification.completed",
+        "payload": {
+          "passed": true,
+          "score": 0.736
+        },
+        "source": "dip2.nextgen",
+        "created_at": "2026-07-22T16:57:59.361212+00:00"
+      },
+      {
+        "trace_id": "dip2-658429e0f66d",
+        "phase": "gate",
+        "event_type": "gate.verdict",
+        "payload": {
+          "approved": false,
+          "decision": "WITHHELD",
+          "reasons": [
+            "Capability coverage is 0.03 (threshold: 0.35) \u2014 insufficient military intelligence to assess escalation risk.",
+            "Analytic confidence is 0.000 (threshold: 0.55) \u2014 insufficient analytical basis to conclude."
+          ]
+        },
+        "source": "dip2.nextgen",
+        "created_at": "2026-07-22T16:57:59.387304+00:00"
+      },
+      {
+        "trace_id": "dip2-658429e0f66d",
+        "phase": "report",
+        "event_type": "assessment.result_populated",
+        "payload": {
+          "status": "WITHHELD",
+          "threat_level": "LOW"
+        },
+        "source": "dip2.nextgen",
+        "created_at": "2026-07-22T16:58:05.015503+00:00"
+      }
+    ],
+    "learning_units": [],
+    "experiment_records": [
+      {
+        "trace_id": "dip2-658429e0f66d",
+        "hypothesis": "Fuzzy SRE thresholds improve early-warning lead time without increasing false positives.",
+        "method": "Run historical crisis replay and ablation suite before promotion.",
+        "metric": "Brier score and lead-time days at HIGH threshold",
+        "success_threshold": "Improves lead time or calibration by 5% without worse false positives.",
+        "rollback_rule": "Keep existing thresholds if replay metrics regress.",
+        "status": "planned",
+        "result": {}
+      }
+    ],
+    "promotion_status": [
+      {
+        "candidate": "nextgen_head_of_country_briefing",
+        "approved": true,
+        "evidence": [
+          "additive output envelope; no change to assessment gate"
+        ],
+        "blockers": []
+      }
+    ]
+  },
+  "nextgen_sre": {
+    "fuzzy_memberships": {
+      "TEST_ACTION": {
+        "unknown": 0.5,
+        "mobilization": 0.3846,
+        "hostility": 0.56,
+        "sanctions": 0.5,
+        "negotiation": 0.6,
+        "instability": 0.6,
+        "exercises": 1.0
+      }
+    },
+    "signal_beliefs": [
+      {
+        "signal_code": "TEST_ACTION",
+        "fuzzy_set": "unknown",
+        "membership": 0.5,
+        "reliability": 0.5,
+        "recency": 1.0,
+        "evidence_support": 0.8,
+        "source_agreement": 0.6,
+        "temporal_stability": 1.0,
+        "uncertainty": 0.2,
+        "source_count": 1,
+        "source_types": [
+          "TEST"
+        ],
+        "evidence_refs": [
+          "test"
+        ],
+        "eligible_for_sre": true,
+        "exclusion_reason": null,
+        "fuzzy_memberships": {
+          "unknown": 0.5,
+          "mobilization": 0.3846,
+          "hostility": 0.56,
+          "sanctions": 0.5,
+          "negotiation": 0.6,
+          "instability": 0.6,
+          "exercises": 1.0
+        }
+      }
+    ],
+    "projected_signals": [
+      {
+        "signal_code": "TEST_ACTION",
+        "domain": "capability",
+        "membership": 0.5,
+        "reliability": 0.5,
+        "recency": 1.0,
+        "evidence_support": 0.8,
+        "confidence": 0.2,
+        "fuzzy_memberships": {
+          "unknown": 0.5,
+          "mobilization": 0.3846,
+          "hostility": 0.56,
+          "sanctions": 0.5,
+          "negotiation": 0.6,
+          "instability": 0.6,
+          "exercises": 1.0
+        },
+        "source_refs": [
+          "test"
+        ],
+        "excluded_from_sre": false,
+        "exclusion_reason": null
+      }
+    ],
+    "sre_domains": {
+      "capability": 0.03,
+      "intent": 0.03,
+      "stability": 0.03,
+      "cost": 0.03,
+      "contributors": {
+        "capability": [
+          "TEST_ACTION"
+        ],
+        "intent": [
+          "TEST_ACTION"
+        ],
+        "stability": [
+          "TEST_ACTION"
+        ],
+        "cost": [
+          "TEST_ACTION"
+        ]
+      }
+    },
+    "sre_input": {
+      "base_score": 0.03,
+      "trend_bonus": 0.0,
+      "temporal_spike_bonus": 0.0,
+      "mobilization_trigger": false,
+      "mobilization_bonus": 0.0,
+      "logistics_trigger": false,
+      "logistics_bonus": 0.0,
+      "capability_floor_applied": true,
+      "conflict_floor_applied": false,
+      "confidence_decay": 0.81,
+      "active_conflicts": []
+    },
+    "sre_escalation_score": 0.0255,
+    "risk_level": "LOW",
+    "qualitative_bands": {
+      "capability": "minimal",
+      "intent": "minimal",
+      "stability": "minimal",
+      "cost": "minimal",
+      "escalation": "minimal"
+    },
+    "escalation_trace": [
+      {
+        "step": "domain_fusion",
+        "score": 0.03,
+        "domains": {
+          "capability": 0.03,
+          "intent": 0.03,
+          "stability": 0.03,
+          "cost": 0.03,
+          "contributors": {
+            "capability": [
+              "TEST_ACTION"
+            ],
+            "intent": [
+              "TEST_ACTION"
+            ],
+            "stability": [
+              "TEST_ACTION"
+            ],
+            "cost": [
+              "TEST_ACTION"
+            ]
+          }
+        }
+      },
+      {
+        "step": "temporal_bonus",
+        "delta": 0.0,
+        "score": 0.03
+      },
+      {
+        "step": "capability_floor",
+        "delta": "x0.85",
+        "score": 0.0255
+      },
+      {
+        "step": "risk_band",
+        "risk_level": "LOW",
+        "score": 0.0255
+      }
+    ],
+    "legal_firewall_rejections": []
+  },
+  "strategic_pressure": {
+    "tension": 0.156525,
+    "uncertainty": 0.35,
+    "urgency": 0.0726,
+    "fragility": 0.20745624999999998,
+    "surprise": 0.4345,
+    "opportunity": 0.27706624999999996,
+    "constraint": 0.0,
+    "diplomatic_window": 0.0,
+    "drivers": [
+      "TEST_ACTION"
+    ],
+    "blindspots": [
+      "Notice: No diplomatic signals detected. Possible communications blackout.",
+      "Notice: No economic data retrieved."
+    ]
+  },
+  "fuzzy_trace": {
+    "fuzzy_memberships": {
+      "TEST_ACTION": {
+        "unknown": 0.5,
+        "mobilization": 0.3846,
+        "hostility": 0.56,
+        "sanctions": 0.5,
+        "negotiation": 0.6,
+        "instability": 0.6,
+        "exercises": 1.0
+      }
+    },
+    "signal_beliefs": [
+      {
+        "signal_code": "TEST_ACTION",
+        "fuzzy_set": "unknown",
+        "membership": 0.5,
+        "reliability": 0.5,
+        "recency": 1.0,
+        "evidence_support": 0.8,
+        "source_agreement": 0.6,
+        "temporal_stability": 1.0,
+        "uncertainty": 0.2,
+        "source_count": 1,
+        "source_types": [
+          "TEST"
+        ],
+        "evidence_refs": [
+          "test"
+        ],
+        "eligible_for_sre": true,
+        "exclusion_reason": null,
+        "fuzzy_memberships": {
+          "unknown": 0.5,
+          "mobilization": 0.3846,
+          "hostility": 0.56,
+          "sanctions": 0.5,
+          "negotiation": 0.6,
+          "instability": 0.6,
+          "exercises": 1.0
+        }
+      }
+    ],
+    "projected_signals": [
+      {
+        "signal_code": "TEST_ACTION",
+        "domain": "capability",
+        "membership": 0.5,
+        "reliability": 0.5,
+        "recency": 1.0,
+        "evidence_support": 0.8,
+        "confidence": 0.2,
+        "fuzzy_memberships": {
+          "unknown": 0.5,
+          "mobilization": 0.3846,
+          "hostility": 0.56,
+          "sanctions": 0.5,
+          "negotiation": 0.6,
+          "instability": 0.6,
+          "exercises": 1.0
+        },
+        "source_refs": [
+          "test"
+        ],
+        "excluded_from_sre": false,
+        "exclusion_reason": null
+      }
+    ],
+    "sre_domains": {
+      "capability": 0.03,
+      "intent": 0.03,
+      "stability": 0.03,
+      "cost": 0.03,
+      "contributors": {
+        "capability": [
+          "TEST_ACTION"
+        ],
+        "intent": [
+          "TEST_ACTION"
+        ],
+        "stability": [
+          "TEST_ACTION"
+        ],
+        "cost": [
+          "TEST_ACTION"
+        ]
+      }
+    },
+    "sre_input": {
+      "base_score": 0.03,
+      "trend_bonus": 0.0,
+      "temporal_spike_bonus": 0.0,
+      "mobilization_trigger": false,
+      "mobilization_bonus": 0.0,
+      "logistics_trigger": false,
+      "logistics_bonus": 0.0,
+      "capability_floor_applied": true,
+      "conflict_floor_applied": false,
+      "confidence_decay": 0.81,
+      "active_conflicts": []
+    },
+    "sre_escalation_score": 0.0255,
+    "risk_level": "LOW",
+    "qualitative_bands": {
+      "capability": "minimal",
+      "intent": "minimal",
+      "stability": "minimal",
+      "cost": "minimal",
+      "escalation": "minimal"
+    },
+    "escalation_trace": [
+      {
+        "step": "domain_fusion",
+        "score": 0.03,
+        "domains": {
+          "capability": 0.03,
+          "intent": 0.03,
+          "stability": 0.03,
+          "cost": 0.03,
+          "contributors": {
+            "capability": [
+              "TEST_ACTION"
+            ],
+            "intent": [
+              "TEST_ACTION"
+            ],
+            "stability": [
+              "TEST_ACTION"
+            ],
+            "cost": [
+              "TEST_ACTION"
+            ]
+          }
+        }
+      },
+      {
+        "step": "temporal_bonus",
+        "delta": 0.0,
+        "score": 0.03
+      },
+      {
+        "step": "capability_floor",
+        "delta": "x0.85",
+        "score": 0.0255
+      },
+      {
+        "step": "risk_band",
+        "risk_level": "LOW",
+        "score": 0.0255
+      }
+    ],
+    "legal_firewall_rejections": []
+  },
+  "blackboard_events": [
+    {
+      "trace_id": "dip2-658429e0f66d",
+      "phase": "goal_intake",
+      "event_type": "goal.created",
+      "payload": {
+        "objective": "Assess India-Pakistan border tensions",
+        "country": "IN"
+      },
+      "source": "dip2.nextgen",
+      "created_at": "2026-07-22T16:53:27.866550+00:00"
+    },
+    {
+      "trace_id": "dip2-658429e0f66d",
+      "phase": "collection",
+      "event_type": "collection.started",
+      "payload": {
+        "country": "IN"
+      },
+      "source": "dip2.nextgen",
+      "created_at": "2026-07-22T16:53:27.871867+00:00"
+    },
+    {
+      "trace_id": "dip2-658429e0f66d",
+      "phase": "collection",
+      "event_type": "collection.completed",
+      "payload": {
+        "observation_count": 76,
+        "iterations": 3
+      },
+      "source": "dip2.nextgen",
+      "created_at": "2026-07-22T16:53:31.023992+00:00"
+    },
+    {
+      "trace_id": "dip2-658429e0f66d",
+      "phase": "fuzzy_projection",
+      "event_type": "state.uncertainty_applied",
+      "payload": {
+        "confidence_decay": 0.81,
+        "blindspots": [
+          "Notice: No diplomatic signals detected. Possible communications blackout.",
+          "Notice: No economic data retrieved."
+        ]
+      },
+      "source": "dip2.nextgen",
+      "created_at": "2026-07-22T16:53:31.024907+00:00"
+    },
+    {
+      "trace_id": "dip2-658429e0f66d",
+      "phase": "sre",
+      "event_type": "nextgen_sre.completed",
+      "payload": {
+        "score": 0.0255,
+        "risk": "LOW",
+        "projected_signal_count": 1,
+        "firewall_rejections": 0
+      },
+      "source": "dip2.nextgen",
+      "created_at": "2026-07-22T16:53:31.030447+00:00"
+    },
+    {
+      "trace_id": "dip2-658429e0f66d",
+      "phase": "sre",
+      "event_type": "sre.available",
+      "payload": {
+        "score": 0.0,
+        "risk": "LOW"
+      },
+      "source": "dip2.nextgen",
+      "created_at": "2026-07-22T16:53:31.030447+00:00"
+    },
+    {
+      "trace_id": "dip2-658429e0f66d",
+      "phase": "council",
+      "event_type": "council.started",
+      "payload": {},
+      "source": "dip2.nextgen",
+      "created_at": "2026-07-22T16:53:31.031451+00:00"
+    },
+    {
+      "trace_id": "dip2-658429e0f66d",
+      "phase": "council",
+      "event_type": "council.completed",
+      "payload": {
+        "hypothesis_count": 3
+      },
+      "source": "dip2.nextgen",
+      "created_at": "2026-07-22T16:54:41.869665+00:00"
+    },
+    {
+      "trace_id": "dip2-658429e0f66d",
+      "phase": "gate",
+      "event_type": "verification.completed",
+      "payload": {
+        "passed": true,
+        "score": 0.736
+      },
+      "source": "dip2.nextgen",
+      "created_at": "2026-07-22T16:57:59.361212+00:00"
+    },
+    {
+      "trace_id": "dip2-658429e0f66d",
+      "phase": "gate",
+      "event_type": "gate.verdict",
+      "payload": {
+        "approved": false,
+        "decision": "WITHHELD",
+        "reasons": [
+          "Capability coverage is 0.03 (threshold: 0.35) \u2014 insufficient military intelligence to assess escalation risk.",
+          "Analytic confidence is 0.000 (threshold: 0.55) \u2014 insufficient analytical basis to conclude."
+        ]
+      },
+      "source": "dip2.nextgen",
+      "created_at": "2026-07-22T16:57:59.387304+00:00"
+    },
+    {
+      "trace_id": "dip2-658429e0f66d",
+      "phase": "report",
+      "event_type": "assessment.result_populated",
+      "payload": {
+        "status": "WITHHELD",
+        "threat_level": "LOW"
+      },
+      "source": "dip2.nextgen",
+      "created_at": "2026-07-22T16:58:05.015503+00:00"
+    }
+  ],
+  "learning_units": [],
+  "experiment_records": [
+    {
+      "trace_id": "dip2-658429e0f66d",
+      "hypothesis": "Fuzzy SRE thresholds improve early-warning lead time without increasing false positives.",
+      "method": "Run historical crisis replay and ablation suite before promotion.",
+      "metric": "Brier score and lead-time days at HIGH threshold",
+      "success_threshold": "Improves lead time or calibration by 5% without worse false positives.",
+      "rollback_rule": "Keep existing thresholds if replay metrics regress.",
+      "status": "planned",
+      "result": {}
+    }
+  ],
+  "schema_matches": [],
+  "promotion_status": [
+    {
+      "candidate": "nextgen_head_of_country_briefing",
+      "approved": true,
+      "evidence": [
+        "additive output envelope; no change to assessment gate"
+      ],
+      "blockers": []
+    }
+  ],
+  "symbolic_guardrails": {
+    "passed": true,
+    "findings": [],
+    "solver_stack": {
+      "z3": false,
+      "pyDatalog": false,
+      "nemoguardrails": false
+    }
+  },
+  "hypotheses": [
+    {
+      "minister": "Minister",
+      "type": "hypothesis",
+      "confidence": 0.0,
+      "matched_signals": [],
+      "missing_signals": []
+    },
+    {
+      "minister": "Minister",
+      "type": "hypothesis",
+      "confidence": 0.0,
+      "matched_signals": [],
+      "missing_signals": []
+    },
+    {
+      "minister": "Minister",
+      "type": "hypothesis",
+      "confidence": 0.0,
+      "matched_signals": [],
+      "missing_signals": []
+    }
+  ],
+  "evidence_log": [
+    "[CoVe CLAIM] Minister hypothesizes hypothesis with confidence 0%",
+    "[CoVe CLAIM] LOW-CONFIDENCE: Minister assessment below 30%",
+    "[CoVe CLAIM] Minister hypothesizes hypothesis with confidence 0%",
+    "[CoVe CLAIM] LOW-CONFIDENCE: Minister assessment below 30%",
+    "[CoVe CLAIM] Minister hypothesizes hypothesis with confidence 0%",
+    "[CoVe CLAIM] LOW-CONFIDENCE: Minister assessment below 30%",
+    "[CoVe CLAIM] CONVERGENCE: Multiple ministers assess overlapping domains"
+  ],
+  "research_log": [
+    {
+      "rfi": {
+        "query": "Find recent events, conflicts, or significant strategic developments regarding Assess India-Pakistan border tensions in IN.",
+        "target_domains": [
+          "political",
+          "economic",
+          "military"
+        ],
+        "priority": "HIGH",
+        "estimated_time_mins": 3.5,
+        "estimated_tokens": 65000,
+        "estimated_cost_usd": 0.31,
+        "justification": "Insufficient overall evidence volume for Assess India-Pakistan border tensions in IN. Found 1 signals."
+      },
+      "status": "EXECUTED",
+      "evidence_found": 0,
+      "execution_time_ms": 0.0,
+      "timestamp": "2026-07-22T22:23:31.021898"
+    },
+    {
+      "rfi": {
+        "query": "Find recent events, conflicts, or significant strategic developments regarding Assess India-Pakistan border tensions in IN.",
+        "target_domains": [
+          "political",
+          "economic",
+          "military"
+        ],
+        "priority": "HIGH",
+        "estimated_time_mins": 3.5,
+        "estimated_tokens": 65000,
+        "estimated_cost_usd": 0.31,
+        "justification": "Insufficient overall evidence volume for Assess India-Pakistan border tensions in IN. Found 1 signals."
+      },
+      "status": "EXECUTED",
+      "evidence_found": 0,
+      "execution_time_ms": 0.0,
+      "timestamp": "2026-07-22T22:23:31.022897"
+    }
+  ],
+  "readiness_report": {
+    "score": 45.0,
+    "is_ready": false,
+    "evidence_coverage": 6.666666666666667,
+    "graph_connectivity": 60.0,
+    "temporal_coverage": 40.0,
+    "source_diversity": 25.0,
+    "contradiction_score": 100.0,
+    "expert_agreement": 100.0,
+    "missing_entities": [],
+    "missing_relationships": [],
+    "rfi_queries": [
+      {
+        "query": "Find recent events, conflicts, or significant strategic developments regarding Assess India-Pakistan border tensions in IN.",
+        "target_domains": [
+          "political",
+          "economic",
+          "military"
+        ],
+        "priority": "HIGH",
+        "estimated_time_mins": 3.5,
+        "estimated_tokens": 65000,
+        "estimated_cost_usd": 0.31,
+        "justification": "Insufficient overall evidence volume for Assess India-Pakistan border tensions in IN. Found 1 signals."
+      }
+    ],
+    "estimated_cost": 0.31,
+    "estimated_time": 3.5,
+    "iteration": 3
+  },
+  "red_team_report": [
+    "No significant biases detected."
+  ],
+  "refusal": null,
+  "hitl_review": null,
+  "trajectory": {
+    "prob_14d": 0.0,
+    "prob_30d": 0.0,
+    "prob_60d": 0.0,
+    "velocity": 0.0,
+    "trajectory_label": "STABLE"
+  },
+  "black_swan": {
+    "triggered": false,
+    "reasons": [],
+    "channels_fired": [],
+    "escalation_boost": 0.0,
+    "trajectory_floor": 0.0,
+    "confidence_cap": 1.0,
+    "mandatory_review": false
+  },
+  "contagion": null,
+  "learning": {
+    "accuracy_trend": 0.0,
+    "calibration_error": 0.0,
+    "blind_spots": [],
+    "improvement_suggestions": [
+      "Reduce base confidence; system is generating unverified claims."
+    ],
+    "confidence_adjustment": 0.0
+  },
+  "elapsed_seconds": 0.0,
+  "gate_verdict": {
+    "approved": false,
+    "withheld": true,
+    "decision": "WITHHELD",
+    "reasons": [
+      "Capability coverage is 0.03 (threshold: 0.35) \u2014 insufficient military intelligence to assess escalation risk.",
+      "Analytic confidence is 0.000 (threshold: 0.55) \u2014 insufficient analytical basis to conclude."
+    ],
+    "required_collection": [
+      "Capability coverage is 0.03 (threshold: 0.35) \u2014 insufficient military intelligence to assess escalation risk.",
+      "Analytic confidence is 0.000 (threshold: 0.55) \u2014 insufficient analytical basis to conclude."
+    ],
+    "intelligence_gaps": [],
+    "collection_tasks": [
+      {
+        "signal": "military_capability",
+        "modality": "SIGINT",
+        "priority": "HIGH",
+        "reason": "Capability coverage is 0.03 (threshold: 0.35) \u2014 insufficient military intelligence to assess escalation risk.",
+        "source_hint": "satellite_imagery"
+      },
+      {
+        "signal": "corroboration",
+        "modality": "MULTI_SOURCE",
+        "priority": "MEDIUM",
+        "reason": "Analytic confidence is 0.000 (threshold: 0.55) \u2014 insufficient analytical basis to conclude.",
+        "source_hint": "cross_reference"
+      }
+    ],
+    "proposed_decision": "LOW",
+    "confidence": 0.0,
+    "mandatory_review": false,
+    "sre_score": 0.0255,
+    "clamped": false,
+    "clamped_warning": ""
+  },
+  "raw_sources": [
+    {
+      "entity": "Test",
+      "action": "TEST_ACTION",
+      "target": null,
+      "intensity": 0.5,
+      "confidence": 0.8,
+      "source_ref": "test",
+      "domain": "unknown",
+      "timestamp": null,
+      "lat": null,
+      "lon": null,
+      "reliability_score": 0.5,
+      "verification_status": "Unverified",
+      "weight": 1.0
+    }
+  ],
+  "xai_sources": [
+    "TEST_ACTION via test"
+  ],
+  "strategic_narrative": {
+    "executive_summary": "The autonomous system has completed a recursive investigation into 'Assess India-Pakistan border tensions'. The verified strategic threat level is assessed as LOW.",
+    "threat_assessment": [
+      "Minister assessed hypothesis with 0.0% confidence.",
+      "Minister assessed hypothesis with 0.0% confidence.",
+      "Minister assessed hypothesis with 0.0% confidence."
+    ],
+    "evidence": [
+      "Processed 0 unique signals.",
+      "Verification Score (CoVe): 73.6%"
+    ],
+    "counter_arguments": [
+      "No significant biases detected."
+    ],
+    "forecast": [
+      "Forecast: Stable",
+      "Key Driver: None"
+    ],
+    "recommendations": [
+      "Continue monitoring indicators.",
+      "Deploy automated sensors to track missing entities identified in the readiness report."
+    ],
+    "generation_mode": "modular_heuristic"
+  },
+  "strategic_narrative_md": "# Strategic Narrative\n\n## Executive Summary\nThe autonomous system has completed a recursive investigation into 'Assess India-Pakistan border tensions'. The verified strategic threat level is assessed as LOW.\n\n## Threat Assessment\n- Minister assessed hypothesis with 0.0% confidence.\n- Minister assessed hypothesis with 0.0% confidence.\n- Minister assessed hypothesis with 0.0% confidence.\n\n## Evidentiary Basis\n- Processed 0 unique signals.\n- Verification Score (CoVe): 73.6%\n\n## Counter Arguments & Red Team\n- No significant biases detected.\n\n## Trajectory Forecast\n- Forecast: Stable\n- Key Driver: None\n\n## Strategic Recommendations\n- Continue monitoring indicators.\n- Deploy automated sensors to track missing entities identified in the readiness report.\n\n"
+}

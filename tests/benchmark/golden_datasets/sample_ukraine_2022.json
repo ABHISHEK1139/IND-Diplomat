@@ -1,0 +1,31 @@
+{
+    "dataset_id": "GD-UKR-001",
+    "query": "Assess the likelihood of a Russian invasion of Ukraine based on troop movements.",
+    "expected_base_trajectory": "Escalation to armed conflict",
+    "expected_signals": [
+        {
+            "entity": "RUS",
+            "action": "SIG_MIL_BUILDUP",
+            "target": "UKR",
+            "intensity": 0.95,
+            "confidence": 0.99,
+            "source_ref": "OSINT_SATELLITE_1"
+        },
+        {
+            "entity": "USA",
+            "action": "SIG_DIPLO_WARNING",
+            "target": "RUS",
+            "intensity": 0.80,
+            "confidence": 0.90,
+            "source_ref": "NEWS_1"
+        },
+        {
+            "entity": "RUS",
+            "action": "SIG_CYBER_ATTACK",
+            "target": "UKR",
+            "intensity": 0.60,
+            "confidence": 0.70,
+            "source_ref": "OSINT_CYBER_1"
+        }
+    ]
+}

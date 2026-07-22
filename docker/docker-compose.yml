@@ -1,0 +1,240 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: dip2-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-dipadmin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-dippassword}
+      POSTGRES_DB: ${POSTGRES_DB:-dipdb}
+    ports:
+    - 5432:5432
+    volumes:
+    - ./data/postgres:/var/lib/postgresql/data
+    networks:
+    - dip2-network
+    healthcheck:
+      test:
+      - CMD-SHELL
+      - pg_isready -U dipadmin -d dipdb
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  qdrant:
+    image: qdrant/qdrant:v1.6.1
+    container_name: dip2-qdrant
+    restart: unless-stopped
+    ports:
+    - 6333:6333
+    - 6334:6334
+    volumes:
+    - ./data/qdrant:/qdrant/storage
+    networks:
+    - dip2-network
+  redis:
+    image: redis:7-alpine
+    container_name: dip2-redis
+    restart: unless-stopped
+    ports:
+    - 6379:6379
+    volumes:
+    - ./data/redis:/data
+    networks:
+    - dip2-network
+    healthcheck:
+      test:
+      - CMD
+      - redis-cli
+      - ping
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  neo4j:
+    image: neo4j:5-community
+    container_name: dip2-neo4j
+    restart: unless-stopped
+    ports:
+    - 7474:7474
+    - 7687:7687
+    environment:
+      NEO4J_AUTH: ${NEO4J_USER:-neo4j}/${NEO4J_PASSWORD:-password}
+      NEO4J_apoc_export_file_enabled: 'true'
+      NEO4J_apoc_import_file_enabled: 'true'
+      NEO4J_apoc_import_file_use__neo4j__config: 'true'
+    volumes:
+    - ./data/neo4j/data:/data
+    - ./data/neo4j/logs:/logs
+    - ./data/neo4j/import:/var/lib/neo4j/import
+    - ./data/neo4j/plugins:/plugins
+    networks:
+    - dip2-network
+    healthcheck:
+      test:
+      - CMD
+      - wget
+      - http://localhost:7474
+      - -O
+      - '-'
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    container_name: dip2-web
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+    - ${API_PORT:-8000}:8000
+    env_file:
+    - .env
+    environment:
+    - PYTHONUNBUFFERED=1
+    - DATABASE_URL=postgresql://dipadmin:dippassword@postgres:5432/dipdb
+    - REDIS_URL=redis://redis:6379/0
+    - NEO4J_URI=bolt://neo4j:7687
+    - NEO4J_USER=neo4j
+    - NEO4J_PASSWORD=password
+    volumes:
+    - ./data/app:/app/data
+    healthcheck:
+      test:
+      - CMD
+      - curl
+      - -f
+      - http://localhost:8000/health
+      interval: 30s
+      timeout: 10s
+      start_period: 15s
+      retries: 3
+    networks:
+    - dip2-network
+    deploy: &id001
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            count: all
+            capabilities:
+            - gpu
+  frontend:
+    build:
+      context: ./frontend-next
+      dockerfile: Dockerfile
+    container_name: dip2-frontend
+    restart: unless-stopped
+    ports:
+    - 3000:3000
+    networks:
+    - dip2-network
+    depends_on:
+      web:
+        condition: service_healthy
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    container_name: dip2-worker
+    restart: unless-stopped
+    depends_on:
+      web:
+        condition: service_healthy
+    env_file:
+    - .env
+    environment:
+    - PYTHONUNBUFFERED=1
+    - DATABASE_URL=postgresql://dipadmin:dippassword@postgres:5432/dipdb
+    - REDIS_URL=redis://redis:6379/0
+    - NEO4J_URI=bolt://neo4j:7687
+    - NEO4J_USER=neo4j
+    - NEO4J_PASSWORD=password
+    volumes:
+    - ./data/app:/app/data
+    networks:
+    - dip2-network
+    deploy: *id001
+  scheduler:
+    build:
+      context: .
+      dockerfile: Dockerfile.scheduler
+    container_name: dip2-scheduler
+    restart: unless-stopped
+    depends_on:
+      web:
+        condition: service_healthy
+    env_file:
+    - .env
+    environment:
+    - PYTHONUNBUFFERED=1
+    - DATABASE_URL=postgresql://dipadmin:dippassword@postgres:5432/dipdb
+    volumes:
+    - ./data/app:/app/data
+    networks:
+    - dip2-network
+    deploy: *id001
+  guardian:
+    build:
+      context: .
+      dockerfile: Dockerfile.guardian
+    container_name: dip2-guardian
+    restart: unless-stopped
+    depends_on:
+    - web
+    env_file:
+    - .env
+    environment:
+    - PYTHONUNBUFFERED=1
+    volumes:
+    - ./data/app:/app/data
+    networks:
+    - dip2-network
+    deploy: *id001
+  prefect:
+    image: prefecthq/prefect:2-python3.11
+    container_name: dip2-prefect
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+    - 4200:4200
+    environment:
+    - PREFECT_SERVER_API_HOST=0.0.0.0
+    - PREFECT_API_URL=http://127.0.0.1:4200/api
+    - PREFECT_API_DATABASE_CONNECTION_URL=postgresql+asyncpg://dipadmin:dippassword@postgres:5432/dipdb
+    command: prefect server start
+    volumes:
+    - ./data/prefect:/root/.prefect
+    networks:
+    - dip2-network
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: dip2-prometheus
+    restart: unless-stopped
+    ports:
+    - 9090:9090
+    volumes:
+    - ./data/prometheus:/prometheus
+    - ./deploy/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+    - dip2-network
+  grafana:
+    image: grafana/grafana:latest
+    container_name: dip2-grafana
+    restart: unless-stopped
+    ports:
+    - 3001:3000
+    volumes:
+    - ./data/grafana:/var/lib/grafana
+    - ./deploy/grafana/provisioning:/etc/grafana/provisioning
+    - ./deploy/grafana/dashboards:/var/lib/grafana/dashboards
+    networks:
+    - dip2-network
+networks:
+  dip2-network:
+    driver: bridge

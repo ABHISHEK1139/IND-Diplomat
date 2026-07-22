@@ -1,0 +1,26 @@
+{
+  "title": "DIP 2.0 Minister AI Metrics",
+  "timezone": "browser",
+  "panels": [
+    {
+      "type": "timeseries",
+      "title": "Layer Duration",
+      "targets": [
+        {
+          "expr": "sum by (layer) (rate(dip_layer_duration_seconds_sum[5m]) / rate(dip_layer_duration_seconds_count[5m]))",
+          "legendFormat": "{{layer}}"
+        }
+      ]
+    },
+    {
+      "type": "stat",
+      "title": "Current Threat Level (Max 3)",
+      "targets": [
+        {
+          "expr": "max(dip_last_threat_level)",
+          "legendFormat": "Threat Level"
+        }
+      ]
+    }
+  ]
+}

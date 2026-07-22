@@ -1,0 +1,59 @@
+# =============================================================================
+# DIP 2.0 — Web Server (FastAPI + Uvicorn) — ~1.2 GB
+# Build:  docker build -f Dockerfile.web -t dip2-web .
+# Run:    docker run -p 8000:8000 --env-file .env dip2-web
+# =============================================================================
+
+FROM python:3.12-slim
+
+LABEL maintainer="DIP 2.0 Team"
+LABEL service="dip2-web"
+LABEL role="api"
+LABEL description="DIP 2.0 Web Server — FastAPI API + Dashboard + Prometheus /metrics"
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends curl && \
+    rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Web server only needs: api + pipeline layers + frontend
+COPY api.py .
+COPY core/ core/
+COPY Config/ Config/
+COPY layer3_state/ layer3_state/
+COPY layer3_world_model/ layer3_world_model/
+COPY layer8_wargaming/ layer8_wargaming/
+COPY unified_pipeline.py .
+COPY verifier.py .
+COPY nextgen/ nextgen/
+COPY analyst_api/ analyst_api/
+COPY api_ws/ api_ws/
+COPY ind_diplomat/ ind_diplomat/
+COPY layer1_collection/ layer1_collection/
+COPY layer2_knowledge/ layer2_knowledge/
+COPY layer4_reasoning/ layer4_reasoning/
+COPY layer10_telemetry/ layer10_telemetry/
+COPY layer5_trajectory/ layer5_trajectory/
+COPY layer6_presentation/ layer6_presentation/
+COPY layer6_workspace/ layer6_workspace/
+COPY layer6_backtesting/ layer6_backtesting/
+COPY layer7_global/ layer7_global/
+COPY deliberation/ deliberation/
+COPY decision/ decision/
+COPY investigation/ investigation/
+COPY memory/ memory/
+COPY legal/ legal/
+COPY SystemGuardian/ SystemGuardian/
+COPY control_loop/ control_loop/
+
+RUN mkdir -p /app/data
+
+EXPOSE 8000
+ENV PYTHONUNBUFFERED=1
+HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
+    CMD curl -f http://localhost:8000/health || exit 1
+CMD ["python", "-m", "uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "2"]

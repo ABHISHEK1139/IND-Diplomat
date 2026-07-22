@@ -1,0 +1,998 @@
+{
+  "query": "test signals for ws",
+  "country": "CXY",
+  "goal": {
+    "objective": "test signals for ws",
+    "country": "CXY",
+    "theater": null,
+    "mode": "situation_brief",
+    "success_criteria": [
+      "evidence-backed situation picture",
+      "explicit uncertainty and blindspots",
+      "ranked options with second-order effects",
+      "clear human review points"
+    ],
+    "constraints": [],
+    "safety_boundaries": [
+      {
+        "name": "human_authority",
+        "rule": "The system advises; accountable humans decide.",
+        "severity": "hard"
+      },
+      {
+        "name": "evidence_first",
+        "rule": "Separate evidence, inference, forecast, and recommendation.",
+        "severity": "hard"
+      },
+      {
+        "name": "no_covert_action",
+        "rule": "Do not plan deception, covert influence, or unlawful operations.",
+        "severity": "hard"
+      },
+      {
+        "name": "legal_humanitarian_review",
+        "rule": "Flag options requiring legal, treaty, humanitarian, or democratic oversight.",
+        "severity": "hard"
+      },
+      {
+        "name": "uncertainty_disclosure",
+        "rule": "Never hide low confidence, source gaps, or contradictory evidence.",
+        "severity": "hard"
+      }
+    ],
+    "risk_tolerance": "low",
+    "trace_id": "dip2-f07904de6d24",
+    "created_at": "2026-07-22T17:58:29.897885+00:00"
+  },
+  "trace_id": "dip2-f07904de6d24",
+  "status": "WITHHELD",
+  "threat_level": "CRITICAL",
+  "verification_score": 0.0,
+  "briefing": {
+    "executive_summary": "Auto-generated summary based on verified facts.",
+    "sections": [
+      "Timeline",
+      "Graph",
+      "Evidence",
+      "Forecast"
+    ]
+  },
+  "head_of_country_briefing": {
+    "goal": {
+      "objective": "test signals for ws",
+      "country": "CXY",
+      "theater": null,
+      "mode": "situation_brief",
+      "success_criteria": [
+        "evidence-backed situation picture",
+        "explicit uncertainty and blindspots",
+        "ranked options with second-order effects",
+        "clear human review points"
+      ],
+      "constraints": [],
+      "safety_boundaries": [
+        {
+          "name": "human_authority",
+          "rule": "The system advises; accountable humans decide.",
+          "severity": "hard"
+        },
+        {
+          "name": "evidence_first",
+          "rule": "Separate evidence, inference, forecast, and recommendation.",
+          "severity": "hard"
+        },
+        {
+          "name": "no_covert_action",
+          "rule": "Do not plan deception, covert influence, or unlawful operations.",
+          "severity": "hard"
+        },
+        {
+          "name": "legal_humanitarian_review",
+          "rule": "Flag options requiring legal, treaty, humanitarian, or democratic oversight.",
+          "severity": "hard"
+        },
+        {
+          "name": "uncertainty_disclosure",
+          "rule": "Never hide low confidence, source gaps, or contradictory evidence.",
+          "severity": "hard"
+        }
+      ],
+      "risk_tolerance": "low",
+      "trace_id": "dip2-f07904de6d24",
+      "created_at": "2026-07-22T17:58:29.897885+00:00"
+    },
+    "decision_posture": "warn",
+    "executive_summary": "CXY risk is CRITICAL. Strategic pulse is stable-watch. Urgency=0.41, uncertainty=0.78, diplomatic_window=0.00.",
+    "evidence_findings": [
+      "No strong signal driver was available; treat assessment as collection-limited."
+    ],
+    "options": [
+      {
+        "name": "Convene crisis cell",
+        "posture": "urgent",
+        "purpose": "Synchronize intelligence, diplomacy, military readiness, legal review, and communications.",
+        "second_order_effects": [
+          "Faster decisions",
+          "Higher coordination load",
+          "Risk of public signal leakage"
+        ]
+      },
+      {
+        "name": "Intensify collection",
+        "posture": "low-risk",
+        "purpose": "Close intelligence gaps before committing policy.",
+        "second_order_effects": [
+          "Slower response",
+          "Higher confidence",
+          "Less escalation risk"
+        ]
+      },
+      {
+        "name": "Open or reinforce diplomatic channel",
+        "posture": "de-escalatory",
+        "purpose": "Preserve bargaining space and reduce miscalculation.",
+        "second_order_effects": [
+          "May be read as restraint",
+          "Creates off-ramp",
+          "Requires message discipline"
+        ]
+      },
+      {
+        "name": "Prepare visible defensive readiness",
+        "posture": "deterrent",
+        "purpose": "Signal resolve while avoiding offensive commitment.",
+        "second_order_effects": [
+          "Can deter",
+          "Can also trigger reciprocal mobilization",
+          "Needs allied coordination"
+        ]
+      }
+    ],
+    "risk_matrix": {
+      "threat_level": "CRITICAL",
+      "pressure": {
+        "tension": 0.138,
+        "uncertainty": 0.7799999999999999,
+        "urgency": 0.41400000000000003,
+        "fragility": 0.41789999999999994,
+        "surprise": 0.03,
+        "opportunity": 0.19819999999999996,
+        "constraint": 0.0,
+        "diplomatic_window": 0.0,
+        "drivers": [],
+        "blindspots": [
+          "CRITICAL: Zero live observations retrieved. Sensors may be blocked or offline."
+        ]
+      },
+      "sre_domains": {
+        "capability": 0.0,
+        "intent": 0.0,
+        "stability": 0.0,
+        "cost": 0.0,
+        "contributors": {
+          "capability": [],
+          "intent": [],
+          "stability": [],
+          "cost": []
+        }
+      },
+      "sre_input": {
+        "base_score": 0.0,
+        "trend_bonus": 0.0,
+        "temporal_spike_bonus": 0.0,
+        "mobilization_trigger": false,
+        "mobilization_bonus": 0.0,
+        "logistics_trigger": false,
+        "logistics_bonus": 0.0,
+        "capability_floor_applied": true,
+        "conflict_floor_applied": false,
+        "confidence_decay": 0.3,
+        "active_conflicts": []
+      },
+      "escalation_trace": [
+        {
+          "step": "domain_fusion",
+          "score": 0.0,
+          "domains": {
+            "capability": 0.0,
+            "intent": 0.0,
+            "stability": 0.0,
+            "cost": 0.0,
+            "contributors": {
+              "capability": [],
+              "intent": [],
+              "stability": [],
+              "cost": []
+            }
+          }
+        },
+        {
+          "step": "temporal_bonus",
+          "delta": 0.0,
+          "score": 0.0
+        },
+        {
+          "step": "capability_floor",
+          "delta": "x0.85",
+          "score": 0.0
+        },
+        {
+          "step": "risk_band",
+          "risk_level": "LOW",
+          "score": 0.0
+        }
+      ],
+      "legal_firewall_rejections": [],
+      "knowledge_graph": {
+        "nodes": [
+          {
+            "id": "country:CXY",
+            "kind": "country",
+            "label": "CXY"
+          },
+          {
+            "id": "assessment:DIP2-F07904DE6D24",
+            "kind": "assessment",
+            "risk_level": "CRITICAL",
+            "confidence": 0.0
+          }
+        ],
+        "edges": [
+          {
+            "source": "country:CXY",
+            "target": "assessment:DIP2-F07904DE6D24",
+            "relation": "HAS_ASSESSMENT"
+          }
+        ],
+        "centrality": {
+          "country:CXY": 1.0,
+          "assessment:DIP2-F07904DE6D24": 1.0
+        }
+      }
+    },
+    "uncertainty": [
+      "CRITICAL: Zero live observations retrieved. Sensors may be blocked or offline.",
+      "Confidence pressure is elevated; collect more independent corroboration.",
+      "Assessment gate withheld or limited the output."
+    ],
+    "red_team_challenges": [
+      "Challenge assumption that visible signals reflect intent rather than deterrent signaling."
+    ],
+    "required_human_decisions": [
+      "Confirm acceptable risk tolerance before any escalatory posture.",
+      "Request legal/humanitarian review for any coercive or force-adjacent option."
+    ],
+    "next_collection_tasks": [
+      "Corroborate top military/logistics indicators.",
+      "Check diplomatic channel status and allied posture.",
+      "Refresh economic pressure and domestic stability indicators."
+    ],
+    "fuzzy_trace": {
+      "fuzzy_memberships": {},
+      "signal_beliefs": [],
+      "projected_signals": [],
+      "sre_domains": {
+        "capability": 0.0,
+        "intent": 0.0,
+        "stability": 0.0,
+        "cost": 0.0,
+        "contributors": {
+          "capability": [],
+          "intent": [],
+          "stability": [],
+          "cost": []
+        }
+      },
+      "sre_input": {
+        "base_score": 0.0,
+        "trend_bonus": 0.0,
+        "temporal_spike_bonus": 0.0,
+        "mobilization_trigger": false,
+        "mobilization_bonus": 0.0,
+        "logistics_trigger": false,
+        "logistics_bonus": 0.0,
+        "capability_floor_applied": true,
+        "conflict_floor_applied": false,
+        "confidence_decay": 0.3,
+        "active_conflicts": []
+      },
+      "sre_escalation_score": 0.0,
+      "risk_level": "LOW",
+      "qualitative_bands": {
+        "capability": "minimal",
+        "intent": "minimal",
+        "stability": "minimal",
+        "cost": "minimal",
+        "escalation": "minimal"
+      },
+      "escalation_trace": [
+        {
+          "step": "domain_fusion",
+          "score": 0.0,
+          "domains": {
+            "capability": 0.0,
+            "intent": 0.0,
+            "stability": 0.0,
+            "cost": 0.0,
+            "contributors": {
+              "capability": [],
+              "intent": [],
+              "stability": [],
+              "cost": []
+            }
+          }
+        },
+        {
+          "step": "temporal_bonus",
+          "delta": 0.0,
+          "score": 0.0
+        },
+        {
+          "step": "capability_floor",
+          "delta": "x0.85",
+          "score": 0.0
+        },
+        {
+          "step": "risk_band",
+          "risk_level": "LOW",
+          "score": 0.0
+        }
+      ],
+      "legal_firewall_rejections": []
+    },
+    "blackboard_events": [
+      {
+        "trace_id": "dip2-f07904de6d24",
+        "phase": "goal_intake",
+        "event_type": "goal.created",
+        "payload": {
+          "objective": "test signals for ws",
+          "country": "CXY"
+        },
+        "source": "dip2.nextgen",
+        "created_at": "2026-07-22T17:58:29.897885+00:00"
+      },
+      {
+        "trace_id": "dip2-f07904de6d24",
+        "phase": "collection",
+        "event_type": "collection.started",
+        "payload": {
+          "country": "CXY"
+        },
+        "source": "dip2.nextgen",
+        "created_at": "2026-07-22T17:58:29.904346+00:00"
+      },
+      {
+        "trace_id": "dip2-f07904de6d24",
+        "phase": "collection",
+        "event_type": "collection.completed",
+        "payload": {
+          "observation_count": 0,
+          "iterations": 3
+        },
+        "source": "dip2.nextgen",
+        "created_at": "2026-07-22T17:58:30.875281+00:00"
+      },
+      {
+        "trace_id": "dip2-f07904de6d24",
+        "phase": "fuzzy_projection",
+        "event_type": "state.uncertainty_applied",
+        "payload": {
+          "confidence_decay": 0.3,
+          "blindspots": [
+            "CRITICAL: Zero live observations retrieved. Sensors may be blocked or offline."
+          ]
+        },
+        "source": "dip2.nextgen",
+        "created_at": "2026-07-22T17:58:30.875281+00:00"
+      },
+      {
+        "trace_id": "dip2-f07904de6d24",
+        "phase": "sre",
+        "event_type": "nextgen_sre.completed",
+        "payload": {
+          "score": 0.0,
+          "risk": "LOW",
+          "projected_signal_count": 0,
+          "firewall_rejections": 0
+        },
+        "source": "dip2.nextgen",
+        "created_at": "2026-07-22T17:58:30.877429+00:00"
+      },
+      {
+        "trace_id": "dip2-f07904de6d24",
+        "phase": "council",
+        "event_type": "council.started",
+        "payload": {},
+        "source": "dip2.nextgen",
+        "created_at": "2026-07-22T17:58:30.878824+00:00"
+      },
+      {
+        "trace_id": "dip2-f07904de6d24",
+        "phase": "council",
+        "event_type": "council.completed",
+        "payload": {
+          "hypothesis_count": 0
+        },
+        "source": "dip2.nextgen",
+        "created_at": "2026-07-22T17:58:30.879905+00:00"
+      },
+      {
+        "trace_id": "dip2-f07904de6d24",
+        "phase": "gate",
+        "event_type": "verification.completed",
+        "payload": {
+          "passed": false,
+          "score": 0.0
+        },
+        "source": "dip2.nextgen",
+        "created_at": "2026-07-22T17:58:32.301415+00:00"
+      },
+      {
+        "trace_id": "dip2-f07904de6d24",
+        "phase": "gate",
+        "event_type": "gate.verdict",
+        "payload": {
+          "approved": false,
+          "decision": "WITHHELD",
+          "reasons": [
+            "Capability coverage is 0.00 (threshold: 0.35) \u2014 insufficient military intelligence to assess escalation risk.",
+            "Analytic confidence is 0.000 (threshold: 0.55) \u2014 insufficient analytical basis to conclude."
+          ]
+        },
+        "source": "dip2.nextgen",
+        "created_at": "2026-07-22T17:58:32.323849+00:00"
+      },
+      {
+        "trace_id": "dip2-f07904de6d24",
+        "phase": "report",
+        "event_type": "assessment.result_populated",
+        "payload": {
+          "status": "WITHHELD",
+          "threat_level": "CRITICAL"
+        },
+        "source": "dip2.nextgen",
+        "created_at": "2026-07-22T17:58:36.438229+00:00"
+      }
+    ],
+    "learning_units": [
+      {
+        "trace_id": "dip2-f07904de6d24",
+        "topic": "Reduce uncertainty in strategic pressure estimate",
+        "trigger": "high_uncertainty",
+        "success_test": "At least two independent sources corroborate the top signal drivers.",
+        "priority": 0.7799999999999999,
+        "evidence": [
+          "CRITICAL: Zero live observations retrieved. Sensors may be blocked or offline."
+        ],
+        "status": "planned"
+      }
+    ],
+    "experiment_records": [
+      {
+        "trace_id": "dip2-f07904de6d24",
+        "hypothesis": "Fuzzy SRE thresholds improve early-warning lead time without increasing false positives.",
+        "method": "Run historical crisis replay and ablation suite before promotion.",
+        "metric": "Brier score and lead-time days at HIGH threshold",
+        "success_threshold": "Improves lead time or calibration by 5% without worse false positives.",
+        "rollback_rule": "Keep existing thresholds if replay metrics regress.",
+        "status": "planned",
+        "result": {}
+      }
+    ],
+    "promotion_status": [
+      {
+        "candidate": "nextgen_head_of_country_briefing",
+        "approved": true,
+        "evidence": [
+          "additive output envelope; no change to assessment gate"
+        ],
+        "blockers": []
+      }
+    ]
+  },
+  "nextgen_sre": {
+    "fuzzy_memberships": {},
+    "signal_beliefs": [],
+    "projected_signals": [],
+    "sre_domains": {
+      "capability": 0.0,
+      "intent": 0.0,
+      "stability": 0.0,
+      "cost": 0.0,
+      "contributors": {
+        "capability": [],
+        "intent": [],
+        "stability": [],
+        "cost": []
+      }
+    },
+    "sre_input": {
+      "base_score": 0.0,
+      "trend_bonus": 0.0,
+      "temporal_spike_bonus": 0.0,
+      "mobilization_trigger": false,
+      "mobilization_bonus": 0.0,
+      "logistics_trigger": false,
+      "logistics_bonus": 0.0,
+      "capability_floor_applied": true,
+      "conflict_floor_applied": false,
+      "confidence_decay": 0.3,
+      "active_conflicts": []
+    },
+    "sre_escalation_score": 0.0,
+    "risk_level": "LOW",
+    "qualitative_bands": {
+      "capability": "minimal",
+      "intent": "minimal",
+      "stability": "minimal",
+      "cost": "minimal",
+      "escalation": "minimal"
+    },
+    "escalation_trace": [
+      {
+        "step": "domain_fusion",
+        "score": 0.0,
+        "domains": {
+          "capability": 0.0,
+          "intent": 0.0,
+          "stability": 0.0,
+          "cost": 0.0,
+          "contributors": {
+            "capability": [],
+            "intent": [],
+            "stability": [],
+            "cost": []
+          }
+        }
+      },
+      {
+        "step": "temporal_bonus",
+        "delta": 0.0,
+        "score": 0.0
+      },
+      {
+        "step": "capability_floor",
+        "delta": "x0.85",
+        "score": 0.0
+      },
+      {
+        "step": "risk_band",
+        "risk_level": "LOW",
+        "score": 0.0
+      }
+    ],
+    "legal_firewall_rejections": []
+  },
+  "strategic_pressure": {
+    "tension": 0.138,
+    "uncertainty": 0.7799999999999999,
+    "urgency": 0.41400000000000003,
+    "fragility": 0.41789999999999994,
+    "surprise": 0.03,
+    "opportunity": 0.19819999999999996,
+    "constraint": 0.0,
+    "diplomatic_window": 0.0,
+    "drivers": [],
+    "blindspots": [
+      "CRITICAL: Zero live observations retrieved. Sensors may be blocked or offline."
+    ]
+  },
+  "fuzzy_trace": {
+    "fuzzy_memberships": {},
+    "signal_beliefs": [],
+    "projected_signals": [],
+    "sre_domains": {
+      "capability": 0.0,
+      "intent": 0.0,
+      "stability": 0.0,
+      "cost": 0.0,
+      "contributors": {
+        "capability": [],
+        "intent": [],
+        "stability": [],
+        "cost": []
+      }
+    },
+    "sre_input": {
+      "base_score": 0.0,
+      "trend_bonus": 0.0,
+      "temporal_spike_bonus": 0.0,
+      "mobilization_trigger": false,
+      "mobilization_bonus": 0.0,
+      "logistics_trigger": false,
+      "logistics_bonus": 0.0,
+      "capability_floor_applied": true,
+      "conflict_floor_applied": false,
+      "confidence_decay": 0.3,
+      "active_conflicts": []
+    },
+    "sre_escalation_score": 0.0,
+    "risk_level": "LOW",
+    "qualitative_bands": {
+      "capability": "minimal",
+      "intent": "minimal",
+      "stability": "minimal",
+      "cost": "minimal",
+      "escalation": "minimal"
+    },
+    "escalation_trace": [
+      {
+        "step": "domain_fusion",
+        "score": 0.0,
+        "domains": {
+          "capability": 0.0,
+          "intent": 0.0,
+          "stability": 0.0,
+          "cost": 0.0,
+          "contributors": {
+            "capability": [],
+            "intent": [],
+            "stability": [],
+            "cost": []
+          }
+        }
+      },
+      {
+        "step": "temporal_bonus",
+        "delta": 0.0,
+        "score": 0.0
+      },
+      {
+        "step": "capability_floor",
+        "delta": "x0.85",
+        "score": 0.0
+      },
+      {
+        "step": "risk_band",
+        "risk_level": "LOW",
+        "score": 0.0
+      }
+    ],
+    "legal_firewall_rejections": []
+  },
+  "blackboard_events": [
+    {
+      "trace_id": "dip2-f07904de6d24",
+      "phase": "goal_intake",
+      "event_type": "goal.created",
+      "payload": {
+        "objective": "test signals for ws",
+        "country": "CXY"
+      },
+      "source": "dip2.nextgen",
+      "created_at": "2026-07-22T17:58:29.897885+00:00"
+    },
+    {
+      "trace_id": "dip2-f07904de6d24",
+      "phase": "collection",
+      "event_type": "collection.started",
+      "payload": {
+        "country": "CXY"
+      },
+      "source": "dip2.nextgen",
+      "created_at": "2026-07-22T17:58:29.904346+00:00"
+    },
+    {
+      "trace_id": "dip2-f07904de6d24",
+      "phase": "collection",
+      "event_type": "collection.completed",
+      "payload": {
+        "observation_count": 0,
+        "iterations": 3
+      },
+      "source": "dip2.nextgen",
+      "created_at": "2026-07-22T17:58:30.875281+00:00"
+    },
+    {
+      "trace_id": "dip2-f07904de6d24",
+      "phase": "fuzzy_projection",
+      "event_type": "state.uncertainty_applied",
+      "payload": {
+        "confidence_decay": 0.3,
+        "blindspots": [
+          "CRITICAL: Zero live observations retrieved. Sensors may be blocked or offline."
+        ]
+      },
+      "source": "dip2.nextgen",
+      "created_at": "2026-07-22T17:58:30.875281+00:00"
+    },
+    {
+      "trace_id": "dip2-f07904de6d24",
+      "phase": "sre",
+      "event_type": "nextgen_sre.completed",
+      "payload": {
+        "score": 0.0,
+        "risk": "LOW",
+        "projected_signal_count": 0,
+        "firewall_rejections": 0
+      },
+      "source": "dip2.nextgen",
+      "created_at": "2026-07-22T17:58:30.877429+00:00"
+    },
+    {
+      "trace_id": "dip2-f07904de6d24",
+      "phase": "council",
+      "event_type": "council.started",
+      "payload": {},
+      "source": "dip2.nextgen",
+      "created_at": "2026-07-22T17:58:30.878824+00:00"
+    },
+    {
+      "trace_id": "dip2-f07904de6d24",
+      "phase": "council",
+      "event_type": "council.completed",
+      "payload": {
+        "hypothesis_count": 0
+      },
+      "source": "dip2.nextgen",
+      "created_at": "2026-07-22T17:58:30.879905+00:00"
+    },
+    {
+      "trace_id": "dip2-f07904de6d24",
+      "phase": "gate",
+      "event_type": "verification.completed",
+      "payload": {
+        "passed": false,
+        "score": 0.0
+      },
+      "source": "dip2.nextgen",
+      "created_at": "2026-07-22T17:58:32.301415+00:00"
+    },
+    {
+      "trace_id": "dip2-f07904de6d24",
+      "phase": "gate",
+      "event_type": "gate.verdict",
+      "payload": {
+        "approved": false,
+        "decision": "WITHHELD",
+        "reasons": [
+          "Capability coverage is 0.00 (threshold: 0.35) \u2014 insufficient military intelligence to assess escalation risk.",
+          "Analytic confidence is 0.000 (threshold: 0.55) \u2014 insufficient analytical basis to conclude."
+        ]
+      },
+      "source": "dip2.nextgen",
+      "created_at": "2026-07-22T17:58:32.323849+00:00"
+    },
+    {
+      "trace_id": "dip2-f07904de6d24",
+      "phase": "report",
+      "event_type": "assessment.result_populated",
+      "payload": {
+        "status": "WITHHELD",
+        "threat_level": "CRITICAL"
+      },
+      "source": "dip2.nextgen",
+      "created_at": "2026-07-22T17:58:36.438229+00:00"
+    }
+  ],
+  "learning_units": [
+    {
+      "trace_id": "dip2-f07904de6d24",
+      "topic": "Reduce uncertainty in strategic pressure estimate",
+      "trigger": "high_uncertainty",
+      "success_test": "At least two independent sources corroborate the top signal drivers.",
+      "priority": 0.7799999999999999,
+      "evidence": [
+        "CRITICAL: Zero live observations retrieved. Sensors may be blocked or offline."
+      ],
+      "status": "planned"
+    }
+  ],
+  "experiment_records": [
+    {
+      "trace_id": "dip2-f07904de6d24",
+      "hypothesis": "Fuzzy SRE thresholds improve early-warning lead time without increasing false positives.",
+      "method": "Run historical crisis replay and ablation suite before promotion.",
+      "metric": "Brier score and lead-time days at HIGH threshold",
+      "success_threshold": "Improves lead time or calibration by 5% without worse false positives.",
+      "rollback_rule": "Keep existing thresholds if replay metrics regress.",
+      "status": "planned",
+      "result": {}
+    }
+  ],
+  "schema_matches": [],
+  "promotion_status": [
+    {
+      "candidate": "nextgen_head_of_country_briefing",
+      "approved": true,
+      "evidence": [
+        "additive output envelope; no change to assessment gate"
+      ],
+      "blockers": []
+    }
+  ],
+  "symbolic_guardrails": {
+    "passed": false,
+    "findings": [
+      {
+        "rule": "high_risk_requires_grounding",
+        "severity": "hard",
+        "message": "High-risk output has low verification; require HITL or withholding.",
+        "evidence": [
+          "threat=CRITICAL",
+          "verification=0.00"
+        ]
+      }
+    ],
+    "solver_stack": {
+      "z3": false,
+      "pyDatalog": false,
+      "nemoguardrails": false
+    }
+  },
+  "hypotheses": [],
+  "evidence_log": [],
+  "research_log": [
+    {
+      "rfi": {
+        "query": "Find recent events, conflicts, or significant strategic developments regarding test signals for ws in CXY.",
+        "target_domains": [
+          "political",
+          "economic",
+          "military"
+        ],
+        "priority": "HIGH",
+        "estimated_time_mins": 3.5,
+        "estimated_tokens": 65000,
+        "estimated_cost_usd": 0.31,
+        "justification": "Insufficient overall evidence volume for test signals for ws in CXY. Found 0 signals."
+      },
+      "status": "EXECUTED",
+      "evidence_found": 0,
+      "execution_time_ms": 0.0,
+      "timestamp": "2026-07-22T23:28:30.872646"
+    },
+    {
+      "rfi": {
+        "query": "Find recent events, conflicts, or significant strategic developments regarding test signals for ws in CXY.",
+        "target_domains": [
+          "political",
+          "economic",
+          "military"
+        ],
+        "priority": "HIGH",
+        "estimated_time_mins": 3.5,
+        "estimated_tokens": 65000,
+        "estimated_cost_usd": 0.31,
+        "justification": "Insufficient overall evidence volume for test signals for ws in CXY. Found 0 signals."
+      },
+      "status": "EXECUTED",
+      "evidence_found": 0,
+      "execution_time_ms": 0.0,
+      "timestamp": "2026-07-22T23:28:30.874058"
+    }
+  ],
+  "readiness_report": {
+    "score": 19.0,
+    "is_ready": false,
+    "evidence_coverage": 0.0,
+    "graph_connectivity": 60.0,
+    "temporal_coverage": 0.0,
+    "source_diversity": 0.0,
+    "contradiction_score": 100.0,
+    "expert_agreement": 100.0,
+    "missing_entities": [],
+    "missing_relationships": [],
+    "rfi_queries": [
+      {
+        "query": "Find recent events, conflicts, or significant strategic developments regarding test signals for ws in CXY.",
+        "target_domains": [
+          "political",
+          "economic",
+          "military"
+        ],
+        "priority": "HIGH",
+        "estimated_time_mins": 3.5,
+        "estimated_tokens": 65000,
+        "estimated_cost_usd": 0.31,
+        "justification": "Insufficient overall evidence volume for test signals for ws in CXY. Found 0 signals."
+      }
+    ],
+    "estimated_cost": 0.31,
+    "estimated_time": 3.5,
+    "iteration": 3
+  },
+  "red_team_report": null,
+  "refusal": {
+    "status": "REFUSED",
+    "verification_score": 0.0,
+    "reasons": [
+      "No hypotheses were generated \u2014 insufficient intelligence signals.",
+      "Verification score (0.0) is below the 0.7 threshold. Claims could not be adequately corroborated against evidence.",
+      "Evidence log is empty \u2014 no corroborating evidence available."
+    ],
+    "recommendation": "This assessment has been withheld from dissemination. Additional intelligence collection and analysis is required before a reliable assessment can be produced.",
+    "query": "test signals for ws",
+    "country": "CXY"
+  },
+  "hitl_review": null,
+  "trajectory": {
+    "prob_14d": 0.0,
+    "prob_30d": 0.0,
+    "prob_60d": 0.0,
+    "velocity": 0.0,
+    "trajectory_label": "STABLE"
+  },
+  "black_swan": {
+    "triggered": false,
+    "reasons": [],
+    "channels_fired": [],
+    "escalation_boost": 0.0,
+    "trajectory_floor": 0.0,
+    "confidence_cap": 1.0,
+    "mandatory_review": false
+  },
+  "contagion": null,
+  "learning": {
+    "accuracy_trend": 0.0,
+    "calibration_error": 0.0,
+    "blind_spots": [],
+    "improvement_suggestions": [
+      "Reduce base confidence; system is generating unverified claims."
+    ],
+    "confidence_adjustment": 0.6
+  },
+  "elapsed_seconds": 0.0,
+  "gate_verdict": {
+    "approved": false,
+    "withheld": true,
+    "decision": "WITHHELD",
+    "reasons": [
+      "Capability coverage is 0.00 (threshold: 0.35) \u2014 insufficient military intelligence to assess escalation risk.",
+      "Analytic confidence is 0.000 (threshold: 0.55) \u2014 insufficient analytical basis to conclude."
+    ],
+    "required_collection": [
+      "Capability coverage is 0.00 (threshold: 0.35) \u2014 insufficient military intelligence to assess escalation risk.",
+      "Analytic confidence is 0.000 (threshold: 0.55) \u2014 insufficient analytical basis to conclude."
+    ],
+    "intelligence_gaps": [],
+    "collection_tasks": [
+      {
+        "signal": "military_capability",
+        "modality": "SIGINT",
+        "priority": "HIGH",
+        "reason": "Capability coverage is 0.00 (threshold: 0.35) \u2014 insufficient military intelligence to assess escalation risk.",
+        "source_hint": "satellite_imagery"
+      },
+      {
+        "signal": "corroboration",
+        "modality": "MULTI_SOURCE",
+        "priority": "MEDIUM",
+        "reason": "Analytic confidence is 0.000 (threshold: 0.55) \u2014 insufficient analytical basis to conclude.",
+        "source_hint": "cross_reference"
+      }
+    ],
+    "proposed_decision": "LOW",
+    "confidence": 0.0,
+    "mandatory_review": false,
+    "sre_score": 0.0,
+    "clamped": false,
+    "clamped_warning": ""
+  },
+  "raw_sources": [],
+  "xai_sources": [],
+  "strategic_narrative": {
+    "executive_summary": "The autonomous system has completed a recursive investigation into 'test signals for ws'. The verified strategic threat level is assessed as CRITICAL.",
+    "threat_assessment": [
+      "No clear threat hypotheses formed."
+    ],
+    "evidence": [
+      "Processed 0 unique signals.",
+      "Verification Score (CoVe): 0.0%"
+    ],
+    "counter_arguments": [
+      "No significant counter arguments or biases detected during the Red Team phase."
+    ],
+    "forecast": [
+      "Forecast: Stable",
+      "Key Driver: None"
+    ],
+    "recommendations": [
+      "Continue monitoring indicators.",
+      "Deploy automated sensors to track missing entities identified in the readiness report."
+    ],
+    "generation_mode": "modular_heuristic"
+  },
+  "strategic_narrative_md": "# Strategic Narrative\n\n## Executive Summary\nThe autonomous system has completed a recursive investigation into 'test signals for ws'. The verified strategic threat level is assessed as CRITICAL.\n\n## Threat Assessment\n- No clear threat hypotheses formed.\n\n## Evidentiary Basis\n- Processed 0 unique signals.\n- Verification Score (CoVe): 0.0%\n\n## Counter Arguments & Red Team\n- No significant counter arguments or biases detected during the Red Team phase.\n\n## Trajectory Forecast\n- Forecast: Stable\n- Key Driver: None\n\n## Strategic Recommendations\n- Continue monitoring indicators.\n- Deploy automated sensors to track missing entities identified in the readiness report.\n\n"
+}

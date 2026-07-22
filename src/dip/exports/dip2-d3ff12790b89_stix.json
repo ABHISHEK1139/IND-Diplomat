@@ -1,0 +1,53 @@
+{
+  "type": "bundle",
+  "id": "bundle--acf3691a-78ec-4f53-a457-767138b02693",
+  "spec_version": "2.1",
+  "objects": [
+    {
+      "type": "identity",
+      "spec_version": "2.1",
+      "id": "identity--66f97de1-3756-4c9e-ac2f-61f2664df889",
+      "created": "2025-01-01T00:00:00.000Z",
+      "modified": "2026-07-07T09:10:53.116480+00:00",
+      "name": "DIP 2.0 \u2014 Geopolitical Intelligence Engine",
+      "identity_class": "system",
+      "sectors": [
+        "intelligence",
+        "defense"
+      ]
+    },
+    {
+      "type": "report",
+      "spec_version": "2.1",
+      "id": "report--b8e99b12-498a-4a8f-b2fe-5a65c3987028",
+      "created": "2026-07-07T09:10:53.116480+00:00",
+      "modified": "2026-07-07T09:10:53.116480+00:00",
+      "name": "DIP 2.0 Assessment: IN \u2014 LOW",
+      "description": "Geopolitical intelligence assessment for IN. Threat level: LOW. Trace ID: dip2-d3ff12790b89.",
+      "report_types": [
+        "threat-report",
+        "assessment"
+      ],
+      "published": "2026-07-07T09:10:53.116480+00:00",
+      "created_by_ref": "identity--66f97de1-3756-4c9e-ac2f-61f2664df889",
+      "object_refs": [],
+      "labels": [
+        "geopolitical",
+        "low"
+      ],
+      "external_references": [
+        {
+          "source_name": "DIP 2.0 Trace",
+          "external_id": "dip2-d3ff12790b89"
+        }
+      ],
+      "x_dip_assessment": {
+        "country": "IN",
+        "threat_level": "LOW",
+        "verification_score": 0.411,
+        "trace_id": "dip2-d3ff12790b89",
+        "generator": "DIP 2.0 fallback exporter (install 'stix2' for full export)"
+      }
+    }
+  ]
+}

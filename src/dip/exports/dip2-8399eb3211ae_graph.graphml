@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns">
+  <graph id="G" edgedefault="directed">
+    <node id="UA"/>
+    <node id="RFI_0"/>
+    <edge source="RFI_0" target="UA"/>
+    <node id="RFI_1"/>
+    <edge source="RFI_1" target="UA"/>
+  </graph>
+</graphml>

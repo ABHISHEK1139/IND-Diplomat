@@ -1,0 +1,28 @@
+{
+  "dashboard": {
+    "id": null,
+    "title": "DIP 3.0 Enterprise Dashboard",
+    "panels": [
+      {
+        "title": "Pipeline Latency",
+        "type": "timeseries",
+        "targets": [
+          {
+            "expr": "rate(dip_pipeline_duration_seconds_sum[5m]) / rate(dip_pipeline_duration_seconds_count[5m])",
+            "legendFormat": "Average Latency"
+          }
+        ]
+      },
+      {
+        "title": "Threat Levels",
+        "type": "gauge",
+        "targets": [
+          {
+            "expr": "dip_last_threat_level",
+            "legendFormat": "{{country}}"
+          }
+        ]
+      }
+    ]
+  }
+}

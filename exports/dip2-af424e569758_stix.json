@@ -1,0 +1,53 @@
+{
+  "type": "bundle",
+  "id": "bundle--7e9b191a-d5b4-41a9-87c2-230f223370ed",
+  "spec_version": "2.1",
+  "objects": [
+    {
+      "type": "identity",
+      "spec_version": "2.1",
+      "id": "identity--e5ab7289-e0c9-4a4b-b1f4-cbd0b1a803e0",
+      "created": "2025-01-01T00:00:00.000Z",
+      "modified": "2026-07-22T17:57:31.684764+00:00",
+      "name": "DIP 2.0 \u2014 Geopolitical Intelligence Engine",
+      "identity_class": "system",
+      "sectors": [
+        "intelligence",
+        "defense"
+      ]
+    },
+    {
+      "type": "report",
+      "spec_version": "2.1",
+      "id": "report--e4b464ec-6327-493b-bf0c-d3e4c5f39a8b",
+      "created": "2026-07-22T17:57:31.684764+00:00",
+      "modified": "2026-07-22T17:57:31.684764+00:00",
+      "name": "DIP 2.0 Assessment: CN \u2014 LOW",
+      "description": "Geopolitical intelligence assessment for CN. Threat level: LOW. Trace ID: dip2-af424e569758.",
+      "report_types": [
+        "threat-report",
+        "assessment"
+      ],
+      "published": "2026-07-22T17:57:31.684764+00:00",
+      "created_by_ref": "identity--e5ab7289-e0c9-4a4b-b1f4-cbd0b1a803e0",
+      "object_refs": [],
+      "labels": [
+        "geopolitical",
+        "low"
+      ],
+      "external_references": [
+        {
+          "source_name": "DIP 2.0 Trace",
+          "external_id": "dip2-af424e569758"
+        }
+      ],
+      "x_dip_assessment": {
+        "country": "CN",
+        "threat_level": "LOW",
+        "verification_score": 0.736,
+        "trace_id": "dip2-af424e569758",
+        "generator": "DIP 2.0 fallback exporter (install 'stix2' for full export)"
+      }
+    }
+  ]
+}

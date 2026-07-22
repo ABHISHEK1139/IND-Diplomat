@@ -1,0 +1,78 @@
+[
+  {
+    "id": "scenario_001",
+    "date_context": "2020-01-15",
+    "query": "Assess the risk of a global pandemic originating from Wuhan, China.",
+    "country_code": "CHN",
+    "expected_entities": [
+      "Wuhan",
+      "Coronavirus",
+      "WHO",
+      "Huanan Seafood Market"
+    ],
+    "expected_threat_level": "CRITICAL",
+    "expected_narrative_keywords": [
+      "pandemic",
+      "lockdown",
+      "supply chain disruption",
+      "travel ban"
+    ]
+  },
+  {
+    "id": "scenario_002",
+    "date_context": "2021-12-01",
+    "query": "Analyze Russian troop movements near the Ukrainian border.",
+    "country_code": "RUS",
+    "expected_entities": [
+      "Ukraine",
+      "NATO",
+      "Vladimir Putin",
+      "Crimea"
+    ],
+    "expected_threat_level": "CRITICAL",
+    "expected_narrative_keywords": [
+      "invasion",
+      "sanctions",
+      "energy crisis",
+      "military buildup"
+    ]
+  },
+  {
+    "id": "scenario_003",
+    "date_context": "2023-09-01",
+    "query": "Evaluate India's semiconductor manufacturing capability and policy shifts.",
+    "country_code": "IND",
+    "expected_entities": [
+      "Indian Semiconductor Mission",
+      "Tata",
+      "PSMC",
+      "Gujarat"
+    ],
+    "expected_threat_level": "ELEVATED",
+    "expected_narrative_keywords": [
+      "subsidies",
+      "fabrication",
+      "supply chain resilience",
+      "joint venture"
+    ]
+  },
+  {
+    "id": "scenario_004",
+    "date_context": "2024-03-01",
+    "query": "Assess the economic impact of Houthi attacks in the Red Sea.",
+    "country_code": "YEM",
+    "expected_entities": [
+      "Houthi",
+      "Red Sea",
+      "Suez Canal",
+      "Iran"
+    ],
+    "expected_threat_level": "HIGH",
+    "expected_narrative_keywords": [
+      "freight costs",
+      "shipping reroute",
+      "inflation",
+      "supply chain"
+    ]
+  }
+]

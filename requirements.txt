@@ -1,0 +1,48 @@
+# ============================================================================
+# DIP 2.0 — Core Dependencies
+# ============================================================================
+# Install: pip install -r requirements.txt
+# These are required for ALL environments (dev, CI, production).
+# ============================================================================
+
+# ── Framework & API ──────────────────────────────────────────────────────────
+pydantic>=2.0.0
+fastapi>=0.100.0
+uvicorn[standard]>=0.22.0
+python-dotenv>=1.0.0
+rich>=13.0.0
+
+# ── LLM & AI Orchestration ──────────────────────────────────────────────────
+litellm>=1.35.0
+langgraph>=0.0.30
+dspy-ai>=2.4.0
+
+# ── NLP & Embeddings ────────────────────────────────────────────────────────
+gliner>=0.1.0
+keybert>=0.8.0
+sentence-transformers>=2.0.0
+transformers>=4.0.0
+
+# ── Knowledge Graph & Vector DB ─────────────────────────────────────────────
+networkx>=3.0.0
+neo4j>=5.0.0
+qdrant-client>=1.0.0
+
+# ── Document Processing ─────────────────────────────────────────────────────
+docling>=1.0.0
+
+# ── Memory & State ──────────────────────────────────────────────────────────
+mem0ai>=0.0.10
+hdbscan>=0.8.0
+
+# ── Simulation & Wargaming ──────────────────────────────────────────────────
+mesa>=2.1.0
+
+# ── Plugin System ───────────────────────────────────────────────────────────
+pluggy>=1.4.0
+y-py>=0.6.2
+
+# ── Observability ───────────────────────────────────────────────────────────
+prometheus-client>=0.17.0
+langfuse>=2.0.0
+dspy-ai<=2.4.9

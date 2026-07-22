@@ -1,0 +1,53 @@
+{
+  "type": "bundle",
+  "id": "bundle--31850b8d-f18a-45c0-ad00-34ec12285d61",
+  "spec_version": "2.1",
+  "objects": [
+    {
+      "type": "identity",
+      "spec_version": "2.1",
+      "id": "identity--13ac9207-56a3-4b5d-a94a-5ade41751540",
+      "created": "2025-01-01T00:00:00.000Z",
+      "modified": "2026-07-22T17:58:06.199384+00:00",
+      "name": "DIP 2.0 \u2014 Geopolitical Intelligence Engine",
+      "identity_class": "system",
+      "sectors": [
+        "intelligence",
+        "defense"
+      ]
+    },
+    {
+      "type": "report",
+      "spec_version": "2.1",
+      "id": "report--9d93e7a7-3893-4738-8e8c-53c90eb9f5ae",
+      "created": "2026-07-22T17:58:06.199384+00:00",
+      "modified": "2026-07-22T17:58:06.199384+00:00",
+      "name": "DIP 2.0 Assessment: CXY \u2014 CRITICAL",
+      "description": "Geopolitical intelligence assessment for CXY. Threat level: CRITICAL. Trace ID: dip2-4d7fbf5e196a.",
+      "report_types": [
+        "threat-report",
+        "assessment"
+      ],
+      "published": "2026-07-22T17:58:06.199384+00:00",
+      "created_by_ref": "identity--13ac9207-56a3-4b5d-a94a-5ade41751540",
+      "object_refs": [],
+      "labels": [
+        "geopolitical",
+        "critical"
+      ],
+      "external_references": [
+        {
+          "source_name": "DIP 2.0 Trace",
+          "external_id": "dip2-4d7fbf5e196a"
+        }
+      ],
+      "x_dip_assessment": {
+        "country": "CXY",
+        "threat_level": "CRITICAL",
+        "verification_score": 0.0,
+        "trace_id": "dip2-4d7fbf5e196a",
+        "generator": "DIP 2.0 fallback exporter (install 'stix2' for full export)"
+      }
+    }
+  ]
+}

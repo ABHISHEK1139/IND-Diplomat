@@ -1,0 +1,79 @@
+# =============================================================================
+# DIP 2.0 — Docker Compose (Development — Hot Reload)
+# Usage: docker compose -f docker-compose.dev.yml up --build
+# =============================================================================
+
+services:
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    container_name: dip2-web-dev
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      - PYTHONUNBUFFERED=1
+      - FORCE_MINISTER_HEURISTIC=1
+      - ENVIRONMENT=development
+    volumes:
+      - ./:/app
+      - dip2-dev-data:/app/data
+    command: ["python", "-m", "uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    networks:
+      - dip2-dev-network
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    container_name: dip2-worker-dev
+    restart: unless-stopped
+    depends_on:
+      - web
+    env_file:
+      - .env
+    environment:
+      - PYTHONUNBUFFERED=1
+      - FORCE_MINISTER_HEURISTIC=1
+    volumes:
+      - ./:/app
+      - dip2-dev-data:/app/data
+    networks:
+      - dip2-dev-network
+
+  guardian:
+    build:
+      context: .
+      dockerfile: Dockerfile.guardian
+    container_name: dip2-guardian-dev
+    restart: unless-stopped
+    depends_on:
+      - web
+    env_file:
+      - .env
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./:/app
+      - dip2-dev-data:/app/data
+    networks:
+      - dip2-dev-network
+
+volumes:
+  dip2-dev-data:
+    driver: local
+
+networks:
+  dip2-dev-network:
+    driver: bridge
+
+  # ---------------------------------------------------------------------------
+  # PostgreSQL — Same as production, no overrides needed
+  # ---------------------------------------------------------------------------
+  db:
+    ports:
+      - "5432:5432"
