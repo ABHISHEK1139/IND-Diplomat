@@ -7,14 +7,13 @@ echo.
 echo Please select how you want to run the system:
 echo 1) Run Locally (Creates Virtual Environment ^& Installs Dependencies)
 echo 2) Run via Docker (Builds and runs all microservices)
-echo 3) Run tests locally
-echo 4) Exit
+echo 3) Exit
 echo.
-set /p choice="Enter choice (1-4): "
+set /p choice="Enter choice (1-3): "
 
 if "%choice%"=="1" goto local
 if "%choice%"=="2" goto docker
-if "%choice%"=="3" goto tests
+if "%choice%"=="3" goto end
 goto end
 
 :local
@@ -41,16 +40,6 @@ echo [INFO] Starting Docker Compose...
 cd docker
 docker-compose up --build
 cd ..
-goto end
-
-:tests
-echo [INFO] Running automated test suite...
-if not exist venv (
-    echo [ERROR] Virtual environment not found. Please run Option 1 first to install dependencies.
-    goto end
-)
-call venv\Scripts\activate.bat
-pytest tests/ -q
 goto end
 
 :end

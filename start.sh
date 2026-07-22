@@ -6,10 +6,9 @@ echo ""
 echo "Please select how you want to run the system:"
 echo "1) Run Locally (Creates Virtual Environment & Installs Dependencies)"
 echo "2) Run via Docker (Builds and runs all microservices)"
-echo "3) Run tests locally"
-echo "4) Exit"
+echo "3) Exit"
 echo ""
-read -p "Enter choice (1-4): " choice
+read -p "Enter choice (1-3): " choice
 
 case $choice in
     1)
@@ -38,15 +37,6 @@ case $choice in
         cd ..
         ;;
     3)
-        echo "[INFO] Running automated test suite..."
-        if [ ! -d "venv" ]; then
-            echo "[ERROR] Virtual environment not found. Please run Option 1 first."
-            exit 1
-        fi
-        source venv/bin/activate
-        pytest tests/ -q
-        ;;
-    4)
         echo "Exiting..."
         exit 0
         ;;
