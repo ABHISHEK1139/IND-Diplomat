@@ -205,18 +205,7 @@ curl -X POST http://localhost:8000/investigate \
   -d '{"country": "India", "topic": "border security"}'
 ```
 
-## Testing
 
-```bash
-# Run all tests
-pytest tests/ -q
-
-# Run with coverage
-pytest tests/ --cov=src/dip --cov-report=html
-
-# Run specific layer tests
-pytest tests/ -k "layer4" -v
-```
 
 ## Contributing
 
