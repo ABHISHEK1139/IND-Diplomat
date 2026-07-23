@@ -62,10 +62,10 @@ DEFAULT_STACK: List[OSSCapability] = [
         dip_use="source drift, signal drift, fuzzy threshold stability monitoring",
     ),
     OSSCapability(
-        name="Haystack",
-        package="haystack",
-        replaces="custom RAG routing",
-        dip_use="modular legal/post-gate RAG while preserving the empirical SRE firewall",
+        name="DuckDuckGo Search",
+        package="duckduckgo_search",
+        replaces="local PDF/OCR treaty pipeline",
+        dip_use="live web search for treaty text, legal precedents, and news feeds",
     ),
     OSSCapability(
         name="Instructor",

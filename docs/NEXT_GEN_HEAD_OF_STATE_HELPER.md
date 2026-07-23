@@ -1,8 +1,8 @@
-# DIP 2.0 Next-Gen Head-of-State Helper
+# Politiq AI — Head-of-State Decision Support Architecture
 
 ## Goal
 
-Build DIP 2.0 as a strategic decision-support system for a head of state or
+Build Politiq AI as a strategic decision-support system for a head of state or
 national security principal. It should not act autonomously on policy. It should
 produce evidence-backed situation pictures, options, second-order effects,
 uncertainty, red-team critique, and explicit human decision points.
@@ -17,7 +17,7 @@ uncertainty, red-team critique, and explicit human decision points.
 - MLflow: experiment tracking, prompt/threshold versions, model registry, and
   promotion governance.
 - Evidently: data quality, source drift, signal drift, and fuzzy-threshold drift.
-- Haystack: modular RAG pipelines for post-gate legal and evidence retrieval.
+- DuckDuckGo Search: live web search for treaty text and legal evidence retrieval.
 - STIX2/OpenCTI-style modeling: intelligence entities, indicators, reports,
   relationships, provenance, and export bundles.
 - NetworkX: actor graphs, causal paths, theater contagion, and centrality.
@@ -61,6 +61,6 @@ Keep these custom because they are the unique intelligence layer:
   failure handling.
 - OpenTelemetry: vendor-neutral traces, metrics, and logs for Python.
 - MLflow: experiment tracking and model registry.
-- Haystack: production RAG and agent pipelines.
+- DuckDuckGo Search: live web search for treaty and legal RAG.
 - OpenCTI/STIX: knowledge-graph and structured intelligence object patterns.
 - NetworkX: complex network representation and algorithms.

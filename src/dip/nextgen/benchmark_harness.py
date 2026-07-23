@@ -181,7 +181,7 @@ async def run_vanilla_rag(query: str, country_code: str) -> BenchmarkRun:
 
 async def run_dip_heuristic(query: str, country_code: str) -> BenchmarkRun:
     """
-    Baseline 3: DIP 2.0 Heuristic (FORCE_MINISTER_HEURISTIC=1).
+    Baseline 3: Politiq AI Heuristic (FORCE_MINISTER_HEURISTIC=1).
     """
     import os
     os.environ["FORCE_MINISTER_HEURISTIC"] = "1"
@@ -193,7 +193,7 @@ async def run_dip_heuristic(query: str, country_code: str) -> BenchmarkRun:
         result = await execute(query, country_code, f"bench-heuristic-{int(time.time())}")
         
         return BenchmarkRun(
-            system_name="DIP 2.0 Heuristic",
+            system_name="Politiq AI Heuristic",
             query=query,
             country_code=country_code,
             threat_level=result.get("threat_level", "UNKNOWN"),
@@ -205,7 +205,7 @@ async def run_dip_heuristic(query: str, country_code: str) -> BenchmarkRun:
         )
     except Exception as e:
         return BenchmarkRun(
-            system_name="DIP 2.0 Heuristic",
+            system_name="Politiq AI Heuristic",
             query=query,
             country_code=country_code,
             threat_level="ERROR",
@@ -216,7 +216,7 @@ async def run_dip_heuristic(query: str, country_code: str) -> BenchmarkRun:
 
 async def run_dip_full(query: str, country_code: str) -> BenchmarkRun:
     """
-    Baseline 4: DIP 2.0 Full (LLM ministers enabled).
+    Baseline 4: Politiq AI Full (LLM ministers enabled).
     """
     import os
     os.environ["FORCE_MINISTER_HEURISTIC"] = "0"
@@ -228,7 +228,7 @@ async def run_dip_full(query: str, country_code: str) -> BenchmarkRun:
         result = await execute(query, country_code, f"bench-full-{int(time.time())}")
         
         return BenchmarkRun(
-            system_name="DIP 2.0 Full",
+            system_name="Politiq AI Full",
             query=query,
             country_code=country_code,
             threat_level=result.get("threat_level", "UNKNOWN"),
@@ -240,7 +240,7 @@ async def run_dip_full(query: str, country_code: str) -> BenchmarkRun:
         )
     except Exception as e:
         return BenchmarkRun(
-            system_name="DIP 2.0 Full",
+            system_name="Politiq AI Full",
             query=query,
             country_code=country_code,
             threat_level="ERROR",
@@ -303,7 +303,7 @@ def print_benchmark_report(report: BenchmarkReport) -> str:
     """Format benchmark report."""
     lines: List[str] = []
     lines.append("=" * 70)
-    lines.append("  DIP 2.0 — BENCHMARK COMPARISON REPORT")
+    lines.append("  Politiq AI — BENCHMARK COMPARISON REPORT")
     lines.append("=" * 70)
     lines.append("")
     

@@ -1,5 +1,5 @@
 """
-Unified Pipeline: Full 7-Layer IND-Diplomat Orchestrator
+Unified Pipeline: Full 7-Layer Politiq AI Orchestrator
 =========================================================
 
 Executes the complete RAND/CSIS-grade intelligence assessment flow:
@@ -255,7 +255,7 @@ except ImportError:
 @observe(as_type="generation")
 async def execute(query: str, country_code: str, job_id: str | None = None) -> Dict[str, Any]:
     """
-    Execute the full 7-layer IND-Diplomat assessment pipeline.
+    Execute the full 7-layer Politiq AI assessment pipeline.
 
     Returns a result dictionary containing the complete assessment,
     trajectory forecast, learning report, and global contagion data.

@@ -323,7 +323,7 @@ def print_backtest_report(report: BacktestReport) -> str:
     """Format a backtest report as a readable string."""
     lines: List[str] = []
     lines.append("=" * 70)
-    lines.append("  DIP 2.0 — HISTORICAL CRISIS BACKTESTING REPORT")
+    lines.append("  Politiq AI — HISTORICAL CRISIS BACKTESTING REPORT")
     lines.append("=" * 70)
     lines.append("")
     lines.append(f"  Crises evaluated:       {len(report.evaluations)}")

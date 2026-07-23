@@ -1,5 +1,5 @@
 """
-FastAPI Server for IND-Diplomat
+FastAPI Server for Politiq AI
 ===============================
 Exposes the 7-layer pipeline and War Gaming Engine to the Web Dashboard.
 """
@@ -37,7 +37,7 @@ from dip.api_ws.router import router as ws_router
 from dip.nextgen.job_store import AssessmentJob, job_store
 from dip.nextgen.oss_adapters import OSSAdapterRegistry
 
-app = FastAPI(title="IND-Diplomat API", version="2.5")
+app = FastAPI(title="Politiq AI API", version="2.5")
 
 
 @app.on_event("startup")

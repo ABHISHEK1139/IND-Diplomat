@@ -1,4 +1,4 @@
-"""Local import shim for IND-Diplomat during source-tree development."""
+"""Local import shim for Politiq AI during source-tree development."""
 
 from __future__ import annotations
 

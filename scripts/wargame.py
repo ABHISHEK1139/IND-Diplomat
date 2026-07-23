@@ -105,7 +105,7 @@ async def execute_wargame(query: str, country: str, action_desc: str):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="IND-Diplomat 2.5 War Gaming Engine")
+    parser = argparse.ArgumentParser(description="Politiq AI 2.5 War Gaming Engine")
     parser.add_argument("query", type=str, help="Context query")
     parser.add_argument("--country", type=str, required=True, help="Target country code")
     parser.add_argument("--action", type=str, required=True, help="Proposed policy/military action")

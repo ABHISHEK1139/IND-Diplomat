@@ -153,7 +153,7 @@ def compute_overconfidence(points: List[CalibrationPoint]) -> float:
 
 def build_calibration_report(
     points: List[CalibrationPoint],
-    label: str = "DIP 2.0 Calibration Report",
+    label: str = "Politiq AI Calibration Report",
 ) -> CalibrationReport:
     """Compute all calibration metrics from raw forecast-outcome pairs."""
     if not points:
@@ -244,7 +244,7 @@ def print_calibration_report(report: CalibrationReport) -> str:
     """Format calibration report as readable string."""
     lines: List[str] = []
     lines.append("=" * 70)
-    lines.append("  DIP 2.0 — CALIBRATION REPORT")
+    lines.append("  Politiq AI — CALIBRATION REPORT")
     lines.append("=" * 70)
     lines.append(f"  Samples:              {report.n_samples}")
     lines.append(f"  Brier Score:          {report.brier_score:.4f}  (0=perfect, 0.25=baseline, 1=worst)")

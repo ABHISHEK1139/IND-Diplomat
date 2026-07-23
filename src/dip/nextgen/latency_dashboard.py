@@ -299,7 +299,7 @@ def print_latency_report(report: LatencyReport) -> str:
     """Format a single trace latency report."""
     lines: List[str] = []
     lines.append("=" * 70)
-    lines.append(f"  DIP 2.0 — LATENCY REPORT (Trace: {report.trace_id})")
+    lines.append(f"  Politiq AI — LATENCY REPORT (Trace: {report.trace_id})")
     lines.append("=" * 70)
     lines.append(f"  Total Duration: {report.total_duration:.3f}s")
     lines.append(f"  Steps: {report.step_count}")
@@ -327,7 +327,7 @@ def print_aggregate_latency(agg: Dict[str, Any]) -> str:
     """Format aggregate latency analysis."""
     lines: List[str] = []
     lines.append("=" * 70)
-    lines.append("  DIP 2.0 — AGGREGATE LATENCY ANALYSIS")
+    lines.append("  Politiq AI — AGGREGATE LATENCY ANALYSIS")
     lines.append("=" * 70)
     lines.append(f"  Traces Analyzed:   {agg.get('traces_analyzed', 0)}")
     lines.append(f"  Avg Duration:      {agg.get('avg_total_duration_s', 0):.2f}s")

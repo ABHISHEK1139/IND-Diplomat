@@ -21,7 +21,7 @@ from .contracts import AssessmentGoal, HeadOfStateBriefing
 
 
 class STIX2ExportAdapter:
-    """Export DIP 2.0 assessments as STIX 2.1 bundles."""
+    """Export Politiq AI assessments as STIX 2.1 bundles."""
 
     def __init__(self):
         if not STIX2_AVAILABLE:
@@ -52,7 +52,7 @@ class STIX2ExportAdapter:
     def create_report(self, goal: AssessmentGoal, briefing: HeadOfStateBriefing) -> stix2.Report:
         """Create a STIX Report from an assessment."""
         now = datetime.now(timezone.utc)
-        name = f"DIP 2.0 Assessment: {goal.objective[:100]}"
+        name = f"Politiq AI Assessment: {goal.objective[:100]}"
         return stix2.Report(
             id=stix2.Report.generate_id(name=name, published=now),
             name=name,
@@ -81,7 +81,7 @@ class STIX2ExportAdapter:
         objects = []
 
         # Create identity for DIP 2.0
-        identity = self.create_identity("DIP 2.0 Intelligence System")
+        identity = self.create_identity("Politiq AI Intelligence System")
         objects.append(identity)
 
         # Create indicators from signals

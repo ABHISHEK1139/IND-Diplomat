@@ -1,5 +1,5 @@
 """
-CLI Runner for IND-Diplomat (dip 2.0)
+CLI Runner for Politiq AI (dip 2.0)
 ======================================
 
 Full 7-layer intelligence assessment system.
@@ -256,7 +256,7 @@ def display_plain_output(result: dict, verbose: bool = False) -> None:
 
 def main():
     parser = argparse.ArgumentParser(
-        description="IND-Diplomat 2.0 — Geopolitical Intelligence Assessment System",
+        description="Politiq AI 2.0 — Geopolitical Intelligence Assessment System",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=(
             "Examples:\n"

@@ -3,9 +3,9 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "ind-diplomat"
+name = "politiq-ai"
 version = "3.0.0"
-description = "Next-generation geopolitical intelligence and head-of-country advisory system."
+description = "Politiq AI: Next-generation geopolitical intelligence and head-of-country advisory system."
 readme = "README.md"
 requires-python = ">=3.11"
 license = {text = "Proprietary"}
@@ -42,7 +42,6 @@ dependencies = [
 workflow = ["prefect>=2.10.0"]
 observability = ["opentelemetry-api>=1.24.0", "opentelemetry-sdk>=1.24.0"]
 experiments = ["mlflow>=2.0.0", "evidently>=0.4.0"]
-rag = ["haystack-ai>=2.0.0"]
 intel-sharing = ["stix2>=3.0.0"]
 dev = [
     "pytest>=7.0.0",
@@ -52,7 +51,7 @@ dev = [
 ]
 
 [project.scripts]
-ind-diplomat = "dip3.ind_diplomat:main"
+politiq-ai = "dip.run:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

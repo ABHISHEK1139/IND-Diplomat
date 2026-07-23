@@ -1,6 +1,6 @@
-# Contributing to DIP 2.0
+# Contributing to Politiq AI
 
-Thank you for your interest in contributing to DIP 2.0! This document outlines the process for contributing to this project.
+Thank you for your interest in contributing to Politiq AI! This document outlines the process for contributing to this project.
 
 ## Code of Conduct
 

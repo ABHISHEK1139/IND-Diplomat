@@ -260,7 +260,7 @@ def print_ablation_report(report: AblationReport) -> str:
     """Format ablation report as string."""
     lines: List[str] = []
     lines.append("=" * 70)
-    lines.append("  DIP 2.0 — ABLATION STUDY REPORT")
+    lines.append("  Politiq AI — ABLATION STUDY REPORT")
     lines.append("=" * 70)
     lines.append(f"  Query: {report.query[:60]}")
     lines.append(f"  Country: {report.country_code}")

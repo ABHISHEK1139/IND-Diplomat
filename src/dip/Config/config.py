@@ -85,7 +85,7 @@ class Config:
     DIP_PREFECT_ENABLED: bool = field(default_factory=lambda: os.getenv("DIP_PREFECT_ENABLED", "0") == "1")
     DIP_STIX2_ENABLED: bool = field(default_factory=lambda: os.getenv("DIP_STIX2_ENABLED", "0") == "1")
     DIP_NETWORKX_ENABLED: bool = field(default_factory=lambda: os.getenv("DIP_NETWORKX_ENABLED", "0") != "0")
-    DIP_HAYSTACK_ENABLED: bool = field(default_factory=lambda: os.getenv("DIP_HAYSTACK_ENABLED", "0") == "1")
+
 
     # ═══════════════════════════════════════════════════════════════
     # Feature Flags — Runtime Behavior

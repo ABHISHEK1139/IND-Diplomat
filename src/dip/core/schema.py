@@ -1,5 +1,5 @@
 """
-IND-Diplomat (dip 2.0) — Core Schema Definitions
+Politiq AI (dip 2.0) — Core Schema Definitions
 =================================================
 
 Every object that flows between layers is defined here.
