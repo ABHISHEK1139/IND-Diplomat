@@ -12,6 +12,11 @@ uvicorn[standard]>=0.22.0
 python-dotenv>=1.0.0
 rich>=13.0.0
 
+# ── Data Collection & Web Search ────────────────────────────────────────────
+duckduckgo-search>=6.0.0
+feedparser>=6.0.0
+aiohttp>=3.9.0
+
 # ── LLM & AI Orchestration ──────────────────────────────────────────────────
 litellm>=1.35.0
 langgraph>=0.0.30

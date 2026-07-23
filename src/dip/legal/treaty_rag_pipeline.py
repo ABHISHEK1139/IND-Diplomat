@@ -1,13 +1,12 @@
 """
-Legal Treaty RAG Pipeline — Haystack/ChromaDB Treaty Reasoning
-===============================================================
+Legal Treaty RAG Pipeline — Live Internet Search via DuckDuckGo
+================================================================
 
-The unique feature: maps geopolitical signals to specific treaty articles
-and international law. Uses Haystack for RAG when available, falls back to
-direct ChromaDB search.
+Searches for treaty text, international law, and legal precedents
+in real-time using DuckDuckGo. No local treaty PDFs required.
 
-Key capability: "Given India's troop movement, what does the India-Bhutan
-Friendship Treaty Article 2 say?"
+Falls back to the hardcoded SIGNAL_TREATY_MAP in signal_legal_mapper.py
+when internet search is unavailable.
 """
 
 from __future__ import annotations
@@ -19,71 +18,76 @@ from typing import Any, Dict, List, Optional
 logger = logging.getLogger("Legal.treaty_rag")
 
 try:
-    from haystack import Pipeline as HaystackPipeline
-    from haystack.components.retrievers import InMemoryBM25Retriever
-    from haystack.components.builders import PromptBuilder
-    from haystack.components.generators import OpenAIGenerator
-    from haystack.document_stores.in_memory import InMemoryDocumentStore
-    from haystack import Document
-    HAYSTACK_AVAILABLE = True
+    from duckduckgo_search import DDGS
+    DDGS_AVAILABLE = True
 except ImportError:
-    HAYSTACK_AVAILABLE = False
-    logger.info("Haystack not installed. Using direct ChromaDB search for legal RAG.")
+    DDGS_AVAILABLE = False
+    logger.info("duckduckgo-search not installed. Legal RAG will use heuristic fallback only.")
 
-
-LEGAL_PROMPT_TEMPLATE = """
-You are a legal expert analyzing geopolitical signals against international treaties and law.
-
-CONTEXT (relevant treaty text):
-{% for doc in documents %}
-  TREATY: {{ doc.meta.get('treaty_name', 'Unknown') }}
-  ARTICLE: {{ doc.meta.get('article', 'Unknown') }}
-  TEXT: {{ doc.content }}
-{% endfor %}
-
-SIGNAL BEING ANALYZED:
-{{ query }}
-
-INSTRUCTIONS:
-1. Identify which treaty articles are relevant to this signal
-2. State whether the action described is consistent with or violates the treaty
-3. Cite the specific article and text
-4. Note any precedents (ICJ rulings, UN resolutions) that apply
-5. Flag if this action requires prior consultation or notification
-6. NEVER speculate beyond what the treaty text supports
-
-Return your analysis in this JSON format:
-{
-  "relevant_treaties": [{"name": "", "article": "", "relevance": ""}],
-  "compliance_assessment": "CONSISTENT|VIOLATION|UNCLEAR|NOT_APPLICABLE",
-  "specific_violations": [{"article": "", "reason": ""}],
-  "consultation_required": true|false,
-  "precedents": [{"case": "", "relevance": ""}],
-  "confidence": 0.0,
-  "legal_risks": [""]
-}
-"""
+try:
+    import litellm
+except ImportError:
+    litellm = None
 
 
 class TreatyRAGPipeline:
-    """RAG pipeline for treaty-aware geopolitical analysis."""
+    """RAG pipeline for treaty-aware geopolitical analysis using live web search."""
 
     def __init__(self):
-        self._haystack_pipeline = None
-        self._init()
+        self._ddgs = DDGS() if DDGS_AVAILABLE else None
 
-    def _init(self) -> None:
-        """Initialize Haystack pipeline if available."""
-        if HAYSTACK_AVAILABLE:
-            try:
-                doc_store = InMemoryDocumentStore()
-                self._haystack_pipeline = HaystackPipeline()
-                self._haystack_pipeline.add_component("retriever", InMemoryBM25Retriever(document_store=doc_store))
-                self._haystack_pipeline.add_component("prompt_builder", PromptBuilder(template=LEGAL_PROMPT_TEMPLATE))
-                logger.info("Haystack legal RAG pipeline initialized")
-            except Exception as e:
-                logger.warning("Haystack pipeline init failed: %s", e)
-                self._haystack_pipeline = None
+    def _search_web(self, query: str, max_results: int = 5) -> List[Dict[str, Any]]:
+        """Search DuckDuckGo for treaty and legal information."""
+        if not self._ddgs:
+            return []
+
+        try:
+            results = list(self._ddgs.text(
+                query,
+                max_results=max_results,
+                region="wt-wt",  # Worldwide
+            ))
+            return [
+                {
+                    "title": r.get("title", ""),
+                    "text": r.get("body", ""),
+                    "url": r.get("href", ""),
+                    "source": "DuckDuckGo",
+                }
+                for r in results
+            ]
+        except Exception as e:
+            logger.warning("DuckDuckGo search failed: %s", e)
+            return []
+
+    async def search_treaties(
+        self,
+        query: str,
+        k: int = 5,
+    ) -> List[Dict[str, Any]]:
+        """Search for relevant treaty texts using DuckDuckGo.
+
+        Constructs a targeted legal search query and returns
+        web results with treaty-relevant content.
+        """
+        search_query = f"{query} international treaty law article text"
+        results = self._search_web(search_query, max_results=k)
+
+        # Enrich results with metadata
+        enriched = []
+        for r in results:
+            enriched.append({
+                "id": r.get("url", ""),
+                "text": r.get("text", ""),
+                "score": 0.7,  # Web results are assumed moderately relevant
+                "metadata": {
+                    "treaty_name": r.get("title", "Unknown"),
+                    "article": "See source",
+                    "source": r.get("url", "DuckDuckGo"),
+                    "retrieved_at": datetime.now(timezone.utc).isoformat(),
+                },
+            })
+        return enriched
 
     async def analyze_signal(
         self,
@@ -92,23 +96,48 @@ class TreatyRAGPipeline:
     ) -> Dict[str, Any]:
         """Analyze a geopolitical signal against relevant treaties.
 
+        Uses DuckDuckGo to search for additional legal context when
+        the hardcoded treaty map doesn't have enough information.
+
         Args:
             signal: {action, entity, target, intensity, ...}
-            relevant_treaties: [{name, article, text, ...}] from ChromaDB search
+            relevant_treaties: [{name, article, text, ...}] from signal mapper
 
         Returns:
             Legal analysis result
         """
+        action = signal.get("action", "unknown_action")
+        country = signal.get("country", "")
+        target = signal.get("target", "")
+
+        # If no treaties were found from the hardcoded map, search the web
         if not relevant_treaties:
-            return {
-                "relevant_treaties": [],
-                "compliance_assessment": "NOT_APPLICABLE",
-                "specific_violations": [],
-                "consultation_required": False,
-                "precedents": [],
-                "confidence": 0.0,
-                "legal_risks": ["No relevant treaties found for this signal."],
-            }
+            search_query = f"{action} {country} {target} international law treaty violation"
+            web_results = self._search_web(search_query, max_results=3)
+
+            if not web_results:
+                return {
+                    "relevant_treaties": [],
+                    "compliance_assessment": "NOT_APPLICABLE",
+                    "specific_violations": [],
+                    "consultation_required": False,
+                    "precedents": [],
+                    "confidence": 0.0,
+                    "legal_risks": ["No relevant treaties found for this signal."],
+                }
+
+            # Convert web results into treaty-like entries
+            relevant_treaties = [
+                {
+                    "metadata": {
+                        "treaty_name": r.get("title", "Unknown"),
+                        "article": "See source",
+                    },
+                    "text": r.get("text", ""),
+                    "url": r.get("url", ""),
+                }
+                for r in web_results
+            ]
 
         # Build structured analysis from treaty matches
         analysis = {
@@ -129,7 +158,8 @@ class TreatyRAGPipeline:
             analysis["relevant_treaties"].append({
                 "name": treaty_name,
                 "article": article,
-                "relevance": f"Signal '{signal.get('action', '')}' may relate to {treaty_name} {article}",
+                "relevance": f"Signal '{action}' may relate to {treaty_name} {article}",
+                "source_url": treaty.get("url", ""),
             })
 
             # Check for consultation requirements
@@ -140,11 +170,10 @@ class TreatyRAGPipeline:
                 )
 
             # Check for violation indicators
-            action = signal.get("action", "").lower()
-            if "deploy" in action or "mobilize" in action:
+            if "deploy" in action.lower() or "mobilize" in action.lower():
                 analysis["specific_violations"].append({
                     "article": f"{treaty_name} {article}",
-                    "reason": f"Military deployment without prior notification may violate consultation requirements.",
+                    "reason": "Military deployment without prior notification may violate consultation requirements.",
                 })
 
         # Determine overall compliance
@@ -159,48 +188,6 @@ class TreatyRAGPipeline:
             analysis["confidence"] = 0.6
 
         return analysis
-
-    async def search_treaties(
-        self,
-        query: str,
-        k: int = 5,
-    ) -> List[Dict[str, Any]]:
-        """Search relevant treaty texts for a query.
-
-        Uses ChromaDB vector search via the shared VectorStore.
-        """
-        try:
-            from dip.layer2_knowledge.vector_store import get_vector_store
-            store = get_vector_store()
-            return store.search("treaties", query, k=k)
-        except ImportError:
-            return []
-
-    async def index_treaty(
-        self,
-        treaty_name: str,
-        article: str,
-        text: str,
-        doc_id: Optional[str] = None,
-    ) -> None:
-        """Index a treaty article into the vector store."""
-        try:
-            from dip.layer2_knowledge.vector_store import get_vector_store
-            store = get_vector_store()
-            store.store_document(
-                collection_name="treaties",
-                doc_id=doc_id or f"{treaty_name}_{article}",
-                text=text,
-                metadata={
-                    "treaty_name": treaty_name,
-                    "article": article,
-                    "indexed_at": datetime.now(timezone.utc).isoformat(),
-                    "source": "DIP_8_legal_memory",
-                },
-            )
-            logger.info("Indexed treaty: %s %s", treaty_name, article)
-        except ImportError:
-            logger.warning("VectorStore not available, skipping treaty index")
 
 
 # Module-level singleton
