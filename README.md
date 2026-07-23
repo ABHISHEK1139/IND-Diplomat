@@ -1,89 +1,88 @@
-# 🌐 IND-Diplomat
+# 🧠 Politiq AI
 
-**Next-generation geopolitical intelligence and head-of-country advisory system.**
+**Next-generation geopolitical intelligence platform. Head-of-state advisory powered by a 13-layer cognitive pipeline.**
 
-[![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/downloads/)
-[![License](https://img.shields.io/badge/license-Proprietary-red.svg)](LICENSE)
-[![CI](https://github.com/ABHISHEK1139/IND-Diplomat/actions/workflows/ci.yml/badge.svg)](https://github.com/ABHISHEK1139/IND-Diplomat/actions/workflows/ci.yml)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/downloads/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
+[![License](https://img.shields.io/badge/License-Proprietary-E74C3C?style=for-the-badge)](LICENSE)
 
 ---
 
-IND-Diplomat is a multi-layered AI-powered intelligence analysis platform that transforms
-raw OSINT signals into structured geopolitical assessments, threat forecasts, and policy
-recommendations. It orchestrates a 13-layer cognitive pipeline — from data collection
-through adversarial red-teaming to decision support — delivering head-of-state-grade
-intelligence briefs in real time.
+## What is Politiq AI?
 
-## Architecture
+Politiq AI is an AI-powered intelligence analysis system that transforms raw open-source intelligence (OSINT) signals into structured geopolitical assessments, threat forecasts, and policy recommendations.
+
+It orchestrates a **13-layer cognitive pipeline** — from real-time data collection through adversarial red-teaming to decision support — delivering **head-of-state-grade intelligence briefs** in real time.
+
+> Think of it as an autonomous intelligence analyst that collects signals from the world, debates them through a council of AI ministers, stress-tests every conclusion, and produces a final threat assessment — all in a single API call.
+
+---
+
+## 🏗️ How It Works — The Pipeline
+
+Every query flows through 13 sequential layers. Each layer refines, challenges, and enriches the analysis before passing it forward.
 
 ```mermaid
-flowchart TB
-    subgraph Collection ["Layer 0-1: Planning & Collection"]
-        L0[Objective Parser] --> L1[Adaptive Collector]
-        L1 --> GDELT[GDELT / ACLED Sensors]
-        L1 --> NEWS[News Feeds]
+flowchart LR
+    subgraph COLLECT["📡 COLLECT"]
+        L0["Layer 0\nPlanning"] --> L1["Layer 1\nOSINT Collection"]
     end
 
-    subgraph Knowledge ["Layer 2-3: Knowledge & State"]
-        L2[Signal Extractor] --> L3[World Model]
-        L3 --> BN[Bayesian Tracker]
-        L3 --> TM[Temporal Memory]
+    subgraph UNDERSTAND["🧩 UNDERSTAND"]
+        L2["Layer 2\nKnowledge Extraction"] --> L3["Layer 3\nWorld Model & State"]
     end
 
-    subgraph Reasoning ["Layer 4-5: Reasoning & Forecasting"]
-        L4[Minister Council] --> DEBATE[Adversarial Debate]
-        L4 --> CF[Counterfactual Engine]
-        L5[Trajectory Model] --> BS[Black Swan Detector]
+    subgraph REASON["⚔️ REASON"]
+        L4["Layer 4\nMinister Council\n+ Red Team\n+ CRAG + CoVe"] --> L5["Layer 5\nForecasting\n+ Black Swan"]
     end
 
-    subgraph Output ["Layer 6-9: Output & Decision"]
-        L6[Workspace & Backtesting]
-        L7[Global Contagion]
-        L8[Wargaming Simulation]
-        L9[Decision Support]
+    subgraph ACT["📊 ACT"]
+        L6["Layer 6\nDossier &\nBacktesting"] --> L7["Layer 7\nGlobal Contagion"]
+        L7 --> L8["Layer 8\nWargaming\n& Nash EQ"]
+        L8 --> L9["Layer 9\nDecision Support"]
     end
 
-    subgraph Meta ["Layer 10-12: Meta & Adaptation"]
-        L10[Telemetry & Tracing]
-        L11[Human-in-the-Loop]
-        L12[Adaptive Learning]
+    subgraph META["🔄 META"]
+        L10["Layer 10\nTelemetry"] --> L11["Layer 11\nHuman-in-the-Loop"]
+        L11 --> L12["Layer 12\nAdaptive Learning"]
     end
 
-    Collection --> Knowledge --> Reasoning --> Output --> Meta
+    COLLECT --> UNDERSTAND --> REASON --> ACT --> META
 ```
 
-## Features
+### Pipeline Stages Explained
 
-- **13-Layer Cognitive Pipeline** — from OSINT collection to decision support
-- **Minister Council Architecture** — multi-expert adversarial reasoning (economic, security, diplomatic, strategic)
-- **Bayesian Belief Networks** — probabilistic state tracking with uncertainty quantification
-- **Black Swan Detection** — early warning for low-probability / high-impact events
-- **Wargaming Engine** — agent-based conflict simulation with Mesa
-- **Legal RAG Pipeline** — treaty and international law grounding via vector search
-- **STIX2 & OpenCTI Integration** — Standards-compliant threat intelligence sharing for enterprise SOCs
-- **Web UI & WebSocket Streaming** — Live interactive dashboard to monitor the Minister Council's reasoning in real time
+| Phase | Layers | What Happens |
+|---|---|---|
+| **📡 Collect** | 0 → 1 | Parses the user's query into intelligence objectives. Pulls real-time signals from **GDELT**, **ACLED**, news feeds, and OSINT sensors. |
+| **🧩 Understand** | 2 → 3 | Extracts entities, relationships, and events from raw text. Builds a **Bayesian Belief Network** and temporal world model with uncertainty tracking. |
+| **⚔️ Reason** | 4 → 5 | The core brain. A **Council of Ministers** (Security, Strategy, Economy, Diplomacy, Contrarian) debates hypotheses. A **Red Team** challenges biases. **CRAG** fetches missing evidence. **CoVe** decomposes and verifies every claim. Forecasting projects trajectories and detects **Black Swan** events. |
+| **📊 Act** | 6 → 9 | Generates executive dossiers and STIX2 bundles. Models **global contagion** (how a crisis in one region propagates). Runs **agent-based wargaming** with Nash Equilibrium computation. Synthesizes final **threat assessment** and **decision recommendations**. |
+| **🔄 Meta** | 10 → 12 | Full **OpenTelemetry tracing** and Langfuse observability. Halts for **human-in-the-loop review** on high-risk decisions. **Adaptive learning** recalibrates the system from past forecasts. |
 
-## 🕸️ How to Use with Web (Live Dashboard)
+---
 
-IND-Diplomat 3.0 includes a real-time Web UI that allows analysts to interact with the system, stream live debates from the Minister Council, and view generated STIX2 graphs.
+## ⚡ Key Capabilities
 
-```bash
-# 1. Start the backend API and WebSocket server
-python -m uvicorn dip.api:app --host 0.0.0.0 --port 8000 --reload
+| Capability | Description |
+|---|---|
+| **Minister Council** | Multi-expert adversarial reasoning. Five specialized AI ministers debate, then a merged heuristic + AI consensus is produced. |
+| **Red Team & CRAG** | Automatic bias detection and evidence gap analysis. Missing signals trigger autonomous re-investigation. |
+| **Chain of Verification (CoVe)** | Every claim is decomposed into atomic facts and independently verified before the final assessment is issued. |
+| **Refusal Gate** | If verification fails, the system **refuses to issue an assessment** rather than produce unreliable intelligence. |
+| **Black Swan Detection** | Early warning system for low-probability, high-impact geopolitical events. |
+| **Wargaming Engine** | Agent-based conflict simulation (Mesa) with Nash Equilibrium game theory computation. |
+| **Legal RAG Pipeline** | International treaty and law grounding via vector search to ensure legal accuracy. |
+| **STIX2 & OpenCTI** | Standards-compliant threat intelligence export for enterprise SOC integration. |
+| **Real-time WebSocket** | Live streaming of the Minister Council's deliberation to the Web dashboard. |
+| **Auto-Healing** | Both local and Docker deployments feature continuous health monitoring with automatic restarts. |
 
-# 2. Open the Web UI
-# The system provides a built-in static dashboard (if configured) or you can connect 
-# your enterprise frontend to ws://localhost:8000/ws/{job_id}
+---
 
-# 3. Submit a job via REST and watch the live analysis
-curl -X POST http://localhost:8000/investigate \
-  -H "Content-Type: application/json" \
-  -d '{"country": "India", "query": "maritime security in the Indian Ocean"}'
-```
+## 🚀 Quick Start — One-Click Installer
 
-## 🚀 Quick Start (One-Click Installer)
-
-IND-Diplomat 3.0 provides robust one-click startup scripts for both Windows and Linux/Mac. These scripts automatically handle virtual environments, dependency installation, and provide interactive menus for booting the system.
+Politiq AI provides fully automated startup scripts. No manual dependency management required.
 
 ```bash
 # 1. Clone the repository
@@ -91,126 +90,242 @@ git clone https://github.com/ABHISHEK1139/IND-Diplomat.git
 cd IND-Diplomat
 
 # 2. Run the interactive startup script
-# On Windows:
+# Windows:
 start.bat
-# On Linux/Mac:
-./start.sh
+
+# Linux / Mac:
+chmod +x start.sh && ./start.sh
 ```
 
-You will be presented with the following options:
-1. **Run Locally (Auto-Heal enabled)**: Installs dependencies natively and runs the API server. Highly recommended if you are running **Local AI like Ollama** on your machine to prevent GPU crashes.
-2. **Run via Docker (Auto-Heal enabled)**: Builds all 13 microservices (Postgres, Redis, Neo4j, Qdrant, Workers, etc.) into an isolated, auto-healing cluster.
-3. **Exit**
+You will see an interactive menu:
+
+| Option | What It Does |
+|---|---|
+| **1. Run Locally** | Creates a Python virtual environment, installs all dependencies, and starts the API server with auto-heal. |
+| **2. Run via Docker** | Builds and launches the full microservice cluster (Postgres, Redis, Neo4j, Qdrant, Web, Workers, Guardian, Grafana, Prometheus) with auto-heal. |
+| **3. Exit** | Exits the installer. |
 
 > [!TIP]
-> **Local AI Compatibility:** If you are running Ollama or LM Studio locally on your host machine, we recommend using **Option 1 (Run Locally)**. Running heavy local LLMs alongside Docker's GPU reservations can cause violent Out-of-Memory (OOM) crashes.
+> **Running Ollama or LM Studio locally?** Choose **Option 1 (Run Locally)**. Running local LLMs alongside Docker GPU reservations can cause severe Out-of-Memory crashes.
 
 > [!IMPORTANT]
-> **Auto-Healing Infrastructure:** Whether you run natively or via Docker, IND-Diplomat features a dedicated Auto-Healer that continuously monitors system health and gracefully restarts any failing agents or microservices without user intervention.
+> **Auto-Healing is built-in.** Whether you run locally or via Docker, Politiq AI continuously monitors system health and automatically restarts any failing services without manual intervention.
 
-## Project Structure
+---
 
-```
-ind-diplomat/
-├── src/dip/                  # All source code under dip namespace
-│   ├── __init__.py
-│   ├── api.py                 # FastAPI application
-│   ├── run.py                 # CLI entry point
-│   ├── unified_pipeline.py    # Master orchestration pipeline
-│   ├── Config/                # Configuration management
-│   ├── core/                  # Shared models, utilities, LLM clients
-│   ├── layer0_planning/       # Objective parsing & workflow planning
-│   ├── layer1_collection/     # OSINT collection (GDELT, ACLED, news)
-│   ├── layer2_knowledge/      # Signal extraction & event classification
-│   ├── layer3_state/          # Bayesian state tracking & world model
-│   ├── layer3_world_model/    # Claim extraction & belief networks
-│   ├── layer4_reasoning/      # Minister council & adversarial debate
-│   ├── layer5_forecasting/    # Probabilistic forecasting
-│   ├── layer5_trajectory/     # Scenario trajectories & black swans
-│   ├── layer6_backtesting/    # Historical replay & evaluation
-│   ├── layer6_presentation/   # Report generation & formatting
-│   ├── layer6_workspace/      # Analyst workspace management
-│   ├── layer7_global/         # Cross-region contagion analysis
-│   ├── layer7_learning/       # Model calibration & learning
-│   ├── layer8_collaboration/  # Multi-analyst collaboration
-│   ├── layer8_wargaming/      # Agent-based wargame simulation
-│   ├── layer9_decision/       # Decision support & recommendations
-│   ├── layer9_ecosystem/      # Plugin ecosystem & SDK
-│   ├── layer10_enterprise/    # Enterprise integrations
-│   ├── layer10_telemetry/     # Observability & tracing
-│   ├── layer11_hitl/          # Human-in-the-loop review
-│   ├── layer11_research/      # Research & experimentation
-│   ├── layer12_adaptive/      # Adaptive learning loops
-│   ├── deliberation/          # Chain-of-Verification & CRAG
-│   ├── decision/              # Threat synthesis & consistency
-│   ├── legal/                 # Treaty RAG & legal analysis
-│   ├── memory/                # Investigation & calibration memory
-│   ├── nextgen/               # Experimental modules
-│   └── SystemGuardian/        # System health monitoring
-├── tests/                     # All test suites
-├── scripts/                   # Utility & deployment scripts
-├── docker/                    # Dockerfiles & compose configs
-├── docs/                      # Documentation
-├── pyproject.toml             # Build configuration
-├── requirements.txt           # Pinned dependencies
-└── .github/workflows/ci.yml   # CI pipeline
+## 🔌 API Reference
+
+Politiq AI exposes a full REST + WebSocket API via FastAPI.
+
+### Submit an Assessment (Synchronous)
+
+```bash
+curl -X POST http://localhost:8000/api/assess \
+  -H "Content-Type: application/json" \
+  -d '{"query": "maritime security in the Indian Ocean", "country": "IND"}'
 ```
 
-## 🧠 Depth and Breadth of the 13 Layers
+### Submit an Assessment (Async Job)
 
-IND-Diplomat 3.0 provides unparalleled breadth and depth across 13 distinct cognitive layers:
+```bash
+# Start a background job
+curl -X POST http://localhost:8000/api/v3/assess \
+  -H "Content-Type: application/json" \
+  -d '{"query": "border tensions in South Asia", "country": "IND"}'
 
-1. **Layer 0 (Planning)**: Formulates specific intelligence collection objectives based on raw user queries.
-2. **Layer 1 (Collection)**: Plugs into OSINT APIs (GDELT, ACLED, news scrapers) to gather unstructured signals.
-3. **Layer 2 (Knowledge)**: Extracts entities, relationships, and geopolitical events from raw text.
-4. **Layer 3 (State/World Model)**: Maintains a Bayesian Belief Network and temporal memory of all ongoing global events.
-5. **Layer 4 (Reasoning)**: The core engine. A multi-agent **Minister Council** (Strategy, Security, Economy, Diplomacy) debates evidence, challenges biases via a **Red Team**, and fetches missing data using **CRAG**.
-6. **Layer 5 (Forecasting)**: Projects current signals into future trajectories and detects low-probability **Black Swan** events.
-7. **Layer 6 (Workspace)**: Generates Head-of-State dossiers, STIX2 bundles, and executive summaries.
-8. **Layer 7 (Global Contagion)**: Models how a crisis in one theater propagates economically or militarily to other nations.
-9. **Layer 8 (Wargaming)**: Uses Mesa agent-based simulations to compute Nash Equilibriums for conflict scenarios.
-10. **Layer 9 (Decision)**: Synthesizes final threat assessments and refusal gates.
-11. **Layer 10 (Enterprise/Telemetry)**: Full OpenTelemetry tracing and Langfuse observability.
-12. **Layer 11 (HITL/Research)**: Halts the pipeline for human-in-the-loop review on critical decisions.
-13. **Layer 12 (Adaptive)**: Self-model updates and reinforcement learning from past forecasts.
+# Response: { "job_id": "abc-123", "status_url": "/api/v3/jobs/abc-123" }
 
-## 🔌 API Usage
+# Poll for results
+curl http://localhost:8000/api/v3/jobs/abc-123/result
+```
+
+### Live WebSocket Streaming
+
+```javascript
+const ws = new WebSocket("ws://localhost:8000/ws/abc-123");
+ws.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+    console.log(`Phase: ${data.phase} — Status: ${data.type}`);
+};
+```
+
+### Full API Endpoints
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/api/assess` | Synchronous full assessment |
+| `POST` | `/api/v3/assess` | Async job submission |
+| `GET` | `/api/v3/jobs` | List all jobs |
+| `GET` | `/api/v3/jobs/{id}` | Job status |
+| `GET` | `/api/v3/jobs/{id}/result` | Full result payload |
+| `GET` | `/api/v3/jobs/{id}/evidence` | Evidence log & fuzzy trace |
+| `GET` | `/api/v3/jobs/{id}/verification` | Verification score & red team report |
+| `GET` | `/api/v3/trends/{country}` | Historical threat trends |
+| `GET` | `/api/v3/alerts/{country}` | High-threat alerts |
+| `POST` | `/api/head-of-country` | Head-of-state briefing |
+| `WS` | `/ws/{job_id}` | Live pipeline streaming |
+| `GET` | `/health` | Health check + OSS adapter status |
+| `GET` | `/metrics` | Prometheus metrics |
+
+### Python SDK
 
 ```python
 from dip.unified_pipeline import execute
 import asyncio
 
-# Run a full intelligence assessment programmatically
-async def run_assessment():
+async def run():
     result = await execute(
         query="maritime security in the Indian Ocean",
-        country_code="IN",
-        job_id="test-job-123"
+        country_code="IND",
+        job_id="analysis-001"
     )
-    print(result.get("briefing"))
-    print("STIX2 Bundle:", result.get("stix2_bundle"))
+    
+    print(f"Threat Level: {result['threat_level']}")
+    print(f"Verification: {result['verification_score']:.0%}")
+    print(f"Black Swan:   {result.get('black_swan', {}).get('triggered', False)}")
+    print(f"Briefing:     {result.get('briefing', 'N/A')[:200]}")
 
-asyncio.run(run_assessment())
+asyncio.run(run())
 ```
 
-### REST API
+---
+
+## 📁 Project Structure
+
+```
+politiq-ai/
+├── src/dip/                        # Core intelligence engine
+│   ├── api.py                      # FastAPI server (REST + WebSocket)
+│   ├── unified_pipeline.py         # Master 13-layer orchestrator
+│   ├── Config/                     # Environment & runtime configuration
+│   ├── core/                       # Shared models, schemas, LLM clients
+│   │
+│   ├── layer0_planning/            # Intelligence objective parsing
+│   ├── layer1_collection/          # OSINT feeds (GDELT, ACLED, News)
+│   ├── layer2_knowledge/           # Entity & signal extraction
+│   ├── layer3_state/               # Bayesian belief network & world model
+│   ├── layer4_reasoning/           # Minister Council & adversarial debate
+│   │   └── ministers/              # Security, Strategy, Economy, Diplomacy, Contrarian
+│   ├── layer5_forecasting/         # Probabilistic forecasting & Monte Carlo
+│   ├── layer5_trajectory/          # Black swan detection & scenario engine
+│   ├── layer6_backtesting/         # Historical crisis replay & evaluation
+│   ├── layer6_workspace/           # Analyst workspace & dossier composer
+│   ├── layer7_global/              # Cross-region contagion modeling
+│   ├── layer7_learning/            # Model calibration & fine-tuning
+│   ├── layer8_collaboration/       # Multi-analyst workspace & RBAC
+│   ├── layer8_wargaming/           # Mesa simulations & Nash equilibrium
+│   ├── layer9_decision/            # Final threat synthesis
+│   ├── layer9_ecosystem/           # Plugin SDK & extensions
+│   ├── layer10_enterprise/         # Kubernetes deployments & monitoring
+│   ├── layer10_telemetry/          # OpenTelemetry & Langfuse tracing
+│   ├── layer11_hitl/               # Human-in-the-loop review gates
+│   ├── layer11_research/           # Experimental modules
+│   ├── layer12_adaptive/           # Self-learning & reinforcement loops
+│   │
+│   ├── deliberation/               # Red Team, CRAG, CoVe engines
+│   ├── decision/                   # Threat synthesizer & refusal gate
+│   ├── legal/                      # Treaty RAG & international law
+│   ├── memory/                     # Investigation memory & calibration
+│   ├── nextgen/                    # STIX2, LangGraph, Prefect adapters
+│   └── SystemGuardian/             # System health monitoring
+│
+├── docker/                         # Dockerfiles & Compose configs
+│   ├── docker-compose.yml          # Full production cluster (11 containers)
+│   └── docker-compose.dev.yml      # Development hot-reload
+├── deploy/                         # Prometheus & Grafana configurations
+├── frontend-next/                  # Next.js Web Dashboard
+├── tests/                          # 40+ test suites (unit, integration, E2E)
+├── scripts/                        # Utility & deployment scripts
+├── docs/                           # Architecture & deployment docs
+│
+├── start.bat                       # Windows one-click installer
+├── start.sh                        # Linux/Mac one-click installer
+├── pyproject.toml                  # Build configuration & dependencies
+├── requirements.txt                # Pinned dependency versions
+└── .github/workflows/ci.yml        # CI/CD pipeline
+```
+
+---
+
+## 🐳 Docker Architecture
+
+When launched via Docker, Politiq AI spins up a complete, self-healing microservice cluster:
+
+```mermaid
+graph TB
+    subgraph External["External Access"]
+        USER["👤 User / Analyst"]
+    end
+
+    subgraph Services["Politiq AI Cluster"]
+        WEB["🌐 Web API\n:8000"]
+        FRONTEND["💻 Dashboard\n:3000"]
+        WORKER["⚙️ Worker"]
+        SCHEDULER["📅 Scheduler"]
+        GUARDIAN["🛡️ Guardian"]
+    end
+
+    subgraph Data["Data Layer"]
+        PG["🐘 PostgreSQL\n:5432"]
+        REDIS["🔴 Redis\n:6379"]
+        NEO4J["🔵 Neo4j\n:7474"]
+        QDRANT["🟣 Qdrant\n:6333"]
+    end
+
+    subgraph Observability["Monitoring"]
+        PROM["📈 Prometheus\n:9090"]
+        GRAF["📊 Grafana\n:3001"]
+        PREFECT["🔧 Prefect\n:4200"]
+        AUTOHEAL["💊 AutoHeal"]
+    end
+
+    USER --> FRONTEND --> WEB
+    USER --> WEB
+    WEB --> PG & REDIS & NEO4J & QDRANT
+    WORKER --> PG & REDIS
+    SCHEDULER --> PG
+    GUARDIAN --> WEB
+    PROM --> WEB
+    GRAF --> PROM
+    AUTOHEAL -.->|monitors & restarts| Services
+```
+
+---
+
+## ⚙️ Configuration
+
+Copy the example environment file and configure your API keys:
 
 ```bash
-# Start the API server
-uvicorn dip.api:app --host 0.0.0.0 --port 8000
-
-# Submit an investigation
-curl -X POST http://localhost:8000/investigate \
-  -H "Content-Type: application/json" \
-  -d '{"country": "India", "topic": "border security"}'
+cp .env.example .env
 ```
 
+### Required Keys
 
+| Variable | Description |
+|---|---|
+| `OPENAI_API_KEY` | OpenAI API key (or use OpenRouter / Ollama) |
+| `LLM_MODEL` | Model to use (default: `gpt-4o`) |
+| `LLM_PROVIDER` | Provider: `openai`, `openrouter`, `ollama` |
 
-## Contributing
+### Optional Integrations
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for development guidelines, coding standards, and PR workflow.
+| Variable | Description |
+|---|---|
+| `ACLED_API_KEY` | ACLED conflict data API |
+| `GDELT_API_KEY` | GDELT event monitoring |
+| `OLLAMA_BASE_URL` | Local Ollama endpoint (default: `http://localhost:11434`) |
+| `DIP_OTEL_ENABLED` | Enable OpenTelemetry tracing (`0` / `1`) |
+| `DIP_MLFLOW_ENABLED` | Enable MLflow experiment tracking |
+| `DIP_LANGGRAPH_ENABLED` | Enable LangGraph workflow adapter |
+| `DIP_STIX2_ENABLED` | Enable STIX2 threat intelligence export |
 
-## License
+---
+
+## 🤝 Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, coding standards, and PR workflow.
+
+## 📄 License
 
 This project is proprietary software. See [LICENSE](LICENSE) for details.
