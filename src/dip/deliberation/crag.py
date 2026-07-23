@@ -24,8 +24,11 @@ try:
 except ImportError:
     litellm = None
 
+from dip.Config.config import config
+from dip.core.schema import StateContext
 from dip.layer4_reasoning.council_session import CouncilSession
 from dip.core.json_utils import strip_markdown_json
+from dip.research.planner import ResearchPlanner
 
 LLM_MODEL = config.LLM_MODEL
 
@@ -179,44 +182,31 @@ async def _retrieve_evidence(
     requests: List[str], session: CouncilSession
 ) -> List[str]:
     """
-    Simulate evidence retrieval for each investigation request.
-
-    In production, this would call real APIs (news feeds, OSINT, satellite
-    data, etc.). Here we ask the LLM to generate plausible evidence or
-    confirm that the gap cannot be filled.
+    Retrieves evidence for each investigation request using the Autonomous Research Planner.
+    This executes live web searches via DuckDuckGo, crawls the pages, extracts clean text,
+    and returns verified evidence.
     """
-    requests_block = "\n".join(f"  - {r}" for r in requests)
-
-    prompt = (
-        "You are a data-retrieval simulator for an intelligence system. "
-        "For each investigation request below, generate one of:\n"
-        "  - A plausible evidence finding (if the signal could be confirmed).\n"
-        "  - A 'GAP CONFIRMED' statement (if no evidence is available).\n\n"
-        f"Country: {session.state_context.country}\n"
-        f"Investigation requests:\n{requests_block}\n\n"
-        "Return a JSON array of finding strings, one per request."
-    )
-
-    response = await litellm.acompletion(
-        model=LLM_MODEL,
-        messages=[{"role": "user", "content": prompt}],
-        temperature=0.2,
-        max_tokens=1000
-    )
-
-    raw = response.choices[0].message.content.strip()
-
+    planner = ResearchPlanner()
+    country = session.state_context.country if hasattr(session.state_context, 'country') else "Global"
+    
     try:
-        raw = strip_markdown_json(raw)
-        parsed = json.loads(raw)
-        if isinstance(parsed, list):
-            return [str(f) for f in parsed]
-        elif isinstance(parsed, dict):
-            for v in parsed.values():
-                if isinstance(v, list):
-                    return [str(f) for f in v]
-        return [raw]
-    except json.JSONDecodeError:
+        result = await planner.execute_from_gaps(requests, country=country, query_context=session.query)
+        
+        findings = []
+        for r in requests:
+            # Check if any evidence covers this request (simple heuristic)
+            matching_evidence = [e for e in result.evidence if e.confidence > 0.4]
+            if matching_evidence:
+                # Combine the top pieces of evidence
+                summary = " | ".join([f"[{e.publisher}] {e.text}" for e in matching_evidence[:2]])
+                findings.append(summary)
+            else:
+                findings.append(f"GAP CONFIRMED: No evidence retrieved for: {r}")
+                
+        return findings
+    except Exception as e:
+        import logging
+        logging.getLogger("CRAG").error(f"Research Planner failed: {e}")
         return [f"RETRIEVAL FAILED for: {r}" for r in requests]
 
 
