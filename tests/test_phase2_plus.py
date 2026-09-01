@@ -2,14 +2,14 @@
 import json
 import pytest
 
-from dip.layer3_state.source_weighting import SourceReliability
-from dip.legal.signal_legal_mapper import map_signal_to_treaties, get_all_relevant_treaties
-from dip.legal.treaty_rag_pipeline import TreatyRAGPipeline
-from dip.memory.confidence_recalibrator import ConfidenceRecalibrator
-from dip.nextgen.safety_enforcer import enforce_safety, SafetyReport
-from dip.nextgen.self_model import SelfModel
-from dip.nextgen.experiment_gate import ExperimentGate
-from dip.layer8_wargaming.mesa_simulation import SimpleWargameSim
+from dip.pipeline.world_model.state.source_weighting import SourceReliability
+from dip.engines.legal.signal_legal_mapper import map_signal_to_treaties, get_all_relevant_treaties
+from dip.engines.legal.treaty_rag_pipeline import TreatyRAGPipeline
+from dip.pipeline.memory.core.confidence_recalibrator import ConfidenceRecalibrator
+from dip.engines.safety_enforcer import enforce_safety, SafetyReport
+from dip.engines.self_model import SelfModel
+from dip.engines.experiment_gate import ExperimentGate
+from dip.pipeline.forecasting.wargaming.mesa_simulation import SimpleWargameSim
 
 
 class TestSourceReliability:
@@ -184,7 +184,7 @@ class TestWargameSim:
 
 class TestVectorStore:
     def test_store_and_search_fallback(self):
-        from dip.layer2_knowledge.vector_store import VectorStore
+        from dip.pipeline.knowledge.vector_store import VectorStore
         store = VectorStore()
         store.store_document("test_col", "doc1", "Troop movement detected near border", {"region": "north"})
         results = store.search("test_col", "troop movement", k=3)

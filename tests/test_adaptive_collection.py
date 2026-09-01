@@ -9,12 +9,12 @@ Deduplicator, Validator, BudgetManager, StoppingCriteria.
 import pytest
 from datetime import datetime, timezone, timedelta
 from dip.core.schema import RawObservation, Investigation, InvestigationScope, CollectionPlan, CollectionNeed, UserObjective
-from dip.layer1_collection.source_registry import SourceRegistry, SourceEntry
-from dip.layer1_collection.source_selector import SourceSelector
-from dip.layer1_collection.deduplicator import Deduplicator
-from dip.layer1_collection.validator import SourceValidator
-from dip.layer1_collection.budget_manager import BudgetManager
-from dip.layer1_collection.stopping_criteria import StoppingCriteria
+from dip.pipeline.collection.source_registry import SourceRegistry, SourceEntry
+from dip.pipeline.collection.source_selector import SourceSelector
+from dip.pipeline.collection.deduplicator import Deduplicator
+from dip.pipeline.collection.validator import SourceValidator
+from dip.pipeline.collection.budget_manager import BudgetManager
+from dip.pipeline.collection.stopping_criteria import StoppingCriteria
 
 # ------------------------------------------------------------------
 # Fixtures

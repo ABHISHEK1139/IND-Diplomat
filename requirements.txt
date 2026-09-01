@@ -52,3 +52,7 @@ y-py>=0.6.2
 prometheus-client>=0.17.0
 langfuse>=2.0.0
 dspy-ai<=2.4.9
+
+# -- Symbolic Math & Guardrails --
+z3-solver>=4.12.0
+pyDatalog>=0.17.0

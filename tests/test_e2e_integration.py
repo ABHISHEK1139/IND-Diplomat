@@ -64,7 +64,7 @@ async def test_stix2_export_generated():
     """STIX2 bundle must be present and valid."""
     from dip.unified_pipeline import execute
     from unittest.mock import patch
-    from dip.control_loop.investigation_controller import InvestigationController
+    from dip.runtime.control_loop.investigation_controller import InvestigationController
     
     async def mock_run_loop(self, state_context, goal, query, country_code, result_dict):
         result_dict["readiness_report"] = {"is_ready": True, "score": 100.0, "iteration": 1}
@@ -91,7 +91,7 @@ async def test_step_tracer_produces_files():
     from dip.unified_pipeline import execute
     from pathlib import Path
     from unittest.mock import patch
-    from dip.control_loop.investigation_controller import InvestigationController
+    from dip.runtime.control_loop.investigation_controller import InvestigationController
     
     async def mock_run_loop(self, state_context, goal, query, country_code, result_dict):
         result_dict["readiness_report"] = {"is_ready": True, "score": 100.0, "iteration": 1}
@@ -104,7 +104,7 @@ async def test_step_tracer_produces_files():
             job_id="e2e-test-004",
         )
         
-        from dip.nextgen.step_tracer import TRACES_DIR
+        from dip.engines.step_tracer import TRACES_DIR
         trace_dir = TRACES_DIR / result["trace_id"]
         assert trace_dir.exists(), f"Trace directory {trace_dir} does not exist"
         
@@ -120,8 +120,8 @@ async def test_step_tracer_produces_files():
 @pytest.mark.e2e
 async def test_cove_heuristic_does_not_hang():
     """CoVe deliberation must complete instantly in heuristic mode."""
-    from dip.deliberation.cove import decompose, _heuristic_decompose
-    from dip.layer4_reasoning.council_session import CouncilSession
+    from dip.pipeline.deliberation.deliberation.cove import decompose, _heuristic_decompose
+    from dip.pipeline.deliberation.reasoning.council_session import CouncilSession
     from dip.core.schema import Hypothesis
     import time
     
@@ -158,8 +158,8 @@ async def test_cove_heuristic_does_not_hang():
 @pytest.mark.e2e
 async def test_crag_heuristic_does_not_hang():
     """CRAG investigation must complete instantly in heuristic mode."""
-    from dip.deliberation.crag import _heuristic_investigate
-    from dip.layer4_reasoning.council_session import CouncilSession
+    from dip.pipeline.deliberation.deliberation.crag import _heuristic_investigate
+    from dip.pipeline.deliberation.reasoning.council_session import CouncilSession
     import time
     
     session = CouncilSession(query="test", state_context=None)
@@ -189,8 +189,8 @@ async def test_crag_heuristic_does_not_hang():
 @pytest.mark.e2e
 async def test_red_team_heuristic_does_not_hang():
     """Red Team challenge must complete instantly in heuristic mode."""
-    from dip.deliberation.red_team import _heuristic_challenge, _select_targets
-    from dip.layer4_reasoning.council_session import CouncilSession
+    from dip.pipeline.deliberation.deliberation.red_team import _heuristic_challenge, _select_targets
+    from dip.pipeline.deliberation.reasoning.council_session import CouncilSession
     from dip.core.schema import Hypothesis
     import time
     
@@ -229,8 +229,8 @@ async def test_red_team_heuristic_does_not_hang():
 @pytest.mark.e2e
 async def test_threat_synthesizer_heuristic():
     """Threat synthesizer must produce valid assessment in heuristic mode."""
-    from dip.decision.threat_synthesizer import _build_heuristic_assessment
-    from dip.layer4_reasoning.council_session import CouncilSession
+    from dip.pipeline.synthesis.decision_core.threat_synthesizer import _build_heuristic_assessment
+    from dip.pipeline.deliberation.reasoning.council_session import CouncilSession
     from dip.core.schema import IntelligenceAssessment, Signal
     import time
     
@@ -270,7 +270,7 @@ async def test_threat_synthesizer_heuristic():
 @pytest.mark.skip(reason="layer6_presentation superseded by dossier")
 async def test_narrative_markdown_export():
     """Narrative must export to valid markdown."""
-    from dip.layer6_presentation.strategic_narrative import narrative_to_markdown
+    from dip.pipeline.synthesis.presentation.strategic_narrative import narrative_to_markdown
     
     narrative = {
         "executive_judgment": "Test judgment.",

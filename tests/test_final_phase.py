@@ -1,8 +1,8 @@
 """Final integration tests for Phase 3-6 modules."""
-from dip.layer7_global.cross_theater_forecaster import forecast_cross_theater, COUNTRY_THEATER
+from dip.pipeline.memory.global_state.cross_theater_forecaster import forecast_cross_theater, COUNTRY_THEATER
 import pytest
-from dip.layer4_reasoning.minister_curriculum import MinisterCurriculum
-from dip.SystemGuardian.guardian_agent import SystemGuardian
+from dip.pipeline.deliberation.reasoning.minister_curriculum import MinisterCurriculum
+from dip.engines.SystemGuardian.guardian_agent import SystemGuardian
 
 
 class TestCrossTheaterForecaster:

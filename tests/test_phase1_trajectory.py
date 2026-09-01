@@ -1,12 +1,12 @@
 """Tests for Phase 1 modules: Trajectory, CSIS, ACH, Online Drift."""
 from datetime import datetime, timezone
 
-from dip.layer5_trajectory.prophet_forecaster import forecast_trajectory
-from dip.layer5_trajectory.online_drift import OnlineDriftDetector
-from dip.layer5_trajectory.csis_framework import (
+from dip.pipeline.forecasting.trajectory.prophet_forecaster import forecast_trajectory
+from dip.pipeline.forecasting.trajectory.online_drift import OnlineDriftDetector
+from dip.pipeline.forecasting.trajectory.csis_framework import (
     run_ach, run_red_team, run_devils_advocacy, run_scenario_planning,
 )
-from dip.layer4_reasoning.hypothesis_tracker import (
+from dip.pipeline.deliberation.reasoning.hypothesis_tracker import (
     HypothesisTracker, create_default_hypotheses,
 )
 

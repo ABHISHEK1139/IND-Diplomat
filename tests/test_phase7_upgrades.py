@@ -1,7 +1,7 @@
 import pytest
 
-from dip.layer2_knowledge.vector_store import VectorStore
-from dip.layer6_backtesting.crisis_registry import CrisisRegistry
+from dip.pipeline.knowledge.vector_store import VectorStore
+from dip.pipeline.memory.backtesting.crisis_registry import CrisisRegistry
 import json
 import os
 import shutil
@@ -13,7 +13,7 @@ from pathlib import Path
 def test_pure_python_simplex_nash():
     """Test the pure python exact simplex solver against a known matrix."""
     # Temporarily hide scipy to force the pure python fallback
-    import dip.layer8_wargaming.nash_equilibrium as nash_module
+    import dip.pipeline.forecasting.wargaming.nash_equilibrium as nash_module
     original_scipy = nash_module.SCIPY_AVAILABLE
     nash_module.SCIPY_AVAILABLE = False
     
@@ -36,7 +36,7 @@ def test_pure_python_simplex_nash():
     # p+1 = 3-3p => 4p = 2 => p = 0.5
     # Value = 1.5
     
-    from dip.layer8_wargaming.nash_equilibrium import _scipy_minimax_solve
+    from dip.pipeline.forecasting.wargaming.nash_equilibrium import _scipy_minimax_solve
     result = _scipy_minimax_solve(payoffs, capability=1.0, intent=1.0, stability=0.5, cost=0.5)
     
     # Restore scipy availability
@@ -50,7 +50,7 @@ def test_pure_python_simplex_nash():
 def test_tfidf_fallback_vector_store(mocker):
     """Test TF-IDF string matching offline capability."""
     import numpy as np
-    mock_st = mocker.patch("layer2_knowledge.vector_store.SentenceTransformer")
+    mock_st = mocker.patch("dip.pipeline.knowledge.vector_store.SentenceTransformer")
     # Setup mock to return a 2D numpy array
     mock_st.return_value.encode.return_value = np.array([[0.1, 0.2]])
     

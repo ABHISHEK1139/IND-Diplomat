@@ -17,11 +17,11 @@ from dip.layer0_planning.workflow import PlanningWorkflow, PlannerState
 
 class TestPlanningWorkflow:
 
-    @patch("layer0_planning.workflow.ScopeDetector")
-    @patch("layer0_planning.workflow.ObjectiveParser")
-    @patch("layer0_planning.workflow.QueryExpander")
-    @patch("layer0_planning.workflow.TemplateSelector")
-    @patch("layer0_planning.workflow.PlannerMemory")
+    @patch("dip.layer0_planning.workflow.ScopeDetector")
+    @patch("dip.layer0_planning.workflow.ObjectiveParser")
+    @patch("dip.layer0_planning.workflow.QueryExpander")
+    @patch("dip.layer0_planning.workflow.TemplateSelector")
+    @patch("dip.layer0_planning.workflow.PlannerMemory")
     def test_workflow_execution(self, mock_memory, mock_template, mock_expander, mock_objective, mock_scope):
         # Setup mocks
         mock_objective.return_value.parse.return_value = {

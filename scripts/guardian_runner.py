@@ -6,7 +6,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(__file__))
 
-from dip.SystemGuardian import SystemGuardian, get_guardian
+from dip.engines.SystemGuardian import SystemGuardian, get_guardian
 
 
 async def loop(interval: int = 60):

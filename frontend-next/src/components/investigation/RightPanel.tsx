@@ -23,11 +23,12 @@ interface EvidenceEntry {
 interface RightPanelProps {
   mockDebate: DebateEntry[];
   mockEvidence: EvidenceEntry[];
+  hypotheses?: any[];
 }
 
 type TabType = "experts" | "timeline" | "evidence" | "confidence";
 
-export default function RightPanel({ mockDebate, mockEvidence }: RightPanelProps) {
+export default function RightPanel({ mockDebate, mockEvidence, hypotheses }: RightPanelProps) {
   const [activeTab, setActiveTab] = useState<TabType>("experts");
 
   const mockTimeline = [
@@ -83,8 +84,8 @@ export default function RightPanel({ mockDebate, mockEvidence }: RightPanelProps
       <div className="flex-1 overflow-y-auto pr-1">
         {activeTab === "experts" && (
           <div className="space-y-4">
-            <h3 className="text-sm font-semibold text-text-primary">Live Debate</h3>
-            <DebateView debate={mockDebate} />
+            <h3 className="text-sm font-semibold text-text-primary">7-Minister Deliberation & Debate</h3>
+            <DebateView debate={mockDebate} hypotheses={hypotheses} />
           </div>
         )}
 

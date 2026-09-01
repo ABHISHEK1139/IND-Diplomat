@@ -8,7 +8,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(__file__))
 
-from dip.analyst_api.job_store import STORE, run_job_background
+from dip.api.analyst.job_store import STORE, run_job_background
 
 
 async def poll_loop(poll_interval: int = 5):

@@ -12,9 +12,9 @@ import json
 import logging
 from typing import Dict, Any
 
-from dip.Config.config import config
+from dip.core.Config.config import config
 from dip.core.json_utils import strip_markdown_json
-from dip.layer10_telemetry.llm_tracer import tracer
+from dip.telemetry.llm_tracer import tracer
 
 logger = logging.getLogger("Layer0.ObjectiveParser")
 

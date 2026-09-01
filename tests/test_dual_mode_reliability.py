@@ -1,6 +1,6 @@
 import pytest
 from dip.core.schema import StateContext, Signal, MinisterHypothesisOutput
-from dip.decision.threat_synthesizer import _merge_bounded_assessment
+from dip.pipeline.synthesis.decision_core.threat_synthesizer import _merge_bounded_assessment
 
 @pytest.fixture
 def mock_state_context():
@@ -24,7 +24,7 @@ def test_dual_mode_agreement():
         confidence=0.85, rationale="llm agreed"
     )
     
-    from dip.layer4_reasoning.ministers.base import BaseMinister
+    from dip.pipeline.deliberation.reasoning.ministers.base import BaseMinister
     class DummyMinister(BaseMinister):
         @property
         def minister_name(self): return "Dummy"
@@ -52,7 +52,7 @@ def test_dual_mode_disagreement_bounds():
         critical_signal_refs=[]  # no proof provided!
     )
     
-    from dip.layer4_reasoning.ministers.base import BaseMinister
+    from dip.pipeline.deliberation.reasoning.ministers.base import BaseMinister
     class DummyMinister(BaseMinister):
         @property
         def minister_name(self): return "Dummy"
@@ -93,7 +93,7 @@ def test_threat_synthesizer_merger():
 @pytest.mark.asyncio
 async def test_hybrid_dual_engine_integration():
     """Test that unified_pipeline runs both Heuristic and AI engines and merges them."""
-    from dip.layer4_reasoning.council_session import CouncilSession
+    from dip.pipeline.deliberation.reasoning.council_session import CouncilSession
     from dip.core.schema import StateContext, Hypothesis
     from dip.unified_pipeline import _merge_dual_engine_hypotheses
     

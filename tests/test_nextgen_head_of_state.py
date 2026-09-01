@@ -2,12 +2,12 @@ from pathlib import Path
 from types import SimpleNamespace
 
 from dip.core.schema import NextGenSREOutput, Signal, StateContext
-from dip.nextgen.assessment_graph import HeadOfStatePipelineGraph, PipelinePhase
-from dip.nextgen.contracts import AdvisoryMode, create_assessment_goal
-from dip.nextgen.oss_adapters import OSSAdapterRegistry
-from dip.nextgen.briefing import build_head_of_country_briefing
-from dip.nextgen.perception import compute_strategic_pressure
-from dip.nextgen.sre import (
+from dip.engines.assessment_graph import HeadOfStatePipelineGraph, PipelinePhase
+from dip.engines.contracts import AdvisoryMode, create_assessment_goal
+from dip.engines.oss_adapters import OSSAdapterRegistry
+from dip.engines.briefing import build_head_of_country_briefing
+from dip.engines.perception import compute_strategic_pressure
+from dip.engines.sre import (
     falling,
     project_state_to_observed_signals,
     rising,

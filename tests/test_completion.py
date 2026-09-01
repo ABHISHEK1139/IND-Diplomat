@@ -1,12 +1,12 @@
 """Tests for Phase 1-5 completion modules."""
 import pytest
-from dip.layer5_trajectory.granger_causality import find_causal_chains
-from dip.layer4_reasoning.sre_parity import (
+from dip.pipeline.forecasting.trajectory.granger_causality import find_causal_chains
+from dip.pipeline.deliberation.reasoning.sre_parity import (
     run_counterfactual, generate_curiosity_questions,
     assess_epistemic_needs, detect_intelligence_gaps, compute_war_index,
 )
-from dip.layer8_wargaming.nash_equilibrium import compute_equilibrium
-from dip.nextgen.replay_consolidation import ReplayConsolidator
+from dip.pipeline.forecasting.wargaming.nash_equilibrium import compute_equilibrium
+from dip.engines.replay_consolidation import ReplayConsolidator
 
 
 

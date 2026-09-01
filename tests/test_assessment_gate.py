@@ -1,5 +1,5 @@
 """Tests for the Assessment Gate — deterministic verdict rules."""
-from dip.layer5_trajectory.assessment_gate import (
+from dip.pipeline.forecasting.trajectory.assessment_gate import (
     AssessmentState,
     GateVerdict,
     assess,

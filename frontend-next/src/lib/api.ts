@@ -11,16 +11,29 @@ export interface InvestigationJob {
   trace_id?: string;
 }
 
+export interface MinisterHypothesis {
+  minister: string;
+  type: string;
+  confidence: number;
+  matched_signals: string[];
+  missing_signals: string[];
+  rationale?: string;
+  critical_signal_refs?: string[];
+  disagreement_notes?: string[];
+  recalibrated_confidence?: number;
+}
+
 export interface InvestigationResult {
   query?: string;
   country?: string;
   threat_level?: string;
+  briefing?: string;
   dossier?: string;
-  signals?: Array<{ title: string; source: string; category: string }>;
-  hypotheses?: Array<{ text: string; probability: number }>;
+  signals?: Array<{ title?: string; entity?: string; action?: string; source?: string; source_ref?: string; intensity?: number; confidence?: number; category?: string }>;
+  hypotheses?: Array<MinisterHypothesis | { text?: string; probability?: number; minister?: string; confidence?: number; matched_signals?: string[]; missing_signals?: string[]; rationale?: string }>;
   scenarios?: Array<{ name: string; probability: number; description: string }>;
   recommendations?: Array<{ option: string; impact: string; confidence: number }>;
-  evidence_log?: Array<{ claim: string; sources: string[]; contradictions?: number }>;
+  evidence_log?: Array<string | { claim: string; sources: string[]; contradictions?: number }>;
   verification_score?: number;
   confidence_scores?: {
     evidence?: number;
@@ -31,6 +44,9 @@ export interface InvestigationResult {
   expert_reports?: Array<{ expert: string; analysis: string; status: string }>;
   entities?: Array<{ id: string; label: string; type: string }>;
   relationships?: Array<{ source: string; target: string; label: string }>;
+  red_team_report?: string[];
+  raw_sources?: any[];
+  xai_sources?: string[];
 }
 
 // Create a new investigation

@@ -6,11 +6,26 @@ import os
 # Ensure the src directory is in the python path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../src")))
 
-from dip.research.planner import ResearchPlanner
+from dip.pipeline.collection.research.planner import ResearchPlanner
 
 logging.basicConfig(level=logging.INFO)
 
 from duckduckgo_search import DDGS
+
+import pytest
+
+@pytest.mark.asyncio
+async def test_research_planner_execution():
+    planner = ResearchPlanner()
+    result = await planner.execute_from_gaps(
+        missing_signals=["latest news on space exploration"],
+        country="USA",
+        query_context="Determine current state of US space capabilities"
+    )
+    assert result is not None
+    assert hasattr(result, "documents")
+    assert hasattr(result, "evidence")
+    assert hasattr(result, "execution_time")
 
 async def main():
     print("Testing DDGS native...")
@@ -44,3 +59,4 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+

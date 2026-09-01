@@ -10,8 +10,8 @@ from dip.core.schema import (
 )
 
 # Import Layers
-from dip.layer1_collection.sensors.news_sensor import NewsSensor
-from dip.layer3_state.state_provider import StateProvider
+from dip.pipeline.collection.sensors.news_sensor import NewsSensor
+from dip.pipeline.world_model.state.state_provider import StateProvider
 
 
 
@@ -61,8 +61,8 @@ async def test_layer1_news_sensor():
 async def test_layer3_state_provider():
     """Test Layer 3 State Provider Module"""
     from unittest.mock import AsyncMock
-    with patch('dip.layer1_collection.feed_integrator.FeedIntegrator.fetch_all', new_callable=AsyncMock) as mock_fetch, \
-         patch('dip.layer2_knowledge.signal_extractor.SignalExtractor.extract', new_callable=AsyncMock) as mock_extract:
+    with patch('dip.pipeline.collection.feed_integrator.FeedIntegrator.fetch_all', new_callable=AsyncMock) as mock_fetch, \
+         patch('dip.pipeline.knowledge.signal_extractor.SignalExtractor.extract', new_callable=AsyncMock) as mock_extract:
          
         provider = StateProvider()
         mock_fetch.return_value = [RawObservation(source_id="1", content="Border movement", timestamp="now")]
@@ -84,7 +84,7 @@ def test_layer6_presentation(mock_session):
         "trajectory": {"label": "Escalation", "confidence": 0.7}
     }
     
-    from dip.layer6_presentation.strategic_narrative import synthesize_narrative
+    from dip.pipeline.synthesis.presentation.strategic_narrative import synthesize_narrative
     
     # We force heuristic mode for testing by mocking the Litellm import to fail
     with patch('layer6_presentation.strategic_narrative.litellm', None):

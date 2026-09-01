@@ -1,9 +1,9 @@
 import asyncio
 import logging
-from dip.layer3_state.state_provider import StateProvider
-from dip.layer3_state.bayesian_tracker import BayesianTracker
-from dip.layer4_reasoning.gap_analyzer import GapAnalyzer
-from dip.layer6_presentation.dossier_compiler import DossierCompiler
+from dip.pipeline.world_model.state.state_provider import StateProvider
+from dip.pipeline.world_model.state.bayesian_tracker import BayesianTracker
+from dip.pipeline.deliberation.reasoning.gap_analyzer import GapAnalyzer
+from dip.pipeline.synthesis.presentation.dossier_compiler import DossierCompiler
 import json
 
 logging.basicConfig(level=logging.INFO)

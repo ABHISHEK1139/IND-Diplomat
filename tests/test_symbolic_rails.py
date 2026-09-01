@@ -1,5 +1,5 @@
 import pytest
-from dip.nextgen.symbolic_guardrails import run_symbolic_guardrails, _run_z3_constraints, _run_pydatalog_facts
+from dip.engines.symbolic_guardrails import run_symbolic_guardrails, _run_z3_constraints, _run_pydatalog_facts
 
 @pytest.mark.unit
 def test_symbolic_guardrails_pass():

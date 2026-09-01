@@ -1,7 +1,7 @@
 import pytest
-from dip.nextgen.self_model import AgentSelfModel
-from dip.nextgen.experiment_gate import ExperimentGate
-from dip.nextgen.replay_consolidation import ReplayBuffer
+from dip.engines.self_model import AgentSelfModel
+from dip.engines.experiment_gate import ExperimentGate
+from dip.engines.replay_consolidation import ReplayBuffer
 
 @pytest.mark.unit
 def test_self_model_initialization():

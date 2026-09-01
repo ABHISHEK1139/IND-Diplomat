@@ -22,20 +22,20 @@ except ImportError:
 from dip.core.schema import TimelineEvent, Investigation
 from dip.core.investigation_store import InvestigationStore
 from dip.layer0_planning.workflow import PlanningWorkflow
-from dip.layer1_collection.adaptive_collector import AdaptiveCollector
-from dip.layer3_world_model.world_model import WorldModel
-from dip.layer3_world_model.document_understanding.docling_parser import DoclingParser
-from dip.layer3_world_model.entity.gliner_extractor import EntityExtractor
-from dip.layer3_world_model.relation.rebel_extractor import RelationExtractor
-from dip.layer3_world_model.claims.claim_extractor import ClaimExtractor
-from dip.layer4_reasoning.orchestrator import ReasoningOrchestrator
-from dip.layer5_forecasting.orchestrator import ForecastingOrchestrator
-from dip.layer6_workspace.orchestrator import WorkspaceOrchestrator
-from dip.layer7_learning.orchestrator import LearningOrchestrator
-from dip.layer11_hitl.review_manager import ReviewManager
-from dip.layer10_telemetry.dataset_exporter import DatasetExporter
-from dip.layer10_telemetry.llm_tracer import current_investigation_id
-from dip.memory.investigation_memory import InvestigationMemory
+from dip.pipeline.collection.adaptive_collector import AdaptiveCollector
+from dip.pipeline.world_model.world.world_model import WorldModel
+from dip.pipeline.world_model.world.document_understanding.docling_parser import DoclingParser
+from dip.pipeline.world_model.world.entity.gliner_extractor import EntityExtractor
+from dip.pipeline.world_model.world.relation.rebel_extractor import RelationExtractor
+from dip.pipeline.world_model.world.claims.claim_extractor import ClaimExtractor
+from dip.pipeline.deliberation.reasoning.orchestrator import ReasoningOrchestrator
+from dip.pipeline.forecasting.forecasting.orchestrator import ForecastingOrchestrator
+from dip.pipeline.synthesis.workspace.orchestrator import WorkspaceOrchestrator
+from dip.pipeline.memory.learning.orchestrator import LearningOrchestrator
+from dip.hitl.review_manager import ReviewManager
+from dip.telemetry.dataset_exporter import DatasetExporter
+from dip.telemetry.llm_tracer import current_investigation_id
+from dip.pipeline.memory.core.investigation_memory import InvestigationMemory
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(name)s | %(levelname)s | %(message)s")
 logger = logging.getLogger("DIP3.MasterGraph")

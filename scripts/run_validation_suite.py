@@ -41,7 +41,7 @@ async def run_backtest_suite(execute_fn) -> Dict[str, Any]:
     print("=  PHASE 1/5: HISTORICAL CRISIS BACKTESTING")
     print("=" * 70)
     
-    from dip.layer6_backtesting.historical_crisis_evaluator import (
+    from dip.pipeline.memory.backtesting.historical_crisis_evaluator import (
         run_full_backtest_suite, print_backtest_report, export_backtest_json,
     )
     
@@ -85,7 +85,7 @@ async def run_calibration_suite(backtest_evaluations: List[Any]) -> Dict[str, An
     print("=  PHASE 3/5: CALIBRATION ANALYSIS")
     print("=" * 70)
     
-    from dip.memory.calibration_metrics import (
+    from dip.pipeline.memory.core.calibration_metrics import (
         points_from_backtest, build_calibration_report,
         print_calibration_report, export_calibration_json,
     )
@@ -112,7 +112,7 @@ async def run_benchmark_suite_full(execute_fn, query: str, country: str) -> Dict
     print("=  PHASE 4/5: BENCHMARK COMPARISON (DIP vs Baselines)")
     print("=" * 70)
     
-    from dip.nextgen.benchmark_harness import (
+    from dip.engines.benchmark_harness import (
         run_benchmark_suite, print_benchmark_report, export_benchmark_json,
     )
     
@@ -133,7 +133,7 @@ async def run_latency_suite() -> Dict[str, Any]:
     print("=  PHASE 5/5: LATENCY & THROUGHPUT ANALYSIS")
     print("=" * 70)
     
-    from dip.nextgen.latency_dashboard import (
+    from dip.engines.latency_dashboard import (
         analyze_all_traces, aggregate_across_traces,
         print_aggregate_latency, export_latency_json,
     )
@@ -199,7 +199,7 @@ async def main():
         
         # Phase 3: Calibration (from backtest data)
         # Need to re-import evaluations for calibration
-        from dip.layer6_backtesting.historical_crisis_evaluator import (
+        from dip.pipeline.memory.backtesting.historical_crisis_evaluator import (
             run_full_backtest_suite,
         )
         # Re-use if available, otherwise skip

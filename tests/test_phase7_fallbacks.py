@@ -7,9 +7,9 @@ import numpy as np
 # Add project root to sys.path
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
-from dip.layer2_knowledge import vector_store
-from dip.layer6_backtesting.crisis_registry import registry, CrisisTimelineEvent, CrisisScenario
-from dip.legal.signal_legal_mapper import map_signal_to_treaties
+from dip.pipeline.knowledge import vector_store
+from dip.pipeline.memory.backtesting.crisis_registry import registry, CrisisTimelineEvent, CrisisScenario
+from dip.engines.legal.signal_legal_mapper import map_signal_to_treaties
 
 
 def test_tfidf_fallback_vector_store():

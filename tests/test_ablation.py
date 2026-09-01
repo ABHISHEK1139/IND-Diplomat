@@ -103,6 +103,36 @@ def compute_ablation_delta(baseline: Dict[str, Any], ablated: Dict[str, Any],
     return result
 
 
+import pytest
+
+@pytest.mark.unit
+def test_ablation_delta_computation():
+    """Verify compute_ablation_delta accurately detects shifts."""
+    baseline = {
+        "threat_level": "HIGH",
+        "verification_score": 0.85,
+        "hypotheses": [{"minister": "Security"}],
+        "evidence_log": ["sig1", "sig2"],
+        "gate_verdict": {"decision": "APPROVE"},
+        "elapsed_seconds": 5.0,
+    }
+    ablated = {
+        "threat_level": "LOW",
+        "verification_score": 0.45,
+        "hypotheses": [],
+        "evidence_log": ["sig1"],
+        "gate_verdict": {"decision": "WITHHOLD"},
+        "elapsed_seconds": 3.0,
+    }
+    delta = compute_ablation_delta(baseline, ablated, "test_mod", "Test Module")
+    assert delta.threat_level_changed is True
+    assert delta.gate_verdict_changed is True
+    assert delta.confidence_delta == -0.4
+    assert delta.hypothesis_count_delta == -1
+    assert delta.evidence_count_delta == -1
+    assert delta.elapsed_delta == -2.0
+
+
 async def run_ablation_suite(
     execute_fn,
     query: str,
@@ -123,22 +153,22 @@ async def run_ablation_suite(
     MODULES = {
         "red_team": {
             "desc": "Red Team adversarial challenge",
-            "patch_target": "deliberation.red_team.challenge",
+            "patch_target": "dip.pipeline.deliberation.deliberation.red_team.challenge",
             "stub": lambda session: session,  # no-op
         },
         "crag": {
             "desc": "CRAG evidence investigation",
-            "patch_target": "deliberation.crag.investigate",
+            "patch_target": "dip.pipeline.deliberation.deliberation.crag.investigate",
             "stub": lambda session: session,
         },
         "cove": {
             "desc": "CoVe claim verification",
-            "patch_target": "deliberation.cove.decompose",
+            "patch_target": "dip.pipeline.deliberation.deliberation.cove.decompose",
             "stub": lambda session: [],
         },
         "assessment_gate": {
             "desc": "Assessment Gate (WITHHOLD/APPROVE)",
-            "patch_target": "layer5_trajectory.assessment_gate.assess",
+            "patch_target": "dip.pipeline.forecasting.trajectory.assessment_gate.assess",
             "stub": lambda state: type('Verdict', (), {
                 'approved': True, 'withheld': False, 'decision': 'APPROVE',
                 'reasons': ['Gate bypassed for ablation study'],
@@ -147,12 +177,12 @@ async def run_ablation_suite(
         },
         "council": {
             "desc": "Council of Ministers (multi-perspective)",
-            "patch_target": "layer4_reasoning.coordinator.run_council",
+            "patch_target": "dip.pipeline.deliberation.reasoning.coordinator.run_council",
             "stub": lambda session: None,
         },
         "strategic_narrative": {
             "desc": "Strategic Narrative Synthesis",
-            "patch_target": "layer6_presentation.strategic_narrative.synthesize_narrative",
+            "patch_target": "dip.pipeline.synthesis.presentation.strategic_narrative.synthesize_narrative",
             "stub": lambda session, result: {"executive_judgment": "Ablated", "generation_mode": "ablation"},
         },
     }

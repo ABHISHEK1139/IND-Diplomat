@@ -35,7 +35,7 @@ async def diplomat_query(query: str, country: str = "IND", job_id: str | None = 
     """
     # best-effort import of ws manager for progress updates
     try:
-        from dip.api_ws.ws_manager import manager as ws_manager
+        from dip.api.ws.ws_manager import manager as ws_manager
     except Exception:
         ws_manager = None
 

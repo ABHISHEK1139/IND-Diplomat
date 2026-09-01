@@ -1,10 +1,10 @@
 import asyncio
 
-from dip.nextgen.observed_signal import ObservedSignal
-from dip.nextgen.signal_belief import SignalBeliefModel
-from dip.nextgen.domain_fusion import fuse_domains
-from dip.nextgen.escalation_index import compute_escalation
-from dip.nextgen.signal_projection import project_signals
+from dip.engines.observed_signal import ObservedSignal
+from dip.engines.signal_belief import SignalBeliefModel
+from dip.engines.domain_fusion import fuse_domains
+from dip.engines.escalation_index import compute_escalation
+from dip.engines.signal_projection import project_signals
 
 
 def test_signal_belief_and_fusion():

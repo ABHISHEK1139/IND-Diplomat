@@ -7,7 +7,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 os.environ.setdefault("FORCE_MINISTER_HEURISTIC", "1")  # Fast mode: no LLM calls
 
 async def run_query(query, country):
-    from dip.ind_diplomat import diplomat_query
+    from dip.pipeline.deliberation.ind_diplomat import diplomat_query
     return await diplomat_query(query, country)
 
 async def main():

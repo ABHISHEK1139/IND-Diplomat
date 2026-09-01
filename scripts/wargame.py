@@ -21,9 +21,9 @@ if sys.stdout.encoding != 'utf-8':
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from dip.layer3_state.state_provider import StateProvider
+from dip.pipeline.world_model.state.state_provider import StateProvider
 from dip.core.schema import WargameAction
-from dip.layer8_wargaming.scenario_engine import run_wargame
+from dip.pipeline.forecasting.wargaming.scenario_engine import run_wargame
 
 try:
     from rich.console import Console

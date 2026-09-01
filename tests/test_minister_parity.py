@@ -1,9 +1,9 @@
 import os
 import asyncio
 
-from dip.layer4_reasoning.council_session import CouncilSession
-from dip.layer3_state.state_provider import StateProvider
-from dip.layer4_reasoning.coordinator import run_council
+from dip.pipeline.deliberation.reasoning.council_session import CouncilSession
+from dip.pipeline.world_model.state.state_provider import StateProvider
+from dip.pipeline.deliberation.reasoning.coordinator import run_council
 
 
 def test_all_seven_ministers_produce_hypotheses(monkeypatch):
@@ -11,7 +11,7 @@ def test_all_seven_ministers_produce_hypotheses(monkeypatch):
     os.environ["FORCE_MINISTER_HEURISTIC"] = "1"
 
     async def _run():
-        from dip.layer3_state.working_memory import WorkingMemory
+        from dip.pipeline.world_model.state.working_memory import WorkingMemory
         provider = StateProvider()
         state = await provider.build_state_context("CXY", "test signals for ministers")
         session = CouncilSession(query="test ministers", state_context=state)

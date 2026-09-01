@@ -15,7 +15,11 @@ def test_health_endpoint():
     assert data["status"] == "healthy"
 
 
-def test_v2_query_endpoint():
+def test_v2_query_endpoint(monkeypatch):
+    async def mock_execute(query, country):
+        return {"query": query, "country": country, "nextgen_sre": True}
+    monkeypatch.setattr("dip.api.rest_api.execute", mock_execute)
+
     client = TestClient(app, raise_server_exceptions=False)
     resp = client.post("/v2/query", json={"query": "test query", "country": "CXY"})
     assert resp.status_code == 200

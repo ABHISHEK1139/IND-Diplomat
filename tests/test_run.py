@@ -1,12 +1,21 @@
 import asyncio
 import json
 import logging
+import pytest
 from dip.unified_pipeline import execute
 from dotenv import load_dotenv
 
 load_dotenv()
 
 logging.basicConfig(level=logging.DEBUG)
+
+@pytest.mark.asyncio
+async def test_pipeline_smoke():
+    result = await execute("Massive cyber attack on Taiwanese grid detected. Chinese naval vessels moving into strait.", "TWN")
+    assert result is not None
+    assert result["status"] in ("COMPLETE", "WITHHELD", "HUMAN_REVIEW", "REFUSED", "HUMAN_OVERRIDE_REQUIRED")
+    assert "threat_level" in result
+    assert "verification_score" in result
 
 async def main():
     print("==========================================")
@@ -47,3 +56,4 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+

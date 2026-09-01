@@ -22,8 +22,8 @@ except ImportError:
         if len(args) == 1 and callable(args[0]): return args[0]
         return decorator
 
-from dip.layer1_collection.feed_integrator import FeedIntegrator
-from dip.layer2_knowledge.signal_extractor import SignalExtractor
+from dip.pipeline.collection.feed_integrator import FeedIntegrator
+from dip.pipeline.knowledge.signal_extractor import SignalExtractor
 
 
 logger = logging.getLogger("Orchestrator")

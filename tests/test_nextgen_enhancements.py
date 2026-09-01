@@ -1,6 +1,6 @@
-from dip.nextgen.oss_adapters import OSSAdapterRegistry
-from dip.nextgen.networkx_adapter import create_networkx_adapter
-from dip.nextgen.crisis_replay import CrisisReplayBenchmark, ReplayCase
+from dip.engines.oss_adapters import OSSAdapterRegistry
+from dip.engines.networkx_adapter import create_networkx_adapter
+from dip.engines.crisis_replay import CrisisReplayBenchmark, ReplayCase
 
 
 def test_oss_adapter_registry_has_expected_capabilities():

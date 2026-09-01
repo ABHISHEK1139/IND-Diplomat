@@ -1,8 +1,8 @@
 import pytest
-from dip.layer8_wargaming.mesa_simulation import run_wargame_simulation, SimulationResult
-from dip.layer3_state.working_memory import WorkingMemory
+from dip.pipeline.forecasting.wargaming.mesa_simulation import run_wargame_simulation, SimulationResult
+from dip.pipeline.world_model.state.working_memory import WorkingMemory
 from dip.core.schema import StateContext
-from dip.layer4_reasoning.council_session import CouncilSession
+from dip.pipeline.deliberation.reasoning.council_session import CouncilSession
 
 @pytest.mark.unit
 def test_wargame_simulation_basic():

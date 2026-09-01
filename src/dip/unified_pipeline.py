@@ -24,16 +24,16 @@ from pathlib import Path
 from pydantic import ValidationError
 from typing import Dict, Any, Optional, List
 
-from dip.Config.config import config
+from dip.core.Config.config import config
 from dip.core.schema import Hypothesis, NextGenSREOutput
-from dip.nextgen import HeadOfStatePipelineGraph, PipelinePhase, build_head_of_country_briefing, run_fuzzy_sre, observability
-from dip.nextgen.step_tracer import start_trace, trace_step, get_tracer
-from dip.nextgen.symbolic_guardrails import run_symbolic_guardrails
-from dip.nextgen.safety_enforcer import enforce_safety
+from dip.engines import HeadOfStatePipelineGraph, PipelinePhase, build_head_of_country_briefing, run_fuzzy_sre, observability
+from dip.engines.step_tracer import start_trace, trace_step, get_tracer
+from dip.engines.symbolic_guardrails import run_symbolic_guardrails
+from dip.engines.safety_enforcer import enforce_safety
 
 # Optional OpenTelemetry
 try:
-    from dip.nextgen import observability
+    from dip.engines import observability
     tracer_provider = observability.get_tracer()
 except Exception:
     tracer_provider = None
@@ -51,38 +51,38 @@ logger = logging.getLogger("unified_pipeline")
 
 def _import_layer1():
     try:
-        from dip.layer1_collection.feed_integrator import FeedIntegrator
+        from dip.pipeline.collection.feed_integrator import FeedIntegrator
         return FeedIntegrator
     except ImportError:
         return None
 
 def _import_layer2():
     try:
-        from dip.layer2_knowledge.signal_extractor import SignalExtractor
+        from dip.pipeline.knowledge.signal_extractor import SignalExtractor
         return SignalExtractor
     except ImportError:
         return None
 
 def _import_memory():
     try:
-        from dip.memory.memory_vault import MemoryVault
-        from dip.memory.learning_engine import LearningEngine
-        from dip.memory.forecast_archive import ForecastArchive
+        from dip.pipeline.memory.core.memory_vault import MemoryVault
+        from dip.pipeline.memory.core.learning_engine import LearningEngine
+        from dip.pipeline.memory.core.forecast_archive import ForecastArchive
         return MemoryVault, LearningEngine, ForecastArchive
     except ImportError:
         return None, None, None
 
 def _import_trajectory():
     try:
-        from dip.layer5_trajectory.trajectory_model import compute_trajectory
-        from dip.layer5_trajectory.black_swan_detector import detect_black_swan
+        from dip.pipeline.forecasting.trajectory.trajectory_model import compute_trajectory
+        from dip.pipeline.forecasting.trajectory.black_swan_detector import detect_black_swan
         return compute_trajectory, detect_black_swan
     except ImportError:
         return None, None
 
 def _import_global():
     try:
-        from dip.layer7_global.contagion_engine import run_global_cycle
+        from dip.pipeline.memory.global_state.contagion_engine import run_global_cycle
         return run_global_cycle
     except ImportError:
         return None
@@ -90,22 +90,22 @@ def _import_global():
 
 # ── Core imports (always available) ──────────────────────────────
 
-from dip.layer3_state.state_provider import StateProvider
-from dip.layer3_state.working_memory import WorkingMemory
-from dip.layer3_state.uncertainty_monitor import apply_uncertainty_decay
-from dip.layer4_reasoning.council_session import CouncilSession
-from dip.layer4_reasoning.coordinator import run_council
-from dip.deliberation.red_team import challenge as red_team_challenge
-from dip.deliberation.crag import investigate as crag_investigate
-from dip.deliberation.cove import decompose as cove_decompose
-from dip.decision.threat_synthesizer import decide
+from dip.pipeline.world_model.state.state_provider import StateProvider
+from dip.pipeline.world_model.state.working_memory import WorkingMemory
+from dip.pipeline.world_model.state.uncertainty_monitor import apply_uncertainty_decay
+from dip.pipeline.deliberation.reasoning.council_session import CouncilSession
+from dip.pipeline.deliberation.reasoning.coordinator import run_council
+from dip.pipeline.deliberation.deliberation.red_team import challenge as red_team_challenge
+from dip.pipeline.deliberation.deliberation.crag import investigate as crag_investigate
+from dip.pipeline.deliberation.deliberation.cove import decompose as cove_decompose
+from dip.pipeline.synthesis.decision_core.threat_synthesizer import decide
 from dip.verifier import verify
-from dip.decision.refusal_engine import refuse
-from dip.investigation.hitl import request_review
-from dip.layer6_workspace.dossier.composer import DossierComposer
-from dip.layer4_reasoning.introspection import analyze_bias
-from dip.layer5_trajectory.assessment_gate import assess as gate_assess, build_assessment_state, AssessmentState, GateVerdict
-from dip.layer5_trajectory.assessment_record import record_assessment
+from dip.pipeline.synthesis.decision_core.refusal_engine import refuse
+from dip.runtime.investigation.hitl import request_review
+from dip.pipeline.synthesis.workspace.dossier.composer import DossierComposer
+from dip.pipeline.deliberation.reasoning.introspection import analyze_bias
+from dip.pipeline.forecasting.trajectory.assessment_gate import assess as gate_assess, build_assessment_state, AssessmentState, GateVerdict
+from dip.pipeline.forecasting.trajectory.assessment_record import record_assessment
 
 
 # ── Heuristic fallback for when LLM ministers fail ───────────────
@@ -138,12 +138,13 @@ def _heuristic_council(session) -> None:
             confidence=round(min(avg_intensity * 0.9, 1.0), 3),
         ))
 
-def _merge_dual_engine_hypotheses(heuristic: List[Hypothesis], ai: List[Any]) -> List[Hypothesis]:
+def _merge_dual_engine_hypotheses(heuristic: List[Hypothesis], ai: Any) -> List[Hypothesis]:
     from dip.core.schema import MergedHypothesis, Hypothesis
     merged_list = []
     
+    ai_list = ai.hypotheses if hasattr(ai, "hypotheses") else (ai if isinstance(ai, list) else [])
     # Simple arbitration per minister domain
-    ai_by_minister = {getattr(a, "minister", "unknown"): a for a in ai}
+    ai_by_minister = {getattr(a, "minister", "unknown"): a for a in ai_list}
     
     for h in heuristic:
         ai_match = ai_by_minister.pop(h.minister, None)
@@ -176,14 +177,14 @@ def _merge_dual_engine_hypotheses(heuristic: List[Hypothesis], ai: List[Any]) ->
             missing_signals=list(set(h.missing_signals + getattr(ai_match, "missing_signals", []))),
             confidence=final_conf,
             heuristic_source=h,
-            ai_source=Hypothesis(**ai_match.dict()) if hasattr(ai_match, "dict") else None
+            ai_source=Hypothesis(**ai_match.model_dump()) if hasattr(ai_match, "model_dump") else None
         )
         merged_list.append(merged)
         
     # Add remaining AI hypotheses that didn't match heuristic domains
     for ai_unmatched in ai_by_minister.values():
-        if hasattr(ai_unmatched, "dict"):
-            merged_list.append(Hypothesis(**ai_unmatched.dict()))
+        if hasattr(ai_unmatched, "model_dump"):
+            merged_list.append(Hypothesis(**ai_unmatched.model_dump()))
             
     return merged_list
 
@@ -261,6 +262,24 @@ async def execute(query: str, country_code: str, job_id: str | None = None) -> D
     trajectory forecast, learning report, and global contagion data.
     """
     t0 = time.time()
+    
+    if not query or not str(query).strip():
+        return {
+            "query": query,
+            "country": country_code,
+            "trace_id": f"dip2-refused-{int(time.time())}",
+            "status": "REFUSED",
+            "threat_level": "LOW",
+            "verification_score": 0.0,
+            "refusal": {
+                "status": "INSUFFICIENT_EVIDENCE",
+                "reasons": ["Empty query provided. System cannot perform analysis without an objective."]
+            },
+            "hypotheses": [],
+            "evidence_log": [],
+            "elapsed_seconds": 0.0,
+        }
+
     trace_cm = observability.trace_phase("pipeline.execute", {"country": country_code, "query": query})
     trace_cm.__enter__()
     graph = HeadOfStatePipelineGraph(checkpoint_dir=Path(__file__).resolve().parent / "data" / "checkpoints")
@@ -304,9 +323,12 @@ async def execute(query: str, country_code: str, job_id: str | None = None) -> D
     try:
         # optional websocket manager for progress updates
         try:
-            from dip.api_ws.ws_manager import manager as ws_manager
+            from dip.api.ws.ws_manager import manager as ws_manager
         except Exception:
             ws_manager = None
+
+        # Maintain strong references to background tasks to prevent GC
+        _bg_tasks = set()
 
         def _publish_progress(payload: dict) -> None:
             # Best-effort async publish; schedule in event loop
@@ -319,13 +341,15 @@ async def execute(query: str, country_code: str, job_id: str | None = None) -> D
                         await ws_manager.publish_topic(topic, payload)
                     else:
                         await ws_manager.broadcast(payload)
-                except Exception:
-                    return
+                except Exception as e:
+                    logger.debug(f"[WS] Publish failed: {e}")
             try:
                 import asyncio
-                asyncio.create_task(_do())
-            except Exception:
-                pass
+                task = asyncio.create_task(_do())
+                _bg_tasks.add(task)
+                task.add_done_callback(_bg_tasks.discard)
+            except Exception as e:
+                logger.debug(f"[WS] Failed to create background task: {e}")
 
         # ── Layer 1+2+3: Build State Context & Recursive RFI Loop ──
         logger.info("[Layer 1-3] Building State Context for %s", country_code)
@@ -335,9 +359,9 @@ async def execute(query: str, country_code: str, job_id: str | None = None) -> D
         state_provider = StateProvider()
         state_context = await state_provider.build_state_context(country_code, query)
         
-        from dip.control_loop.investigation_controller import InvestigationController
+        from dip.runtime.control_loop.investigation_controller import InvestigationController
         
-        controller = InvestigationController(max_iterations=3, min_readiness=80.0)
+        controller = InvestigationController(max_iterations=5, min_readiness=75.0, plateau_patience=2)
         state_context = await controller.run_loop(
             state_context=state_context, 
             goal=goal, 
@@ -511,7 +535,7 @@ async def execute(query: str, country_code: str, job_id: str | None = None) -> D
         analyze_bias(session)
         
         # Save to Working Memory
-        from dip.layer3_state.working_memory import WorkingMemory
+        from dip.pipeline.world_model.state.working_memory import WorkingMemory
         WorkingMemory().save_context(state_context)
 
         # ── Layer 5: Assessment Gate ─────────────────────────────
@@ -548,7 +572,7 @@ async def execute(query: str, country_code: str, job_id: str | None = None) -> D
 
         # ── Layer 5: Trajectory Forecast ─────────────────────────
         try:
-            from dip.layer5_trajectory.trajectory_model import compute_trajectory
+            from dip.pipeline.forecasting.trajectory.trajectory_model import compute_trajectory
             trajectory = compute_trajectory(session)
             result["trajectory"] = trajectory
             logger.info("[Layer 5] Trajectory: %s", trajectory.get("label", "N/A"))
@@ -557,7 +581,7 @@ async def execute(query: str, country_code: str, job_id: str | None = None) -> D
 
         # ── Layer 5: Black Swan Detection ────────────────────────
         try:
-            from dip.layer5_trajectory.black_swan_detector import detect_black_swan
+            from dip.pipeline.forecasting.trajectory.black_swan_detector import detect_black_swan
             black_swan = detect_black_swan(session)
             result["black_swan"] = black_swan
             if isinstance(black_swan, dict) and black_swan.get("triggered"):
@@ -568,11 +592,11 @@ async def execute(query: str, country_code: str, job_id: str | None = None) -> D
 
         # ── Layer 8: Wargaming & Game Theory ─────────────────────
         try:
-            from dip.layer8_wargaming.mesa_simulation import run_wargame_simulation
-            from dip.layer8_wargaming.nash_equilibrium import compute_nash_equilibrium
+            from dip.pipeline.forecasting.wargaming.mesa_simulation import run_wargame_simulation
+            from dip.pipeline.forecasting.wargaming.nash_equilibrium import compute_equilibrium
             
             # Nash Equilibrium
-            nash = compute_nash_equilibrium(
+            nash = compute_equilibrium(
                 capability=state_context.nextgen_sre.sre_escalation_score if state_context.nextgen_sre else 0.5,
                 intent=session.verification_score,
                 hypotheses=session.hypotheses,
@@ -596,7 +620,7 @@ async def execute(query: str, country_code: str, job_id: str | None = None) -> D
 
         # ── Graph Manager Ripple Effects ─────────────────────
         try:
-            from dip.layer3_state.graph_manager import GraphManager
+            from dip.pipeline.world_model.state.graph_manager import GraphManager
             gm = GraphManager(max_retries=1)
             ripple_effects = gm.get_ripple_effects(country_code)
             result["ripple_effects"] = ripple_effects
@@ -661,7 +685,7 @@ async def execute(query: str, country_code: str, job_id: str | None = None) -> D
 
         # ── Self-Model & Introspection ─────────────────────
         try:
-            from dip.nextgen.self_model import get_self_model
+            from dip.engines.self_model import get_self_model
             sm = get_self_model()
             sm.update_after_assessment(result)
             sm.log_backtest_result({"accuracy": result.get("verification_score", 0.0), "expected_accuracy": 0.9, "forecasts_resolved": 1})
@@ -701,10 +725,14 @@ async def execute(query: str, country_code: str, job_id: str | None = None) -> D
         result["red_team_report"] = session.red_team_report
 
         if session.final_decision:
-            for level in ["CRITICAL", "HIGH", "ELEVATED", "LOW"]:
-                if level in session.final_decision:
-                    result["threat_level"] = level
-                    break
+            try:
+                dec_json = json.loads(session.final_decision)
+                result["threat_level"] = dec_json.get("overall_threat_level", "LOW")
+            except Exception:
+                for level in ["CRITICAL", "HIGH", "ELEVATED", "LOW"]:
+                    if f'"overall_threat_level": "{level}"' in session.final_decision:
+                        result["threat_level"] = level
+                        break
 
         result["hypotheses"] = [
             {
@@ -713,6 +741,10 @@ async def execute(query: str, country_code: str, job_id: str | None = None) -> D
                 "confidence": getattr(h, "confidence", 0.5),
                 "matched_signals": getattr(h, "matched_signals", []),
                 "missing_signals": getattr(h, "missing_signals", []),
+                "rationale": getattr(h, "rationale", getattr(h, "recalibration_rationale", "Corroborated by StateContext intelligence signals.")),
+                "critical_signal_refs": getattr(h, "critical_signal_refs", []),
+                "disagreement_notes": getattr(h, "disagreement_notes", []),
+                "recalibrated_confidence": getattr(h, "recalibrated_confidence", None),
             }
             for h in session.hypotheses
         ]
@@ -744,7 +776,7 @@ async def execute(query: str, country_code: str, job_id: str | None = None) -> D
 
         # ── Layer 6: Presentation (Strategic Narrative) ──────────
         try:
-            from dip.layer6_presentation.strategic_narrative import (
+            from dip.pipeline.synthesis.presentation.strategic_narrative import (
                 synthesize_narrative,
                 narrative_to_markdown
             )
@@ -754,7 +786,7 @@ async def execute(query: str, country_code: str, job_id: str | None = None) -> D
             logger.info("[Layer 6] Strategic narrative synthesized (mode: %s)", narrative.get("generation_mode"))
             
             try:
-                from dip.nextgen.stix2_exporter import export_stix_bundle
+                from dip.engines.stix2_exporter import export_stix_bundle
                 stix_bundle = export_stix_bundle(result, session)
                 result["stix2_bundle"] = stix_bundle
             except ImportError:
@@ -768,7 +800,7 @@ async def execute(query: str, country_code: str, job_id: str | None = None) -> D
 
         # ── Multiformat Intelligence Export (NEW — DIP 2.1) ─────────────
         try:
-            from dip.nextgen.multiformat_exporter import export_all
+            from dip.engines.multiformat_exporter import export_all
             export_paths = export_all(result, session)
             result["export_paths"] = export_paths
             logger.info("[Export] Generated multiformat exports: %s", list(export_paths.keys()))

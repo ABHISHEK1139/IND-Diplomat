@@ -2,7 +2,7 @@ import asyncio
 
 import pytest
 
-from dip.analyst_api.job_store import STORE, run_job_background
+from dip.api.analyst.job_store import STORE, run_job_background
 
 
 @pytest.mark.asyncio

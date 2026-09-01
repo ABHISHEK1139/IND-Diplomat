@@ -3,7 +3,7 @@ import asyncio
 from unittest.mock import patch, MagicMock
 
 from dip.core.schema import InvestigationGoal, StateContext, RFIQuery
-from dip.control_loop.readiness_engine import evaluate_readiness
+from dip.runtime.control_loop.readiness_engine import evaluate_readiness
 
 def test_readiness_low_coverage():
     # Setup a state context with very few signals
@@ -66,9 +66,9 @@ async def test_recursive_pipeline_loop():
     from dip.unified_pipeline import execute
     
     # Mock StateProvider and SignalExtractor to avoid network calls
-    with patch('unified_pipeline.StateProvider') as MockProvider, \
-         patch('layer2_knowledge.signal_extractor.SignalExtractor') as MockExtractor, \
-         patch('unified_pipeline.run_council') as MockCouncil:
+    with patch('dip.unified_pipeline.StateProvider') as MockProvider, \
+         patch('dip.runtime.control_loop.investigation_controller.SignalExtractor') as MockExtractor, \
+         patch('dip.unified_pipeline.run_council') as MockCouncil:
          
         # Mock StateProvider to return an empty StateContext on first call
         mock_provider_instance = MockProvider.return_value

@@ -1,4 +1,4 @@
-from dip.nextgen.assessment_graph import HeadOfStatePipelineGraph
+from dip.engines.assessment_graph import HeadOfStatePipelineGraph
 
 
 def test_blackboard_posts_and_checkpoints(tmp_path):

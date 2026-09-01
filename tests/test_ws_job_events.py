@@ -1,7 +1,7 @@
 import asyncio
 
-from dip.api_ws.ws_manager import manager
-from dip.ind_diplomat import diplomat_query
+from dip.api.ws.ws_manager import manager
+from dip.pipeline.deliberation.ind_diplomat import diplomat_query
 
 
 class StubWebSocket:

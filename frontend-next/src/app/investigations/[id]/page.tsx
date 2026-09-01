@@ -133,8 +133,12 @@ export default function InvestigationWorkspacePage() {
       {/* Question Header */}
       <div className="glass p-5">
         <p className="text-[11px] text-text-muted uppercase tracking-widest mb-1">Investigation</p>
-        <h1 className="text-xl font-bold text-text-primary">Can India become an AI semiconductor leader by 2035?</h1>
-        <p className="text-xs text-text-muted mt-1 font-mono">ID: {Array.isArray(params?.id) ? params?.id[0] : params?.id}</p>
+        <h1 className="text-xl font-bold text-text-primary">
+          {result?.query || "Strategic Geopolitical Risk Assessment"}
+        </h1>
+        <p className="text-xs text-text-muted mt-1 font-mono">
+          ID: {Array.isArray(params?.id) ? params?.id[0] : params?.id} | Country: {result?.country || "IND"}
+        </p>
       </div>
 
       {/* Pipeline Tracker */}
@@ -163,7 +167,7 @@ export default function InvestigationWorkspacePage() {
             />
           </div>
 
-          {/* CENTER: Report / Notebook */}
+          {/* CENTER: Report / Ministers / Sources / Notebook */}
           <div className="col-span-6">
             <CenterPanel 
               allComplete={allComplete}
@@ -176,7 +180,8 @@ export default function InvestigationWorkspacePage() {
           <div className="col-span-3">
             <RightPanel 
               mockDebate={mockDebate} 
-              mockEvidence={mockEvidence} 
+              mockEvidence={mockEvidence}
+              hypotheses={result?.hypotheses}
             />
           </div>
         </motion.div>

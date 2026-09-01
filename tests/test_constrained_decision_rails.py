@@ -1,9 +1,9 @@
 import pytest
 
 from dip.core.schema import MinisterHypothesisOutput, Signal, StateContext
-from dip.layer4_reasoning.ministers.security_minister import SecurityMinister
-from dip.nextgen.structured_llm import parse_model
-from dip.nextgen.symbolic_guardrails import run_symbolic_guardrails
+from dip.pipeline.deliberation.reasoning.ministers.security_minister import SecurityMinister
+from dip.engines.structured_llm import parse_model
+from dip.engines.symbolic_guardrails import run_symbolic_guardrails
 
 
 def test_parse_model_validates_structured_minister_output():

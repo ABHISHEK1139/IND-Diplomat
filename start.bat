@@ -1,48 +1,63 @@
 @echo off
 setlocal
 echo ===================================================
-echo     Politiq AI 3.0 - Next-Gen Intelligence Engine
+echo     Politiq AI 3.0 - Ultimate 1-Click Starter
 echo ===================================================
 echo.
-echo Please select how you want to run the system:
-echo 1) Run Locally (Creates Virtual Environment ^& Installs Dependencies)
-echo 2) Run via Docker (Builds and runs all microservices)
-echo 3) Exit
-echo.
-set /p choice="Enter choice (1-3): "
 
-if "%choice%"=="1" goto local
-if "%choice%"=="2" goto docker
-if "%choice%"=="3" goto end
-goto end
+:: 1. API Keys & Configuration
+if not exist ".env" (
+    echo [INFO] No .env file found. Creating from .env.example...
+    if exist ".env.example" (
+        copy .env.example .env >nul
+    ) else (
+        echo LLM_MODEL=ollama/qwen3.5:4b > .env
+        echo LLM_API_BASE=http://127.0.0.1:11434 >> .env
+        echo OPENAI_API_KEY=your_openai_key >> .env
+        echo TAVILY_API_KEY=your_tavily_key >> .env
+    )
+    echo.
+    echo [ACTION REQUIRED] A new '.env' file has been created in the root directory.
+    echo Please open '.env' and add your API keys (e.g. OPENAI_API_KEY, TAVILY_API_KEY^)
+    echo if you are not using a local Ollama model.
+    echo.
+    echo Press any key to continue once your keys are ready...
+    pause
+)
 
-:local
-echo [INFO] Setting up local environment...
+:: 2. Backend Dependencies
+echo [INFO] Setting up Python backend environment...
 if not exist venv (
     echo [INFO] Creating Python virtual environment...
     python -m venv venv
 )
 call venv\Scripts\activate.bat
-echo [INFO] Upgrading pip...
-python -m pip install --upgrade pip
-echo [INFO] Installing dependencies...
-pip install -r requirements.txt
-pip install -e .
-:run_server
-echo [INFO] Starting the Politiq AI API Server (Auto-Heal enabled)...
-python -m uvicorn dip.api:app --host 0.0.0.0 --port 8000
-echo [WARNING] Server stopped or crashed! Auto-restarting in 5 seconds...
-timeout /t 5 >nul
-goto run_server
+echo [INFO] Installing Python dependencies (this may take a moment)...
+python -m pip install --upgrade pip >nul
+pip install -r requirements.txt >nul
+pip install -e . >nul
 
-:docker
-echo [INFO] Starting Docker Compose...
-cd docker
-docker-compose up --build
-cd ..
-goto end
+:: 3. Frontend Dependencies
+echo [INFO] Setting up Node.js frontend environment...
+if not exist "frontend-next\node_modules" (
+    cd frontend-next
+    echo [INFO] Installing NPM packages (this may take a moment)...
+    call npm install
+    cd ..
+)
 
-:end
-echo Exiting...
-endlocal
+:: 4. Start Both Servers
+echo [INFO] Starting Backend API on port 8000...
+start "Politiq AI Backend" cmd /c "call venv\Scripts\activate.bat && python -m uvicorn dip.api:app --host 0.0.0.0 --port 8000"
+
+echo [INFO] Starting Frontend UI on port 3000...
+start "Politiq AI Frontend" cmd /c "cd frontend-next && npm run dev"
+
+echo.
+echo ===================================================
+echo SUCCESS! System is starting up in separate windows.
+echo - Backend API: http://localhost:8000
+echo - Frontend UI: http://localhost:3000
+echo ===================================================
+echo Close this window when you are done to shut down.
 pause
