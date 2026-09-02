@@ -24,7 +24,7 @@ def export_all(result: Dict[str, Any], session: Any, output_dir: str = "exports"
     json_path = os.path.join(output_dir, f"{job_id}_raw.json")
     try:
         with open(json_path, 'w', encoding='utf-8') as f:
-            json.dump(result, f, indent=2)
+            json.dump(result, f, indent=2, default=str)
         paths["json"] = json_path
     except Exception as e:
         logger.error(f"Failed to export JSON: {e}")
