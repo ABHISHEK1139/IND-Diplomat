@@ -45,6 +45,7 @@ def print_result_summary(name, result):
     print()
 
 
+@pytest.mark.asyncio
 async def test_full_signals():
     """
     Test 1: Full signals query -> expects HIGH threat level.
@@ -74,9 +75,11 @@ async def test_full_signals():
         print(f"  {RED}[FAIL]{RESET} -- Expected HIGH/ELEVATED with hypotheses, "
               f"got Threat={threat}, Hypotheses={len(result.get('hypotheses', []))}")
 
+    assert passed, f"Expected HIGH/ELEVATED with hypotheses, got Threat={threat}"
     return passed
 
 
+@pytest.mark.asyncio
 async def test_no_military():
     """
     Test 2: Remove military keyword -> expects LOW or REFUSED.
@@ -106,9 +109,11 @@ async def test_no_military():
         print(f"  {RED}[FAIL]{RESET} -- Expected LOW/MODERATE/REFUSED/WITHHELD, "
               f"got Threat={threat}, Status={status}")
 
+    assert passed, f"Expected LOW/MODERATE/REFUSED/WITHHELD, got Threat={threat}, Status={status}"
     return passed
 
 
+@pytest.mark.asyncio
 async def test_empty_query():
     """
     Test 3: Empty/irrelevant query -> expects REFUSED.
@@ -138,6 +143,7 @@ async def test_empty_query():
         print(f"  {RED}[FAIL]{RESET} -- Expected REFUSED or LOW, "
               f"got Status={status}, Threat={threat}")
 
+    assert passed, f"Expected REFUSED or LOW, got Status={status}, Threat={threat}"
     return passed
 
 
@@ -190,12 +196,6 @@ async def run_all_tests():
 
     print()
 
-
-@pytest.mark.asyncio
-async def test_counterfactual_suite():
-    assert await test_full_signals() is True
-    assert await test_no_military() is True
-    assert await test_empty_query() is True
 
 if __name__ == "__main__":
     asyncio.run(run_all_tests())
