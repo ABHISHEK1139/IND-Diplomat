@@ -40,7 +40,21 @@ class DeterministicGate:
             logger.warning(f"[DeterministicGate] Confidence floor failed ({highest_conf}). WITHHOLD.")
             return "WITHHOLD"
             
-        # 2. Check for unresolved Contrarian challenges
+        # 2. Structural Coverage: Must have input from Security, Diplomacy, and Strategy
+        active_agents = set(self.bus.agent_memory.keys())
+        required_agents = {"Security", "Diplomacy", "Strategy"}
+        if not required_agents.issubset(active_agents):
+            missing = required_agents - active_agents
+            logger.warning(f"[DeterministicGate] Missing required agent coverage: {missing}. WITHHOLD.")
+            return "WITHHOLD"
+
+        # 3. Evidence grounding check: Are there unsupported verified claims?
+        unsupported = [m for m in self.bus.debate_memory if m.message_type.value == "VERIFICATION_RESULT" and "UNSUPPORTED" in m.claim]
+        if unsupported:
+            logger.warning(f"[DeterministicGate] Found {len(unsupported)} UNSUPPORTED verification results. WITHHOLD.")
+            return "WITHHOLD"
+            
+        # 4. Check for unresolved Contrarian challenges
         unresolved_challenges = sum(1 for m in self.bus.debate_memory if m.message_type.value == "CHALLENGE")
         rebuttals = sum(1 for m in self.bus.debate_memory if m.message_type.value == "REBUTTAL")
         
@@ -48,5 +62,5 @@ class DeterministicGate:
             logger.warning("[DeterministicGate] Unresolved Contrarian attacks present. WITHHOLD.")
             return "WITHHOLD"
             
-        logger.info("[DeterministicGate] All 5 gate rules passed. RELEASE.")
+        logger.info("[DeterministicGate] All gate rules passed structurally. RELEASE.")
         return "RELEASE"

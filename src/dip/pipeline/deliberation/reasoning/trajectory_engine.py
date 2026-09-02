@@ -51,49 +51,40 @@ class EarlyWarning(BaseModel):
 
 class TrajectoryEngine:
     """
-    Uses the Belief Trajectory data from Phase 9 to project
-    forward-looking conflict state distributions.
+    Uses the Bayesian Temporal History combined with verified Belief Trajectory
+    to project forward-looking conflict state distributions.
     """
 
-    def __init__(self, belief_trajectory: BeliefTrajectory, message_bus: MessageBus):
+    def __init__(self, belief_trajectory: BeliefTrajectory, message_bus: MessageBus, state_context: 'StateContext'):
         self.bt = belief_trajectory
         self.bus = message_bus
+        self.state_context = state_context
         self.early_warnings: List[EarlyWarning] = []
 
     def project_state_distribution(self, horizon_days: int) -> StateDistribution:
         """
         Project a probability distribution across conflict states
-        at the given horizon, using agent belief trajectories and momentum.
+        at the given horizon, using Bayesian state and agent momentum.
         """
-        # Gather current agent beliefs and momentum
-        agent_probs: Dict[str, float] = {}
+        # 1. Base Bayesian Probability
+        # Take the deterministic escalation score as the baseline
+        bayesian_prob = 0.5
+        if hasattr(self.state_context, 'escalation') and self.state_context.escalation:
+            bayesian_prob = self.state_context.escalation.escalation_score
+
+        # 2. Verified LLM Trajectory Adjustments
         agent_momentum: Dict[str, float] = {}
 
         for agent in self.bt.trajectories:
             latest = self.bt.get_latest(agent)
             if latest:
-                agent_probs[agent] = latest.probability
                 agent_momentum[agent] = self.bt.compute_momentum(agent)
 
-        if not agent_probs:
-            # No data — return uniform distribution
-            uniform = {s: 1.0 / len(CONFLICT_STATES) for s in CONFLICT_STATES}
-            return StateDistribution(
-                horizon_days=horizon_days,
-                probabilities=uniform,
-                dominant_state="CRISIS",
-                confidence=0.1,
-                black_swan_risk=0.05,
-            )
-
-        # Compute weighted average probability across agents
-        avg_prob = sum(agent_probs.values()) / len(agent_probs)
         avg_momentum = sum(agent_momentum.values()) / len(agent_momentum) if agent_momentum else 0.0
 
-        # Project forward using momentum * horizon scaling
-        # Longer horizons amplify uncertainty
+        # Project forward using Bayesian Base + Verified LLM Momentum * horizon scaling
         decay = 1.0 / (1.0 + 0.02 * horizon_days)  # confidence decay
-        projected = avg_prob + avg_momentum * (horizon_days / 7.0) * decay
+        projected = bayesian_prob + avg_momentum * (horizon_days / 7.0) * decay
         projected = max(0.0, min(1.0, projected))
 
         # Map projected probability to a state distribution

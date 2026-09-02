@@ -335,7 +335,7 @@ async def run_full_integration_test():
         for snap in agent.belief_trajectory.get_trajectory(agent.name):
             combined_bt.record(snap.agent, snap.state, snap.probability,
                                snap.reason, snap.evidence_ids, snap.round_num)
-    te = TrajectoryEngine(combined_bt, bus)
+    te = TrajectoryEngine(combined_bt, bus, state_context)
     forecast = te.generate_forecast()
     for horizon, dist in forecast["trajectories"].items():
         print(f"  {horizon}: dominant={dist['dominant_state']} "
