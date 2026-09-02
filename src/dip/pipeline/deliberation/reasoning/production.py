@@ -132,8 +132,16 @@ class AuthManager:
 class RateLimitError(Exception):
     pass
 
+class CostMetrics(BaseModel):
+    llm_calls: int = 0
+    input_tokens: int = 0
+    output_tokens: int = 0
+    latency_seconds: float = 0.0
+    evidence_calls: int = 0
+    retries: int = 0
+    
 class ResilienceManager:
-    """Handles Rate Limiting, Timeouts, Retries, and Fallbacks."""
+    """Handles Rate Limiting, Timeouts, Retries, Fallbacks, and System Cost Metrics."""
     
     MAX_ROUNDS = 4
     MAX_MESSAGES_PER_ROUND = 200
@@ -144,6 +152,16 @@ class ResilienceManager:
         self.message_counts: Dict[str, int] = {}
         self.evidence_requests: Dict[str, int] = {}
         self.round_count = 1
+        self.metrics = CostMetrics()
+        
+    def record_llm_call(self, input_tokens: int, output_tokens: int, latency: float, retried: bool = False):
+        """Track LLM costs as a first-class production metric."""
+        self.metrics.llm_calls += 1
+        self.metrics.input_tokens += input_tokens
+        self.metrics.output_tokens += output_tokens
+        self.metrics.latency_seconds += latency
+        if retried:
+            self.metrics.retries += 1
         
     def check_rate_limit(self, agent: str, message_type: MessageType, current_round: int):
         """Raises RateLimitError if limits are exceeded, preventing runaway LLM loops."""
