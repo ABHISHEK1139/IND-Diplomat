@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "politiq-ai"
-version = "3.0.0"
+version = "3.1.0"
 description = "Politiq AI: Next-generation geopolitical intelligence and head-of-country advisory system."
 readme = "README.md"
 requires-python = ">=3.11"

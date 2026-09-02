@@ -52,3 +52,4 @@ pip install -e ".[dev]"          # Tests + linting + security
 - [ ] Run security scan: `bandit -r . && safety check`
 - [ ] Set up Prefect server for scheduled workflows
 - [ ] Index treaties into ChromaDB for legal RAG
+

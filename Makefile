@@ -20,3 +20,7 @@ smoke:
 
 api:
 	python -m uvicorn api:app --host 127.0.0.1 --port 8000
+
+
+test-swarm:
+	PYTHONPATH=src python -m pytest tests/test_multi_agent_protocol.py

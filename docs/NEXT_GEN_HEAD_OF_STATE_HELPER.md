@@ -64,3 +64,4 @@ Keep these custom because they are the unique intelligence layer:
 - DuckDuckGo Search: live web search for treaty and legal RAG.
 - OpenCTI/STIX: knowledge-graph and structured intelligence object patterns.
 - NetworkX: complex network representation and algorithms.
+

@@ -61,3 +61,4 @@ jobs:
         pip install safety
         safety check -r requirements.txt
       continue-on-error: true
+

@@ -13,3 +13,4 @@ scrape_configs:
       - targets: ['web:8000']
         labels:
           application: 'dip2_ministers'
+
