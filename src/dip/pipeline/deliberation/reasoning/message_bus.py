@@ -14,7 +14,15 @@ class MessageBus:
     Supports pub/sub architecture using Python asyncio queues as a prototype
     for future Redis Streams / Kafka integration.
     """
-    def __init__(self):
+    def __init__(self, trace_id: str = "UNKNOWN_TRACE"):
+        # Phase 15: Production Hardening
+        from dip.pipeline.deliberation.reasoning.production import AuthManager, AuditLogger, ResilienceManager, PermissionError
+        self.trace_id = trace_id
+        self.auth = AuthManager(trace_id)
+        self.audit = AuditLogger(trace_id)
+        self.resilience = ResilienceManager()
+        self.PermissionError = PermissionError
+
         # Level 1 - Global Evidence Memory
         self.evidence_memory: Dict[str, EvidenceNode] = {}
         
@@ -52,14 +60,31 @@ class MessageBus:
         self.subscribe("ALL", callback)
 
     async def publish(self, message: AgentMessage):
-        """Publish a message to the bus."""
+        """Publish a message to the bus, validating auth and rate limits first."""
+        # 1. Check Rate Limits
+        self.resilience.check_rate_limit(message.sender, message.message_type, message.round)
+        
+        # 2. Verify Identity Signature
+        if not self.auth.verify_message(message):
+            raise self.PermissionError(f"Signature mismatch for {message.sender}")
+            
+        # 3. Log to Audit
+        self.audit.log(
+            event="MESSAGE_PUBLISHED", 
+            agent=message.sender, 
+            message_id=message.message_id, 
+            evidence_ids=message.evidence_ids,
+            message_type=message.message_type.value
+        )
+        
+        # 4. Store and Route
+        self.debate_memory.append(message)
         await self.queue.put(message)
 
     async def _worker(self):
         while self._running:
             try:
                 message: AgentMessage = await self.queue.get()
-                self.debate_memory.append(message)
                 
                 # Route to specific type subscribers
                 topic = message.message_type.value

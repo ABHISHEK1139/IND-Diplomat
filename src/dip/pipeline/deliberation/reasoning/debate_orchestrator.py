@@ -63,14 +63,17 @@ class DebateOrchestrator:
 
         elif self.state == OrchestratorState.INDEPENDENT_ANALYSIS:
             logger.info("[Orchestrator] Gathering independent hypotheses.")
+            msg_id = f"sys_r{self.round}"
             msg = AgentMessage(
-                message_id=f"sys_r{self.round}",
+                message_id=msg_id,
+                trace_id=self.bus.trace_id,
                 round=self.round,
                 sender="Orchestrator",
                 receiver="BROADCAST",
                 message_type=MessageType.EVIDENCE_REQUEST,
                 claim="Produce initial independent hypotheses",
-                reasoning_summary="Start of Phase 1."
+                reasoning_summary="Start of Phase 1.",
+                signature=self.bus.auth.sign_message("Orchestrator", msg_id)
             )
             await self.bus.publish(msg)
             await asyncio.sleep(2)
@@ -82,14 +85,17 @@ class DebateOrchestrator:
 
         elif self.state == OrchestratorState.CONTRARIAN_CHALLENGE:
             logger.info("[Orchestrator] Red Team Contrarian challenge.")
+            msg_id = f"sys_c{self.round}"
             msg = AgentMessage(
-                message_id=f"sys_c{self.round}",
+                message_id=msg_id,
+                trace_id=self.bus.trace_id,
                 round=self.round,
                 sender="Orchestrator",
                 receiver="BROADCAST",
                 message_type=MessageType.EVIDENCE_REQUEST,
                 claim="Contrarian challenge: attack the highest confidence hypothesis.",
-                reasoning_summary="Start of Phase 5."
+                reasoning_summary="Start of Phase 5.",
+                signature=self.bus.auth.sign_message("Orchestrator", msg_id)
             )
             await self.bus.publish(msg)
             await asyncio.sleep(2)
@@ -106,14 +112,17 @@ class DebateOrchestrator:
             from dip.pipeline.deliberation.reasoning.verification_pipeline import VerificationPipeline
             VerificationPipeline(self.bus)
 
+            msg_id = f"sys_v{self.round}"
             msg = AgentMessage(
-                message_id=f"sys_v{self.round}",
+                message_id=msg_id,
+                trace_id=self.bus.trace_id,
                 round=self.round,
                 sender="Orchestrator",
                 receiver="BROADCAST",
                 message_type=MessageType.VERIFICATION_REQUEST,
                 claim="Verify all current hypotheses",
-                reasoning_summary="Start of Phase 6."
+                reasoning_summary="Start of Phase 6.",
+                signature=self.bus.auth.sign_message("Orchestrator", msg_id)
             )
             await self.bus.publish(msg)
             await asyncio.sleep(1)

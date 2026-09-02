@@ -41,14 +41,17 @@ class VerificationPipeline:
         # 4. Result formulation
         result_state = "VERIFIED" if verified else "UNSUPPORTED"
         
+        msg_id = f"verif_{message.message_id}"
         response = AgentMessage(
-            message_id=f"verif_{message.message_id}",
+            message_id=msg_id,
+            trace_id=self.bus.trace_id,
             round=message.round,
-            sender="VerificationEngine",
+            sender="Verification",
             receiver=message.sender,
             message_type=MessageType.VERIFICATION_RESULT,
             claim=f"Verification status: {result_state}",
-            reasoning_summary="Completed CoVe pipeline check against Global Evidence Memory."
+            reasoning_summary="Completed CoVe pipeline check against Global Evidence Memory.",
+            signature=self.bus.auth.sign_message("Verification", msg_id)
         )
         
         await self.bus.publish(response)

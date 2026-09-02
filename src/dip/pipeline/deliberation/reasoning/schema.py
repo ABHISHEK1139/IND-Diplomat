@@ -28,6 +28,7 @@ class BeliefLedger(BaseModel):
 
 class AgentMessage(BaseModel):
     message_id: str
+    trace_id: str = "UNKNOWN_TRACE"  # Phase 15: Run reproducibility and tracing
     round: int
     sender: str
     receiver: str
@@ -39,6 +40,7 @@ class AgentMessage(BaseModel):
     evidence_ids: List[str] = Field(default_factory=list)
     counter_evidence: List[str] = Field(default_factory=list)
     reasoning_summary: str
+    signature: Optional[str] = None  # Phase 15: Agent authentication signature
     created_at: str = Field(default_factory=lambda: datetime.utcnow().isoformat())
 
 class EvidenceNode(BaseModel):

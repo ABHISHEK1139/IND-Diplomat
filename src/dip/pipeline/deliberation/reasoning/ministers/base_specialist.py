@@ -81,8 +81,10 @@ class BaseSpecialist(abc.ABC):
         reasoning_summary: str = ""
     ):
         """Publish a structured message to the bus."""
+        msg_id = f"msg_{uuid.uuid4().hex[:8]}"
         msg = AgentMessage(
-            message_id=f"msg_{uuid.uuid4().hex[:8]}",
+            message_id=msg_id,
+            trace_id=self.bus.trace_id,
             round=round_num,
             sender=self.name,
             receiver=receiver,
@@ -93,7 +95,8 @@ class BaseSpecialist(abc.ABC):
             confidence=confidence,
             evidence_ids=evidence_ids or [],
             counter_evidence=counter_evidence or [],
-            reasoning_summary=reasoning_summary
+            reasoning_summary=reasoning_summary,
+            signature=self.bus.auth.sign_message(self.name, msg_id)
         )
         await self.bus.publish(msg)
 
