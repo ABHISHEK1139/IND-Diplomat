@@ -1,52 +1,106 @@
-"""Strategy Minister — tests: 'Is this escalation or de-escalation?'
+import json
+from typing import List
 
-Predicts the observable signals that SHOULD exist if the situation is
-escalating (or de-escalating), then compares against the StateContext.
-"""
+from dip.pipeline.deliberation.reasoning.schema import AgentMessage, MessageType
+from dip.pipeline.deliberation.reasoning.ministers.base_specialist import BaseSpecialist
+from dip.pipeline.deliberation.reasoning.message_bus import MessageBus
+from dip.telemetry.llm_tracer import tracer
+from dip.core.Config.config import config
+from dip.core.json_utils import strip_markdown_json
 
-from dip.pipeline.deliberation.reasoning.ministers.base import BaseMinister
 
-
-class StrategyMinister(BaseMinister):
-    """Hypothesis tester for escalation vs. de-escalation patterns."""
-
-    @property
-    def minister_name(self) -> str:
-        return "Strategy Minister"
-
-    @property
-    def hypothesis_type(self) -> str:
-        return "Is this escalation or de-escalation?"
-
-    @property
-    def system_prompt(self) -> str:
-        return (
-            "You are a senior strategic-escalation analyst operating under "
-            "ICD-203 Analytic Standards. You apply the Kahn Escalation Ladder \n"
-            "and crisis stability frameworks. You are a hypothesis TESTER.\n\n"
-            "ANALYTICAL METHOD (follow this chain-of-thought):\n"
-            "1. HYPOTHESIS: State the escalation/de-escalation hypothesis.\n"
-            "2. ESCALATION LADDER ASSESSMENT:\n"
-            "   Level 1-3 (Subcrisis): Diplomatic friction, rhetorical escalation\n"
-            "   Level 4-6 (Crisis): Military mobilization, ultimatums, blockades\n"
-            "   Level 7-9 (Conflict): Limited strikes, theater operations\n"
-            "   Level 10+ (General War): Full mobilization, strategic weapons\n"
-            "3. PREDICTED ESCALATION INDICATORS:\n"
-            "   - Rhetoric intensity: leadership statements, threat language\n"
-            "   - Diplomatic channel status: open/closed/suspended/recalled\n"
-            "   - Military posture shifts: DEFCON equivalents, force generation\n"
-            "   - Alliance activation: Article 5/mutual defense invocations\n"
-            "   - Economic warfare: sanctions escalation, trade embargo\n"
-            "   - Information operations: propaganda surge, media blackout\n"
-            "   - Doctrinal shifts: published strategy changes, new command structures\n"
-            "4. PREDICTED DE-ESCALATION INDICATORS:\n"
-            "   - Ceasefire proposals, troop withdrawal announcements\n"
-            "   - Backchannel reopening, mediator acceptance\n"
-            "   - Conciliatory public statements, prisoner exchanges\n"
-            "5. MATCH against StateContext observed signals.\n"
-            "6. GAPS: List indicators NOT found.\n"
-            "7. CONFIDENCE: Calibrate using ICD-203.\n\n"
-            "EVIDENCE SEARCH: If escalation-ladder indicators are ambiguous, list \n"
-            "search queries in critical_signal_refs prefixed with 'RFI:'.\n\n"
-            "Return ONLY the MinisterHypothesisOutput JSON schema."
+class StrategySpecialist(BaseSpecialist):
+    def __init__(self, message_bus: MessageBus):
+        mandate = (
+            "Focus: escalation ladders, deterrence posture, strategic signaling, red lines, off-ramps, crisis stability. "
+            "Answer: 'Is this escalation or de-escalation?'"
         )
+        super().__init__("Strategy", mandate, message_bus)
+
+    async def process_message(self, message: AgentMessage):
+        if message.message_type == MessageType.EVIDENCE_REQUEST and message.sender == "Orchestrator":
+            # Phase 1: Formulate independent hypothesis based on evidence
+            await self._formulate_hypothesis(message)
+        elif message.message_type == MessageType.CHALLENGE and message.receiver == self.name:
+            # Phase: Rebuttal
+            await self._formulate_rebuttal(message)
+
+    async def _formulate_hypothesis(self, trigger_msg: AgentMessage):
+        prompt = f"""You are the Strategy Agent for IND-Diplomat.
+Mandate: {self.mandate}
+
+Analyze the global evidence memory (if any) and formulate your hypothesis.
+Use your analytical constraints to estimate the probability of ACTIVE_CONFLICT.
+
+Respond in JSON:
+{{
+    "claim": "Your main hypothesis",
+    "state": "ACTIVE_CONFLICT",
+    "probability": 0.65,
+    "confidence": 0.75,
+    "reasoning_summary": "Explanation of your reasoning based on strategic and escalation indicators."
+}}"""
+        try:
+            response = await tracer.acompletion(
+                layer="Layer4_Strategy",
+                model=config.LLM_MODEL,
+                messages=[{"role": "system", "content": prompt}],
+                temperature=0.2,
+                response_format={"type": "json_object"}
+            )
+            data = json.loads(strip_markdown_json(response.choices[0].message.content))
+            
+            await self.update_belief(data.get("state", "UNKNOWN"), data.get("probability", 0.5))
+            
+            await self.send_message(
+                receiver="BROADCAST",
+                message_type=MessageType.HYPOTHESIS,
+                claim=data.get("claim", ""),
+                round_num=trigger_msg.round,
+                state=data.get("state"),
+                probability=data.get("probability"),
+                confidence=data.get("confidence"),
+                reasoning_summary=data.get("reasoning_summary", "")
+            )
+        except Exception as e:
+            pass
+
+    async def _formulate_rebuttal(self, challenge_msg: AgentMessage):
+        prompt = f"""You are the Strategy Agent.
+You have been CHALLENGED by {challenge_msg.sender}.
+Challenge Claim: {challenge_msg.claim}
+Reasoning: {challenge_msg.reasoning_summary}
+
+Formulate a REBUTTAL or REVISION to your previous belief.
+Respond in JSON:
+{{
+    "claim": "Your rebuttal or revision",
+    "state": "ACTIVE_CONFLICT",
+    "probability": 0.62,
+    "confidence": 0.70,
+    "reasoning_summary": "Why you updated or held your belief."
+}}"""
+        try:
+            response = await tracer.acompletion(
+                layer="Layer4_Strategy",
+                model=config.LLM_MODEL,
+                messages=[{"role": "system", "content": prompt}],
+                temperature=0.2,
+                response_format={"type": "json_object"}
+            )
+            data = json.loads(strip_markdown_json(response.choices[0].message.content))
+            
+            await self.update_belief(data.get("state", "UNKNOWN"), data.get("probability", 0.5))
+            
+            await self.send_message(
+                receiver=challenge_msg.sender,
+                message_type=MessageType.REBUTTAL,
+                claim=data.get("claim", ""),
+                round_num=challenge_msg.round + 1,
+                state=data.get("state"),
+                probability=data.get("probability"),
+                confidence=data.get("confidence"),
+                reasoning_summary=data.get("reasoning_summary", "")
+            )
+        except Exception as e:
+            pass

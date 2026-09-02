@@ -1,52 +1,83 @@
-"""Contrarian Minister — tests the strongest alternative explanation."""
+import json
+import random
+from typing import List
 
-from dip.pipeline.deliberation.reasoning.ministers.base import BaseMinister
+from dip.pipeline.deliberation.reasoning.schema import AgentMessage, MessageType
+from dip.pipeline.deliberation.reasoning.ministers.base_specialist import BaseSpecialist
+from dip.pipeline.deliberation.reasoning.message_bus import MessageBus
+from dip.telemetry.llm_tracer import tracer
+from dip.core.Config.config import config
+from dip.core.json_utils import strip_markdown_json
 
-
-class ContrarianMinister(BaseMinister):
-    """Hypothesis tester for deception, false positives, and de-escalation."""
-
-    @property
-    def minister_name(self) -> str:
-        return "Contrarian Minister"
-
-    @property
-    def hypothesis_type(self) -> str:
-        return "What is the strongest non-escalatory or deceptive explanation?"
-
-    @property
-    def system_prompt(self) -> str:
-        return (
-            "You are a senior Red Team / Devil's Advocate analyst operating under "
-            "ICD-203 Analytic Standards. Your SOLE PURPOSE is to stress-test the \n"
-            "consensus by finding the strongest ALTERNATIVE explanation.\n\n"
-            "COGNITIVE BIAS CHECKLIST (apply systematically):\n"
-            "- Confirmation Bias: Are analysts only seeing evidence that supports \n"
-            "  the prevailing hypothesis?\n"
-            "- Anchoring: Is the first piece of evidence disproportionately \n"
-            "  influencing the assessment?\n"
-            "- Availability Bias: Are recent or dramatic events overweighted?\n"
-            "- Mirror Imaging: Are we assuming the adversary thinks like us?\n"
-            "- Groupthink: Has the cabinet converged too quickly without dissent?\n"
-            "- Base Rate Neglect: How often do similar situations actually escalate?\n\n"
-            "ANALYTICAL METHOD (follow this chain-of-thought):\n"
-            "1. ALTERNATIVE HYPOTHESIS: State the strongest non-escalatory \n"
-            "   explanation (exercises, defensive posturing, bluffing, deception, \n"
-            "   domestic distraction, sensor error, propaganda inflation).\n"
-            "2. PREDICTED INDICATORS for the ALTERNATIVE being TRUE:\n"
-            "   - Routine exercise schedules matching observed movements\n"
-            "   - Defensive-only posturing (no offensive logistics buildup)\n"
-            "   - Diplomatic backchannels remaining active despite public rhetoric\n"
-            "   - Economic constraints making escalation costly\n"
-            "   - Propaganda-to-action ratio: lots of rhetoric, minimal force changes\n"
-            "   - Missing corroboration from independent sources\n"
-            "   - Historical base rates: similar crises that did NOT escalate\n"
-            "3. MATCH against StateContext observed signals.\n"
-            "4. GAPS in the MAIN escalation hypothesis (evidence the other \n"
-            "   ministers may have overlooked or overweighted).\n"
-            "5. CONFIDENCE in the ALTERNATIVE explanation using ICD-203.\n\n"
-            "EVIDENCE SEARCH: If alternative-explanation evidence is missing, \n"
-            "list search queries in critical_signal_refs prefixed with 'RFI:' \n"
-            "(e.g., 'RFI: scheduled military exercises September 2026 routine').\n\n"
-            "Return ONLY the MinisterHypothesisOutput JSON schema."
+class ContrarianSpecialist(BaseSpecialist):
+    def __init__(self, message_bus: MessageBus):
+        mandate = (
+            "ATTACK THE CURRENT HYPOTHESIS. Execute 6-dimension Red Team attacks: "
+            "1. Evidence attack, 2. Causal attack, 3. Base-rate attack, 4. Data-quality attack, "
+            "5. Temporal attack, 6. Alternative-hypothesis attack."
         )
+        super().__init__("Contrarian", mandate, message_bus)
+        
+        # Track hypotheses to attack
+        self.hypotheses_to_attack: List[AgentMessage] = []
+
+    async def process_message(self, message: AgentMessage):
+        if message.message_type == MessageType.HYPOTHESIS and message.sender != self.name:
+            self.hypotheses_to_attack.append(message)
+            
+        elif message.message_type == MessageType.EVIDENCE_REQUEST and message.sender == "Orchestrator":
+            # The orchestrator triggered a contrarian challenge phase
+            if "Contrarian challenge" in message.claim:
+                await self._execute_red_team_attack(message.round)
+
+    async def _execute_red_team_attack(self, round_num: int):
+        if not self.hypotheses_to_attack:
+            return
+            
+        # Target the highest probability hypothesis
+        target = max(self.hypotheses_to_attack, key=lambda x: x.probability if x.probability else 0)
+        
+        attack_types = [
+            "Evidence attack: Are we counting the same event multiple times?",
+            "Causal attack: Could this pattern have a non-escalatory explanation?",
+            "Base-rate attack: How often does this happen normally without conflict?",
+            "Data-quality attack: Is the source reliable?",
+            "Temporal attack: Has this activity declined recently?",
+            "Alternative-hypothesis attack: Is this deterrence signaling?"
+        ]
+        chosen_attack = random.choice(attack_types)
+        
+        prompt = f"""You are the Contrarian (Red Team) Agent for IND-Diplomat.
+Mandate: {self.mandate}
+
+Target Claim: {target.claim} by {target.sender}
+Target Probability: {target.probability}
+Target Reasoning: {target.reasoning_summary}
+
+Execute the following attack type: {chosen_attack}
+
+Respond in JSON:
+{{
+    "claim": "Your challenge statement",
+    "reasoning_summary": "Explanation of the attack and why their probability is unjustified.",
+    "severity": "HIGH|MEDIUM|LOW"
+}}"""
+        try:
+            response = await tracer.acompletion(
+                layer="Layer4_Contrarian",
+                model=config.LLM_MODEL,
+                messages=[{"role": "system", "content": prompt}],
+                temperature=0.3,
+                response_format={"type": "json_object"}
+            )
+            data = json.loads(strip_markdown_json(response.choices[0].message.content))
+            
+            await self.send_message(
+                receiver=target.sender,
+                message_type=MessageType.CHALLENGE,
+                claim=f"[{chosen_attack.split(':')[0]}] {data.get('claim')}",
+                round_num=round_num,
+                reasoning_summary=data.get("reasoning_summary", "")
+            )
+        except Exception as e:
+            pass

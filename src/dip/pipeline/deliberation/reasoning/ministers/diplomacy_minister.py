@@ -1,53 +1,54 @@
-"""Diplomacy Minister — tests: 'Is this diplomatic posturing or genuine negotiation?'
+import json
+from typing import List
 
-Predicts the observable signals that SHOULD exist if diplomatic activity
-represents real negotiation (vs. posturing), then compares against the StateContext.
-"""
+from dip.pipeline.deliberation.reasoning.schema import AgentMessage, MessageType
+from dip.pipeline.deliberation.reasoning.ministers.base_specialist import BaseSpecialist
+from dip.pipeline.deliberation.reasoning.message_bus import MessageBus
+from dip.telemetry.llm_tracer import tracer
+from dip.core.Config.config import config
+from dip.core.json_utils import strip_markdown_json
 
-from dip.pipeline.deliberation.reasoning.ministers.base import BaseMinister
-
-
-class DiplomacyMinister(BaseMinister):
-    """Hypothesis tester for diplomatic posturing vs. genuine negotiation."""
-
-    @property
-    def minister_name(self) -> str:
-        return "Diplomacy Minister"
-
-    @property
-    def hypothesis_type(self) -> str:
-        return "Is this diplomatic posturing or genuine negotiation?"
-
-    @property
-    def system_prompt(self) -> str:
-        return (
-            "You are a senior diplomatic-affairs analyst operating under "
-            "ICD-203 Analytic Standards. You are a hypothesis TESTER, not a "
-            "policy advisor.\n\n"
-            "ANALYTICAL METHOD (follow this chain-of-thought):\n"
-            "1. HYPOTHESIS: State the diplomatic behavior hypothesis being tested.\n"
-            "2. PREDICTED INDICATORS for GENUINE NEGOTIATION:\n"
-            "   - Envoy dispatches with substantive mandate (not ceremonial)\n"
-            "   - Back-channel communications via trusted intermediaries\n"
-            "   - Concession offers or precondition adjustments\n"
-            "   - Draft agreement texts or framework proposals leaked/circulated\n"
-            "   - Third-party mediator involvement (UN, regional body)\n"
-            "   - Public vs. private messaging CONSISTENCY (not contradictory)\n"
-            "   - Working-group formation with technical experts\n"
-            "   - Summit or ministerial meeting scheduling with concrete agenda\n"
-            "   - Confidence-building measures (prisoner exchanges, border protocols)\n"
-            "   - Treaty or protocol references (UN Charter, bilateral agreements)\n"
-            "3. PREDICTED INDICATORS for POSTURING:\n"
-            "   - Inflammatory public rhetoric contradicting private channels\n"
-            "   - Preconditions designed to be unacceptable\n"
-            "   - Refusal of mediation or third-party involvement\n"
-            "   - Propaganda-heavy statements with no substantive follow-through\n"
-            "4. MATCH against StateContext observed signals.\n"
-            "5. GAPS: List indicators NOT found.\n"
-            "6. CONFIDENCE: Calibrate using ICD-203 (Almost Certain / Highly Likely / \n"
-            "   Likely / Roughly Even / Unlikely).\n\n"
-            "EVIDENCE SEARCH: If diplomatic channel data is missing, list specific \n"
-            "search queries in critical_signal_refs prefixed with 'RFI:' \n"
-            "(e.g., 'RFI: bilateral joint statement text September 2026').\n\n"
-            "Return ONLY the MinisterHypothesisOutput JSON schema."
+class DiplomacySpecialist(BaseSpecialist):
+    def __init__(self, message_bus: MessageBus):
+        mandate = (
+            "Focus: treaties, negotiations, demarches, public rhetoric vs private signaling. "
+            "Answer: 'Is this diplomatic posturing or genuine negotiation?'"
         )
+        super().__init__("Diplomacy", mandate, message_bus)
+
+    async def process_message(self, message: AgentMessage):
+        if message.message_type == MessageType.EVIDENCE_REQUEST and message.sender == "Orchestrator":
+            await self._formulate_hypothesis(message)
+
+    async def _formulate_hypothesis(self, trigger_msg: AgentMessage):
+        prompt = f"""You are the Diplomacy Agent. Mandate: {self.mandate}
+Analyze the global evidence memory. Respond in JSON:
+{{
+    "claim": "Your main hypothesis",
+    "state": "ACTIVE_CONFLICT",
+    "probability": 0.40,
+    "confidence": 0.80,
+    "reasoning_summary": "Explanation based on diplomatic indicators."
+}}"""
+        try:
+            response = await tracer.acompletion(
+                layer="Layer4_Diplomacy",
+                model=config.LLM_MODEL,
+                messages=[{"role": "system", "content": prompt}],
+                temperature=0.2,
+                response_format={"type": "json_object"}
+            )
+            data = json.loads(strip_markdown_json(response.choices[0].message.content))
+            await self.update_belief(data.get("state", "UNKNOWN"), data.get("probability", 0.5))
+            await self.send_message(
+                receiver="BROADCAST",
+                message_type=MessageType.HYPOTHESIS,
+                claim=data.get("claim", ""),
+                round_num=trigger_msg.round,
+                state=data.get("state"),
+                probability=data.get("probability"),
+                confidence=data.get("confidence"),
+                reasoning_summary=data.get("reasoning_summary", "")
+            )
+        except Exception:
+            pass

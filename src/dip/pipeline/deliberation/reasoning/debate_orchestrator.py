@@ -60,6 +60,17 @@ class DebateOrchestrator:
             
         elif self.state == OrchestratorState.CONTRARIAN_CHALLENGE:
             logger.info("[Orchestrator] Red Team Contrarian challenge.")
+            msg = AgentMessage(
+                message_id=f"sys_c{self.round}",
+                round=self.round,
+                sender="Orchestrator",
+                receiver="BROADCAST",
+                message_type=MessageType.EVIDENCE_REQUEST,
+                claim="Contrarian challenge: attack the highest confidence hypothesis.",
+                reasoning_summary="Start of Phase 4."
+            )
+            await self.bus.publish(msg)
+            await asyncio.sleep(2)
             self.state = OrchestratorState.REBUTTAL
             
         elif self.state == OrchestratorState.REBUTTAL:
@@ -68,6 +79,22 @@ class DebateOrchestrator:
             
         elif self.state == OrchestratorState.CLAIM_VERIFICATION:
             logger.info("[Orchestrator] Verification pipeline active.")
+            # Trigger Verification Pipeline
+            from dip.pipeline.deliberation.reasoning.verification_pipeline import VerificationPipeline
+            vp = VerificationPipeline(self.bus)
+            
+            # Send the current top hypotheses for verification
+            msg = AgentMessage(
+                message_id=f"sys_v{self.round}",
+                round=self.round,
+                sender="Orchestrator",
+                receiver="BROADCAST",
+                message_type=MessageType.VERIFICATION_REQUEST,
+                claim="Verify all current hypotheses",
+                reasoning_summary="Start of Phase 6."
+            )
+            await self.bus.publish(msg)
+            await asyncio.sleep(1)
             self.state = OrchestratorState.CONSENSUS_SYNTHESIS
             
         elif self.state == OrchestratorState.CONSENSUS_SYNTHESIS:
@@ -76,6 +103,10 @@ class DebateOrchestrator:
             
         elif self.state == OrchestratorState.DETERMINISTIC_GATE:
             logger.info("[Orchestrator] Running deterministic gates.")
+            from dip.pipeline.deliberation.reasoning.deterministic_gate import DeterministicGate
+            gate = DeterministicGate(self.bus)
+            decision = gate.evaluate()
+            logger.info(f"[Orchestrator] Gate Decision: {decision}")
             self.state = OrchestratorState.FINAL_ASSESSMENT
             
         elif self.state == OrchestratorState.FINAL_ASSESSMENT:

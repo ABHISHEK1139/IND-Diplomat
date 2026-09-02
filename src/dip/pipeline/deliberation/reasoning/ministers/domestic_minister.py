@@ -1,44 +1,106 @@
-"""Domestic Minister — tests internal stability and regime pressure."""
+import json
+from typing import List
 
-from dip.pipeline.deliberation.reasoning.ministers.base import BaseMinister
+from dip.pipeline.deliberation.reasoning.schema import AgentMessage, MessageType
+from dip.pipeline.deliberation.reasoning.ministers.base_specialist import BaseSpecialist
+from dip.pipeline.deliberation.reasoning.message_bus import MessageBus
+from dip.telemetry.llm_tracer import tracer
+from dip.core.Config.config import config
+from dip.core.json_utils import strip_markdown_json
 
 
-class DomesticMinister(BaseMinister):
-    """Hypothesis tester for internal instability and domestic pressure."""
-
-    @property
-    def minister_name(self) -> str:
-        return "Domestic Minister"
-
-    @property
-    def hypothesis_type(self) -> str:
-        return "Is domestic instability shaping the external behavior?"
-
-    @property
-    def system_prompt(self) -> str:
-        return (
-            "You are a senior domestic-stability and political-risk analyst "
-            "operating under ICD-203 Analytic Standards. You are a hypothesis "
-            "TESTER, not a political advisor.\n\n"
-            "ANALYTICAL METHOD (follow this chain-of-thought):\n"
-            "1. HYPOTHESIS: State the domestic-instability hypothesis being tested.\n"
-            "2. PREDICTED INDICATORS:\n"
-            "   - Mass protests or civil unrest: scale, frequency, geographic spread\n"
-            "   - Elite fragmentation: factional splits, purges, defections\n"
-            "   - Emergency powers invocation: martial law, curfews, media blackouts\n"
-            "   - Diversionary conflict incentives: 'rally around the flag' dynamics\n"
-            "   - Economic pain indicators: inflation spikes, unemployment surges\n"
-            "   - Leadership vulnerability: approval ratings, succession uncertainty\n"
-            "   - Nationalist mobilization: state-sponsored rallies, propaganda surge\n"
-            "   - Internal security deployments: police/paramilitary mobilization\n"
-            "   - Legislative or judicial challenges to executive authority\n"
-            "   - Social media sentiment shifts: hashtag campaigns, information ops\n"
-            "3. MATCH against StateContext observed signals.\n"
-            "4. GAPS: List indicators NOT found.\n"
-            "5. CONFIDENCE: Calibrate using ICD-203 language:\n"
-            "   Almost Certain / Highly Likely / Likely / Roughly Even / Unlikely.\n\n"
-            "EVIDENCE SEARCH: If domestic political intelligence is missing, list \n"
-            "search queries in critical_signal_refs prefixed with 'RFI:' \n"
-            "(e.g., 'RFI: protest activity capital city September 2026').\n\n"
-            "Return ONLY the MinisterHypothesisOutput JSON schema."
+class DomesticSpecialist(BaseSpecialist):
+    def __init__(self, message_bus: MessageBus):
+        mandate = (
+            "Focus: regime stability, public opinion, elections, protests, media control, succession politics. "
+            "Answer: 'Is domestic politics driving external behavior?'"
         )
+        super().__init__("Domestic", mandate, message_bus)
+
+    async def process_message(self, message: AgentMessage):
+        if message.message_type == MessageType.EVIDENCE_REQUEST and message.sender == "Orchestrator":
+            # Phase 1: Formulate independent hypothesis based on evidence
+            await self._formulate_hypothesis(message)
+        elif message.message_type == MessageType.CHALLENGE and message.receiver == self.name:
+            # Phase: Rebuttal
+            await self._formulate_rebuttal(message)
+
+    async def _formulate_hypothesis(self, trigger_msg: AgentMessage):
+        prompt = f"""You are the Domestic Agent for IND-Diplomat.
+Mandate: {self.mandate}
+
+Analyze the global evidence memory (if any) and formulate your hypothesis.
+Use your analytical constraints to estimate the probability of ACTIVE_CONFLICT.
+
+Respond in JSON:
+{{
+    "claim": "Your main hypothesis",
+    "state": "ACTIVE_CONFLICT",
+    "probability": 0.60,
+    "confidence": 0.72,
+    "reasoning_summary": "Explanation of your reasoning based on domestic political indicators."
+}}"""
+        try:
+            response = await tracer.acompletion(
+                layer="Layer4_Domestic",
+                model=config.LLM_MODEL,
+                messages=[{"role": "system", "content": prompt}],
+                temperature=0.2,
+                response_format={"type": "json_object"}
+            )
+            data = json.loads(strip_markdown_json(response.choices[0].message.content))
+            
+            await self.update_belief(data.get("state", "UNKNOWN"), data.get("probability", 0.5))
+            
+            await self.send_message(
+                receiver="BROADCAST",
+                message_type=MessageType.HYPOTHESIS,
+                claim=data.get("claim", ""),
+                round_num=trigger_msg.round,
+                state=data.get("state"),
+                probability=data.get("probability"),
+                confidence=data.get("confidence"),
+                reasoning_summary=data.get("reasoning_summary", "")
+            )
+        except Exception as e:
+            pass
+
+    async def _formulate_rebuttal(self, challenge_msg: AgentMessage):
+        prompt = f"""You are the Domestic Agent.
+You have been CHALLENGED by {challenge_msg.sender}.
+Challenge Claim: {challenge_msg.claim}
+Reasoning: {challenge_msg.reasoning_summary}
+
+Formulate a REBUTTAL or REVISION to your previous belief.
+Respond in JSON:
+{{
+    "claim": "Your rebuttal or revision",
+    "state": "ACTIVE_CONFLICT",
+    "probability": 0.58,
+    "confidence": 0.68,
+    "reasoning_summary": "Why you updated or held your belief."
+}}"""
+        try:
+            response = await tracer.acompletion(
+                layer="Layer4_Domestic",
+                model=config.LLM_MODEL,
+                messages=[{"role": "system", "content": prompt}],
+                temperature=0.2,
+                response_format={"type": "json_object"}
+            )
+            data = json.loads(strip_markdown_json(response.choices[0].message.content))
+            
+            await self.update_belief(data.get("state", "UNKNOWN"), data.get("probability", 0.5))
+            
+            await self.send_message(
+                receiver=challenge_msg.sender,
+                message_type=MessageType.REBUTTAL,
+                claim=data.get("claim", ""),
+                round_num=challenge_msg.round + 1,
+                state=data.get("state"),
+                probability=data.get("probability"),
+                confidence=data.get("confidence"),
+                reasoning_summary=data.get("reasoning_summary", "")
+            )
+        except Exception as e:
+            pass

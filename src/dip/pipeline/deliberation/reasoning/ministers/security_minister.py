@@ -1,52 +1,105 @@
-"""Security Minister — tests: 'Is this a genuine military threat?'
+import json
+from typing import List
 
-Predicts the observable signals that SHOULD exist if a genuine military
-threat is present, then compares against the StateContext.
-"""
+from dip.pipeline.deliberation.reasoning.schema import AgentMessage, MessageType
+from dip.pipeline.deliberation.reasoning.ministers.base_specialist import BaseSpecialist
+from dip.pipeline.deliberation.reasoning.message_bus import MessageBus
+from dip.telemetry.llm_tracer import tracer
+from dip.core.Config.config import config
+from dip.core.json_utils import strip_markdown_json
 
-from dip.pipeline.deliberation.reasoning.ministers.base import BaseMinister
-
-
-class SecurityMinister(BaseMinister):
-    """Hypothesis tester for genuine military threat assessment."""
-
-    @property
-    def minister_name(self) -> str:
-        return "Security Minister"
-
-    @property
-    def hypothesis_type(self) -> str:
-        return "Is this a genuine military threat?"
-
-    @property
-    def system_prompt(self) -> str:
-        return (
-            "You are a senior military-intelligence analyst operating under "
-            "ICD-203 Analytic Standards. You are a hypothesis TESTER, not a "
-            "decision-maker.\n\n"
-            "ANALYTICAL METHOD (follow this chain-of-thought):\n"
-            "1. HYPOTHESIS: State the military threat hypothesis being tested.\n"
-            "2. PREDICTED INDICATORS: List the specific, observable signals that \n"
-            "   MUST be present if the hypothesis is TRUE. Think about:\n"
-            "   - Forward troop deployments & mechanized brigade positioning\n"
-            "   - Air defense radar battery activations & SAM redeployments\n"
-            "   - Naval task force repositioning & carrier strike group movements\n"
-            "   - Logistics surge: fuel depot activity, ammunition resupply convoys\n"
-            "   - Communications intercepts: encrypted traffic spikes, EMCON shifts\n"
-            "   - Runway extensions, hardened shelter construction, FOB activation\n"
-            "   - Mobilization orders: reserve callups, leave cancellations\n"
-            "   - SIGINT/ELINT anomalies indicating targeting or ISR activity\n"
-            "3. MATCH: Compare predicted indicators against observed StateContext signals.\n"
-            "4. GAPS: List predicted indicators NOT found in the evidence.\n"
-            "5. CONFIDENCE: Calibrate using ICD-203 language:\n"
-            "   - Almost Certain (95-99%): All critical indicators present\n"
-            "   - Highly Likely (80-95%): Most indicators present, minor gaps\n"
-            "   - Likely (55-80%): Majority present but notable gaps\n"
-            "   - Roughly Even (45-55%): Evidence split or ambiguous\n"
-            "   - Unlikely (<45%): Few indicators match, alternative explanation stronger\n\n"
-            "EVIDENCE SEARCH: If critical indicators are missing and you believe \n"
-            "additional web search could resolve them, list specific search queries \n"
-            "in critical_signal_refs prefixed with 'RFI:' (e.g., 'RFI: satellite imagery \n"
-            "LAC sector troop positions September 2026').\n\n"
-            "Return ONLY the MinisterHypothesisOutput JSON schema."
+class SecuritySpecialist(BaseSpecialist):
+    def __init__(self, message_bus: MessageBus):
+        mandate = (
+            "Focus: military capability, mobilization, force posture, logistics, readiness, WMD, "
+            "military signaling. Answer: 'What military evidence suggests the conflict state is changing?'"
         )
+        super().__init__("Security", mandate, message_bus)
+
+    async def process_message(self, message: AgentMessage):
+        if message.message_type == MessageType.EVIDENCE_REQUEST and message.sender == "Orchestrator":
+            # Phase 1: Formulate independent hypothesis based on evidence
+            await self._formulate_hypothesis(message)
+        elif message.message_type == MessageType.CHALLENGE and message.receiver == self.name:
+            # Phase: Rebuttal
+            await self._formulate_rebuttal(message)
+
+    async def _formulate_hypothesis(self, trigger_msg: AgentMessage):
+        prompt = f"""You are the Security Agent for IND-Diplomat.
+Mandate: {self.mandate}
+
+Analyze the global evidence memory (if any) and formulate your hypothesis.
+Use your analytical constraints to estimate the probability of ACTIVE_CONFLICT.
+
+Respond in JSON:
+{{
+    "claim": "Your main hypothesis",
+    "state": "ACTIVE_CONFLICT",
+    "probability": 0.68,
+    "confidence": 0.74,
+    "reasoning_summary": "Explanation of your reasoning based on military indicators."
+}}"""
+        try:
+            response = await tracer.acompletion(
+                layer="Layer4_Security",
+                model=config.LLM_MODEL,
+                messages=[{"role": "system", "content": prompt}],
+                temperature=0.2,
+                response_format={"type": "json_object"}
+            )
+            data = json.loads(strip_markdown_json(response.choices[0].message.content))
+            
+            await self.update_belief(data.get("state", "UNKNOWN"), data.get("probability", 0.5))
+            
+            await self.send_message(
+                receiver="BROADCAST",
+                message_type=MessageType.HYPOTHESIS,
+                claim=data.get("claim", ""),
+                round_num=trigger_msg.round,
+                state=data.get("state"),
+                probability=data.get("probability"),
+                confidence=data.get("confidence"),
+                reasoning_summary=data.get("reasoning_summary", "")
+            )
+        except Exception as e:
+            pass
+
+    async def _formulate_rebuttal(self, challenge_msg: AgentMessage):
+        prompt = f"""You are the Security Agent.
+You have been CHALLENGED by {challenge_msg.sender}.
+Challenge Claim: {challenge_msg.claim}
+Reasoning: {challenge_msg.reasoning_summary}
+
+Formulate a REBUTTAL or REVISION to your previous belief.
+Respond in JSON:
+{{
+    "claim": "Your rebuttal or revision",
+    "state": "ACTIVE_CONFLICT",
+    "probability": 0.65,
+    "confidence": 0.70,
+    "reasoning_summary": "Why you updated or held your belief."
+}}"""
+        try:
+            response = await tracer.acompletion(
+                layer="Layer4_Security",
+                model=config.LLM_MODEL,
+                messages=[{"role": "system", "content": prompt}],
+                temperature=0.2,
+                response_format={"type": "json_object"}
+            )
+            data = json.loads(strip_markdown_json(response.choices[0].message.content))
+            
+            await self.update_belief(data.get("state", "UNKNOWN"), data.get("probability", 0.5))
+            
+            await self.send_message(
+                receiver=challenge_msg.sender,
+                message_type=MessageType.REBUTTAL,
+                claim=data.get("claim", ""),
+                round_num=challenge_msg.round + 1,
+                state=data.get("state"),
+                probability=data.get("probability"),
+                confidence=data.get("confidence"),
+                reasoning_summary=data.get("reasoning_summary", "")
+            )
+        except Exception as e:
+            pass
