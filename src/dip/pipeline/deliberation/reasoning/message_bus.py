@@ -32,6 +32,9 @@ class MessageBus:
         # Level 3 - Debate Memory (the trace)
         self.debate_memory: List[AgentMessage] = []
         
+        # Track registered specialist agents
+        self.registered_agents: List[str] = []
+        
         # Subscriptions
         # Dict[topic, List[callback]]
         self.subscriptions: Dict[str, List[Callable[[AgentMessage], Awaitable[None]]]] = {}
@@ -49,6 +52,12 @@ class MessageBus:
             self.agent_memory[ledger.agent] = []
         self.agent_memory[ledger.agent].append(ledger)
         logger.debug(f"[Agent Memory] Updated belief for {ledger.agent}")
+
+    def register_agent(self, agent_name: str):
+        """Register a participating specialist agent."""
+        if agent_name not in self.registered_agents:
+            self.registered_agents.append(agent_name)
+            logger.debug(f"[MessageBus] Registered agent: {agent_name}")
 
     def subscribe(self, message_type, callback: Callable[[AgentMessage], Awaitable[None]]):
         topic = message_type.value if hasattr(message_type, "value") else message_type

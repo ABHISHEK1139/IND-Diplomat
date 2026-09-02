@@ -48,6 +48,9 @@ class BaseSpecialist(abc.ABC):
         # Phase 9: Local belief trajectory
         self.belief_trajectory = BeliefTrajectory()
 
+        # Register with message bus
+        self.bus.register_agent(self.name)
+
         # Subscribe to messages directed at this agent or BROADCAST
         self.bus.subscribe_to_all(self._handle_incoming)
 
@@ -135,6 +138,38 @@ class BaseSpecialist(abc.ABC):
             reasoning_summary=f"{self.name} requires additional evidence: {query}"
         )
         logger.info(f"[{self.name}] Issued EVIDENCE_REQUEST: {query}")
+
+    async def perform_web_search(self, query: str, max_results: int = 3) -> List[str]:
+        """Perform live autonomous internet search via ResilientWebSurfer.
+        
+        Fetches live OSINT, injects new EvidenceNodes into the MessageBus,
+        and appends new findings to this agent's private context.
+        """
+        try:
+            from dip.pipeline.collection.research.retrieval.web_surfer import ResilientWebSurfer
+            surfer = ResilientWebSurfer()
+            observations = await surfer.search(query=query, max_results=max_results)
+            new_snippets = []
+            for obs in observations:
+                snippet = f"[{self.name} Web Search] {obs.content}"
+                new_snippets.append(snippet)
+                ev_id = f"EV_WEB_{uuid.uuid4().hex[:6]}"
+                self.bus.add_evidence(EvidenceNode(
+                    evidence_id=ev_id,
+                    observation_id=obs.source_id or "WEB",
+                    source="LiveWebSearch",
+                    reliability=0.80,
+                    content=obs.content,
+                    timestamp=datetime.now(timezone.utc).isoformat()
+                ))
+                self.my_evidence_ids.append(ev_id)
+            if new_snippets:
+                self.evidence_context += "\n" + "\n".join(new_snippets)
+                logger.info(f"[{self.name}] Live web search for '{query}' found {len(new_snippets)} new facts.")
+            return new_snippets
+        except Exception as e:
+            logger.warning(f"[{self.name}] Live web search failed: {e}")
+            return []
 
     def get_belief_summary(self) -> Dict:
         """Return this agent's belief trajectory summary (Phase 9)."""

@@ -34,14 +34,14 @@ You must explicitly cite the evidence IDs (e.g., EV_1234) that form the basis of
 Do not invent evidence. If the evidence is weak, your confidence should be low.
 
 Respond in strict JSON:
-{
+{{
     "claim": "Your main hypothesis (max 2 sentences)",
     "state": "ACTIVE_CONFLICT", 
     "probability": 0.0 to 1.0,
     "confidence": 0.0 to 1.0,
     "reasoning_summary": "Detailed explanation of your reasoning.",
     "evidence_ids_cited": ["EV_abc123", "EV_def456"]
-}'''
+}}'''
         try:
             response = await tracer.acompletion(
                 layer="Layer4_Security",
@@ -89,14 +89,14 @@ Formulate a REBUTTAL (defending your view) or a REVISION (updating your probabil
 You must cite evidence to support your defense or concession.
 
 Respond in strict JSON:
-{
+{{
     "claim": "Your rebuttal or concession (max 2 sentences)",
     "state": "ACTIVE_CONFLICT",
     "probability": 0.0 to 1.0,
     "confidence": 0.0 to 1.0,
     "reasoning_summary": "Why you updated or held your belief.",
     "evidence_ids_cited": ["EV_abc123"]
-}'''
+}}'''
         try:
             response = await tracer.acompletion(
                 layer="Layer4_Security",
@@ -129,3 +129,6 @@ Respond in strict JSON:
             )
         except Exception as e:
             logger.error(f"[Security] Rebuttal error: {e}")
+
+
+SecurityMinister = SecuritySpecialist

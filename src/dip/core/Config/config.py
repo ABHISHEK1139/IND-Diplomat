@@ -25,7 +25,8 @@ from typing import Optional
 # Load .env file at module level
 try:
     from dotenv import load_dotenv
-    _env_path = Path(__file__).resolve().parent.parent / ".env"
+    # Root dir is 4 levels up from config.py: src/dip/core/Config -> src/dip/core -> src/dip -> src -> project_root
+    _env_path = Path(__file__).resolve().parent.parent.parent.parent.parent / ".env"
     if _env_path.exists():
         load_dotenv(_env_path)
 except ImportError:

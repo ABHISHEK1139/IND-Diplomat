@@ -84,3 +84,6 @@ Respond in strict JSON:
             )
         except Exception as e:
             logger.error(f"[Contrarian] Challenge error: {e}")
+
+
+ContrarianMinister = ContrarianSpecialist

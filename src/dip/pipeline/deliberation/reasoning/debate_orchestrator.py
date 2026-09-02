@@ -51,8 +51,29 @@ class DebateOrchestrator:
         self.gate_decision: str = "PENDING"
         self.groupthink_result: Optional[Dict] = None
 
+    async def _wait_for_messages(self, message_types, expected_count: int, timeout_seconds: float = 60.0) -> bool:
+        """Wait dynamically until expected number of messages arrive or timeout."""
+        if not isinstance(message_types, (list, tuple, set)):
+            message_types = [message_types]
+            
+        start_time = asyncio.get_event_loop().time()
+        while asyncio.get_event_loop().time() - start_time < timeout_seconds:
+            count = sum(
+                1 for m in self.bus.debate_memory 
+                if m.round >= self.round and m.message_type in message_types
+            )
+            if count >= expected_count:
+                types_str = "/".join(t.value for t in message_types)
+                logger.info(f"[Orchestrator] Received {count}/{expected_count} {types_str} messages.")
+                return True
+            await asyncio.sleep(0.3)
+            
+        types_str = "/".join(t.value for t in message_types)
+        logger.warning(f"[Orchestrator] Timeout waiting for {types_str} messages. Proceeding.")
+        return False
+
     async def advance_state(self):
-        """State machine loop — one step per call."""
+        """State machine loop - one step per call."""
         if self.state == OrchestratorState.START:
             logger.info("[Orchestrator] Transitioning to EVIDENCE_READY")
             self.state = OrchestratorState.EVIDENCE_READY
@@ -76,7 +97,10 @@ class DebateOrchestrator:
                 signature=self.bus.auth.sign_message("Orchestrator", msg_id)
             )
             await self.bus.publish(msg)
-            await asyncio.sleep(2)
+            
+            # Dynamically wait for all active non-contrarian ministers to respond
+            expected_ministers = max(1, len([a for a in self.bus.registered_agents if a != "Contrarian"]))
+            await self._wait_for_messages(MessageType.HYPOTHESIS, expected_count=expected_ministers, timeout_seconds=45.0)
             self.state = OrchestratorState.CROSS_EXAMINATION
 
         elif self.state == OrchestratorState.CROSS_EXAMINATION:
@@ -98,13 +122,15 @@ class DebateOrchestrator:
                 signature=self.bus.auth.sign_message("Orchestrator", msg_id)
             )
             await self.bus.publish(msg)
-            await asyncio.sleep(2)
+            
+            # Dynamically wait for Contrarian to produce its challenge
+            await self._wait_for_messages(MessageType.CHALLENGE, expected_count=1, timeout_seconds=30.0)
             self.state = OrchestratorState.REBUTTAL
 
         elif self.state == OrchestratorState.REBUTTAL:
             logger.info("[Orchestrator] Agent rebuttals and belief revision.")
-            # Give agents time to process challenges and update beliefs
-            await asyncio.sleep(1)
+            # Dynamically wait for challenged agent to produce its rebuttal or revision
+            await self._wait_for_messages([MessageType.REBUTTAL, MessageType.REVISION], expected_count=1, timeout_seconds=30.0)
             self.state = OrchestratorState.CLAIM_VERIFICATION
 
         elif self.state == OrchestratorState.CLAIM_VERIFICATION:
