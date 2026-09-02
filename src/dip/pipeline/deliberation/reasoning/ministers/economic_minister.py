@@ -1,9 +1,21 @@
+"""
+Economic Minister / Specialist
+==============================
+Hybrid hypothesis tester for Economic analysis.
+Supports:
+  - Dual-mode deterministic rails & RFI search (DIP 2.0 BaseMinister)
+  - Asynchronous pub/sub deliberation bus (DIP 3.0 BaseSpecialist)
+"""
+
+from __future__ import annotations
+
 import json
 import logging
-from typing import List
+from typing import List, Optional
 
 from dip.pipeline.deliberation.reasoning.schema import AgentMessage, MessageType
 from dip.pipeline.deliberation.reasoning.ministers.base_specialist import BaseSpecialist
+from dip.pipeline.deliberation.reasoning.ministers.base import BaseMinister
 from dip.pipeline.deliberation.reasoning.message_bus import MessageBus
 from dip.telemetry.llm_tracer import tracer
 from dip.core.Config.config import config
@@ -11,10 +23,51 @@ from dip.core.json_utils import strip_markdown_json
 
 logger = logging.getLogger("Layer4.EconomicSpecialist")
 
-class EconomicSpecialist(BaseSpecialist):
-    def __init__(self, message_bus: MessageBus):
-        mandate = "You are the Economic Specialist. Your EXCLUSIVE focus is on sanctions, trade flows, energy pipelines, currency fluctuations, FDI, and supply chains. Ignore military posturing unless it disrupts trade."
-        super().__init__("Economic", mandate, message_bus)
+
+class EconomicSpecialist(BaseSpecialist, BaseMinister):
+    """Hypothesis tester for Economic assessment."""
+
+    def __init__(self, message_bus: Optional[MessageBus] = None):
+        mandate = "You are the Geo-Economic Specialist operating under ICD-203 standards. Your EXCLUSIVE focus is on trade flows, sanctions, energy dependencies, currency volatility, debt leverage, and supply chain chokepoints."
+        bus = message_bus if message_bus is not None else MessageBus()
+        BaseSpecialist.__init__(self, "Economic", mandate, bus)
+
+    @property
+    def minister_name(self) -> str:
+        return "Economic Minister"
+
+    @property
+    def hypothesis_type(self) -> str:
+        return "Are economic factors driving this behavior?"
+
+    @property
+    def system_prompt(self) -> str:
+        return """You are a senior geoeconomic analyst operating under ICD-203 Analytic Standards. You are a hypothesis TESTER, not a market advisor.
+
+ANALYTICAL METHOD (follow this chain-of-thought):
+1. HYPOTHESIS: State the economic-motivation hypothesis being tested.
+2. PREDICTED INDICATORS:
+   - Trade policy shifts: tariff announcements, import/export restrictions
+   - Sanctions timing: targeted entity lists, SWIFT exclusions, asset freezes
+   - Resource access disputes: energy corridors, rare earth minerals, water
+   - Currency movements: forex interventions, capital flight indicators
+   - Debt leverage: loan conditionality changes, credit rating actions
+   - Energy supply disruptions: pipeline rerouting, LNG contract shifts
+   - Investment withdrawal or FDI freeze announcements
+   - Supply chain realignment: nearshoring, friendshoring signals
+   - Economic corridor negotiations (BRI, IMEC, bilateral FTAs)
+   - Sovereign wealth fund repositioning
+3. MATCH against StateContext observed signals.
+4. GAPS: List indicators NOT found in evidence.
+5. CONFIDENCE: Calibrate using ICD-203 language: Almost Certain (95-99%) / Highly Likely (80-95%) / Likely (55-80%) / Roughly Even (45-55%) / Unlikely (<45%).
+
+EVIDENCE SEARCH: If trade data or sanctions intelligence is missing, list targeted search queries in critical_signal_refs prefixed with 'RFI:'.
+
+Return ONLY the MinisterHypothesisOutput JSON schema."""
+
+    # -------------------------------------------------------------------------
+    # MessageBus Deliberation Protocol (DIP 3.0)
+    # -------------------------------------------------------------------------
 
     async def process_message(self, message: AgentMessage):
         if message.message_type == MessageType.EVIDENCE_REQUEST and message.sender == "Orchestrator":
@@ -52,25 +105,45 @@ Respond in strict JSON:
             )
             data = json.loads(strip_markdown_json(response.choices[0].message.content))
             
+            # Defensive float typecasting
+            raw_prob = data.get("probability", 0.5)
+            try:
+                prob = float(raw_prob) if raw_prob is not None else 0.5
+            except (ValueError, TypeError):
+                prob = 0.5
+            prob = max(0.0, min(1.0, prob))
+
+            raw_conf = data.get("confidence", 0.5)
+            try:
+                conf = float(raw_conf) if raw_conf is not None else 0.5
+            except (ValueError, TypeError):
+                conf = 0.5
+            conf = max(0.0, min(1.0, conf))
+
+            state = data.get("state", "UNKNOWN")
+            evidence_cited = data.get("evidence_ids_cited", [])
+            claim = data.get("claim", "")
+            reasoning = data.get("reasoning_summary", "")
+
             # Phase 9: Record belief revision with reason
             await self.update_belief(
-                state=data.get("state", "UNKNOWN"), 
-                prob=data.get("probability", 0.5),
+                state=state, 
+                prob=prob,
                 reason="Initial Hypothesis Formulation",
-                evidence_ids=data.get("evidence_ids_cited", []),
+                evidence_ids=evidence_cited,
                 round_num=trigger_msg.round
             )
             
             await self.send_message(
                 receiver="BROADCAST",
                 message_type=MessageType.HYPOTHESIS,
-                claim=data.get("claim", ""),
+                claim=claim,
                 round_num=trigger_msg.round,
-                state=data.get("state"),
-                probability=data.get("probability"),
-                confidence=data.get("confidence"),
-                evidence_ids=data.get("evidence_ids_cited", []),
-                reasoning_summary=data.get("reasoning_summary", "")
+                state=state,
+                probability=prob,
+                confidence=conf,
+                evidence_ids=evidence_cited,
+                reasoning_summary=reasoning
             )
         except Exception as e:
             logger.error(f"[Economic] Hypothesis error: {e}")
@@ -90,6 +163,7 @@ You must cite evidence to support your defense or concession.
 
 Respond in strict JSON:
 {{
+    "action": "DEFEND or CONCEDE",
     "claim": "Your rebuttal or concession (max 2 sentences)",
     "state": "ACTIVE_CONFLICT",
     "probability": 0.0 to 1.0,
@@ -107,28 +181,52 @@ Respond in strict JSON:
             )
             data = json.loads(strip_markdown_json(response.choices[0].message.content))
             
-            # Phase 9: Record belief revision with reason (e.g., conceded to challenge)
+            # Defensive float typecasting
+            raw_prob = data.get("probability", 0.5)
+            try:
+                prob = float(raw_prob) if raw_prob is not None else 0.5
+            except (ValueError, TypeError):
+                prob = 0.5
+            prob = max(0.0, min(1.0, prob))
+
+            raw_conf = data.get("confidence", 0.5)
+            try:
+                conf = float(raw_conf) if raw_conf is not None else 0.5
+            except (ValueError, TypeError):
+                conf = 0.5
+            conf = max(0.0, min(1.0, conf))
+
+            state = data.get("state", "UNKNOWN")
+            evidence_cited = data.get("evidence_ids_cited", [])
+            claim = data.get("claim", "")
+            reasoning = data.get("reasoning_summary", "")
+            action = str(data.get("action", "DEFEND")).upper()
+
+            msg_type = MessageType.REVISION if "CONCEDE" in action else MessageType.REBUTTAL
+            
+            # Phase 9: Record belief revision with reason
             await self.update_belief(
-                state=data.get("state", "UNKNOWN"), 
-                prob=data.get("probability", 0.5),
-                reason=f"Revised in response to {challenge_msg.sender} challenge: {challenge_msg.claim[:50]}",
-                evidence_ids=data.get("evidence_ids_cited", []),
+                state=state, 
+                prob=prob,
+                reason=f"Response to {challenge_msg.sender} challenge: {challenge_msg.claim[:50]}",
+                evidence_ids=evidence_cited,
                 round_num=challenge_msg.round
             )
             
             await self.send_message(
                 receiver=challenge_msg.sender,
-                message_type=MessageType.REBUTTAL,
-                claim=data.get("claim", ""),
-                round_num=challenge_msg.round + 1,
-                state=data.get("state"),
-                probability=data.get("probability"),
-                confidence=data.get("confidence"),
-                evidence_ids=data.get("evidence_ids_cited", []),
-                reasoning_summary=data.get("reasoning_summary", "")
+                message_type=msg_type,
+                claim=claim,
+                round_num=challenge_msg.round,
+                state=state,
+                probability=prob,
+                confidence=conf,
+                evidence_ids=evidence_cited,
+                reasoning_summary=reasoning
             )
         except Exception as e:
             logger.error(f"[Economic] Rebuttal error: {e}")
 
 
+# Backwards compatibility alias
 EconomicMinister = EconomicSpecialist
