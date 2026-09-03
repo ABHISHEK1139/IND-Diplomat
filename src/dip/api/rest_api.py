@@ -31,20 +31,22 @@ from dip.core.schema import WargameAction
 from dip.core.Config.config import config
 
 
-# Analyst job store (async jobs)
+from contextlib import asynccontextmanager
 from dip.api.analyst.job_store import STORE, run_job_background
 from dip.api.ws.router import router as ws_router
 from dip.engines.job_store import AssessmentJob, job_store
 from dip.engines.oss_adapters import OSSAdapterRegistry
 
-app = FastAPI(title="Politiq AI API", version="2.5")
 
-
-@app.on_event("startup")
-async def validate_runtime_configuration() -> None:
+@asynccontextmanager
+async def lifespan(app: FastAPI):
     """Fail at API startup instead of during an LLM request in production."""
     if config.ENVIRONMENT.lower() == "production":
         config.validate_runtime_credentials()
+    yield
+
+
+app = FastAPI(title="Politiq AI API", version="2.5", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
@@ -143,7 +145,7 @@ async def api_v3_job_result(job_id: str):
 @app.get("/api/v3/jobs/{job_id}/evidence")
 async def api_v3_job_evidence(job_id: str):
     result = await api_v3_job_result(job_id)
-    if "query" not in result:
+    if not isinstance(result, dict) or "query" not in result:
         return result
     return {
         "job_id": job_id,
@@ -156,7 +158,7 @@ async def api_v3_job_evidence(job_id: str):
 @app.get("/api/v3/jobs/{job_id}/verification")
 async def api_v3_job_verification(job_id: str):
     result = await api_v3_job_result(job_id)
-    if "query" not in result:
+    if not isinstance(result, dict) or "query" not in result:
         return result
     return {
         "job_id": job_id,
@@ -175,7 +177,7 @@ async def api_v3_job_verify_alias(job_id: str):
 async def api_v3_trends(country_code: str):
     jobs = [
         job for job in job_store.list()
-        if job.country.upper() == country_code.upper() and job.result
+        if (job.country or "").upper() == country_code.upper() and isinstance(job.result, dict)
     ]
     return [
         {
@@ -183,7 +185,7 @@ async def api_v3_trends(country_code: str):
             "trace_id": job.trace_id,
             "created_at": job.created_at,
             "threat_level": job.result.get("threat_level"),
-            "sre_score": (job.result.get("nextgen_sre") or {}).get("sre_escalation_score"),
+            "sre_score": (job.result.get("nextgen_sre") or {}).get("sre_escalation_score") if isinstance(job.result.get("nextgen_sre"), dict) else None,
             "verification_score": job.result.get("verification_score", 0.0),
         }
         for job in jobs[:50]
@@ -192,11 +194,18 @@ async def api_v3_trends(country_code: str):
 @app.get("/api/v3/alerts/{country_code}")
 async def api_v3_alerts(country_code: str):
     trends = await api_v3_trends(country_code)
-    return [
-        item for item in trends
-        if str(item.get("threat_level", "")).upper() in {"HIGH", "CRITICAL"}
-        or float(item.get("sre_score") or 0.0) >= 0.65
-    ]
+    
+    def _is_alert(item: dict) -> bool:
+        threat = str(item.get("threat_level") or "").upper()
+        if threat in {"HIGH", "CRITICAL"}:
+            return True
+        raw_sre = item.get("sre_score")
+        try:
+            return float(raw_sre) >= 0.65 if raw_sre is not None else False
+        except (ValueError, TypeError):
+            return False
+
+    return [item for item in trends if _is_alert(item)]
 
 @app.post("/api/head-of-country")
 async def api_head_of_country(request: HeadOfCountryRequest):

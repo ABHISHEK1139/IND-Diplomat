@@ -4,16 +4,31 @@ IND-Diplomat Control Dashboard
 Visualizes the multi-agent reasoning pipeline, showing the hidden layers
 of epistemic quality, debate, belief revision, and trajectory.
 """
+import sys
+import os
 import streamlit as st
 import pandas as pd
 import time
 import math
 import asyncio
 
-from src.dip.pipeline.deliberation.reasoning.message_bus import MessageBus
-from src.dip.pipeline.deliberation.reasoning.ablation import HISTORICAL_CASES
-from src.dip.pipeline.deliberation.reasoning.trajectory_engine import StateDistribution
-from src.dip.pipeline.deliberation.reasoning.global_spillover import GlobalSpilloverModel
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+SRC_DIR = os.path.join(ROOT_DIR, "src")
+if SRC_DIR not in sys.path:
+    sys.path.insert(0, SRC_DIR)
+if ROOT_DIR not in sys.path:
+    sys.path.insert(0, ROOT_DIR)
+
+try:
+    from dip.pipeline.deliberation.reasoning.message_bus import MessageBus
+    from dip.pipeline.deliberation.reasoning.ablation import HISTORICAL_CASES
+    from dip.pipeline.deliberation.reasoning.trajectory_engine import StateDistribution
+    from dip.pipeline.deliberation.reasoning.global_spillover import GlobalSpilloverModel
+except ImportError:
+    from src.dip.pipeline.deliberation.reasoning.message_bus import MessageBus
+    from src.dip.pipeline.deliberation.reasoning.ablation import HISTORICAL_CASES
+    from src.dip.pipeline.deliberation.reasoning.trajectory_engine import StateDistribution
+    from src.dip.pipeline.deliberation.reasoning.global_spillover import GlobalSpilloverModel
 import plotly.express as px
 import plotly.graph_objects as go
 

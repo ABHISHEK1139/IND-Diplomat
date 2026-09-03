@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import List, Optional, Dict, Any
 from pydantic import BaseModel, Field
-from datetime import datetime
+from datetime import datetime, timezone
 
 class MessageType(str, Enum):
     OBSERVATION = "OBSERVATION"
@@ -24,7 +24,7 @@ class Belief(BaseModel):
 class BeliefLedger(BaseModel):
     agent: str
     beliefs: List[Belief]
-    timestamp: str = Field(default_factory=lambda: datetime.utcnow().isoformat())
+    timestamp: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
 class AgentMessage(BaseModel):
     message_id: str
@@ -41,7 +41,7 @@ class AgentMessage(BaseModel):
     counter_evidence: List[str] = Field(default_factory=list)
     reasoning_summary: str
     signature: Optional[str] = None  # Phase 15: Agent authentication signature
-    created_at: str = Field(default_factory=lambda: datetime.utcnow().isoformat())
+    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
 class EvidenceNode(BaseModel):
     evidence_id: str

@@ -124,7 +124,7 @@ async def node_state_accumulation(state: IntelligenceState) -> Dict[str, Any]:
     query = state.get("query", "")
     country = state.get("country", "GLOBAL")
     
-    state_ctx = await provider.build_state_context(query, country)
+    state_ctx = await provider.build_state_context(country=country, query=query)
     
     # Update state_ctx signals if present
     signals = state.get("signals") or []
@@ -145,7 +145,7 @@ async def node_council_deliberation(state: IntelligenceState) -> Dict[str, Any]:
     
     if not state_ctx:
         provider = StateProvider()
-        state_ctx = await provider.build_state_context(query, country)
+        state_ctx = await provider.build_state_context(country=country, query=query)
         
     session = CouncilSession(query=query, state_context=state_ctx)
     session = await run_council(session)
