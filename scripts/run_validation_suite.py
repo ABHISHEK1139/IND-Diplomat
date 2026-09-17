@@ -28,9 +28,11 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-# Ensure project root is on path
+# Ensure the package is importable: prefer <root>/src, fall back to root
+# (covers both checkout layout and installed distributions).
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(PROJECT_ROOT))
+_SRC = PROJECT_ROOT / "src"
+sys.path.insert(0, str(_SRC) if (_SRC / "dip").is_dir() else str(PROJECT_ROOT))
 
 os.environ["FORCE_MINISTER_HEURISTIC"] = "1"
 

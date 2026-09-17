@@ -11,6 +11,7 @@ This module bridges both: write to store + update index.
 import json
 import logging
 from datetime import datetime, timezone
+from pathlib import Path
 from typing import Optional, List
 
 from sqlalchemy import create_engine, Column, String, Integer, Text
@@ -46,13 +47,52 @@ class InvestigationMemory:
 
     - Writes full Investigation to disk via InvestigationStore.
     - Maintains a lightweight SQLite index for fast list/filter/search.
+
+    Relative paths resolve under the central DATA_DIR (never the process
+    working directory). Legacy working-directory files (``investigations.db``
+    / ``investigations/``) are copied forward once — never moved or deleted.
     """
 
-    def __init__(self, db_path: str = "investigations.db", store_root: str = "investigations"):
+    def __init__(self, db_path: str | None = None, store_root: str | None = None):
+        from dip.core.Config.config import resolve_data_path
+
+        db_path = resolve_data_path(db_path or "", "investigations.db")
+        store_root = resolve_data_path(store_root or "", "investigations")
+        self._migrate_legacy_files(db_path, store_root)
+        Path(db_path).parent.mkdir(parents=True, exist_ok=True)
         self.engine = create_engine(f"sqlite:///{db_path}", echo=False)
         Base.metadata.create_all(self.engine)
         self.Session = sessionmaker(bind=self.engine)
         self.store = InvestigationStore(root_dir=store_root)
+
+    @staticmethod
+    def _migrate_legacy_files(db_path: str, store_root: str) -> None:
+        """One-time copy of working-directory data into DATA_DIR.
+
+        Copies only when the destination is missing, so user data is never
+        destroyed or overwritten. Runs at construction, not at import.
+        """
+        import logging
+        import shutil
+
+        logger = logging.getLogger("Memory.InvestigationMemory")
+        try:
+            legacy_db = Path.cwd() / "investigations.db"
+            if (
+                legacy_db.is_file()
+                and not Path(db_path).exists()
+                and Path(db_path).resolve() != legacy_db.resolve()
+                and legacy_db.read_bytes()[:16] == b"SQLite format 3\x00"
+            ):
+                Path(db_path).parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(legacy_db, db_path)
+                logger.info("Migrated legacy investigations.db from working directory (copy; original kept).")
+            legacy_store = Path.cwd() / "investigations"
+            if legacy_store.is_dir() and not Path(store_root).exists() and Path(store_root).resolve() != legacy_store.resolve():
+                shutil.copytree(legacy_store, store_root)
+                logger.info("Migrated legacy investigations/ from working directory (copy; original kept).")
+        except Exception as exc:  # migration must never break startup
+            logger.debug("Legacy data migration skipped: %s", exc)
 
     # ------------------------------------------------------------------
     # Write

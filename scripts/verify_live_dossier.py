@@ -1,52 +1,18 @@
-import asyncio
-import logging
-from dip.pipeline.world_model.state.state_provider import StateProvider
-from dip.pipeline.world_model.state.bayesian_tracker import BayesianTracker
-from dip.pipeline.deliberation.reasoning.gap_analyzer import GapAnalyzer
-from dip.pipeline.synthesis.presentation.dossier_compiler import DossierCompiler
-import json
+"""Retired: live dossier verification script (stale, kept as a pointer).
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger("LiveVerification")
+This script predates the DIP 3 package layout. It imports
+``dip.pipeline.synthesis.presentation.dossier_compiler`` (which no longer
+exists) and attributes that no longer exist on StateContext, so it cannot
+run. It is preserved here instead of deleted so existing references keep
+resolving to an explanation rather than a bare ModuleNotFoundError.
 
-async def run_live_verification():
-    target = "Russia Sanctions Economy"
-    query = "Analyze the impact of global economic sanctions on Russia and potential cyber retaliation."
-    
-    logger.info(f"Initiating LIVE Dossier Compilation for: {target}")
-    
-    # 1. Fetch live data (RSS/GDELT) and extract signals
-    provider = StateProvider()
-    context = await provider.build_state_context(target, query)
-    
-    logger.info(f"Extracted {len(context.current_signals)} signals from live sources.")
-    
-    if len(context.current_signals) == 0:
-        logger.error("No signals extracted. Cannot build dossier.")
-        return
-        
-    # 2. Bayesian Confidence Updates
-    tracker = BayesianTracker(initial_prior=0.40) # Assume 40% initial belief of escalation
-    traces = tracker.update_beliefs(context.current_signals, hypothesis_label="Economic Instability / Cyber Retaliation")
-    context.bayesian_traces = traces
-    logger.info(f"Generated {len(traces)} Bayesian update steps.")
-    
-    # 3. Gap Analysis
-    gap_analyzer = GapAnalyzer()
-    gaps = await gap_analyzer.analyze_gaps(context)
-    context.intelligence_gaps = gaps
-    logger.info(f"Identified {len(gaps)} critical intelligence gaps.")
-    
-    # 4. Dossier Compilation via LangGraph
-    compiler = DossierCompiler()
-    dossier_md = compiler.compile_dossier(context)
-    
-    # Write to output file
-    output_path = "live_dossier_output.md"
-    with open(output_path, "w", encoding="utf-8") as f:
-        f.write(dossier_md)
-        
-    logger.info(f"Successfully wrote 25-section dossier to {output_path}")
+Use instead:
+  - Offline calibrated backtest:  pytest tests/test_offline_backtest.py
+  - Validation suite (heuristic):  python scripts/run_validation_suite.py
+  - Live dossier check:            POST /api/v3/assess, then
+                                   GET /api/v3/jobs/{id}/result (briefing)
+"""
+import sys
 
-if __name__ == "__main__":
-    asyncio.run(run_live_verification())
+print(__doc__)
+sys.exit(2)

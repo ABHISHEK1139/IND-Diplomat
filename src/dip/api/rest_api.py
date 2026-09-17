@@ -7,7 +7,7 @@ Exposes the 7-layer pipeline and War Gaming Engine to the Web Dashboard.
 from fastapi import FastAPI, HTTPException, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 import asyncio
 import json
 import os
@@ -20,9 +20,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 # Allow normal LLM execution timeouts
 litellm.max_retries = 2
-# Remove 2-second timeout so the model can actually think
-if "LITELLM_TIMEOUT" in os.environ:
-    del os.environ["LITELLM_TIMEOUT"]
+# Respect caller-provided timeout settings.
 
 from dip.unified_pipeline import execute
 from dip.pipeline.world_model.state.state_provider import StateProvider
@@ -34,8 +32,11 @@ from dip.core.Config.config import config
 from contextlib import asynccontextmanager
 from dip.api.analyst.job_store import STORE, run_job_background
 from dip.api.ws.router import router as ws_router
-from dip.engines.job_store import AssessmentJob, job_store
+from dip.engines.job_store import job_store
 from dip.engines.oss_adapters import OSSAdapterRegistry
+
+
+from dip.api.ws.ws_manager import manager as ws_manager
 
 
 @asynccontextmanager
@@ -43,15 +44,40 @@ async def lifespan(app: FastAPI):
     """Fail at API startup instead of during an LLM request in production."""
     if config.ENVIRONMENT.lower() == "production":
         config.validate_runtime_credentials()
-    yield
+    # JSON stores support one API process. Never replay interrupted jobs silently.
+    for job in job_store.list():
+        if str(job.status).upper() in {"QUEUED", "RUNNING"}:
+            job_store.mark_error(job.job_id, "Interrupted by server restart")
+    for job in await STORE.list_jobs(limit=1000000):
+        if job["status"] in {"QUEUED", "RUNNING"}:
+            await STORE.update_job(job["job_id"], status="FAILED", error="Interrupted by server restart")
+    try:
+        yield
+    finally:
+        tasks = list(app.state.background_tasks)
+        for task in tasks:
+            task.cancel()
+        await asyncio.gather(*tasks, return_exceptions=True)
+        app.state.background_tasks.clear()
 
 
-app = FastAPI(title="Politiq AI API", version="2.5", lifespan=lifespan)
+from dip import __version__
+app = FastAPI(title="Politiq AI API", version=__version__, lifespan=lifespan)
+app.state.background_tasks = set()
 
+
+def _schedule_job(coroutine):
+    task = asyncio.create_task(coroutine)
+    app.state.background_tasks.add(task)
+    task.add_done_callback(app.state.background_tasks.discard)
+    return task
+
+
+_cors_origins = [origin.strip() for origin in config.CORS_ALLOWED_ORIGINS if origin.strip()]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
+    allow_origins=_cors_origins,
+    allow_credentials="*" not in _cors_origins,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -60,18 +86,38 @@ class AssessRequest(BaseModel):
     query: str
     country: str = "IND"
 
-class HeadOfCountryRequest(BaseModel):
-    query: str
-    country: str = "IND"
+    @field_validator("query")
+    @classmethod
+    def _query_must_not_be_blank(cls, value: str) -> str:
+        # Reject blank objectives at the boundary instead of running the
+        # whole pipeline only to refuse with an empty-query verdict.
+        if not value or not value.strip():
+            raise ValueError("query must not be blank")
+        return value.strip()
+
+    @field_validator("country")
+    @classmethod
+    def _country_must_not_be_blank(cls, value: str) -> str:
+        if not value or not value.strip():
+            raise ValueError("country must not be blank")
+        return value.strip().upper()
+
+class HeadOfCountryRequest(AssessRequest):
     theater: str | None = None
 
-class WargameRequest(BaseModel):
-    query: str
-    country: str
+class WargameRequest(AssessRequest):
     action: str
+
+    @field_validator("action")
+    @classmethod
+    def _action_must_not_be_blank(cls, value: str) -> str:
+        if not value or not value.strip():
+            raise ValueError("action must not be blank")
+        return value.strip()
 
 @app.post("/api/assess")
 async def api_assess(request: AssessRequest):
+    """Executes the neuro-symbolic intelligence pipeline."""
     try:
         result = await execute(request.query, request.country)
         return result
@@ -91,16 +137,44 @@ async def v2_query(request: AssessRequest):
 async def _run_assessment_job(job_id: str) -> None:
     try:
         job = job_store.mark_running(job_id)
-        result = await execute(job.query, job.country)
-        job_store.mark_complete(job_id, result)
+        if ws_manager:
+            init_payload = {"type": "pipeline_update", "job_id": job_id, "phase": "planning", "status": "running"}
+            await ws_manager.broadcast(init_payload)
+            await ws_manager.publish_topic(f"job:{job_id}", init_payload)
+
+        result = await execute(job.query, job.country, job_id=job_id)
+        stored = job_store.mark_complete(job_id, result)
+
+        if ws_manager:
+            # Lifecycle status comes from the store; the pipeline assessment
+            # disposition travels separately so WS never masks a FAILED job.
+            done_payload = {
+                "type": "job_completed",
+                "job_id": job_id,
+                "status": stored.status,
+                "assessment_status": result.get("status"),
+                "result": result,
+            }
+            await ws_manager.broadcast(done_payload)
+            await ws_manager.broadcast({"type": "job.completed", "job_id": job_id, "status": stored.status, "assessment_status": result.get("status"), "result": result})
+            await ws_manager.publish_topic(f"job:{job_id}", done_payload)
+            await ws_manager.publish_topic(f"job:{job_id}", {"type": "job.completed", "job_id": job_id, "status": stored.status, "assessment_status": result.get("status"), "result": result})
     except Exception as exc:
         job_store.mark_error(job_id, str(exc))
+        if ws_manager:
+            err_payload = {"type": "job_failed", "job_id": job_id, "status": "FAILED", "error": str(exc)}
+            await ws_manager.broadcast(err_payload)
+            await ws_manager.broadcast({"type": "job.failed", "job_id": job_id, "status": "FAILED", "error": str(exc)})
+            await ws_manager.publish_topic(f"job:{job_id}", err_payload)
+    except BaseException:
+        job_store.mark_error(job_id, "Cancelled")
+        raise
 
 @app.post("/api/v3/assess")
 async def api_v3_assess(request: AssessRequest):
     """DIP_8-compatible async assessment endpoint."""
     job = job_store.create(request.query, request.country)
-    asyncio.create_task(_run_assessment_job(job.job_id))
+    _schedule_job(_run_assessment_job(job.job_id))
     return {
         "job_id": job.job_id,
         "status": job.status,
@@ -351,6 +425,8 @@ async def api_v3_job_stix2(job_id: str):
         briefing = HeadOfStateBriefing(**job.result.get("head_of_country_briefing", {})) if job.result.get("head_of_country_briefing") else HeadOfStateBriefing(goal=goal)
         bundle = adapter.export_assessment(goal, briefing, job.result)
         return json.loads(bundle.serialize(pretty=True))
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -374,8 +450,8 @@ async def create_job(request: AssessRequest):
     """Create an async analyst job and return job metadata."""
     try:
         job = await STORE.create_job(request.query, request.country)
-        # schedule background runner
-        asyncio.create_task(run_job_background(job["job_id"], request.query, request.country))
+        # Track the runner in app state so shutdown cancels it (API-04).
+        _schedule_job(run_job_background(job["job_id"], request.query, request.country))
         return {"job_id": job["job_id"], "status": job["status"], "created_at": job["created_at"]}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

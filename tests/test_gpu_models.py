@@ -1,21 +1,29 @@
 import pytest
 import torch
 
-@pytest.mark.unit
-def test_gpu_models_env():
-    """Verify PyTorch environment and entity extractor fallback."""
+pytestmark = pytest.mark.unit
+
+
+def test_torch_cuda_probe():
+    """Deterministic unit check: the CUDA probe itself behaves."""
     cuda_avail = torch.cuda.is_available()
     assert isinstance(cuda_avail, bool)
 
-    try:
-        from dip.pipeline.world_model.world.entity.gliner_extractor import EntityExtractor
-        extractor = EntityExtractor()
-        text = "The Prime Minister of India met with the President of Russia in Moscow today."
-        entities = extractor.extract(text)
-        assert isinstance(entities, list)
-    except Exception:
-        # Fallback when gliner is not installed in local environment
-        pass
+
+@pytest.mark.integration
+def test_gliner_entity_extraction():
+    """Optional model integration: runs only when gliner is installed.
+
+    TEST-02: previously this swallowed every exception and always passed,
+    which hid real model failures. A missing model now skips; a present
+    but broken model fails loudly.
+    """
+    gliner = pytest.importorskip("gliner", reason="gliner not installed")
+    from dip.pipeline.world_model.world.entity.gliner_extractor import EntityExtractor
+    extractor = EntityExtractor()
+    text = "The Prime Minister of India met with the President of Russia in Moscow today."
+    entities = extractor.extract(text)
+    assert isinstance(entities, list)
 
 if __name__ == "__main__":
     print(f"\n--- CUDA Status ---")

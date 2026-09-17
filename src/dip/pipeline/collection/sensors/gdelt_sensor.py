@@ -25,9 +25,11 @@ class GdeltSensor:
 
     async def fetch(self, country: str = "IND") -> List[RawObservation]:
         """Fetches the latest events from GDELT, filtered by country."""
+        import asyncio
         observations = []
         try:
-            async with aiohttp.ClientSession() as session:
+            timeout = aiohttp.ClientTimeout(total=15)
+            async with aiohttp.ClientSession(timeout=timeout) as session:
                 async with session.get(GDELT_LAST_UPDATE_URL) as response:
                     if response.status != 200:
                         logger.error("Failed to get GDELT last update URL.")

@@ -1,0 +1,19 @@
+{
+  "description": "Offline fixture: synthetic border-crisis StateContext variants. No network, no LLM. Counterfactuals mutate the signal set only.",
+  "country": "IND",
+  "query": "Assess border escalation risk",
+  "baseline": [
+    {"entity": "PAK", "action": "SIG_MIL_ESCALATION", "target": "IND", "intensity": 0.85, "confidence": 0.9, "source_ref": "FIXTURE-GDELT", "domain": "military"},
+    {"entity": "PAK", "action": "SIG_FORCE_POSTURE", "target": "IND", "intensity": 0.8, "confidence": 0.85, "source_ref": "FIXTURE-NEWS", "domain": "military"},
+    {"entity": "PAK", "action": "SIG_DIP_HOSTILITY", "target": "IND", "intensity": 0.7, "confidence": 0.8, "source_ref": "FIXTURE-OSINT", "domain": "diplomatic"}
+  ],
+  "no_military": [
+    {"entity": "PAK", "action": "SIG_ECONOMIC_SANCTIONS", "target": "IND", "intensity": 0.35, "confidence": 0.8, "source_ref": "FIXTURE-NEWS", "domain": "economic"},
+    {"entity": "PAK", "action": "SIG_DIP_FRICTION", "target": "IND", "intensity": 0.5, "confidence": 0.8, "source_ref": "FIXTURE-OSINT", "domain": "diplomatic"}
+  ],
+  "cooperation": [
+    {"entity": "PAK", "action": "SIG_TRADE_FLOW", "target": "IND", "intensity": 0.15, "confidence": 0.8, "source_ref": "FIXTURE-NEWS", "domain": "economic"},
+    {"entity": "PAK", "action": "SIG_CULTURAL_EXCHANGE", "target": "IND", "intensity": 0.1, "confidence": 0.7, "source_ref": "FIXTURE-OSINT", "domain": "diplomatic"}
+  ],
+  "empty": []
+}

@@ -62,15 +62,26 @@ export default function NewInvestigationPage() {
 
   const selectedDepth = depths.find((d) => d.key === depth)!;
 
+  const [launchError, setLaunchError] = useState<string | null>(null);
+  const [launching, setLaunching] = useState(false);
+
   const handleLaunch = async () => {
+    // Never synthesize a fake successful job: backend failures surface as
+    // errors with a retry path. Demo mode is explicit-only (button below).
+    setLaunching(true);
+    setLaunchError(null);
     try {
       const job = await createInvestigation(query || "General assessment");
       router.push(`/investigations/${job.job_id}`);
     } catch (err) {
       console.error("Failed to launch investigation:", err);
-      // Fallback for demo purposes if backend isn't running
-      const jobId = "demo-" + Date.now();
-      router.push(`/investigations/${jobId}`);
+      setLaunchError(
+        err instanceof Error
+          ? `Backend unavailable: ${err.message}. Start the API (uvicorn dip.api.rest_api:app) and retry.`
+          : "Backend unavailable. Start the API and retry."
+      );
+    } finally {
+      setLaunching(false);
     }
   };
 
@@ -182,15 +193,29 @@ export default function NewInvestigationPage() {
           </div>
         </div>
       </div>
-      <motion.button
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={handleLaunch}
-        className="inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-accent text-white font-bold text-sm hover:shadow-[0_0_30px_rgba(59,130,246,0.4)] transition-all"
-      >
-        <Rocket className="w-5 h-5" />
-        Launch Investigation
-      </motion.button>
+      {launchError && (
+        <div className="p-4 rounded-xl bg-danger/10 border border-danger/30 text-danger text-sm max-w-xl mx-auto">
+          {launchError}
+        </div>
+      )}
+      <div className="flex items-center justify-center gap-3">
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={handleLaunch}
+          disabled={launching}
+          className="inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-accent text-white font-bold text-sm hover:shadow-[0_0_30px_rgba(59,130,246,0.4)] transition-all disabled:opacity-50"
+        >
+          <Rocket className="w-5 h-5" />
+          {launching ? "Launching…" : "Launch Investigation"}
+        </motion.button>
+        <button
+          onClick={() => router.push(`/investigations/demo-${Date.now()}`)}
+          className="px-4 py-3 rounded-xl text-xs font-semibold text-text-muted border border-border hover:text-text-primary hover:border-accent/30 transition-all"
+        >
+          Preview demo workspace
+        </button>
+      </div>
     </div>,
   ];
 

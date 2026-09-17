@@ -20,8 +20,11 @@ try:
 except ImportError:
     litellm = None
 
+from dip.core.llm_limits import apply_default_timeout
 from dip.core.schema import ReasoningTrace
 from dip.pipeline.memory.core.investigation_memory import InvestigationMemory
+
+apply_default_timeout()
 
 logger = logging.getLogger("Layer10.LLMTracer")
 
@@ -33,7 +36,15 @@ class LLMTracer:
     Intercepts and logs every LLM call as a ReasoningTrace to generate training data.
     """
     def __init__(self):
-        self.memory = InvestigationMemory()
+        # Lazy: constructing the memory store touches the filesystem
+        # (SQLite index + store dirs), which must not happen at import time.
+        self._memory = None
+
+    @property
+    def memory(self):
+        if self._memory is None:
+            self._memory = InvestigationMemory()
+        return self._memory
 
     @staticmethod
     def _provider_kwargs(model: str, kwargs: dict[str, Any]) -> dict[str, Any]:
@@ -126,7 +137,9 @@ class LLMTracer:
                         self.usage = None
                 return MockResp(res.content)
             except Exception as inner_exc:
-                logger.error(f"LLM Call failed during trace and fallback: {inner_exc}")
+                # Never mask the primary failure: it tells us whether the
+                # provider, the key, or the fallback is at fault.
+                logger.error(f"LLM call failed ({e}); fallback also failed ({inner_exc})")
                 raise
 
     def completion_sync(self, layer: str, model: str, messages: list, **kwargs) -> Any:
@@ -206,7 +219,7 @@ class LLMTracer:
                         self.usage = None
                 return MockResp(res.content)
             except Exception as inner_exc:
-                logger.error(f"LLM Call failed during sync trace and fallback: {inner_exc}")
+                logger.error(f"LLM sync call failed ({e}); fallback also failed ({inner_exc})")
                 raise
             
 # Global singleton instance

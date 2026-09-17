@@ -13,6 +13,24 @@ type PhaseStatus = "waiting" | "running" | "complete" | "error";
 
 const phaseOrder = ["planning", "collection", "worldmodel", "reasoning", "forecasting", "workspace", "learning"];
 
+// Backend pipeline phases -> tracker display phases. Without this map the
+// tracker steps sit in "waiting" mid-run because the backend emits its own
+// stage names (council, cove_verification, briefing, ...).
+const PHASE_MAP: Record<string, string> = {
+  planning: "planning",
+  collection: "collection",
+  sre: "worldmodel",
+  council: "reasoning",
+  red_team: "reasoning",
+  investigation: "reasoning",
+  threat_synthesis: "reasoning",
+  cove_verification: "reasoning",
+  assessment_gate: "forecasting",
+  briefing: "workspace",
+  presentation: "workspace",
+  report: "workspace",
+};
+
 // Mock data for the knowledge graph
 const mockEntities = [
   { id: "india", label: "India", type: "country" },
@@ -95,38 +113,188 @@ export default function InvestigationWorkspacePage() {
     setTimeout(() => {
       setStatuses({ planning: "running" }); // Optimistic start
     }, 0);
+
+    let isCompleted = false;
+    let pollAttempts = 0;
+    const MAX_POLL_ATTEMPTS = 150; // ~10 min backstop; terminal states stop earlier
+
+    const markFailed = (message: string) => {
+      if (isCompleted) return;
+      isCompleted = true;
+      clearInterval(pollInterval);
+      setError(message);
+      setStatuses((prev) => {
+        const next = { ...prev };
+        phaseOrder.forEach((p) => { next[p] = next[p] === "complete" ? "complete" : "error"; });
+        return next;
+      });
+    };
+
+    // Polling fallback to ensure results are fetched even if WebSocket disconnects or drops packet
+    const pollInterval = setInterval(async () => {
+      if (isCompleted) return;
+      pollAttempts += 1;
+      try {
+        const res = await getJobResult(idStr);
+        if (res && res.threat_level) {
+          isCompleted = true;
+          setResult(res);
+          setStatuses((prev) => {
+            const next = { ...prev };
+            phaseOrder.forEach((p) => { next[p] = "complete"; });
+            return next;
+          });
+          clearInterval(pollInterval);
+          return;
+        }
+        // Terminal job envelope without a result: stop instead of polling forever.
+        const jobStatus = String(res?.status || "").toUpperCase();
+        if (jobStatus === "FAILED" || jobStatus === "ERROR") {
+          markFailed(res?.error || `Job ${jobStatus.toLowerCase()}: no assessment was produced.`);
+          return;
+        }
+      } catch {
+        // Transient fetch failure — keep polling until the backstop.
+      }
+      if (pollAttempts >= MAX_POLL_ATTEMPTS) {
+        markFailed("Timed out waiting for the assessment result.");
+      }
+    }, 4000);
+
     const ws = connectPipelineWS(
       (data: any) => {
-        if (data.type === "pipeline_update" && data.job_id === idStr) {
-          setStatuses((prev) => ({
-            ...prev,
-            [data.phase]: data.status,
-          }));
-        } else if (data.type === "pipeline_complete" && data.job_id === idStr) {
-          // Fetch final results
-          getJobResult(idStr)
-            .then(res => setResult(res))
-            .catch(err => setError(err.message));
+        const eventType = String(data.type || data.event || "").toLowerCase();
+        const jobId = data.job_id || idStr;
+
+        if (jobId === idStr) {
+          if (eventType.includes("update") || eventType.startsWith("phase.")) {
+            const phase = typeof data.phase === "string" ? (PHASE_MAP[data.phase] || data.phase) : undefined;
+            const rawStatus = data.status || (eventType.endsWith("completed") ? "complete" : "running");
+            const status = rawStatus === "COMPLETED" ? "complete" : rawStatus === "FAILED" ? "error" : rawStatus;
+            if (phase && phaseOrder.includes(phase)) {
+              setStatuses((prev) => ({
+                ...prev,
+                [phase]: status,
+              }));
+            }
+          } else if (
+            eventType === "job_failed" ||
+            eventType === "job.failed"
+          ) {
+            markFailed(data.error || "The assessment job failed with no result.");
+          } else if (
+            eventType === "pipeline_complete" ||
+            eventType === "job_completed" ||
+            eventType === "job.completed" ||
+            eventType === "pipeline.completed"
+          ) {
+            isCompleted = true;
+            clearInterval(pollInterval);
+            getJobResult(idStr)
+              .then((res) => {
+                setResult(res);
+                setStatuses((prev) => {
+                  const next = { ...prev };
+                  phaseOrder.forEach((p) => { next[p] = "complete"; });
+                  return next;
+                });
+              })
+              .catch((err) => setError(err.message));
+          }
         }
       },
       (err) => {
-        console.error("WS error:", err);
-        setError("Lost connection to live pipeline");
-      }
+        console.warn("WS disconnected, relying on polling fallback:", err);
+      },
+      idStr
     );
 
-    return () => ws.close();
+    return () => {
+      clearInterval(pollInterval);
+      ws.close();
+    };
   }, [params?.id]);
 
+  // Phase details come from the reported result — never hardcoded counts.
+  const signalCount = result?.raw_sources?.length;
   const phaseDetails: Record<string, { sources?: number; credibility?: number; entities?: string[] }> = {
-    planning: { entities: ["Technology", "Economy", "India", "2035"] },
-    collection: { sources: 287, credibility: 91 },
-    worldmodel: { entities: ["TSMC", "NVIDIA", "Modi", "Taiwan"] },
-    reasoning: { entities: ["Economist", "Military", "Technology", "Climate"] },
+    ...(signalCount != null ? { collection: { sources: signalCount } } : {}),
+    ...(result?.hypotheses && result.hypotheses.length > 0
+      ? { reasoning: { entities: result.hypotheses.map((h: any) => h.minister || h.expert || "Minister").slice(0, 8) } }
+      : {}),
   };
+
+  // UI-02: mock workspace data is demo-only. Real investigations surface
+  // pipeline data or explicit unavailable states — never fake jobs.
+  const idStr = Array.isArray(params?.id) ? params?.id[0] : params?.id;
+  const isDemo = typeof idStr === "string" && idStr.startsWith("demo-");
+
+  // Confidence metrics pass through when the pipeline reported them;
+  // individual nulls render as "n/a" bars instead of invented numbers.
+  const cs = result?.confidence_scores;
+  const metrics = cs && typeof cs.evidence === "number"
+    ? {
+        evidence: cs.evidence,
+        sources: typeof cs.sources === "number" ? cs.sources : null,
+        expertAgreement: typeof cs.expert_agreement === "number" ? cs.expert_agreement : null,
+        forecastReliability: typeof cs.forecast_reliability === "number" ? cs.forecast_reliability : null,
+      }
+    : undefined;
+
+  // Timeline projection points derived from the reported trajectory —
+  // labeled as projections, never as historical events.
+  const trajectory = result?.trajectory;
+  const timeline = result?.timeline || (
+    trajectory && (typeof trajectory.prob_14d === "number" || typeof trajectory.prob_30d === "number" || typeof trajectory.prob_60d === "number")
+      ? ([
+          ["T+14d", trajectory.prob_14d],
+          ["T+30d", trajectory.prob_30d],
+          ["T+60d", trajectory.prob_60d],
+        ] as Array<[string, number | undefined]>)
+          .filter(([, p]) => typeof p === "number")
+          .map(([horizon, p]) => ({
+            date: horizon as string,
+            title: "Projection point",
+            cardTitle: `${trajectory.trajectory_label || trajectory.label || "Trajectory"} — P(HIGH ${horizon}) ${Math.round((p as number) * 100)}%`,
+            cardDetailedText: `Model-projected probability of HIGH threat at ${horizon}. Projection, not observation.`,
+          }))
+      : undefined
+  );
 
   const allComplete = phaseOrder.every((p) => statuses[p] === "complete");
   const hasProgress = Object.values(statuses).some((s) => s === "complete");
+
+  // Explainability wiring: derive the knowledge graph from reported signals
+  // (entity -> action -> target) and surface the verbatim evidence log.
+  // Nothing is invented: empty pipeline data renders empty with a notice.
+  const graphNodes = (() => {
+    const nodes = new Map<string, { id: string; label: string; type: string }>();
+    const edges: Array<{ source: string; target: string; label: string }> = [];
+    for (const s of result?.raw_sources || []) {
+      const entity = String(s?.entity || "").trim();
+      const target = String(s?.target || "").trim();
+      const action = String(s?.action || "linked").trim();
+      if (entity && !nodes.has(entity) && nodes.size < 30) {
+        nodes.set(entity, { id: entity, label: entity, type: String(s?.domain || "actor") });
+      }
+      if (entity && target) {
+        if (!nodes.has(target) && nodes.size < 30) {
+          nodes.set(target, { id: target, label: target, type: "actor" });
+        }
+        if (edges.length < 40 && nodes.has(entity) && nodes.has(target)) {
+          edges.push({ source: entity, target, label: action.slice(0, 40) });
+        }
+      }
+      if (nodes.size >= 30 && edges.length >= 40) break;
+    }
+    return { entities: [...nodes.values()], relationships: edges };
+  })();
+
+  const evidenceEntries = (result?.evidence_log || []).map((e: any) =>
+    typeof e === "string"
+      ? { claim: e.slice(0, 240), sources: [] as string[], contradictions: 0 }
+      : { claim: String(e?.claim || e?.text || JSON.stringify(e)).slice(0, 240), sources: e?.sources || [], contradictions: e?.contradictions || 0 }
+  );
 
   return (
     <div className="space-y-4">
@@ -159,29 +327,35 @@ export default function InvestigationWorkspacePage() {
         >
           {/* LEFT: Knowledge Graph */}
           <div className="col-span-3">
-            <LeftPanel 
-              entities={result?.entities || mockEntities} 
-              relationships={result?.relationships || mockRelationships} 
+            <LeftPanel
+              entities={result?.entities || (graphNodes.entities.length > 0 ? graphNodes.entities : (isDemo ? mockEntities : []))}
+              relationships={result?.relationships || (graphNodes.relationships.length > 0 ? graphNodes.relationships : (isDemo ? mockRelationships : []))}
               selectedNode={selectedNode}
               setSelectedNode={setSelectedNode}
+              isDemo={isDemo && !result?.entities && graphNodes.entities.length === 0}
             />
           </div>
 
           {/* CENTER: Report / Ministers / Sources / Notebook */}
           <div className="col-span-6">
-            <CenterPanel 
+            <CenterPanel
               allComplete={allComplete}
               result={result}
               error={error}
+              isDemo={isDemo}
             />
           </div>
 
           {/* RIGHT: Experts, Timeline, Evidence, Confidence */}
           <div className="col-span-3">
-            <RightPanel 
-              mockDebate={mockDebate} 
-              mockEvidence={mockEvidence}
+            <RightPanel
+              mockDebate={isDemo ? mockDebate : []}
+              mockEvidence={evidenceEntries.length > 0 ? evidenceEntries : (isDemo ? mockEvidence : [])}
               hypotheses={result?.hypotheses}
+              redTeam={result?.red_team_report}
+              timeline={timeline}
+              metrics={metrics}
+              isDemo={isDemo}
             />
           </div>
         </motion.div>

@@ -12,7 +12,28 @@ from datetime import datetime, timezone
 from dip.pipeline.deliberation.reasoning.council_session import CouncilSession
 
 logger = logging.getLogger("Layer4.introspection")
-HISTORY_FILE = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "introspection_history.json")
+
+
+def _history_file() -> str:
+    # Self-reflection history lives in the central data dir, never the
+    # source tree. A legacy source-tree file is copied forward once.
+    from pathlib import Path
+
+    from dip.core.Config.config import DATA_DIR
+
+    target = DATA_DIR / "introspection_history.json"
+    legacy = Path(os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "introspection_history.json"))
+    try:
+        if legacy.is_file() and not target.exists() and legacy.resolve() != target.resolve():
+            import shutil
+
+            shutil.copy2(legacy, target)
+    except Exception:
+        pass
+    return str(target)
+
+
+HISTORY_FILE = _history_file()
 
 
 class PerformanceTracker:

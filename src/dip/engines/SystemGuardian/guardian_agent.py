@@ -21,7 +21,10 @@ from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger("SystemGuardian")
 
-DATA_DIR = Path(__file__).resolve().parent / "data"
+# CFG-01: never keep data inside the source tree; use the central data dir
+# (project-root data/ by default, DIP_DATA_DIR override).
+from dip.core.Config.config import DATA_DIR
+from dip.core.atomic_json import write_json
 
 
 class SystemGuardian:
@@ -72,7 +75,7 @@ class SystemGuardian:
 
     def _check_job_queue(self) -> Dict[str, Any]:
         try:
-            jobs_path = DATA_DIR / "jobs.json"
+            jobs_path = Path(config.DIP_JOB_STORE)
             if jobs_path.exists():
                 with open(jobs_path, "r", encoding="utf-8") as f:
                     jobs = json.load(f)
@@ -109,7 +112,7 @@ class SystemGuardian:
 
     def _clear_stuck_jobs(self) -> None:
         """Clear jobs stuck in RUNNING for > 30 minutes."""
-        jobs_path = DATA_DIR / "jobs.json"
+        jobs_path = Path(config.DIP_JOB_STORE)
         if not jobs_path.exists():
             return
         try:
@@ -122,8 +125,7 @@ class SystemGuardian:
                     job["error"] = "Cleared by SystemGuardian — stuck job"
                     job["completed_at"] = datetime.now(timezone.utc).isoformat()
                 cleaned.append(job)
-            with open(jobs_path, "w", encoding="utf-8") as f:
-                json.dump(cleaned, f, indent=2)
+            write_json(jobs_path, cleaned)
             logger.info("SystemGuardian cleared %d stuck jobs", sum(1 for j in cleaned if "Cleared by SystemGuardian" in (j.get("error") or "")))
         except Exception:
             pass

@@ -5,6 +5,7 @@ import ReactECharts from "echarts-for-react";
 interface Scenario {
   name: string;
   probability: number;
+  description?: string;
 }
 
 interface ForecastChartsProps {
@@ -76,7 +77,7 @@ export default function ForecastCharts({ scenarios, timelineData }: ForecastChar
     xAxis: {
       type: "category",
       boundaryGap: false,
-      data: ["2024", "2026", "2028", "2030", "2032", "2035"],
+      data: (timelineData || []).map(d => d[0]),
       axisLabel: { color: "#94A3B8" },
       axisLine: { lineStyle: { color: "#1E2642" } },
     },
@@ -91,7 +92,7 @@ export default function ForecastCharts({ scenarios, timelineData }: ForecastChar
         name: "Probability",
         type: "line",
         smooth: true,
-        data: timelineData?.map(d => d[1]) || [15, 25, 42, 60, 75, 85],
+        data: (timelineData || []).map(d => d[1]),
         symbolSize: 8,
         itemStyle: { color: "#10B981" }, // Success
         areaStyle: {
@@ -118,9 +119,13 @@ export default function ForecastCharts({ scenarios, timelineData }: ForecastChar
       </div>
       <div>
         <h4 className="text-xs font-semibold text-text-muted uppercase tracking-wider mb-2">Confidence Projection to 2035</h4>
-        <div className="h-[200px] w-full">
-          <ReactECharts option={lineOption} style={{ height: "100%", width: "100%" }} />
-        </div>
+        {timelineData && timelineData.length > 0 ? (
+          <div className="h-[200px] w-full">
+            <ReactECharts option={lineOption} style={{ height: "100%", width: "100%" }} />
+          </div>
+        ) : (
+          <p className="text-xs text-text-muted">No projection timeline supplied by the pipeline.</p>
+        )}
       </div>
     </div>
   );

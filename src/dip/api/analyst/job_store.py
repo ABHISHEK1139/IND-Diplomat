@@ -1,18 +1,19 @@
 from __future__ import annotations
 from dip.core.Config.config import config
 """Simple JSON-backed job store for async analyst jobs.
-Stores jobs in-memory and persists to `data/jobs.json` for basic durability.
+Stores jobs in-memory and persists to ``config.DIP_JOB_STORE`` (project-root
+data dir by default) for basic durability.
 """
 
 import asyncio
 import json
 import os
-import os
 import uuid
 from datetime import datetime, timezone
 from typing import Any, Dict, Optional, List
 
-ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+from dip.core.atomic_json import write_json
+
 JOBS_PATH = config.DIP_JOB_STORE
 os.makedirs(os.path.dirname(JOBS_PATH), exist_ok=True)
 
@@ -29,20 +30,14 @@ class JobStore:
         self._load()
 
     def _load(self) -> None:
-        try:
-            if os.path.exists(self.path):
-                with open(self.path, "r", encoding="utf-8") as f:
-                    data = json.load(f)
-                    self._jobs = {j["job_id"]: j for j in data}
-        except Exception:
-            self._jobs = {}
+        if not os.path.exists(self.path):
+            return
+        with open(self.path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+            self._jobs = {j["job_id"]: j for j in data}
 
     def _persist(self) -> None:
-        try:
-            with open(self.path, "w", encoding="utf-8") as f:
-                json.dump(list(self._jobs.values()), f, indent=2, ensure_ascii=False)
-        except Exception:
-            pass
+        write_json(self.path, list(self._jobs.values()))
 
     async def create_job(self, query: str, country: str = "IND", meta: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         async with self._lock:
@@ -69,8 +64,14 @@ class JobStore:
             job = self._jobs.get(job_id)
             if not job:
                 return None
+            previous = dict(job)
             job.update(fields)
-            self._persist()
+            try:
+                self._persist()
+            except Exception:
+                job.clear()
+                job.update(previous)
+                raise
             return job
 
     async def get_job(self, job_id: str) -> Optional[Dict[str, Any]]:
@@ -90,11 +91,12 @@ STORE = JobStore()
 
 async def run_job_background(job_id: str, query: str, country: str):
     """Background runner that invokes the main diplomat query and stores results."""
-    # Import here to avoid cycle at module import time
-    from dip.pipeline.deliberation.ind_diplomat import diplomat_query
-
+    ws_manager = None
     await STORE.update_job(job_id, status="RUNNING", started_at=_now(), progress=5)
     try:
+        # Import lazily to avoid cycles; failures must also terminalize the job.
+        from dip.ind_diplomat import PipelineError, diplomat_query
+
         # send progress update helper
         try:
             from dip.api.ws.ws_manager import manager as ws_manager
@@ -105,6 +107,8 @@ async def run_job_background(job_id: str, query: str, country: str):
             await ws_manager.publish_topic(f"job:{job_id}", {"type": "job.progress", "job_id": job_id, "status": "RUNNING", "progress": 5})
 
         result = await diplomat_query(query, country, job_id=job_id)
+        if isinstance(result, PipelineError):
+            raise RuntimeError(result.error)
         # pydantic model -> dict (use model_dump for V2, dict for V1 compat)
         if hasattr(result, "model_dump"):
             payload = result.model_dump(mode="json")

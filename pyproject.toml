@@ -4,47 +4,94 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "politiq-ai"
-version = "3.1.0"
+version = "3.0.0"
 description = "Politiq AI: Next-generation geopolitical intelligence and head-of-country advisory system."
 readme = "README.md"
 requires-python = ">=3.11"
 license = {text = "Proprietary"}
+# Minimal core: everything the default pipeline (heuristic + LLM via litellm),
+# REST API, and deterministic unit tests need. Every heavier integration is
+# an extra; code that needs one must degrade gracefully when it is absent
+# (see tests/test_optional_deps.py). Install all: pip install -e .[all]
 dependencies = [
     "pydantic>=2.0.0",
-    "litellm>=1.0.0",
+    "litellm>=1.35.0",
     "duckduckgo-search>=6.0.0",
     "trafilatura>=1.12.0",
+    "feedparser>=6.0.0",
+    "aiohttp>=3.9.0",
+    "httpx>=0.27.0",
+    "numpy>=1.24.0",
     "rich>=13.0.0",
     "python-dotenv>=1.0.0",
     "networkx>=3.0.0",
     "fastapi>=0.100.0",
     "uvicorn[standard]>=0.22.0",
     "prometheus-client>=0.17.0",
-    "langgraph>=0.0.30",
-    "dspy-ai>=2.4.0",
-    "gliner>=0.1.0",
-    "keybert>=0.8.0",
-    "mem0ai>=0.0.10",
-    "sentence-transformers>=2.0.0",
-    "hdbscan>=0.8.0",
-    "docling>=1.0.0",
-    "transformers>=4.0.0",
-    "neo4j>=5.0.0",
-    "qdrant-client>=1.0.0",
-    "langfuse>=2.0.0",
-    "deepeval>=0.21.0",
-    "ragas>=0.1.0",
-    "mesa>=2.1.0",
-    "causalnex>=0.11.0",
-    "pgmpy>=0.1.24",
     "pluggy>=1.4.0",
+    "sqlalchemy>=2.0.0",
+    "typing_extensions>=4.0.0",
+    "z3-solver>=4.12.0",
+    "pyDatalog>=0.17.0",
 ]
 
 [project.optional-dependencies]
+reasoning = ["dspy-ai>=2.4.0", "langchain-core>=0.2.0", "langchain-community>=0.2.0", "langchain-openai>=0.2.0", "langchain-ollama>=0.1.0", "langchain-google-genai>=1.0.0", "langgraph>=0.0.30"]
+nlp = [
+    "gliner>=0.1.0",
+    "keybert>=0.8.0",
+    "sentence-transformers>=2.0.0",
+    "transformers>=4.0.0",
+    "hdbscan>=0.8.0",
+    "docling>=1.0.0",
+]
+graph = ["neo4j>=5.0.0", "qdrant-client>=1.0.0", "chromadb>=0.4.0"]
+modeling = ["mesa>=2.1.0", "causalnex>=0.11.0", "pgmpy>=0.1.24", "pandas>=2.0.0", "scikit-learn>=1.3.0", "statsmodels>=0.14.0", "prophet>=1.1.0", "pymc>=5.0.0"]
+memory = ["mem0ai>=0.0.10"]
+eval = ["langfuse>=2.0.0", "deepeval>=0.21.0", "ragas>=0.1.0"]
+collab = ["y-py>=0.6.2"]
 workflow = ["prefect>=2.10.0"]
 observability = ["opentelemetry-api>=1.24.0", "opentelemetry-sdk>=1.24.0"]
 experiments = ["mlflow>=2.0.0", "evidently>=0.4.0"]
 intel-sharing = ["stix2>=3.0.0"]
+# Explicit list (pip does not reliably resolve self-referential extras).
+all = [
+    "dspy-ai>=2.4.0",
+    "langchain-core>=0.2.0",
+    "langchain-community>=0.2.0",
+    "langchain-openai>=0.2.0",
+    "langchain-ollama>=0.1.0",
+    "langchain-google-genai>=1.0.0",
+    "langgraph>=0.0.30",
+    "gliner>=0.1.0",
+    "keybert>=0.8.0",
+    "sentence-transformers>=2.0.0",
+    "transformers>=4.0.0",
+    "hdbscan>=0.8.0",
+    "docling>=1.0.0",
+    "neo4j>=5.0.0",
+    "qdrant-client>=1.0.0",
+    "chromadb>=0.4.0",
+    "mesa>=2.1.0",
+    "causalnex>=0.11.0",
+    "pgmpy>=0.1.24",
+    "pandas>=2.0.0",
+    "scikit-learn>=1.3.0",
+    "statsmodels>=0.14.0",
+    "prophet>=1.1.0",
+    "pymc>=5.0.0",
+    "mem0ai>=0.0.10",
+    "langfuse>=2.0.0",
+    "deepeval>=0.21.0",
+    "ragas>=0.1.0",
+    "y-py>=0.6.2",
+    "prefect>=2.10.0",
+    "opentelemetry-api>=1.24.0",
+    "opentelemetry-sdk>=1.24.0",
+    "mlflow>=2.0.0",
+    "evidently>=0.4.0",
+    "stix2>=3.0.0",
+]
 dev = [
     "pytest>=7.0.0",
     "pytest-asyncio>=0.21.0",

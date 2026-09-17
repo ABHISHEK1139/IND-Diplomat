@@ -15,12 +15,13 @@ async def websocket_assessments(websocket: WebSocket):
         await websocket.send_json({"type": "connected", "conn_id": conn_id})
         while True:
             data = await websocket.receive_json()
-            action = data.get("action")
+            action = data.get("action") or data.get("type")
             if action == "subscribe":
-                topic = data.get("topic")
-                if topic:
-                    await manager.subscribe(conn_id, topic)
-                    await websocket.send_json({"type": "subscribed", "topic": topic})
+                topic_list = data.get("topics") or ([data.get("topic")] if data.get("topic") else [])
+                for t in topic_list:
+                    if t:
+                        await manager.subscribe(conn_id, str(t))
+                        await websocket.send_json({"type": "subscribed", "topic": str(t)})
             elif action == "ping":
                 await websocket.send_json({"type": "pong"})
     except WebSocketDisconnect:

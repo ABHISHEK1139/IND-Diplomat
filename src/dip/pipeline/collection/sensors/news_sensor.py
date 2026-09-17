@@ -85,7 +85,8 @@ class NewsSensor:
             return []
 
     async def _fetch_google_rss(self, country: str) -> List[RawObservation]:
-        """Fallback: Fetch news from Google News RSS."""
+        """Fallback: Fetch news from Google News RSS (bounded, threaded)."""
+        import asyncio
         if not FEEDPARSER_AVAILABLE:
             return []
 
@@ -94,7 +95,13 @@ class NewsSensor:
             query = urllib.parse.quote(f"{country} geopolitics OR military OR economy")
             rss_url = f"https://news.google.com/rss/search?q={query}&hl=en-US&gl=US&ceid=US:en"
 
-            feed = feedparser.parse(rss_url)
+            try:
+                feed = await asyncio.wait_for(
+                    asyncio.to_thread(feedparser.parse, rss_url), timeout=15
+                )
+            except asyncio.TimeoutError:
+                logger.warning("Google RSS timed out after 15s.")
+                return []
             results = feed.entries[:15]
 
             for res in results:

@@ -492,7 +492,9 @@ class Hypothesis(BaseModel):
     matched_signals: List[str]
     missing_signals: List[str]
     confidence: float
-    decision_mode: str = "heuristic"
+    # Vocabulary matches DualModeMinisterDecision.resolution_action:
+    # heuristic_only | llm_refined_within_bounds | bounded_llm_refinement.
+    decision_mode: str = "heuristic_only"
     heuristic_confidence: Optional[float] = None
     llm_confidence: Optional[float] = None
     agreement_score: Optional[float] = None

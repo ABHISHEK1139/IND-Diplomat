@@ -1,16 +1,25 @@
 import logging
 from pydantic import BaseModel
-import dspy
+
+try:
+    import dspy
+except ImportError:  # optional dependency; fail only on actual use
+    dspy = None
 
 logger = logging.getLogger("DIP3.Layer11.Decomposer")
 
-class DecomposerSignature(dspy.Signature):
-    """Breaks down a broad research goal into actionable academic search queries."""
-    goal = dspy.InputField(desc="The broad executive goal.")
-    queries = dspy.OutputField(desc="Comma separated list of specific boolean search queries.")
+if dspy is not None:
+    class DecomposerSignature(dspy.Signature):
+        """Breaks down a broad research goal into actionable academic search queries."""
+        goal = dspy.InputField(desc="The broad executive goal.")
+        queries = dspy.OutputField(desc="Comma separated list of specific boolean search queries.")
+else:  # pragma: no cover - minimal installs without dspy
+    DecomposerSignature = None
 
 class GoalDecomposer:
     def __init__(self):
+        if dspy is None or DecomposerSignature is None:
+            raise ImportError("dspy is not installed. pip install 'politiq-ai[reasoning]'")
         self.module = dspy.Predict(DecomposerSignature)
         
     def decompose(self, goal: str) -> list[str]:

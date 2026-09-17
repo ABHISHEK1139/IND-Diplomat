@@ -8,8 +8,11 @@ import sys
 import asyncio
 from pathlib import Path
 
-# Add root to sys path
-sys.path.append(str(Path(__file__).resolve().parent.parent))
+# Anchor the package on sys.path so the script runs from any CWD without
+# requiring an installed distribution (pip install -e . also works).
+_PROJECT_ROOT = Path(__file__).resolve().parent.parent
+_PROJECT_SRC = _PROJECT_ROOT / "src"
+sys.path.insert(0, str(_PROJECT_SRC) if (_PROJECT_SRC / "dip").is_dir() else str(_PROJECT_ROOT))
 
 try:
     from prefect import flow, task

@@ -114,21 +114,31 @@ class ResilientWebSurfer:
         return []
 
     async def _search_ddgs_resilient(self, query: str, country_code: Optional[str], max_results: int) -> List[RawObservation]:
-        """Search DuckDuckGo with anti-rate-limit protection."""
+        """Search DuckDuckGo with anti-rate-limit protection (threaded + bounded)."""
         from duckduckgo_search import DDGS
-        
+
+        def _blocking_search(clean_q: str, headers: dict):
+            with DDGS(headers=headers, timeout=8) as ddgs:
+                news_results = list(ddgs.news(clean_q, max_results=max_results))
+                if not news_results:
+                    news_results = list(ddgs.text(clean_q, max_results=max_results))
+                return news_results
+
         for attempt in range(2):
             try:
                 # Add slight random jitter
                 await asyncio.sleep(random.uniform(0.1, 0.4))
                 headers = {"User-Agent": random.choice(USER_AGENTS)}
-                
-                with DDGS(headers=headers, timeout=8) as ddgs:
-                    # Clean search query (remove special chars that trigger DDG WAF)
-                    clean_q = " ".join([w for w in query.split() if len(w) > 1 and not w.startswith(("http", "site:"))])[:80]
-                    news_results = list(ddgs.news(clean_q, max_results=max_results))
-                    if not news_results:
-                        news_results = list(ddgs.text(clean_q, max_results=max_results))
+                # Clean search query (remove special chars that trigger DDG WAF)
+                clean_q = " ".join([w for w in query.split() if len(w) > 1 and not w.startswith(("http", "site:"))])[:80]
+                try:
+                    news_results = await asyncio.wait_for(
+                        asyncio.to_thread(_blocking_search, clean_q, headers),
+                        timeout=20,
+                    )
+                except asyncio.TimeoutError:
+                    logger.debug(f"DDGS attempt {attempt+1} timed out after 20s.")
+                    continue
                         
                     obs_list = []
                     for item in news_results:

@@ -7,7 +7,11 @@ Uses trafilatura to extract clean text and metadata from raw HTML.
 
 import logging
 from typing import Optional, Dict, Any
-import trafilatura
+
+try:
+    import trafilatura
+except ImportError:  # optional dependency; extraction degrades to None
+    trafilatura = None
 
 from dip.pipeline.collection.research.schemas import Document
 
@@ -31,7 +35,10 @@ class ContentExtractor:
         """
         if not html:
             return None
-            
+        if trafilatura is None:
+            logger.debug("trafilatura not installed; skipping extraction for %s", url)
+            return None
+
         try:
             # Trafilatura extracts text, removing nav, footer, ads, etc.
             result = trafilatura.extract(

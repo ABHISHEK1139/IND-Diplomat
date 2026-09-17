@@ -9,11 +9,19 @@ def client():
 
 @pytest.mark.unit
 def test_api_v3_job_lifecycle(client, monkeypatch):
-    async def mock_execute(query, country):
+    import time
+
+    # TEST-01: the mock must accept the same (query, country, job_id) call
+    # signature the real background runner uses, and the test must observe
+    # the actual background execution instead of marking the job complete
+    # by hand.
+    async def mock_execute(query, country, job_id=None):
+        assert job_id is not None, "background runner must pass job_id through"
         return {
             "query": query,
             "country": country,
             "trace_id": "test-trace-123",
+            "status": "COMPLETE",
             "threat_level": "CRITICAL",
             "verification_score": 0.88,
             "evidence_log": [{"id": "ev1", "text": "border activity"}],
@@ -22,6 +30,8 @@ def test_api_v3_job_lifecycle(client, monkeypatch):
             "nextgen_sre": {"sre_escalation_score": 0.75}
         }
     monkeypatch.setattr("dip.api.rest_api.execute", mock_execute)
+    # Silence WS fan-out; lifecycle assertions below cover the contract.
+    monkeypatch.setattr("dip.api.rest_api.ws_manager", None)
 
     # 1. Create Assessment Job
     res = client.post("/api/v3/assess", json={"query": "Test Border Movement", "country": "IND"})
@@ -36,18 +46,17 @@ def test_api_v3_job_lifecycle(client, monkeypatch):
     assert res.status_code == 200
     assert res.json()["job_id"] == job_id
 
-    # 3. Simulate completion in job_store
-    job_store.mark_complete(job_id, {
-        "query": "Test Border Movement",
-        "country": "IND",
-        "trace_id": "test-trace-123",
-        "threat_level": "CRITICAL",
-        "verification_score": 0.88,
-        "evidence_log": [{"id": "ev1", "text": "border activity"}],
-        "fuzzy_trace": {"score": 0.9},
-        "blackboard_events": ["event1"],
-        "nextgen_sre": {"sre_escalation_score": 0.75}
-    })
+    # 3. Wait for the real background runner to complete the job.
+    deadline = time.time() + 15
+    while time.time() < deadline:
+        job = job_store.get(job_id)
+        if job.result is not None:
+            break
+        time.sleep(0.1)
+    else:
+        pytest.fail("background runner did not complete the job")
+
+    assert job_store.get(job_id).status == "COMPLETED"
 
     # 4. Check Result
     res = client.get(f"/api/v3/jobs/{job_id}/result")

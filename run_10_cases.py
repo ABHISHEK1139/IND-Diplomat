@@ -1,5 +1,14 @@
 import asyncio
 import logging
+import os
+import sys
+
+# Anchor the package on sys.path so the script runs from any CWD without
+# requiring an installed distribution (pip install -e . also works).
+_ROOT = os.path.dirname(os.path.abspath(__file__))
+_SRC = os.path.join(_ROOT, "src")
+sys.path.insert(0, _SRC if os.path.isdir(os.path.join(_SRC, "dip")) else _ROOT)
+
 from dip.pipeline.deliberation.reasoning.ablation import AblationConfig
 from dip.pipeline.deliberation.reasoning.backtesting import HISTORICAL_CASES
 import run_backtest

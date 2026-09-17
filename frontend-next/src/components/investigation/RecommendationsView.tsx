@@ -3,7 +3,7 @@
 interface Recommendation {
   option: string;
   impact: string;
-  confidence: number;
+  confidence: number | null;
 }
 
 interface RecommendationsViewProps {
@@ -19,7 +19,7 @@ export default function RecommendationsView({ recommendations }: Recommendations
             <p className="text-sm font-medium text-text-primary">{rec.option}</p>
             <p className="text-[11px] text-text-muted">Impact: {rec.impact}</p>
           </div>
-          <span className="text-xs font-bold font-mono text-accent">{rec.confidence}%</span>
+          <span className="text-xs font-bold font-mono text-accent">{typeof rec.confidence === "number" ? `${rec.confidence}%` : "n/a"}</span>
         </div>
       ))}
     </div>

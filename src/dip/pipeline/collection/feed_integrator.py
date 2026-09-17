@@ -79,7 +79,13 @@ class FeedIntegrator:
             if self._ofac and self._ofac is not False:
                 tasks.append(self._fetch_ofac(country))
         
-        results = await asyncio.gather(*tasks, return_exceptions=True)
+        try:
+            results = await asyncio.wait_for(
+                asyncio.gather(*tasks, return_exceptions=True), timeout=30
+            )
+        except asyncio.TimeoutError:
+            logger.warning("FeedIntegrator: sensor gather timed out after 30s; using partial results.")
+            results = []
         
         all_obs = []
         for res in results:

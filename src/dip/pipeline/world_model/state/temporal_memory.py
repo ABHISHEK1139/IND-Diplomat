@@ -8,6 +8,7 @@ import json
 import logging
 import os
 import statistics
+from pathlib import Path
 from typing import List, Dict, Optional
 from datetime import datetime, timezone
 from dip.core.schema import Belief, TemporalIndicator
@@ -15,7 +16,25 @@ from dip.core.fuzzy import rising
 
 logger = logging.getLogger("Layer3.temporal_memory")
 
-_HISTORY_FILE = os.path.join(os.path.dirname(__file__), "..", "data", "state_history", "belief_history.jsonl")
+def _history_file() -> str:
+    # Runtime belief history lives in the central data dir, never the
+    # source tree. A legacy source-tree log is copied forward once.
+    from dip.core.Config.config import DATA_DIR
+
+    target = DATA_DIR / "state_history" / "belief_history.jsonl"
+    legacy = Path(os.path.join(os.path.dirname(__file__), "..", "data", "state_history", "belief_history.jsonl"))
+    try:
+        if legacy.is_file() and not target.exists() and legacy.resolve() != target.resolve():
+            target.parent.mkdir(parents=True, exist_ok=True)
+            import shutil
+
+            shutil.copy2(legacy, target)
+    except Exception:
+        pass
+    return str(target)
+
+
+_HISTORY_FILE = _history_file()
 
 MIN_HISTORY_REQUIRED = 4
 TREND_WINDOW = 10

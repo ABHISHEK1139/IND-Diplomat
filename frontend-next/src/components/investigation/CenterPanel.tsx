@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import GlassCard from "@/components/ui/GlassCard";
 import Notebook from "@/components/investigation/Notebook";
+import DecisionTrail from "@/components/investigation/DecisionTrail";
 import ForecastCharts from "@/components/investigation/ForecastCharts";
 import RecommendationsView from "@/components/investigation/RecommendationsView";
 import { InvestigationResult } from "@/lib/api";
@@ -26,25 +27,25 @@ interface CenterPanelProps {
   allComplete: boolean;
   result: InvestigationResult | null;
   error: string | null;
+  // UI-01/UI-02: illustrative fallback content is demo-only. For real
+  // investigations without pipeline data yet, show explicit unavailable
+  // states instead of fabricated assessments.
+  isDemo?: boolean;
 }
 
-export default function CenterPanel({ allComplete, result, error }: CenterPanelProps) {
-  const [activeTab, setActiveTab] = useState<"report" | "ministers" | "sources" | "forecast" | "notebook">("report");
-  const [sourceFilter, setSourceFilter] = useState<string>("all");
+// Demo-only illustrative dossier. Never shown for real investigations:
+// without pipeline output there is nothing truthful to summarize.
+const DEMO_DOSSIER = (country: string, query: string) => `
+# STRATEGIC GEOPOLITICAL INTELLIGENCE ESTIMATE (DEMO): ${country}
+**Objective**: Autonomous multi-domain intelligence synthesis for query: "${query}".
+**Assessed Threat Level**: HIGH (illustrative) | **Confidence**: HIGH CONFIDENCE (illustrative)
 
-  // Format executive briefing / dossier text
-  const executiveDossier = result?.briefing || result?.dossier || `
-# STRATEGIC GEOPOLITICAL INTELLIGENCE ESTIMATE: ${result?.country || "IND"}
-**Objective**: Autonomous multi-domain intelligence synthesis for query: "${result?.query || "Geopolitical Risk Assessment"}".
-**Assessed Threat Level**: ${result?.threat_level || "HIGH"} | **Confidence**: HIGH CONFIDENCE (Calibrated)
+## 1. Executive Intelligence Summary (demo data)
+Illustrative 7-minister council output for UI preview only — not a real assessment.
 
-## 1. Executive Intelligence Summary
-Autonomous 7-minister council investigation indicates a heightened operational environment requiring calibrated deterrence and active strategic monitoring. Corroborated intelligence atoms confirm multi-domain escalation dynamics across military posture, diplomatic communication channels, and supply chain dependencies.
-
-## 2. Key Strategic Judgments
-- Primary indicators point to elevated conflict escalation and forward logistics surge.
-- Evidence verification is calibrated at ${((result?.verification_score ?? 0.88) * 100).toFixed(1)}% corroboration.
-- Multi-agent cabinet consensus established across defense, foreign affairs, and economic portfolios.
+## 2. Key Strategic Judgments (demo data)
+- Illustrative escalation indicators for layout preview.
+- No live evidence corroboration.
 
 ## 3. Applicable Legal & Treaty Grounding
 - UN_CHARTER (Article 2(4)) — Prohibition of threat or use of force.
@@ -52,8 +53,27 @@ Autonomous 7-minister council investigation indicates a heightened operational e
 - UNCLOS (Article 56) — Sovereign rights in exclusive economic zones.
   `;
 
-  // Normalize hypotheses
-  const hypotheses = result?.hypotheses && result.hypotheses.length > 0 ? result.hypotheses : [
+export default function CenterPanel({ allComplete, result, error, isDemo }: CenterPanelProps) {
+  const [activeTab, setActiveTab] = useState<"report" | "why" | "ministers" | "sources" | "forecast" | "engines" | "notebook">("report");
+  const [sourceFilter, setSourceFilter] = useState<string>("all");
+  const demo = isDemo === true;
+
+  // Format executive briefing / dossier text. No fabrication: without a
+  // pipeline briefing there is no dossier to show (demo mode excepted).
+  const executiveDossier =
+    result?.briefing || result?.dossier ||
+    (demo ? DEMO_DOSSIER(result?.country || "IND", result?.query || "Geopolitical Risk Assessment") : null);
+
+  // Display helpers: real values when present, demo placeholders in demo
+  // mode, explicit "unavailable" markers otherwise.
+  const threatLabel = result?.threat_level ?? (demo ? "HIGH" : "Not assessed");
+  const verificationLabel =
+    result?.verification_score != null
+      ? `${(result.verification_score * 100).toFixed(1)}%`
+      : (demo ? "88.0%" : "Unavailable");
+
+  // Normalize hypotheses (demo fallbacks are illustrative preview data only)
+  const hypotheses = result?.hypotheses && result.hypotheses.length > 0 ? result.hypotheses : (demo ? [
     {
       minister: "Security Minister",
       type: "Is this a genuine military threat?",
@@ -110,10 +130,10 @@ Autonomous 7-minister council investigation indicates a heightened operational e
       missing_signals: ["Unannounced rapid mobilization"],
       rationale: "Red Team evaluated alternative explanations; verified that escalation indicators outweigh baseline noise.",
     },
-  ];
+  ] : []);
 
-  // Normalize raw internet / OSINT sources
-  const internetSources = (result?.raw_sources && result.raw_sources.length > 0) ? result.raw_sources : [
+  // Normalize raw internet / OSINT sources (demo fallbacks are illustrative only)
+  const internetSources = (result?.raw_sources && result.raw_sources.length > 0) ? result.raw_sources : (demo ? [
     {
       source_ref: "OFFICIAL_DEFENSE_INTELLIGENCE_BULLETIN",
       entity: "Ministry of Defense / Joint Staff",
@@ -174,7 +194,7 @@ Autonomous 7-minister council investigation indicates a heightened operational e
       url: "https://data.gdeltproject.org/events/index.html",
       timestamp: "2026-09-01T14:20:00Z"
     }
-  ];
+  ] : []);
 
   const filteredSources = sourceFilter === "all" 
     ? internetSources 
@@ -187,6 +207,7 @@ Autonomous 7-minister council investigation indicates a heightened operational e
         <div className="flex items-center gap-1.5">
           {[
             { key: "report", label: "Executive Dossier", icon: FileText },
+            { key: "why", label: "Why?", icon: Scale },
             { key: "ministers", label: "7-Minister Council", icon: Users },
             { key: "sources", label: "Internet & OSINT Sources", icon: Globe2 },
             { key: "forecast", label: "Forecasts & Scenarios", icon: TrendingUp },
@@ -218,7 +239,28 @@ Autonomous 7-minister council investigation indicates a heightened operational e
                     {error}
                   </div>
                 )}
-                
+
+                {/* Refusal / gate banner: a non-released assessment must say why */}
+                {result?.status && !["COMPLETE", "COMPLETED"].includes(result.status.toUpperCase()) && (
+                  <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 space-y-2">
+                    <div className="flex items-center gap-2">
+                      <AlertTriangle className="w-4 h-4 text-amber-400" />
+                      <span className="text-xs font-bold uppercase tracking-wider text-amber-300">
+                        Assessment {result.status} — withheld, not released
+                      </span>
+                    </div>
+                    {(result.refusal?.reasons || []).map((reason, i) => (
+                      <p key={i} className="text-xs text-text-muted leading-relaxed">• {reason}</p>
+                    ))}
+                    {(!result.refusal?.reasons || result.refusal.reasons.length === 0) && (
+                      <p className="text-xs text-text-muted">No refusal record was attached by the pipeline.</p>
+                    )}
+                    {result.refusal?.recommendation && (
+                      <p className="text-xs text-text-primary">{result.refusal.recommendation}</p>
+                    )}
+                  </div>
+                )}
+
                 {/* Header Summary Banner */}
                 <div className="p-4 rounded-xl bg-background/60 border border-border space-y-3">
                   <div className="flex items-center justify-between">
@@ -230,10 +272,10 @@ Autonomous 7-minister council investigation indicates a heightened operational e
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-red-500/10 text-red-400 border border-red-500/30 font-bold">
-                        Threat: {result?.threat_level || "HIGH"}
+                        Threat: {threatLabel}
                       </span>
                       <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-bold">
-                        Verification: {((result?.verification_score ?? 0.88) * 100).toFixed(1)}%
+                        Verification: {verificationLabel}
                       </span>
                     </div>
                   </div>
@@ -245,7 +287,8 @@ Autonomous 7-minister council investigation indicates a heightened operational e
                   </p>
                 </div>
 
-                {/* Key Strategic Judgments Grid */}
+                {/* Key Strategic Judgments Grid — pipeline-derived only */}
+                {result ? (
                 <section className="space-y-3">
                   <h3 className="text-xs font-bold uppercase tracking-wider text-text-muted flex items-center gap-1.5">
                     <Sparkles className="w-3.5 h-3.5 text-accent" />
@@ -258,7 +301,9 @@ Autonomous 7-minister council investigation indicates a heightened operational e
                         <span>Military / Kinetic</span>
                       </div>
                       <p className="text-xs text-text-muted leading-relaxed">
-                        Operational intensity at 0.78 score. Forward armor, air defense battery activations, and runway extensions verified via satellite telemetry.
+                        {hypotheses.length > 0
+                          ? `${hypotheses.length} minister portfolio(s) report assessed signals; see the 7-Minister Council tab for per-portfolio rationale.`
+                          : "No minister portfolios reported assessed signals."}
                       </p>
                     </div>
 
@@ -268,7 +313,9 @@ Autonomous 7-minister council investigation indicates a heightened operational e
                         <span>Diplomatic Channels</span>
                       </div>
                       <p className="text-xs text-text-muted leading-relaxed">
-                        Friction index measured at 0.62. Formal démarches and stalled bilateral working groups indicate diplomatic posturing.
+                        {internetSources.length > 0
+                          ? `${internetSources.length} ingested source(s) available; see the Sources tab.`
+                          : "No diplomatic sources ingested for this assessment."}
                       </p>
                     </div>
 
@@ -278,22 +325,34 @@ Autonomous 7-minister council investigation indicates a heightened operational e
                         <span>Economic Friction</span>
                       </div>
                       <p className="text-xs text-text-muted leading-relaxed">
-                        Supply chain pressure index at 0.50. Targeted border inspection delays and trade dependency adjustments underway.
+                        Verification {verificationLabel}. Threat {threatLabel}.
                       </p>
                     </div>
                   </div>
                 </section>
+                ) : (
+                  <p className="text-xs text-text-muted">Judgments unavailable — no pipeline result for this investigation{demo ? " (demo preview)" : ""}.</p>
+                )}
 
                 {/* Strategic Recommendations */}
                 <section>
                   <h3 className="text-sm font-semibold text-text-primary mb-3">Actionable Strategic Recommendations</h3>
-                  <RecommendationsView 
-                    recommendations={result?.recommendations || [
-                      { option: "Activate high-readiness satellite and UAV surveillance along strategic sectors", impact: "High", confidence: 88 },
-                      { option: "Convene bilateral working group under UN Charter Article 51 & border protocols", impact: "High", confidence: 82 },
-                      { option: "Execute targeted supply chain rerouting for critical imports and components", impact: "Medium", confidence: 75 },
-                    ]} 
-                  />
+                  {result?.recommendations && result.recommendations.length > 0 ? (
+                    <RecommendationsView recommendations={result.recommendations} />
+                  ) : demo ? (
+                    <RecommendationsView
+                      recommendations={[
+                        { option: "Activate high-readiness satellite and UAV surveillance along strategic sectors", impact: "High", confidence: 88 },
+                        { option: "Convene bilateral working group under UN Charter Article 51 & border protocols", impact: "High", confidence: 82 },
+                        { option: "Execute targeted supply chain rerouting for critical imports and components", impact: "Medium", confidence: 75 },
+                      ]}
+                    />
+                  ) : (
+                    <p className="text-xs text-text-muted">No recommendations supplied by the pipeline.</p>
+                  )}
+                  {demo && (!result?.recommendations || result.recommendations.length === 0) && (
+                    <p className="text-[10px] text-text-muted mt-2">Demo preview data — not a real assessment.</p>
+                  )}
                 </section>
               </>
             ) : (
@@ -305,7 +364,14 @@ Autonomous 7-minister council investigation indicates a heightened operational e
           </div>
         )}
 
-        {/* TAB 2: 7-MINISTER COUNCIL (EXPLAINABLE POINTS, ACCESS & COMBINED SYNTHESIS) */}
+        {/* TAB 2: WHY — DECISION TRAIL */}
+        {activeTab === "why" && (
+          <div className="space-y-4 pb-6">
+            <DecisionTrail result={result} isDemo={demo} />
+          </div>
+        )}
+
+        {/* TAB 3: 7-MINISTER COUNCIL (EXPLAINABLE POINTS, ACCESS & COMBINED SYNTHESIS) */}
         {activeTab === "ministers" && (
           <div className="space-y-4 pb-6">
             {/* Combined 7-Minister Consensus Synthesis Engine */}
@@ -318,7 +384,7 @@ Autonomous 7-minister council investigation indicates a heightened operational e
                   </span>
                 </div>
                 <span className="text-[11px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-accent/20 text-accent border border-accent/40">
-                  Consensus Status: CONVERGED
+                  Consensus Status: {result ? (hypotheses.length > 0 ? "REPORTED" : "NO HYPOTHESES") : (demo ? "DEMO" : "PENDING")}
                 </span>
               </div>
 
@@ -326,25 +392,31 @@ Autonomous 7-minister council investigation indicates a heightened operational e
                 <div className="p-3 rounded-lg bg-background/80 border border-border">
                   <span className="text-[10px] text-text-muted uppercase font-semibold">Aggregated Threat Index</span>
                   <div className="text-xl font-bold text-red-400 font-mono mt-0.5">
-                    {result?.threat_level || "HIGH"} (68.5%)
+                    {threatLabel}
                   </div>
-                  <span className="text-[10px] text-text-muted">Weighted cross-domain sum</span>
+                  <span className="text-[10px] text-text-muted">Pipeline-reported level{demo && !result ? " (demo)" : ""}</span>
                 </div>
 
                 <div className="p-3 rounded-lg bg-background/80 border border-border">
                   <span className="text-[10px] text-text-muted uppercase font-semibold">Cabinet Spread & Alignment</span>
                   <div className="text-xl font-bold text-cyan-400 font-mono mt-0.5">
-                    0.33 Spread
+                    {hypotheses.length > 0
+                      ? `${(Math.max(...hypotheses.map((h: any) => Number(h.confidence) || 0)) - Math.min(...hypotheses.map((h: any) => Number(h.confidence) || 0))).toFixed(2)} Spread`
+                      : "Unavailable"}
                   </div>
-                  <span className="text-[10px] text-emerald-400 font-semibold">✓ Within Stable Bounds</span>
+                  <span className="text-[10px] text-text-muted font-semibold">Computed from reported confidences</span>
                 </div>
 
                 <div className="p-3 rounded-lg bg-background/80 border border-border">
                   <span className="text-[10px] text-text-muted uppercase font-semibold">Epistemic Verification Gate</span>
                   <div className="text-xl font-bold text-emerald-400 font-mono mt-0.5">
-                    {((result?.verification_score ?? 0.88) * 100).toFixed(1)}%
+                    {verificationLabel}
                   </div>
-                  <span className="text-[10px] text-emerald-400 font-semibold">✓ Passed Gate (V ≥ 70%)</span>
+                  <span className="text-[10px] text-text-muted font-semibold">
+                    {result?.verification_score != null
+                      ? (result.verification_score >= 0.7 ? "✓ Passed Gate (V ≥ 70%)" : "✗ Below Gate (V < 70%)")
+                      : "Gate status unavailable"}
+                  </span>
                 </div>
               </div>
 
@@ -366,12 +438,15 @@ Autonomous 7-minister council investigation indicates a heightened operational e
                 <h3 className="text-sm font-bold text-text-primary">Individual Minister Portfolio Breakdown</h3>
                 <p className="text-xs text-text-muted">Detailed scoring rationale, accessed signals, and intelligence gaps per minister.</p>
               </div>
-              <span className="text-xs font-mono text-accent font-semibold">7 Portfolios Evaluated</span>
+              <span className="text-xs font-mono text-accent font-semibold">{hypotheses.length > 0 ? `${hypotheses.length} Portfolio${hypotheses.length === 1 ? "" : "s"} Reported` : "No Portfolios Reported"}</span>
             </div>
 
             <div className="space-y-3">
+              {hypotheses.length === 0 && (
+                <p className="text-xs text-text-muted">No minister hypotheses reported for this investigation{demo ? " (demo preview has none either)" : ""}.</p>
+              )}
               {hypotheses.map((h: any, idx: number) => {
-                const conf = typeof h.confidence === "number" ? Math.round(h.confidence * 100) : 70;
+                const conf = typeof h.confidence === "number" ? Math.round(h.confidence * 100) : null;
                 return (
                   <div key={idx} className="p-4 rounded-xl bg-background/50 border border-border space-y-3">
                     {/* Minister Header */}
@@ -381,11 +456,12 @@ Autonomous 7-minister council investigation indicates a heightened operational e
                         <span className="text-[11px] text-text-muted">| {h.type}</span>
                       </div>
                       <span className={`text-xs font-mono font-bold px-2.5 py-0.5 rounded-full border ${
+                        conf == null ? "bg-background text-text-muted border-border" :
                         conf >= 70 ? "bg-red-500/20 text-red-400 border-red-500/30" :
                         conf >= 50 ? "bg-amber-500/20 text-amber-400 border-amber-500/30" :
                         "bg-emerald-500/20 text-emerald-400 border-emerald-500/30"
                       }`}>
-                        Score: {conf}%
+                        Score: {conf == null ? "n/a" : `${conf}%`}
                       </span>
                     </div>
 
@@ -517,17 +593,55 @@ Autonomous 7-minister council investigation indicates a heightened operational e
         {/* TAB 4: FORECASTS */}
         {activeTab === "forecast" && (
           <div className="space-y-6 pb-6">
+            {(result?.trajectory?.trajectory_label || result?.trajectory?.label) && (
+              <div className="p-3.5 rounded-xl bg-background/60 border border-border flex items-center justify-between">
+                <div>
+                  <span className="text-[10px] text-text-muted uppercase font-semibold">Trajectory direction</span>
+                  <div className="text-lg font-bold text-text-primary font-mono">
+                    {result.trajectory.trajectory_label || result.trajectory.label}
+                  </div>
+                </div>
+                <div className="flex items-center gap-4 text-xs font-mono text-text-muted">
+                  {[
+                    ["14d", result.trajectory.prob_14d],
+                    ["30d", result.trajectory.prob_30d],
+                    ["60d", result.trajectory.prob_60d],
+                  ].map(([horizon, p]) => (
+                    <span key={horizon as string}>
+                      P(HIGH {horizon}){" "}
+                      <span className="text-text-primary font-bold">
+                        {typeof p === "number" ? `${Math.round(p * 100)}%` : "—"}
+                      </span>
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
             <section>
               <h3 className="text-sm font-semibold text-text-primary mb-3">Bayesian Trajectory & Scenario Projections</h3>
-              <ForecastCharts
-                scenarios={
-                  result?.scenarios || [
-                    { name: "De-escalation via Treaty Talks", probability: 58, description: "Bilateral working group convenes, reducing forward kinetic alert." },
-                    { name: "Prolonged Armed Standoff", probability: 28, description: "Forces maintain forward winterized positions along disputed sectors." },
-                    { name: "Localized Border Skirmish", probability: 14, description: "Tactical friction triggers isolated patrol engagement without general war." },
-                  ]
-                }
-              />
+              {result?.scenarios && result.scenarios.length > 0 ? (
+                <ForecastCharts
+                  scenarios={result.scenarios}
+                  timelineData={
+                    result.trajectory && typeof result.trajectory.prob_14d === "number"
+                      ? [["14d", Math.round((result.trajectory.prob_14d || 0) * 100)], ["30d", Math.round((result.trajectory.prob_30d || 0) * 100)], ["60d", Math.round((result.trajectory.prob_60d || 0) * 100)]]
+                      : undefined
+                  }
+                />
+              ) : demo ? (
+                <>
+                  <ForecastCharts
+                    scenarios={[
+                      { name: "De-escalation via Treaty Talks", probability: 58, description: "Bilateral working group convenes, reducing forward kinetic alert." },
+                      { name: "Prolonged Armed Standoff", probability: 28, description: "Forces maintain forward winterized positions along disputed sectors." },
+                      { name: "Localized Border Skirmish", probability: 14, description: "Tactical friction triggers isolated patrol engagement without general war." },
+                    ]}
+                  />
+                  <p className="text-[10px] text-text-muted mt-2">Demo preview scenarios — not a real forecast.</p>
+                </>
+              ) : (
+                <p className="text-xs text-text-muted">No scenario projections supplied by the pipeline.</p>
+              )}
             </section>
           </div>
         )}
@@ -550,13 +664,13 @@ Autonomous 7-minister council investigation indicates a heightened operational e
                 <div className="p-3 bg-background/80 border border-border rounded-lg">
                   <span className="text-[10px] text-text-muted uppercase font-semibold">SRE Escalation Score</span>
                   <div className="text-2xl font-bold text-red-400 font-mono mt-1">
-                    {result?.fuzzy_trace?.sre_escalation_score ? result.fuzzy_trace.sre_escalation_score.toFixed(3) : "0.785"}
+                    {result?.fuzzy_trace?.sre_escalation_score != null ? result.fuzzy_trace.sre_escalation_score.toFixed(3) : "Unavailable"}
                   </div>
                 </div>
                 <div className="p-3 bg-background/80 border border-border rounded-lg">
                   <span className="text-[10px] text-text-muted uppercase font-semibold">Mathematical Risk Level</span>
                   <div className="text-2xl font-bold text-accent font-mono mt-1">
-                    {result?.fuzzy_trace?.risk_level || "HIGH_RISK"}
+                    {result?.fuzzy_trace?.risk_level || "Unavailable"}
                   </div>
                 </div>
               </div>
@@ -604,7 +718,7 @@ Autonomous 7-minister council investigation indicates a heightened operational e
               <div className="p-3 bg-background/80 border border-border rounded-lg">
                   <span className="text-[10px] text-text-muted uppercase font-semibold">Predicted Nash Equilibrium</span>
                   <div className="text-sm font-mono text-text-primary mt-1">
-                    {result?.nash_equilibrium?.recommended_strategy || "Symmetric De-escalation Protocol"}
+                    {result?.nash_equilibrium?.recommended_strategy || "Unavailable — no wargame output supplied"}
                   </div>
               </div>
             </section>

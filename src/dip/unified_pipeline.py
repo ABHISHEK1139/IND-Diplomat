@@ -17,6 +17,7 @@ and StateContext objects. No boundary leakage permitted.
 """
 
 import asyncio
+import json
 import logging
 import os
 import time
@@ -191,6 +192,30 @@ def _merge_dual_engine_hypotheses(heuristic: List[Hypothesis], ai: Any) -> List[
 
 
 
+def _hypothesis_to_dict(h: Any) -> Dict[str, Any]:
+    """Serialize one hypothesis for the result payload.
+
+    Provenance fields (decision_mode, heuristic/llm confidence, agreement)
+    are part of the contract: dropping them once made live LLM refinement
+    indistinguishable from heuristic fallback downstream.
+    """
+    return {
+        "minister": getattr(h, "minister", getattr(h, "minister_name", getattr(h, "domain", "Minister"))),
+        "type": getattr(h, "hypothesis_type", getattr(h, "type", "hypothesis")),
+        "confidence": getattr(h, "confidence", 0.5),
+        "matched_signals": getattr(h, "matched_signals", []),
+        "missing_signals": getattr(h, "missing_signals", []),
+        "rationale": getattr(h, "rationale", getattr(h, "recalibration_rationale", "Corroborated by StateContext intelligence signals.")),
+        "critical_signal_refs": getattr(h, "critical_signal_refs", []),
+        "disagreement_notes": getattr(h, "disagreement_notes", []),
+        "recalibrated_confidence": getattr(h, "recalibrated_confidence", None),
+        "decision_mode": getattr(h, "decision_mode", None),
+        "heuristic_confidence": getattr(h, "heuristic_confidence", None),
+        "llm_confidence": getattr(h, "llm_confidence", None),
+        "agreement_score": getattr(h, "agreement_score", None),
+    }
+
+
 # ── Safe wrappers for deliberation modules ───────────────────────
 
 async def _safe_red_team(session) -> None:
@@ -216,10 +241,12 @@ async def _safe_crag(session) -> None:
     try:
         await crag_investigate(session)
     except Exception:
+        # GROUNDING RULE: never fabricate retrieval. Record gaps as unconfirmed
+        # for the Layer 1-3 loop; do not invent corroboration.
         for signal in session.missing_signals[:5]:
             session.evidence_log.append(
-                f"CRAG-RETRIEVED: Partial corroboration for '{signal}' — "
-                f"low-confidence OSINT indicators detected."
+                f"CRAG GAP CONFIRMED (state-only, no retrieval in Layer-4): '{signal}' "
+                f"remains unobserved in StateContext."
             )
 
 
@@ -334,13 +361,26 @@ async def execute(query: str, country_code: str, job_id: str | None = None) -> D
             # Best-effort async publish; schedule in event loop
             if not ws_manager:
                 return
+            msg = dict(payload)
+            if job_id:
+                msg["job_id"] = job_id
+            p_type = msg.get("type", "")
+            if p_type == "phase.started":
+                msg["status"] = "running"
+            elif p_type == "phase.completed":
+                msg["status"] = "complete"
+
             topic = f"job:{job_id}" if job_id else None
             async def _do():
                 try:
                     if topic:
-                        await ws_manager.publish_topic(topic, payload)
-                    else:
-                        await ws_manager.broadcast(payload)
+                        await ws_manager.publish_topic(topic, msg)
+                    await ws_manager.broadcast(msg)
+                    if "phase" in msg and "status" in msg:
+                        fe_msg = {"type": "pipeline_update", "job_id": job_id, "phase": msg["phase"], "status": msg["status"]}
+                        if topic:
+                            await ws_manager.publish_topic(topic, fe_msg)
+                        await ws_manager.broadcast(fe_msg)
                 except Exception as e:
                     logger.debug(f"[WS] Publish failed: {e}")
             try:
@@ -533,10 +573,64 @@ async def execute(query: str, country_code: str, job_id: str | None = None) -> D
             
         # Run Introspection (Layer 4)
         analyze_bias(session)
+        # Preserve reasoning provenance that previously died on the session:
+        # the dual-mode arbitration record and the introspection report both
+        # belong in the auditable result.
+        result["dual_mode_assessment"] = getattr(session, "dual_mode_assessment", None)
+        result["introspection_report"] = getattr(session, "introspection_report", None)
         
         # Save to Working Memory
         from dip.pipeline.world_model.state.working_memory import WorkingMemory
         WorkingMemory().save_context(state_context)
+
+        # ── Finalize assessed fields BEFORE gate/persistence ─────
+        # The assessment gate (analytic_confidence, proposed_decision), the
+        # audit record, trajectory consumers, and the memory vault all read
+        # these fields — populating them after those stages silently fed the
+        # gate verification 0.0 and proposal "LOW" on every run.
+        result["verification_score"] = session.verification_score
+        result["evidence_log"] = session.evidence_log
+        result["red_team_report"] = session.red_team_report
+
+        _decision_doc: dict = {}
+        if session.final_decision:
+            try:
+                _decision_doc = json.loads(session.final_decision)
+            except Exception:
+                _decision_doc = {}
+            result["threat_level"] = _decision_doc.get("overall_threat_level", "LOW") or "LOW"
+            if result["threat_level"] == "LOW":
+                for level in ["CRITICAL", "HIGH", "ELEVATED", "LOW"]:
+                    if f'"overall_threat_level": "{level}"' in session.final_decision:
+                        result["threat_level"] = level
+                        break
+            # Verbatim recommendations from the validated assessment — the
+            # frontend renders these directly, never invents its own.
+            _recs = _decision_doc.get("recommendations") or []
+            result["recommendations"] = [
+                {"option": str(r), "impact": "—", "confidence": None} for r in _recs
+            ]
+
+        result["hypotheses"] = [_hypothesis_to_dict(h) for h in session.hypotheses]
+
+        # Aggregated confidence metrics — every value is computed from
+        # reported data (formula in code); absent inputs yield null, never
+        # a placeholder. forecast_reliability is filled after trajectory.
+        _confs = [
+            float(getattr(h, "confidence", 0.5) or 0.5)
+            for h in session.hypotheses
+        ]
+        _signals = list(getattr(session.state_context, "current_signals", []) or [])
+        _rel = [
+            float(getattr(s, "reliability_score", 0.0) or 0.0)
+            for s in _signals if float(getattr(s, "reliability_score", 0.0) or 0.0) > 0
+        ]
+        result["confidence_scores"] = {
+            "evidence": round(session.verification_score, 3),
+            "sources": round(sum(_rel) / len(_rel), 3) if _rel else None,
+            "expert_agreement": round(1.0 - (max(_confs) - min(_confs)), 3) if len(_confs) >= 2 else None,
+            "forecast_reliability": None,
+        }
 
         # ── Layer 5: Assessment Gate ─────────────────────────────
         logger.info("[Layer 5] Running Assessment Gate")
@@ -575,7 +669,15 @@ async def execute(query: str, country_code: str, job_id: str | None = None) -> D
             from dip.pipeline.forecasting.trajectory.trajectory_model import compute_trajectory
             trajectory = compute_trajectory(session)
             result["trajectory"] = trajectory
-            logger.info("[Layer 5] Trajectory: %s", trajectory.get("label", "N/A"))
+            logger.info("[Layer 5] Trajectory: %s", trajectory.get("trajectory_label", "N/A"))
+            # Forecast reliability: stable trajectories preserve verification,
+            # fast-moving ones discount it. Formula, not a placeholder.
+            _velocity = abs(float(trajectory.get("velocity", 0.0) or 0.0))
+            _cs = result.get("confidence_scores") or {}
+            _cs["forecast_reliability"] = round(
+                max(0.0, session.verification_score * (1.0 - min(_velocity, 0.9))), 3
+            )
+            result["confidence_scores"] = _cs
         except Exception as e:
             logger.debug("[Layer 5] Trajectory unavailable: %s", e)
 
@@ -619,24 +721,41 @@ async def execute(query: str, country_code: str, job_id: str | None = None) -> D
             logger.debug("[Layer 8] Wargaming unavailable: %s", e)
 
         # ── Graph Manager Ripple Effects ─────────────────────
+        # Blocking driver I/O runs in a thread (never stall the event loop);
+        # the driver always closes, even on failure (leaked BoltDrivers
+        # surfaced as ResourceWarnings in the test suite).
         try:
             from dip.pipeline.world_model.state.graph_manager import GraphManager
-            gm = GraphManager(max_retries=1)
-            ripple_effects = gm.get_ripple_effects(country_code)
-            result["ripple_effects"] = ripple_effects
-            gm.close()
+
+            def _ripple() -> Any:
+                gm = GraphManager(max_retries=1)
+                try:
+                    return gm.get_ripple_effects(country_code)
+                finally:
+                    try:
+                        gm.close()
+                    except Exception:
+                        pass
+
+            result["ripple_effects"] = await asyncio.wait_for(
+                asyncio.to_thread(_ripple), timeout=20
+            )
         except Exception as e:
             logger.debug("[Layer 3] GraphManager unavailable: %s", e)
 
         # ── Layer 6: Executive Summary ───────────────────────────
         try:
             composer = DossierComposer()
-            briefing = composer.build_dossier(job_id or "default-job", {"session": session})
+            briefing = await composer.build_dossier_async(job_id or "default-job", {"session": session})
             result["briefing"] = briefing
+            result["dossier"] = briefing
         except Exception as e:
             result["briefing"] = f"[Briefing generation failed: {e}]"
+            result["dossier"] = result["briefing"]
         _publish_progress({"type": "phase.completed", "phase": "briefing"})
 
+        # Assessed fields were finalized before the gate (see above); the
+        # vault/archive/contagion stages below consume the populated values.
         # ── Layer 6: Memory Vault (store for future reference) ───
         try:
             MemoryVault, _, _ = _import_memory()
@@ -719,35 +838,7 @@ async def execute(query: str, country_code: str, job_id: str | None = None) -> D
         except Exception as e:
             logger.debug("Failed to extract xAI sources: %s", e)
 
-        # ── Populate final result ────────────────────────────────
-        result["verification_score"] = session.verification_score
-        result["evidence_log"] = session.evidence_log
-        result["red_team_report"] = session.red_team_report
-
-        if session.final_decision:
-            try:
-                dec_json = json.loads(session.final_decision)
-                result["threat_level"] = dec_json.get("overall_threat_level", "LOW")
-            except Exception:
-                for level in ["CRITICAL", "HIGH", "ELEVATED", "LOW"]:
-                    if f'"overall_threat_level": "{level}"' in session.final_decision:
-                        result["threat_level"] = level
-                        break
-
-        result["hypotheses"] = [
-            {
-                "minister": getattr(h, "minister", getattr(h, "minister_name", getattr(h, "domain", "Minister"))),
-                "type": getattr(h, "hypothesis_type", getattr(h, "type", "hypothesis")),
-                "confidence": getattr(h, "confidence", 0.5),
-                "matched_signals": getattr(h, "matched_signals", []),
-                "missing_signals": getattr(h, "missing_signals", []),
-                "rationale": getattr(h, "rationale", getattr(h, "recalibration_rationale", "Corroborated by StateContext intelligence signals.")),
-                "critical_signal_refs": getattr(h, "critical_signal_refs", []),
-                "disagreement_notes": getattr(h, "disagreement_notes", []),
-                "recalibrated_confidence": getattr(h, "recalibrated_confidence", None),
-            }
-            for h in session.hypotheses
-        ]
+        # Final assessed fields were populated before persistence (see above).
         blackboard.post(
             PipelinePhase.REPORT,
             "assessment.result_populated",

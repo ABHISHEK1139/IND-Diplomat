@@ -20,18 +20,40 @@ interface EvidenceEntry {
   contradictions: number;
 }
 
+interface TimelineEvent {
+  date: string;
+  title: string;
+  cardTitle: string;
+  cardDetailedText: string;
+}
+
+interface ConfidenceMetrics {
+  evidence: number | null;
+  sources: number | null;
+  expertAgreement: number | null;
+  forecastReliability: number | null;
+}
+
 interface RightPanelProps {
   mockDebate: DebateEntry[];
   mockEvidence: EvidenceEntry[];
   hypotheses?: any[];
+  redTeam?: string[];
+  // UI-01: real pipeline data when available. Demo fallbacks render only
+  // when isDemo is true and are explicitly badged as demo; otherwise the
+  // tabs show honest unavailable states.
+  timeline?: TimelineEvent[];
+  metrics?: ConfidenceMetrics | null;
+  isDemo?: boolean;
 }
 
 type TabType = "experts" | "timeline" | "evidence" | "confidence";
 
-export default function RightPanel({ mockDebate, mockEvidence, hypotheses }: RightPanelProps) {
+export default function RightPanel({ mockDebate, mockEvidence, hypotheses, redTeam, timeline, metrics, isDemo }: RightPanelProps) {
   const [activeTab, setActiveTab] = useState<TabType>("experts");
+  const demo = isDemo === true;
 
-  const mockTimeline = [
+  const demoTimeline: TimelineEvent[] = [
     {
       date: "2024 Q3",
       title: "Policy Shift",
@@ -85,7 +107,26 @@ export default function RightPanel({ mockDebate, mockEvidence, hypotheses }: Rig
         {activeTab === "experts" && (
           <div className="space-y-4">
             <h3 className="text-sm font-semibold text-text-primary">7-Minister Deliberation & Debate</h3>
-            <DebateView debate={mockDebate} hypotheses={hypotheses} />
+            <DebateView debate={mockDebate} hypotheses={hypotheses} isDemo={demo} />
+            <div className="space-y-2">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-text-muted flex items-center gap-1.5">
+                <ShieldAlert className="w-3.5 h-3.5 text-orange-400" />
+                Red-Team Challenges ({redTeam?.length || 0})
+              </h4>
+              {redTeam && redTeam.length > 0 ? (
+                <ul className="space-y-1.5">
+                  {redTeam.slice(0, 8).map((finding, i) => (
+                    <li key={i} className="text-xs text-text-muted bg-orange-500/10 border border-orange-500/20 px-2.5 py-1.5 rounded-md leading-relaxed">
+                      {finding}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-xs text-text-muted">
+                  {demo ? "Demo preview — no live challenges." : "No red-team findings recorded for this assessment."}
+                </p>
+              )}
+            </div>
           </div>
         )}
 
@@ -102,21 +143,39 @@ export default function RightPanel({ mockDebate, mockEvidence, hypotheses }: Rig
         {activeTab === "timeline" && (
           <div className="space-y-4">
             <h3 className="text-sm font-semibold text-text-primary">Predicted Timeline</h3>
-            <TimelineView events={mockTimeline} />
+            {timeline && timeline.length > 0 ? (
+              <TimelineView events={timeline} />
+            ) : demo ? (
+              <>
+                <p className="text-[10px] font-semibold text-warning uppercase tracking-wider">Demo preview — not a real forecast</p>
+                <TimelineView events={demoTimeline} />
+              </>
+            ) : (
+              <p className="text-xs text-text-muted">No timeline supplied by the pipeline.</p>
+            )}
           </div>
         )}
 
         {activeTab === "confidence" && (
           <div className="space-y-4">
             <h3 className="text-sm font-semibold text-text-primary">System Confidence</h3>
-            <ConfidencePanel 
-              metrics={{
-                evidence: 92,
-                sources: 87,
-                expertAgreement: 81,
-                forecastReliability: 74,
-              }} 
-            />
+            {metrics ? (
+              <ConfidencePanel metrics={metrics} />
+            ) : demo ? (
+              <>
+                <p className="text-[10px] font-semibold text-warning uppercase tracking-wider">Demo preview — not measured</p>
+                <ConfidencePanel
+                  metrics={{
+                    evidence: 92,
+                    sources: 87,
+                    expertAgreement: 81,
+                    forecastReliability: 74,
+                  }}
+                />
+              </>
+            ) : (
+              <p className="text-xs text-text-muted">Metrics unavailable — no confidence data supplied by the pipeline.</p>
+            )}
           </div>
         )}
       </div>

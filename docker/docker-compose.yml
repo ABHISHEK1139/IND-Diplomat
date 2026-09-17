@@ -10,7 +10,7 @@ services:
     ports:
     - 5432:5432
     volumes:
-    - ./data/postgres:/var/lib/postgresql/data
+    - ../data/postgres:/var/lib/postgresql/data
     networks:
     - dip2-network
     healthcheck:
@@ -28,7 +28,7 @@ services:
     - 6333:6333
     - 6334:6334
     volumes:
-    - ./data/qdrant:/qdrant/storage
+    - ../data/qdrant:/qdrant/storage
     networks:
     - dip2-network
   redis:
@@ -38,7 +38,7 @@ services:
     ports:
     - 6379:6379
     volumes:
-    - ./data/redis:/data
+    - ../data/redis:/data
     networks:
     - dip2-network
     healthcheck:
@@ -62,10 +62,10 @@ services:
       NEO4J_apoc_import_file_enabled: 'true'
       NEO4J_apoc_import_file_use__neo4j__config: 'true'
     volumes:
-    - ./data/neo4j/data:/data
-    - ./data/neo4j/logs:/logs
-    - ./data/neo4j/import:/var/lib/neo4j/import
-    - ./data/neo4j/plugins:/plugins
+    - ../data/neo4j/data:/data
+    - ../data/neo4j/logs:/logs
+    - ../data/neo4j/import:/var/lib/neo4j/import
+    - ../data/neo4j/plugins:/plugins
     networks:
     - dip2-network
     healthcheck:
@@ -78,10 +78,14 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+  # NOTE (DEP-01): this compose file lives in docker/, so every host-relative
+  # path below is anchored at the repository root via ../ (compose resolves
+  # relative paths against this file's directory). Invoke from the repo root:
+  #   docker compose -f docker/docker-compose.yml up --build
   web:
     build:
-      context: .
-      dockerfile: Dockerfile.web
+      context: ..
+      dockerfile: docker/Dockerfile.web
     container_name: dip2-web
     restart: unless-stopped
     depends_on:
@@ -92,7 +96,7 @@ services:
     ports:
     - ${API_PORT:-8000}:8000
     env_file:
-    - .env
+    - ../.env
     environment:
     - PYTHONUNBUFFERED=1
     - DATABASE_URL=postgresql://${POSTGRES_USER:-dipadmin}:${POSTGRES_PASSWORD:-dippassword}@postgres:5432/${POSTGRES_DB:-dipdb}
@@ -101,7 +105,7 @@ services:
     - NEO4J_USER=${NEO4J_USER:-neo4j}
     - NEO4J_PASSWORD=${NEO4J_PASSWORD:-password}
     volumes:
-    - ./data/app:/app/data
+    - ../data/app:/app/data
     healthcheck:
       test:
       - CMD
@@ -125,7 +129,7 @@ services:
     #         - gpu
   frontend:
     build:
-      context: ./frontend-next
+      context: ../frontend-next
       dockerfile: Dockerfile
     container_name: dip2-frontend
     restart: unless-stopped
@@ -138,15 +142,15 @@ services:
         condition: service_healthy
   worker:
     build:
-      context: .
-      dockerfile: Dockerfile.worker
+      context: ..
+      dockerfile: docker/Dockerfile.worker
     container_name: dip2-worker
     restart: unless-stopped
     depends_on:
       web:
         condition: service_healthy
     env_file:
-    - .env
+    - ../.env
     environment:
     - PYTHONUNBUFFERED=1
     - DATABASE_URL=postgresql://${POSTGRES_USER:-dipadmin}:${POSTGRES_PASSWORD:-dippassword}@postgres:5432/${POSTGRES_DB:-dipdb}
@@ -155,43 +159,43 @@ services:
     - NEO4J_USER=${NEO4J_USER:-neo4j}
     - NEO4J_PASSWORD=${NEO4J_PASSWORD:-password}
     volumes:
-    - ./data/app:/app/data
+    - ../data/app:/app/data
     networks:
     - dip2-network
     # deploy: *id001
   scheduler:
     build:
-      context: .
-      dockerfile: Dockerfile.scheduler
+      context: ..
+      dockerfile: docker/Dockerfile.scheduler
     container_name: dip2-scheduler
     restart: unless-stopped
     depends_on:
       web:
         condition: service_healthy
     env_file:
-    - .env
+    - ../.env
     environment:
     - PYTHONUNBUFFERED=1
     - DATABASE_URL=postgresql://${POSTGRES_USER:-dipadmin}:${POSTGRES_PASSWORD:-dippassword}@postgres:5432/${POSTGRES_DB:-dipdb}
     volumes:
-    - ./data/app:/app/data
+    - ../data/app:/app/data
     networks:
     - dip2-network
     # deploy: *id001
   guardian:
     build:
-      context: .
-      dockerfile: Dockerfile.guardian
+      context: ..
+      dockerfile: docker/Dockerfile.guardian
     container_name: dip2-guardian
     restart: unless-stopped
     depends_on:
     - web
     env_file:
-    - .env
+    - ../.env
     environment:
     - PYTHONUNBUFFERED=1
     volumes:
-    - ./data/app:/app/data
+    - ../data/app:/app/data
     networks:
     - dip2-network
     # deploy: *id001
@@ -210,7 +214,7 @@ services:
     - PREFECT_API_DATABASE_CONNECTION_URL=postgresql+asyncpg://${POSTGRES_USER:-dipadmin}:${POSTGRES_PASSWORD:-dippassword}@postgres:5432/${POSTGRES_DB:-dipdb}
     command: prefect server start
     volumes:
-    - ./data/prefect:/root/.prefect
+    - ../data/prefect:/root/.prefect
     networks:
     - dip2-network
   prometheus:
@@ -220,8 +224,8 @@ services:
     ports:
     - 9090:9090
     volumes:
-    - ./data/prometheus:/prometheus
-    - ./deploy/prometheus.yml:/etc/prometheus/prometheus.yml
+    - ../data/prometheus:/prometheus
+    - ../deploy/prometheus.yml:/etc/prometheus/prometheus.yml
     networks:
     - dip2-network
   grafana:
@@ -231,9 +235,9 @@ services:
     ports:
     - 3001:3000
     volumes:
-    - ./data/grafana:/var/lib/grafana
-    - ./deploy/grafana/provisioning:/etc/grafana/provisioning
-    - ./deploy/grafana/dashboards:/var/lib/grafana/dashboards
+    - ../data/grafana:/var/lib/grafana
+    - ../deploy/grafana/provisioning:/etc/grafana/provisioning
+    - ../deploy/grafana/dashboards:/var/lib/grafana/dashboards
     networks:
     - dip2-network
   autoheal:

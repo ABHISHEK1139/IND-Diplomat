@@ -1,9 +1,30 @@
 
-from neo4j import GraphDatabase
-from neo4j.exceptions import ServiceUnavailable, AuthError
 import os
 import time
 from typing import List, Dict, Any, Optional
+
+# neo4j is an optional dependency: the module must import without it so the
+# default pipeline works on a minimal install. Driver construction raises a
+# clear error only when a live graph is actually requested.
+try:
+    from neo4j import GraphDatabase
+    from neo4j.exceptions import ServiceUnavailable, AuthError
+    _NEO4J_AVAILABLE = True
+except ImportError:  # pragma: no cover - exercised on minimal installs
+    GraphDatabase = None
+
+    class ServiceUnavailable(Exception):
+        pass
+
+    class AuthError(Exception):
+        pass
+
+    _NEO4J_AVAILABLE = False
+
+
+def _require_neo4j():
+    if not _NEO4J_AVAILABLE:
+        raise RuntimeError("neo4j is not installed. pip install 'politiq-ai[graph]'")
 
 
 # ══════════════════════════════════════════════════════════════════
@@ -74,6 +95,10 @@ class GraphManager:
     
     def _connect(self):
         """Attempts to connect to Neo4j with retry logic."""
+        if not _NEO4J_AVAILABLE:
+            print("[GraphManager] WARNING: neo4j not installed; running in degraded mode")
+            self._connected = False
+            return
         for attempt in range(self.max_retries):
             try:
                 self.driver = GraphDatabase.driver(self.uri, auth=(self.user, self.password))

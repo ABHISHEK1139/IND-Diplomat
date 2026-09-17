@@ -1,15 +1,24 @@
 import logging
-import dspy
+
+try:
+    import dspy
+except ImportError:  # optional dependency; fail only on actual use
+    dspy = None
 
 logger = logging.getLogger("DIP3.Layer12.MorningBrief")
 
-class MorningBriefSignature(dspy.Signature):
-    """Synthesizes all critical alerts from the last 24 hours into a brief."""
-    alerts = dspy.InputField(desc="List of alerts.")
-    briefing = dspy.OutputField(desc="Executive summary in 3 bullet points.")
+if dspy is not None:
+    class MorningBriefSignature(dspy.Signature):
+        """Synthesizes all critical alerts from the last 24 hours into a brief."""
+        alerts = dspy.InputField(desc="List of alerts.")
+        briefing = dspy.OutputField(desc="Executive summary in 3 bullet points.")
+else:  # pragma: no cover - minimal installs without dspy
+    MorningBriefSignature = None
 
 class MorningBriefCompiler:
     def __init__(self):
+        if dspy is None or MorningBriefSignature is None:
+            raise ImportError("dspy is not installed. pip install 'politiq-ai[reasoning]'")
         try:
             self.module = dspy.Predict(MorningBriefSignature)
         except Exception:

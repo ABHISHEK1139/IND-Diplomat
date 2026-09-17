@@ -13,7 +13,10 @@ from typing import Any, Dict, List, Optional, Type, TypeVar
 
 from pydantic import BaseModel, ValidationError
 
+from dip.core.llm_limits import apply_default_timeout
+
 logger = logging.getLogger("nextgen.structured_llm")
+apply_default_timeout()
 
 T = TypeVar("T", bound=BaseModel)
 

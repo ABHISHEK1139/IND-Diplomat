@@ -52,7 +52,13 @@ class BaseMinister(ABC):
         ...
 
     def _extract_signal_descriptions(self, ctx: StateContext) -> List[str]:
-        """Flatten current signals into short human-readable strings."""
+        """Flatten current signals into short human-readable strings.
+
+        Trust boundary: signal fields ultimately derive from ingested web
+        text, so every description is sanitized and length-bounded before
+        it enters a minister prompt.
+        """
+        from dip.core.sanitize import sanitize_for_prompt, DEFAULT_SIGNAL_DESC_CHARS
 
         descriptions: List[str] = []
         for sig in ctx.current_signals:
@@ -60,7 +66,7 @@ class BaseMinister(ABC):
             if sig.target:
                 desc += f" targeting {sig.target}"
             desc += f" (intensity={sig.intensity:.2f}, confidence={sig.confidence:.2f})"
-            descriptions.append(desc)
+            descriptions.append(sanitize_for_prompt(desc, max_chars=DEFAULT_SIGNAL_DESC_CHARS))
         return descriptions
 
     def _build_prediction_prompt(self, ctx: StateContext) -> str:
@@ -88,10 +94,19 @@ class BaseMinister(ABC):
         """Deterministic proposal. This is the rail the LLM must respect."""
 
         observed = self._extract_signal_descriptions(ctx)
+        # Stopwords keep filler words ("this", "what", "genuine") from
+        # becoming junk gap names like expect_this_indicator that pollute
+        # the gate verdict and the UI.
+        _STOPWORDS = {
+            "this", "that", "what", "with", "from", "genuine", "real",
+            "potential", "possible", "whether", "there", "their", "about",
+            "into", "over", "under",
+        }
         tokens = [
             token.strip(" ?-_").lower()
             for token in self.hypothesis_type.replace("/", " ").split()
             if len(token.strip(" ?-_")) > 3
+            and token.strip(" ?-_").lower() not in _STOPWORDS
         ]
         predicted = [f"expect_{token}_indicator" for token in tokens[:4]]
         if not predicted:
@@ -255,45 +270,21 @@ class BaseMinister(ABC):
         rfi_queries: List[str],
         state_context: StateContext,
     ) -> List[str]:
-        """Execute per-minister autonomous web search for RFI-tagged queries.
+        """STATE-ONLY RFI handling (design.txt boundary lock).
 
-        When a minister's LLM refinement includes critical_signal_refs prefixed
-        with 'RFI:', this method fires targeted web searches and returns new
-        evidence strings that get injected into the minister's signal context.
+        Layer-4 ministers must NEVER call Layer-1 (web_surfer) or Layer-2
+        (signal_extractor) directly. RFI items are recorded as provenance
+        requests for the InvestigationController/StateProvider loop
+        (documents -> Layer-2 signals -> Layer-3 rebuild -> new StateContext).
+        This method mutates NOTHING and reads only StateContext metadata.
         """
-        new_evidence: List[str] = []
         rfi_items = [q for q in rfi_queries if q.upper().startswith("RFI:")]
-
         if not rfi_items:
-            return new_evidence
-
-        try:
-            from dip.pipeline.collection.research.retrieval.web_surfer import ResilientWebSurfer
-            from dip.pipeline.knowledge.signal_extractor import SignalExtractor
-
-            surfer = ResilientWebSurfer()
-            extractor = SignalExtractor()
-            country = getattr(state_context, "country", None)
-
-            for rfi in rfi_items[:3]:  # Cap at 3 per minister to avoid runaway
-                search_query = rfi.split(":", 1)[1].strip()
-                observations = await surfer.search(
-                    query=search_query,
-                    country_code=country,
-                    max_results=3,
-                )
-                for obs in observations:
-                    desc = f"[{self.minister_name} RFI] {obs.content}"
-                    new_evidence.append(desc)
-                    # Convert raw observation to structured signals
-                    signals = await extractor.extract_signals(obs.content)
-                    if signals:
-                        state_context.current_signals.extend(signals)
-        except Exception as e:
-            import logging
-            logging.getLogger("DIP.Layer4").warning(f"Minister autonomous search failed: {e}")
-
-        return new_evidence
+            return []
+        return [
+            f"RFI PENDING (Layer 1-3 loop, not executed in Layer-4): {r.split(':', 1)[1].strip()[:160]}"
+            for r in rfi_items[:3]
+        ]
 
     async def produce_hypothesis(self, state_context: StateContext) -> Hypothesis:
         """Run heuristic-first, schema-constrained LLM refinement.
@@ -314,17 +305,15 @@ class BaseMinister(ABC):
         rfi_queries = [r for r in rfi_refs if isinstance(r, str) and r.upper().startswith("RFI:")]
 
         if rfi_queries:
-            new_evidence = await self._autonomous_search(rfi_queries, state_context)
-            if new_evidence:
-                # Re-run heuristic with enriched state context
-                heuristic = self._heuristic_proposal(state_context)
-                decision = self._merge_dual_mode(heuristic, llm)
-                final = decision.final
-                # Remove consumed RFI queries from critical_signal_refs
-                final.critical_signal_refs = [
-                    r for r in (final.critical_signal_refs or [])
-                    if not r.upper().startswith("RFI:")
-                ] + [f"RESOLVED: {e[:80]}" for e in new_evidence[:5]]
+            pending = await self._autonomous_search(rfi_queries, state_context)
+            if pending:
+                # State NOT mutated: flag RFIs as pending for the Layer 1-3 loop.
+                # Missing signals are extended so CRAG/InvestigationController can act.
+                final.critical_signal_refs = list(final.critical_signal_refs or []) + pending[:3]
+                final.missing_signals = list(final.missing_signals or []) + [
+                    p.replace("RFI PENDING (Layer 1-3 loop, not executed in Layer-4): ", "rfi_pending: ")[:180]
+                    for p in pending[:3]
+                ]
 
         return Hypothesis(
             minister=self.minister_name,

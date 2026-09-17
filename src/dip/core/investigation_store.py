@@ -22,8 +22,6 @@ The SQLite DB in investigation_memory.py is just an index for fast queries.
 
 import json
 import logging
-import os
-import shutil
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional, List
@@ -62,7 +60,13 @@ class InvestigationStore:
     subdirectories for evidence, reports, timeline, etc.
     """
 
-    def __init__(self, root_dir: str = "investigations"):
+    def __init__(self, root_dir: str | None = None):
+        # Default store lives under the central data dir, never the process
+        # working directory. Explicit paths keep their exact meaning.
+        if root_dir is None:
+            from dip.core.Config.config import resolve_data_path
+
+            root_dir = resolve_data_path("", "investigations")
         self.root = Path(root_dir)
         self.root.mkdir(parents=True, exist_ok=True)
 

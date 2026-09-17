@@ -17,6 +17,7 @@ except ImportError:
 
 from dotenv import load_dotenv
 from dip.core.json_utils import strip_markdown_json
+from dip.core.sanitize import sanitize_for_prompt
 from dip.core.schema import RawObservation, Signal, Entity, Claim
 from dip.telemetry.llm_tracer import tracer
 
@@ -55,7 +56,12 @@ class SignalExtractor:
         all_signals = []
         
         for batch in batches:
-            obs_json = [{"id": i, "content": obs.content, "source": obs.source_type} for i, obs in enumerate(batch)]
+            # Trust boundary: observation content is adversary-controlled
+            # (web/OSINT). Sanitize before it enters the extraction prompt.
+            obs_json = [
+                {"id": i, "content": sanitize_for_prompt(obs.content), "source": obs.source_type}
+                for i, obs in enumerate(batch)
+            ]
             all_entities = []
             all_claims = []
             
@@ -172,6 +178,9 @@ class SignalExtractor:
         """Extract structured signals from a raw query or text string (used in RFI loops)."""
         if not query_or_text or not query_or_text.strip():
             return []
+
+        # Trust boundary: RFI text may carry crawled web content.
+        query_or_text = sanitize_for_prompt(query_or_text)
 
         from datetime import datetime, timezone
         now_ts = datetime.now(timezone.utc).isoformat()

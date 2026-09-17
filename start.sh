@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "==================================================="
-echo "    Politiq AI 3.1 - Neuro-Symbolic Agent Swarm"
+echo "    Politiq AI 3.0 - Neuro-Symbolic Agent Swarm"
 echo "==================================================="
 echo ""
 echo "Please select how you want to run the system:"

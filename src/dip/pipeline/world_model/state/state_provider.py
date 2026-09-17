@@ -31,7 +31,16 @@ class StateProvider:
             time_horizon="1 Year",
             investigation_goal="Determine state context"
         )
-        raw_observations = await self.integrator.fetch_all(goal)
+        try:
+            raw_observations = await asyncio.wait_for(
+                self.integrator.fetch_all(goal), timeout=35
+            )
+        except asyncio.TimeoutError:
+            logger.warning("StateProvider: collection timed out after 35s; continuing with empty observations.")
+            raw_observations = []
+        except Exception as e:
+            logger.warning(f"StateProvider: collection failed ({e}); continuing with empty observations.")
+            raw_observations = []
         
         # 2. Extract Signals (Layer 2)
         extraction_result = await self.extractor.extract(raw_observations)

@@ -140,36 +140,18 @@ class BaseSpecialist(abc.ABC):
         logger.info(f"[{self.name}] Issued EVIDENCE_REQUEST: {query}")
 
     async def perform_web_search(self, query: str, max_results: int = 3) -> List[str]:
-        """Perform live autonomous internet search via ResilientWebSurfer.
-        
-        Fetches live OSINT, injects new EvidenceNodes into the MessageBus,
-        and appends new findings to this agent's private context.
+        """STATE-ONLY RFI stub (design.txt boundary lock).
+
+        Layer-4 must NEVER perform live web retrieval or inject raw document
+        text / EvidenceNodes. Live OSINT belongs to the Layer 1-3 loop
+        (InvestigationController/StateProvider). This records an RFI request
+        for that loop and returns no snippets.
         """
-        try:
-            from dip.pipeline.collection.research.retrieval.web_surfer import ResilientWebSurfer
-            surfer = ResilientWebSurfer()
-            observations = await surfer.search(query=query, max_results=max_results)
-            new_snippets = []
-            for obs in observations:
-                snippet = f"[{self.name} Web Search] {obs.content}"
-                new_snippets.append(snippet)
-                ev_id = f"EV_WEB_{uuid.uuid4().hex[:6]}"
-                self.bus.add_evidence(EvidenceNode(
-                    evidence_id=ev_id,
-                    observation_id=obs.source_id or "WEB",
-                    source="LiveWebSearch",
-                    reliability=0.80,
-                    content=obs.content,
-                    timestamp=datetime.now(timezone.utc).isoformat()
-                ))
-                self.my_evidence_ids.append(ev_id)
-            if new_snippets:
-                self.evidence_context += "\n" + "\n".join(new_snippets)
-                logger.info(f"[{self.name}] Live web search for '{query}' found {len(new_snippets)} new facts.")
-            return new_snippets
-        except Exception as e:
-            logger.warning(f"[{self.name}] Live web search failed: {e}")
-            return []
+        logger.info(
+            f"[{self.name}] RFI recorded for Layer 1-3 loop (not executed in Layer-4): {query[:160]}"
+        )
+        await self.request_evidence(query, round_num=0)
+        return []
 
     def get_belief_summary(self) -> Dict:
         """Return this agent's belief trajectory summary (Phase 9)."""

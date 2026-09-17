@@ -12,12 +12,29 @@ Records every gate verdict as an append-only JSONL entry for:
 from __future__ import annotations
 
 import json
-import os
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-RECORDS_PATH = Path(__file__).resolve().parent.parent / "data" / "assessment_records.jsonl"
+def _records_path() -> Path:
+    # Audit log lives in the central data dir, never the source tree.
+    # A legacy source-tree log is copied forward once (original kept).
+    from dip.core.Config.config import DATA_DIR
+
+    target = DATA_DIR / "assessment_records.jsonl"
+    legacy = Path(__file__).resolve().parent.parent / "data" / "assessment_records.jsonl"
+    try:
+        if legacy.is_file() and not target.exists() and legacy.resolve() != target.resolve():
+            target.parent.mkdir(parents=True, exist_ok=True)
+            import shutil
+
+            shutil.copy2(legacy, target)
+    except Exception:
+        pass
+    return target
+
+
+RECORDS_PATH = _records_path()
 
 
 def record_assessment(

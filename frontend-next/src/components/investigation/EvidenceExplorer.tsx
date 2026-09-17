@@ -14,6 +14,11 @@ interface EvidenceExplorerProps {
 }
 
 export default function EvidenceExplorer({ evidence }: EvidenceExplorerProps) {
+  if (!evidence || evidence.length === 0) {
+    return (
+      <p className="text-xs text-text-muted">No verified claims reported for this investigation.</p>
+    );
+  }
   return (
     <div className="space-y-3 overflow-y-auto max-h-[460px] pr-2">
       {evidence.map((ev, i) => (

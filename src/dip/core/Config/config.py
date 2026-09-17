@@ -32,9 +32,39 @@ try:
 except ImportError:
     pass
 
-# Project root
-ROOT_DIR = Path(__file__).resolve().parent.parent
-DATA_DIR = ROOT_DIR / "data"
+# Source checkout root; installed distributions default to the working directory.
+_source_root = Path(__file__).resolve().parents[4]
+ROOT_DIR = _source_root if (_source_root / "pyproject.toml").is_file() else Path.cwd()
+# A relative DIP_DATA_DIR anchors at ROOT_DIR (not the working directory),
+# so `./data` always means the checkout's data/ no matter where started from.
+_raw_data_dir = Path(os.getenv("DIP_DATA_DIR", str(ROOT_DIR / "data"))).expanduser()
+DATA_DIR = (_raw_data_dir if _raw_data_dir.is_absolute() else (ROOT_DIR / _raw_data_dir)).resolve()
+
+
+def resolve_data_path(raw: str | Path, default_name: str | None = None) -> str:
+    """Resolve a storage path against DATA_DIR.
+
+    Relative paths (e.g. ``data/jobs.json`` from a copied .env) are anchored
+    at DATA_DIR so results never depend on the process working directory.
+    Absolute paths and URIs (``file:``, ``sqlite:///``, ``http``) pass
+    through untouched.
+    """
+    text = str(raw or "").strip()
+    if not text and default_name:
+        return str(DATA_DIR / default_name)
+    if not text:
+        return text
+    lowered = text.lower()
+    if lowered.startswith(("file:", "sqlite:", "http://", "https://")) or os.path.isabs(text):
+        return text
+    # Strip a leading ./ or .\ for tidiness, then anchor.
+    cleaned = text[2:] if text[:2] in ("./", ".\\") else text
+    parts = Path(cleaned).parts
+    if parts and parts[0].lower() == "data":
+        # Legacy repo-root-relative form (e.g. .env's data/jobs.json).
+        rest = Path(*parts[1:]) if len(parts) > 1 else Path()
+        return str((ROOT_DIR / rest).resolve()) if str(rest) not in ("", ".") else str(DATA_DIR)
+    return str(DATA_DIR / cleaned)
 
 
 @dataclass
@@ -71,9 +101,9 @@ class Config:
     # ═══════════════════════════════════════════════════════════════
     # Storage Paths
     # ═══════════════════════════════════════════════════════════════
-    DIP_JOB_STORE: str = field(default_factory=lambda: os.getenv("DIP_JOB_STORE", str(DATA_DIR / "jobs.json")))
-    CHECKPOINT_DIR: str = field(default_factory=lambda: os.getenv("CHECKPOINT_DIR", str(DATA_DIR / "checkpoints")))
-    CHROMA_DATA_DIR: str = field(default_factory=lambda: os.getenv("CHROMA_DATA_DIR", str(DATA_DIR / "chroma")))
+    DIP_JOB_STORE: str = field(default_factory=lambda: resolve_data_path(os.getenv("DIP_JOB_STORE", ""), "jobs.json"))
+    CHECKPOINT_DIR: str = field(default_factory=lambda: resolve_data_path(os.getenv("CHECKPOINT_DIR", ""), "checkpoints"))
+    CHROMA_DATA_DIR: str = field(default_factory=lambda: resolve_data_path(os.getenv("CHROMA_DATA_DIR", ""), "chroma"))
     MLFLOW_TRACKING_URI: str = field(default_factory=lambda: os.getenv("MLFLOW_TRACKING_URI", f"file:{DATA_DIR / 'mlruns'}"))
     DIP_MLFLOW_EXPERIMENT: str = field(default_factory=lambda: os.getenv("DIP_MLFLOW_EXPERIMENT", "dip2-assessments"))
 

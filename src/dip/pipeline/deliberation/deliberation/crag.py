@@ -28,7 +28,9 @@ from dip.core.Config.config import config
 from dip.core.schema import StateContext
 from dip.pipeline.deliberation.reasoning.council_session import CouncilSession
 from dip.core.json_utils import strip_markdown_json
-from dip.pipeline.collection.research.planner import ResearchPlanner
+# BOUNDARY LOCK (design.txt Step 1-2): Layer-4 must NEVER import Layer-1/Layer-2.
+# Document fetching lives in InvestigationController/StateProvider (Layer 1-3).
+# CRAG here is state-only: it emits provenance summaries, never raw text.
 
 LLM_MODEL = config.LLM_MODEL
 
@@ -182,32 +184,39 @@ async def _retrieve_evidence(
     requests: List[str], session: CouncilSession
 ) -> List[str]:
     """
-    Retrieves evidence for each investigation request using the Autonomous Research Planner.
-    This executes live web searches via DuckDuckGo, crawls the pages, extracts clean text,
-    and returns verified evidence.
+    STATE-ONLY evidence check (design.txt Step 2).
+
+    Layer-4 must NEVER read documents. Live retrieval is owned by
+    InvestigationController/StateProvider (Layer 1-3 loop):
+      documents -> Layer-2 signals -> Layer-3 rebuild -> new StateContext -> Layer-4.
+
+    Here we only:
+      1. Cross-check each request against the current StateContext signals.
+      2. Emit provenance summaries (counts/coverage), never raw text.
+      3. Leave genuinely missing items as gaps for the Layer 1-3 loop.
     """
-    planner = ResearchPlanner()
-    country = session.state_context.country if hasattr(session.state_context, 'country') else "Global"
-    
-    try:
-        result = await planner.execute_from_gaps(requests, country=country, query_context=session.query)
-        
-        findings = []
-        for r in requests:
-            # Check if any evidence covers this request (simple heuristic)
-            matching_evidence = [e for e in result.evidence if e.confidence > 0.4]
-            if matching_evidence:
-                # Combine the top pieces of evidence
-                summary = " | ".join([f"[{e.publisher}] {e.text}" for e in matching_evidence[:2]])
-                findings.append(summary)
-            else:
-                findings.append(f"GAP CONFIRMED: No evidence retrieved for: {r}")
-                
-        return findings
-    except Exception as e:
-        import logging
-        logging.getLogger("CRAG").error(f"Research Planner failed: {e}")
-        return [f"RETRIEVAL FAILED for: {r}" for r in requests]
+    sc = session.state_context
+    signals = list(getattr(sc, "current_signals", []) or [])
+    # Build a lightweight searchable corpus from signal metadata only
+    # (action/entity/target strings + provenance summary, NOT document text).
+    corpus = [
+        f"{getattr(s, 'action', '')} {getattr(s, 'entity', '')} {getattr(s, 'target', '')}".lower()
+        for s in signals
+    ]
+    provenance_hits = len(signals)
+
+    findings: List[str] = []
+    for r in requests:
+        tokens = [t.lower().strip(" ?-_.") for t in r.split() if len(t.strip(" ?-_. ")) > 3]
+        hits = sum(1 for doc in corpus if any(t and t in doc for t in tokens[:6]))
+        if hits > 0:
+            findings.append(
+                f"STATE-ONLY COVERAGE: {hits}/{provenance_hits} StateContext signals "
+                f"relate to '{r[:120]}' (provenance summary, no document text read)."
+            )
+        else:
+            findings.append(f"GAP CONFIRMED: No StateContext coverage for: {r}")
+    return findings
 
 
 async def _check_remaining_gaps(

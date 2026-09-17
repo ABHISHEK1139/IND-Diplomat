@@ -1,11 +1,18 @@
+# DIP 3 static war-room bundle (optional; NOT used by docker-compose.yml,
+# which serves the frontend via frontend-next/Dockerfile instead).
+#
+# Precondition: build a static export first. The default frontend-next
+# config uses `output: "standalone"`, which has no static out/ directory,
+# so either build with a temporary export config or adapt this file.
+# Example (from the repo root):
+#   docker build -f docker/Dockerfile.war_room -t politiq-ai:war-room .
 FROM nginx:alpine
 
-# Copy the frontend files into the Nginx html directory
-COPY ./frontend /usr/share/nginx/html
+# Static export of frontend-next/ (requires `output: "export"` at build time).
+COPY ./frontend-next/out /usr/share/nginx/html
 
 # Expose port 80
 EXPOSE 80
 
 # Default Nginx command
 CMD ["nginx", "-g", "daemon off;"]
-

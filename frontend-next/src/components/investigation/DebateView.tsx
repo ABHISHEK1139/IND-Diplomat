@@ -28,6 +28,9 @@ interface DebateEntry {
 interface DebateViewProps {
   debate?: DebateEntry[];
   hypotheses?: any[];
+  // Demo-only illustrative cards. Real investigations with no hypotheses
+  // show an unavailable state instead of fabricated minister assessments.
+  isDemo?: boolean;
 }
 
 const ministerMeta: Record<string, { icon: any; color: string; bg: string; border: string }> = {
@@ -41,11 +44,13 @@ const ministerMeta: Record<string, { icon: any; color: string; bg: string; borde
   "Red Team": { icon: Crosshair, color: "text-orange-400", bg: "bg-orange-500/10", border: "border-orange-500/30" },
 };
 
-export default function DebateView({ debate = [], hypotheses = [] }: DebateViewProps) {
+export default function DebateView({ debate = [], hypotheses = [], isDemo }: DebateViewProps) {
   const [expandedIndex, setExpandedIndex] = useState<number | null>(0);
+  const demo = isDemo === true;
 
-  // Normalize hypotheses if present
-  const ministerCards = hypotheses.length > 0 ? hypotheses : [
+  // Normalize hypotheses if present. The illustrative fallback cards below
+  // are demo-preview data only — never fabricate minister assessments.
+  const demoCards = [
     {
       minister: "Security Minister",
       type: "Is this a genuine military threat?",
@@ -87,9 +92,30 @@ export default function DebateView({ debate = [], hypotheses = [] }: DebateViewP
       rationale: "Red Team analysis verified baseline noise, but core escalation indicators outweigh routine rotation hypotheses.",
     },
   ];
+  const ministerCards = hypotheses.length > 0 ? hypotheses : (demo ? demoCards : []);
+
+  if (ministerCards.length === 0) {
+    return (
+      <p className="text-xs text-text-muted">No minister deliberation reported for this investigation.</p>
+    );
+  }
 
   return (
     <div className="space-y-3 overflow-y-auto max-h-[540px] pr-1">
+      {demo && hypotheses.length === 0 && (
+        <p className="text-[10px] font-semibold text-warning uppercase tracking-wider">Demo preview — not a real deliberation</p>
+      )}
+      {debate.length > 0 && (
+        <div className="space-y-2">
+          <h4 className="text-[11px] font-bold uppercase tracking-wider text-text-muted">Expert commentary</h4>
+          {debate.map((entry, i) => (
+            <blockquote key={i} className="p-2.5 rounded-lg bg-background/60 border border-border/50 space-y-1">
+              <span className={`text-[11px] font-bold ${entry.color || "text-accent"}`}>{entry.expert}</span>
+              <p className="text-xs text-text-muted leading-relaxed">{entry.text}</p>
+            </blockquote>
+          ))}
+        </div>
+      )}
       {/* 7-Minister Cards with Explainable Points */}
       {ministerCards.map((item: any, i: number) => {
         const ministerName = item.minister || item.expert || `Minister ${i + 1}`;
@@ -100,7 +126,7 @@ export default function DebateView({ debate = [], hypotheses = [] }: DebateViewP
           border: "border-border",
         };
         const Icon = meta.icon;
-        const conf = typeof item.confidence === "number" ? Math.round(item.confidence * 100) : 70;
+        const conf = typeof item.confidence === "number" ? Math.round(item.confidence * 100) : null;
         const isExpanded = expandedIndex === i;
 
         return (
@@ -127,12 +153,31 @@ export default function DebateView({ debate = [], hypotheses = [] }: DebateViewP
               </div>
 
               <div className="flex items-center gap-2">
+                {item.decision_mode && (
+                  <span
+                    title={
+                      item.llm_confidence != null
+                        ? `Heuristic ${Math.round((item.heuristic_confidence ?? 0) * 100)}% vs LLM ${Math.round(item.llm_confidence * 100)}% (agreement ${item.agreement_score ?? "n/a"})`
+                        : "Produced without LLM refinement"
+                    }
+                    className={`text-[10px] font-mono px-2 py-0.5 rounded-full border ${
+                      item.decision_mode === "heuristic_only"
+                        ? "bg-background text-text-muted border-border"
+                        : item.decision_mode === "bounded_llm_refinement"
+                          ? "bg-amber-500/10 text-amber-300 border-amber-500/30"
+                          : "bg-cyan-500/10 text-cyan-300 border-cyan-500/30"
+                    }`}
+                  >
+                    {item.decision_mode === "heuristic_only" ? "heuristic" : item.decision_mode === "bounded_llm_refinement" ? "LLM·bounded" : "LLM·refined"}
+                  </span>
+                )}
                 <span className={`text-[11px] font-mono font-bold px-2.5 py-0.5 rounded-full border ${
+                  conf == null ? "bg-background text-text-muted border-border" :
                   conf >= 70 ? "bg-red-500/20 text-red-400 border-red-500/40" :
                   conf >= 50 ? "bg-amber-500/20 text-amber-400 border-amber-500/40" :
                   "bg-emerald-500/20 text-emerald-400 border-emerald-500/40"
                 }`}>
-                  {conf}% Conf
+                  {conf == null ? "n/a" : `${conf}% Conf`}
                 </span>
                 {isExpanded ? (
                   <ChevronUp className="w-4 h-4 text-text-muted" />

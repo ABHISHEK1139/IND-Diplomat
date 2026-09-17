@@ -10,7 +10,11 @@ import json
 import asyncio
 from datetime import datetime
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "src")))
+# Anchor the package on sys.path so the script runs from any CWD without
+# requiring an installed distribution (pip install -e . also works).
+_ROOT = os.path.dirname(os.path.abspath(__file__))
+_SRC = os.path.join(_ROOT, "src")
+sys.path.insert(0, _SRC if os.path.isdir(os.path.join(_SRC, "dip")) else _ROOT)
 
 from dip.pipeline.deliberation.reasoning.production import RunManifest
 from dip.pipeline.deliberation.reasoning.message_bus import MessageBus

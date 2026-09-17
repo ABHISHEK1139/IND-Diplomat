@@ -86,9 +86,13 @@ def get_chat_model(
     # 1. OpenAI
     if os.getenv("OPENAI_API_KEY"):
         try:
-            from langchain_community.chat_models import ChatOpenAI
+            try:
+                from langchain_openai import ChatOpenAI
+            except ImportError:
+                # Older langchain-community layout (<0.3).
+                from langchain_community.chat_models import ChatOpenAI
             return ChatOpenAI(
-                model_name=model_name or os.getenv("OPENAI_MODEL", "gpt-4o-mini"),
+                model=model_name or os.getenv("OPENAI_MODEL", "gpt-4o-mini"),
                 temperature=temperature,
                 api_key=os.getenv("OPENAI_API_KEY")
             )
@@ -120,22 +124,61 @@ def get_chat_model(
         except Exception as e:
             logger.warning(f"Failed to initialize ChatGoogleGenerativeAI: {e}")
 
-    # 4. Local Ollama (auto-detect if running or configured)
+    # 4. OpenRouter (when explicitly configured; mirrors the litellm path)
+    if os.getenv("OPENROUTER_API_KEY"):
+        try:
+            try:
+                from langchain_openai import ChatOpenAI
+            except ImportError:
+                # Older langchain-community layout (<0.3).
+                from langchain_community.chat_models import ChatOpenAI
+            _or_model = model_name or os.getenv("OPENROUTER_MODEL", "")
+            if _or_model.startswith("openrouter/"):
+                _or_model = _or_model.split("openrouter/", 1)[1]
+            return ChatOpenAI(
+                model=_or_model or "openai/gpt-4o-mini",
+                temperature=temperature,
+                api_key=os.getenv("OPENROUTER_API_KEY"),
+                base_url="https://openrouter.ai/api/v1",
+            )
+        except Exception as e:
+            logger.warning(f"Failed to initialize OpenRouter chat model: {e}")
+
+    # 5. Local Ollama (auto-detect if running or configured)
     ollama_host = os.getenv("OLLAMA_HOST", "http://127.0.0.1:11434")
     try:
+        import json as _json
         import urllib.request
         with urllib.request.urlopen(f"{ollama_host}/api/tags", timeout=0.8) as resp:
+            available = set()
             if resp.status == 200:
-                from langchain_ollama import ChatOllama
-                m_name = model_name or os.getenv("OLLAMA_MODEL", "qwen3.5:4b")
-                logger.info(f"Using Live Local Ollama AI Model: {m_name} at {ollama_host}")
-                return ChatOllama(
-                    model=m_name,
-                    base_url=ollama_host,
-                    temperature=temperature
-                )
+                try:
+                    available = {m.get("name", "") for m in _json.load(resp).get("models", [])}
+                except Exception:
+                    available = set()
+        from dip.core.Config.config import config as _config
+
+        _configured = (model_name or _config.LLM_MODEL or "").strip()
+        if _configured.startswith("ollama/"):
+            _configured = _configured.split("ollama/", 1)[1]
+            m_name = _configured
+        else:
+            m_name = model_name or os.getenv("OLLAMA_MODEL", "")
+        # Never request a model the server does not have: a reachable host
+        # with a missing model used to surface as a late 404. Fall through
+        # to the deterministic model instead.
+        if m_name and m_name in available:
+            from langchain_ollama import ChatOllama
+            logger.info(f"Using Live Local Ollama AI Model: {m_name} at {ollama_host}")
+            return ChatOllama(
+                model=m_name,
+                base_url=ollama_host,
+                temperature=temperature
+            )
+        if m_name:
+            logger.debug(f"Ollama model '{m_name}' not present; skipping local backend.")
     except Exception as e:
         logger.debug(f"Local Ollama not reachable: {e}")
 
-    # 5. Default Deterministic Fallback
+    # 6. Default Deterministic Fallback
     return DeterministicHeuristicChatModel()

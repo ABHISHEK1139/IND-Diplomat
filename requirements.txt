@@ -1,8 +1,9 @@
 # ============================================================================
-# DIP 2.0 — Core Dependencies
+# Politiq AI — Minimal core dependencies (default pipeline + API + tests)
 # ============================================================================
-# Install: pip install -r requirements.txt
-# These are required for ALL environments (dev, CI, production).
+# Install: pip install -r requirements.txt   (or: pip install -e .)
+# Full stack: pip install -e .[all]  (see pyproject.toml extras)
+# Every extra must degrade gracefully when absent (tests/test_optional_deps.py).
 # ============================================================================
 
 # ── Framework & API ──────────────────────────────────────────────────────────
@@ -11,48 +12,25 @@ fastapi>=0.100.0
 uvicorn[standard]>=0.22.0
 python-dotenv>=1.0.0
 rich>=13.0.0
+prometheus-client>=0.17.0
 
 # ── Data Collection & Web Search ────────────────────────────────────────────
 duckduckgo-search>=6.0.0
 feedparser>=6.0.0
 aiohttp>=3.9.0
+httpx>=0.27.0
 trafilatura>=1.12.0
 
-# ── LLM & AI Orchestration ──────────────────────────────────────────────────
+# ── LLM (guarded; heuristic fallback when absent) ───────────────────────────
 litellm>=1.35.0
-langgraph>=0.0.30
-dspy-ai>=2.4.0
 
-# ── NLP & Embeddings ────────────────────────────────────────────────────────
-gliner>=0.1.0
-keybert>=0.8.0
-sentence-transformers>=2.0.0
-transformers>=4.0.0
-
-# ── Knowledge Graph & Vector DB ─────────────────────────────────────────────
+# ── Graph math, numerics, plugins ───────────────────────────────────────────
 networkx>=3.0.0
-neo4j>=5.0.0
-qdrant-client>=1.0.0
-
-# ── Document Processing ─────────────────────────────────────────────────────
-docling>=1.0.0
-
-# ── Memory & State ──────────────────────────────────────────────────────────
-mem0ai>=0.0.10
-hdbscan>=0.8.0
-
-# ── Simulation & Wargaming ──────────────────────────────────────────────────
-mesa>=2.1.0
-
-# ── Plugin System ───────────────────────────────────────────────────────────
+numpy>=1.24.0
 pluggy>=1.4.0
-y-py>=0.6.2
+sqlalchemy>=2.0.0
+typing_extensions>=4.0.0
 
-# ── Observability ───────────────────────────────────────────────────────────
-prometheus-client>=0.17.0
-langfuse>=2.0.0
-dspy-ai<=2.4.9
-
-# -- Symbolic Math & Guardrails --
+# ── Symbolic Math & Guardrails ──────────────────────────────────────────────
 z3-solver>=4.12.0
 pyDatalog>=0.17.0

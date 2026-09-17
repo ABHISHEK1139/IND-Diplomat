@@ -26,6 +26,12 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from dip.unified_pipeline import execute
 
+# META-01: the CLI banner tracks the package version (single source of truth).
+try:
+    from dip import __version__ as _DIP_VERSION
+except Exception:
+    _DIP_VERSION = "3.0.0"
+
 try:
     from rich.console import Console
     from rich.panel import Panel
@@ -68,7 +74,7 @@ def display_rich_output(result: dict, verbose: bool = False) -> None:
     elapsed = result.get("elapsed_seconds", 0.0)
 
     console.print(Panel(
-        f"[bold cyan]IND-DIPLOMAT 2.0[/bold cyan]  ·  "
+        f"[bold cyan]IND-DIPLOMAT {_DIP_VERSION}[/bold cyan]  ·  "
         f"7-Layer Intelligence Assessment System\n"
         f"[dim]Query: {result['query']}  |  Country: {result['country']}  |  "
         f"Time: {elapsed:.1f}s[/dim]",
@@ -217,7 +223,7 @@ def display_rich_output(result: dict, verbose: bool = False) -> None:
 def display_plain_output(result: dict, verbose: bool = False) -> None:
     """Fallback display without Rich."""
     print("\n" + "=" * 60)
-    print("IND-DIPLOMAT 2.0 — 7-Layer Intelligence Assessment")
+    print(f"IND-DIPLOMAT {_DIP_VERSION} — 7-Layer Intelligence Assessment")
     print("=" * 60)
     print(f"Query:        {result['query']}")
     print(f"Country:      {result['country']}")
@@ -256,7 +262,7 @@ def display_plain_output(result: dict, verbose: bool = False) -> None:
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Politiq AI 2.0 — Geopolitical Intelligence Assessment System",
+        description=f"Politiq AI {_DIP_VERSION} — Geopolitical Intelligence Assessment System",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=(
             "Examples:\n"

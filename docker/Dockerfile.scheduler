@@ -1,15 +1,17 @@
 # =============================================================================
-# DIP 2.0 — Data Ingestion Scheduler — ~600 MB
-# Build:  docker build -f Dockerfile.scheduler -t dip2-scheduler .
-# Run:    docker run --env-file .env dip2-scheduler
+# Politiq AI — Data Ingestion Scheduler
+# Build context is the repository root:
+#   docker build -f docker/Dockerfile.scheduler -t politiq-ai:scheduler .
+# Run:    docker run --env-file .env politiq-ai:scheduler
+# Cron-based Layer 1/2 ingestion via dip.orchestrator (no web, no analysis).
 # =============================================================================
 
 FROM python:3.12-slim
 
-LABEL maintainer="DIP 2.0 Team"
-LABEL service="dip2-scheduler"
+LABEL maintainer="DIP Team"
+LABEL service="dip-scheduler"
 LABEL role="scheduler"
-LABEL description="DIP 2.0 Scheduler — cron-based GDELT/ACLED/News polling (no web, no analysis)"
+LABEL description="Politiq AI Scheduler — cron-based collection ingestion (no web, no analysis)"
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends curl cron && \
@@ -20,17 +22,16 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Scheduler only needs: orchestrator + Layer 1 & 2 + sensor deps
-COPY orchestrator.py .
-COPY layer1_collection/ layer1_collection/
-COPY layer2_knowledge/ layer2_knowledge/
-COPY core/ core/
-COPY Config/ Config/
+# DIP 3 package layout: the orchestrator is dip.orchestrator in src/.
+COPY pyproject.toml .
+COPY src/ src/
+RUN pip install --no-cache-dir -e .
 
 RUN mkdir -p /app/data
+ENV DIP_DATA_DIR=/app/data
 
-# Schedule: orchestrator every 6 hours, feed refresh every 30 min
-RUN echo "0 */6 * * * cd /app && python orchestrator.py >> /tmp/scheduler.log 2>&1" > /tmp/crontab && \
+# Schedule: orchestrator as a module every 6 hours.
+RUN echo "0 */6 * * * cd /app && python -m dip.orchestrator >> /tmp/scheduler.log 2>&1" > /tmp/crontab && \
     crontab /tmp/crontab
 
 ENV PYTHONUNBUFFERED=1

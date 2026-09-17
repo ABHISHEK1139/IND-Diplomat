@@ -13,17 +13,34 @@ from typing import Any, Dict, List, Optional
 from uuid import uuid4
 
 from pydantic import BaseModel, Field
+from dip.core.atomic_json import write_json
+from dip.core.Config.config import DATA_DIR
 
 
 def _now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
+#: Canonical job lifecycle: QUEUED -> RUNNING -> COMPLETED | FAILED.
+#: The pipeline assessment disposition (COMPLETE/REFUSED/HUMAN_REVIEW/
+#: WITHHELD/ERROR) is retained inside ``result``, never copied into ``status``,
+#: except that a pipeline-level ERROR means the job itself FAILED.
+JOB_STATUSES = ("QUEUED", "RUNNING", "COMPLETED", "FAILED")
+
+assert set(JOB_STATUSES) == {"QUEUED", "RUNNING", "COMPLETED", "FAILED"}
+
+
+def _normalize_status(status: str) -> str:
+    """Map legacy lowercase statuses to the canonical uppercase contract."""
+    upper = str(status or "").upper()
+    return upper if upper in JOB_STATUSES else "FAILED"
+
+
 class AssessmentJob(BaseModel):
     job_id: str
     query: str
     country: str = "IND"
-    status: str = "queued"
+    status: str = "QUEUED"
     created_at: str = Field(default_factory=_now)
     updated_at: str = Field(default_factory=_now)
     trace_id: Optional[str] = None
@@ -34,7 +51,7 @@ class AssessmentJob(BaseModel):
 class AssessmentJobStore:
     """Tiny JSON-backed job store for DIP_8-compatible analyst APIs."""
 
-    def __init__(self, path: str | Path = "data/job_store.json"):
+    def __init__(self, path: str | Path = DATA_DIR / "job_store.json"):
         self.path = Path(path)
         self.path.parent.mkdir(parents=True, exist_ok=True)
         self._jobs: Dict[str, AssessmentJob] = {}
@@ -43,21 +60,20 @@ class AssessmentJobStore:
     def _load(self) -> None:
         if not self.path.exists():
             return
-        try:
-            raw = json.loads(self.path.read_text(encoding="utf-8"))
-            self._jobs = {
-                job_id: AssessmentJob(**payload)
-                for job_id, payload in raw.items()
-            }
-        except Exception:
-            self._jobs = {}
+        raw = json.loads(self.path.read_text(encoding="utf-8"))
+        self._jobs = {}
+        for job_id, payload in raw.items():
+            payload = dict(payload)
+            if "status" in payload:
+                payload["status"] = _normalize_status(payload["status"])
+            self._jobs[job_id] = AssessmentJob(**payload)
 
     def _save(self) -> None:
         payload = {
             job_id: job.model_dump(mode="json")
             for job_id, job in self._jobs.items()
         }
-        self.path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+        write_json(self.path, payload)
 
     def create(self, query: str, country: str = "IND") -> AssessmentJob:
         job = AssessmentJob(job_id=uuid4().hex[:12], query=query, country=country)
@@ -75,14 +91,17 @@ class AssessmentJobStore:
 
     def mark_running(self, job_id: str) -> AssessmentJob:
         job = self.get(job_id)
-        job.status = "running"
+        job.status = "RUNNING"
         job.updated_at = _now()
         self._save()
         return job
 
     def mark_complete(self, job_id: str, result: Dict[str, Any]) -> AssessmentJob:
         job = self.get(job_id)
-        job.status = str(result.get("status") or "complete").lower()
+        # Only a pipeline-level ERROR fails the job; every other assessment
+        # disposition (COMPLETE/REFUSED/HUMAN_REVIEW/WITHHELD) is a completed
+        # job whose outcome lives in ``result``.
+        job.status = "FAILED" if str(result.get("status", "")).upper() == "ERROR" else "COMPLETED"
         job.result = result
         job.trace_id = result.get("trace_id")
         job.updated_at = _now()
@@ -91,7 +110,7 @@ class AssessmentJobStore:
 
     def mark_error(self, job_id: str, error: str) -> AssessmentJob:
         job = self.get(job_id)
-        job.status = "error"
+        job.status = "FAILED"
         job.error = error
         job.updated_at = _now()
         self._save()
