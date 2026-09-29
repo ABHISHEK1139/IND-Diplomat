@@ -12,8 +12,8 @@ and nodes represent theaters/domains.
 """
 
 import logging
-from typing import Dict, List, Optional, Tuple
-from pydantic import BaseModel, Field
+from typing import Dict, List
+from pydantic import BaseModel
 
 logger = logging.getLogger("Layer9.GlobalModel")
 

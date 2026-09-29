@@ -11,7 +11,7 @@ Port of DIP_8 engine/Layer7_GlobalModel/cross_theater_forecaster.py
 from __future__ import annotations
 
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 logger = logging.getLogger("Layer7_Global.cross_theater")
 

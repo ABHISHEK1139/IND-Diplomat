@@ -11,8 +11,7 @@ Wire into: unified_pipeline → Layer 5: Trajectory Forecast
 from __future__ import annotations
 
 import logging
-from datetime import datetime, timedelta, timezone
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 import numpy as np
 

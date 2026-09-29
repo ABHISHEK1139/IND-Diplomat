@@ -19,7 +19,6 @@ from dip.pipeline.knowledge.signal_extractor import SignalExtractor
 from dip.pipeline.world_model.state.state_provider import StateProvider
 from dip.pipeline.deliberation.reasoning.coordinator import run_council
 from dip.pipeline.synthesis.decision_core.threat_synthesizer import decide
-from dip.pipeline.synthesis.decision_core.refusal_engine import refuse
 from dip.pipeline.synthesis.presentation.narrative_synthesizer import narrative_synthesizer
 
 logger = logging.getLogger("DIP.Runtime.Graph")

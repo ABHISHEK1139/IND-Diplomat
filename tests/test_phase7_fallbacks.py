@@ -1,14 +1,12 @@
 import pytest
-import os
 import sys
 from pathlib import Path
-import numpy as np
 
 # Add project root to sys.path
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 from dip.pipeline.knowledge import vector_store
-from dip.pipeline.memory.backtesting.crisis_registry import registry, CrisisTimelineEvent, CrisisScenario
+from dip.pipeline.memory.backtesting.crisis_registry import registry
 from dip.engines.legal.signal_legal_mapper import map_signal_to_treaties
 
 

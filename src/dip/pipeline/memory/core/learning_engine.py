@@ -7,7 +7,7 @@ Turns runtime friction into explicit learning goals.
 import os
 import json
 import logging
-from typing import Dict, Any, List
+from typing import List
 from datetime import datetime, timezone
 from dip.core.schema import LearningReport
 

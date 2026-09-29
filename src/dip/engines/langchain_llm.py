@@ -9,8 +9,7 @@ from __future__ import annotations
 import json
 import logging
 import os
-from typing import Any, Dict, List, Optional, Type
-from pydantic import BaseModel
+from typing import Any, List, Optional
 
 from langchain_core.language_models.chat_models import BaseChatModel
 from langchain_core.messages import AIMessage, BaseMessage
@@ -149,7 +148,13 @@ def get_chat_model(
     try:
         import json as _json
         import urllib.request
-        with urllib.request.urlopen(f"{ollama_host}/api/tags", timeout=0.8) as resp:
+
+        from dip.core.url_guard import require_http_scheme
+
+        # OLLAMA_HOST is environment-supplied; require http(s) so urlopen cannot
+        # be steered into file:// or other local schemes.
+        tags_url = require_http_scheme(f"{ollama_host.rstrip('/')}/api/tags")
+        with urllib.request.urlopen(tags_url, timeout=0.8) as resp:  # nosec B310 - scheme validated by require_http_scheme
             available = set()
             if resp.status == 200:
                 try:

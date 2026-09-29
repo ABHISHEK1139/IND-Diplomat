@@ -1,6 +1,5 @@
 import pytest
 from dip.runtime.graph import (
-    intelligence_graph,
     build_intelligence_graph,
     node_legal_grounding,
     node_signal_extraction,

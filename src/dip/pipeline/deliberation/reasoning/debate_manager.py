@@ -6,8 +6,7 @@ Opinion -> Challenge -> Evidence -> Consensus.
 """
 
 import logging
-from typing import TypedDict, List, Dict, Any, Annotated
-import operator
+from typing import TypedDict, List, Dict, Any
 
 try:
     from langgraph.graph import StateGraph, END

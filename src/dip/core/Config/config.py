@@ -20,7 +20,6 @@ from __future__ import annotations
 import os
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Optional
 
 # Load .env file at module level
 try:
@@ -87,7 +86,10 @@ class Config:
     # Server Configuration
     # ═══════════════════════════════════════════════════════════════
     API_PORT: int = field(default_factory=lambda: int(os.getenv("API_PORT", "8000")))
-    API_HOST: str = field(default_factory=lambda: os.getenv("API_HOST", "0.0.0.0"))
+    # Loopback by default: a bare-metal run should not expose the API on every
+    # interface. Container/server deployments opt in explicitly (Dockerfiles pass
+    # --host 0.0.0.0 or set API_HOST=0.0.0.0).
+    API_HOST: str = field(default_factory=lambda: os.getenv("API_HOST", "127.0.0.1"))
     ENVIRONMENT: str = field(default_factory=lambda: os.getenv("ENVIRONMENT", "development"))
     CORS_ALLOWED_ORIGINS: list = field(default_factory=lambda: os.getenv("CORS_ALLOWED_ORIGINS", "*").split(","))
 
@@ -156,6 +158,22 @@ class Config:
         if not key:
             raise ValueError(
                 f"{self.LLM_PROVIDER.upper()} API key is required when LLM mode is enabled"
+            )
+
+    def validate_production_settings(self) -> None:
+        """Fail fast on unsafe production exposure (wildcard CORS).
+
+        In production a wildcard CORS origin lets any site drive the API from a
+        victim's browser. Credentials are already disabled for '*', but the
+        endpoint is still reachable cross-origin, so require an explicit list.
+        """
+        if self.ENVIRONMENT.lower() not in ("production", "prod"):
+            return
+        origins = [o.strip() for o in self.CORS_ALLOWED_ORIGINS if o.strip()]
+        if "*" in origins:
+            raise ValueError(
+                "CORS_ALLOWED_ORIGINS must list explicit origins in production "
+                "(wildcard '*' is not permitted)"
             )
 
     def __repr__(self) -> str:

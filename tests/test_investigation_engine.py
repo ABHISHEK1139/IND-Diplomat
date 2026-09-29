@@ -6,10 +6,6 @@ Tests the state machine, folder persistence, timeline, and round-trip
 serialization of the new Investigation root object.
 """
 
-import json
-import os
-import shutil
-import tempfile
 import pytest
 from datetime import datetime, timezone
 
@@ -19,8 +15,6 @@ from dip.core.schema import (
     InvestigationScope,
     CollectionPlan,
     CollectionNeed,
-    TimelineEvent,
-    InvestigationAlert,
     VALID_TRANSITIONS,
     INVESTIGATION_STATES,
 )

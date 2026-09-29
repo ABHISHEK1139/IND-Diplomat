@@ -6,10 +6,13 @@ point for Z3, pyDatalog, and NeMo Guardrails.
 
 from __future__ import annotations
 
+import logging
 from importlib.util import find_spec
 from typing import Any, Dict, List
 
 from pydantic import BaseModel, Field
+
+logger = logging.getLogger("engines.symbolic_guardrails")
 
 
 class SymbolicFinding(BaseModel):
@@ -129,7 +132,7 @@ def _run_z3_constraints(threat: str, score: float) -> List[SymbolicFinding]:
                 )
             )
     except Exception:
-        pass
+        logger.debug("Z3 guardrail check failed; skipping.", exc_info=True)
     return findings
 
 
@@ -161,7 +164,10 @@ contradiction(X) <= is_high_risk(X) & lacks_verification(X)
 has_contradiction = bool(contradiction("current_assessment"))
 '''
         env = {"pyDatalog": pyDatalog, "threat": threat, "verification": verification}
-        exec(code, env)
+        # Safe: `code` is a fixed literal defined above; `threat`/`verification` are
+        # passed as data in the sandboxed globals dict, never interpolated into the
+        # source. pyDatalog mutates caller locals, so exec is the supported path.
+        exec(code, env)  # nosec B102
         
         if env.get("has_contradiction"):
             findings.append(
@@ -173,7 +179,7 @@ has_contradiction = bool(contradiction("current_assessment"))
                 )
             )
     except Exception:
-        pass
+        logger.debug("pyDatalog guardrail check failed; skipping.", exc_info=True)
     return findings
 
 
@@ -193,6 +199,6 @@ def _run_nemo_guardrails(briefing_text: str) -> List[SymbolicFinding]:
         # This is the insertion point for T28.5
         pass
     except Exception:
-        pass
+        logger.debug("NeMo guardrail check failed; skipping.", exc_info=True)
         
     return findings

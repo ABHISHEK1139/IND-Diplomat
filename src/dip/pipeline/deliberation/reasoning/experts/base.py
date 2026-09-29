@@ -15,7 +15,6 @@ except ImportError:
     Memory = None
 
 from dip.core.Config.config import config
-from dip.telemetry.llm_tracer import tracer
 
 logger = logging.getLogger("Layer4.Experts.Base")
 

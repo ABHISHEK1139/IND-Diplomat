@@ -9,7 +9,7 @@ Deduplicator, Validator, BudgetManager, StoppingCriteria.
 import pytest
 from datetime import datetime, timezone, timedelta
 from dip.core.schema import RawObservation, Investigation, InvestigationScope, CollectionPlan, CollectionNeed, UserObjective
-from dip.pipeline.collection.source_registry import SourceRegistry, SourceEntry
+from dip.pipeline.collection.source_registry import SourceRegistry
 from dip.pipeline.collection.source_selector import SourceSelector
 from dip.pipeline.collection.deduplicator import Deduplicator
 from dip.pipeline.collection.validator import SourceValidator

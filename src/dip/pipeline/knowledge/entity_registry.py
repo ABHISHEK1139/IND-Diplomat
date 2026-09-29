@@ -4,7 +4,6 @@ Entity Registry (Layer 2)
 Tracks entities and their relationships.
 """
 
-from typing import Dict, List, Tuple
 
 class EntityRegistry:
     def __init__(self):

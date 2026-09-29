@@ -7,12 +7,10 @@ Cascades: Tavily -> Serper -> DDGS (with retry/jitter) -> GDELT V2 -> Offline Ca
 from __future__ import annotations
 
 import asyncio
-import json
 import logging
 import os
 import random
-import time
-from typing import Any, Dict, List, Optional
+from typing import List, Optional
 from datetime import datetime, timezone
 import httpx
 
@@ -115,7 +113,7 @@ class ResilientWebSurfer:
 
     async def _search_ddgs_resilient(self, query: str, country_code: Optional[str], max_results: int) -> List[RawObservation]:
         """Search DuckDuckGo with anti-rate-limit protection (threaded + bounded)."""
-        from duckduckgo_search import DDGS
+        from dip.core.search_compat import DDGS
 
         def _blocking_search(clean_q: str, headers: dict):
             with DDGS(headers=headers, timeout=8) as ddgs:

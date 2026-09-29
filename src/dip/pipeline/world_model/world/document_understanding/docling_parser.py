@@ -1,6 +1,5 @@
 import logging
 import os
-from typing import List
 
 try:
     from docling.document_converter import DocumentConverter

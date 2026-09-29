@@ -38,6 +38,10 @@ FORBIDDEN_NAMES = {
     "trafilatura",
     "duckduckgo_search",
     "duckduckgo",
+    # The upstream DuckDuckGo distribution was renamed to `ddgs`; the compat
+    # shim re-exports DDGS from it. Layer-4 must stay locked out of both.
+    "ddgs",
+    "search_compat",
     "feedparser",
     "httpx",
     "aiohttp",

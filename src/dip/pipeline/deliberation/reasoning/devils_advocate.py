@@ -8,8 +8,8 @@ It never agrees with the consensus.
 
 import logging
 import json
-from dip.core.json_utils import strip_markdown_json, safe_parse_json
-from typing import List, Dict, Any
+from dip.core.json_utils import strip_markdown_json
+from typing import Dict, Any
 
 from dip.core.Config.config import config
 from dip.telemetry.llm_tracer import tracer

@@ -13,10 +13,8 @@ Metrics:
 """
 
 import logging
-import math
 from typing import Dict, List, Optional
 from pydantic import BaseModel, Field
-from datetime import datetime, timezone
 
 logger = logging.getLogger("Layer7.Backtesting")
 

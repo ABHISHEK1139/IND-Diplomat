@@ -24,8 +24,6 @@ from dip.layer0_planning.objective_parser import ObjectiveParser
 from dip.layer0_planning.query_expander import QueryExpander
 from dip.layer0_planning.template_selector import TemplateSelector
 from dip.layer0_planning.planner_memory import PlannerMemory
-from dip.core.Config.config import config
-from dip.telemetry.llm_tracer import tracer
 
 logger = logging.getLogger("Layer0.Workflow")
 

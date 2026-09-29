@@ -5,9 +5,10 @@ from __future__ import annotations
 import csv
 import io
 import logging
-import os
 import urllib.request
 from typing import Any, Dict, List
+
+from dip.core.url_guard import require_http_scheme
 
 logger = logging.getLogger("Layer1_Collection.ofac_feed")
 
@@ -20,8 +21,10 @@ class OFACFeed:
     async def fetch_entries(self, country_hint: str = "") -> List[Dict[str, Any]]:
         """Fetch OFAC sanctions entries, optionally filtered by country."""
         try:
-            req = urllib.request.Request(OFAC_URL, headers={"User-Agent": "DIP2/1.0"})
-            with urllib.request.urlopen(req, timeout=60) as resp:
+            req = urllib.request.Request(
+                require_http_scheme(OFAC_URL), headers={"User-Agent": "DIP2/1.0"}
+            )
+            with urllib.request.urlopen(req, timeout=60) as resp:  # nosec B310 - scheme validated by require_http_scheme
                 raw = resp.read().decode("utf-8", errors="replace")
         except Exception as e:
             logger.debug("OFAC fetch failed: %s", e)

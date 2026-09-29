@@ -1,5 +1,4 @@
 import logging
-import numpy as np
 from typing import Dict, Any
 
 logger = logging.getLogger("DIP3.Layer5.MonteCarlo")

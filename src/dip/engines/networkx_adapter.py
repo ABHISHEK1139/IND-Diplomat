@@ -6,8 +6,7 @@ When networkx is installed, this provides graph-based contagion propagation
 and centrality analysis for multi-theater assessments.
 """
 
-import os
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any, Dict, List, Optional
 
 # Optional import
 try:
@@ -16,7 +15,6 @@ try:
 except Exception:
     NETWORKX_AVAILABLE = False
 
-from .contracts import AssessmentGoal
 
 
 class NetworkXContagionAdapter:

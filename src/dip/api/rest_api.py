@@ -42,8 +42,9 @@ from dip.api.ws.ws_manager import manager as ws_manager
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Fail at API startup instead of during an LLM request in production."""
-    if config.ENVIRONMENT.lower() == "production":
+    if config.ENVIRONMENT.lower() in ("production", "prod"):
         config.validate_runtime_credentials()
+        config.validate_production_settings()
     # JSON stores support one API process. Never replay interrupted jobs silently.
     for job in job_store.list():
         if str(job.status).upper() in {"QUEUED", "RUNNING"}:
@@ -122,9 +123,7 @@ async def api_assess(request: AssessRequest):
         result = await execute(request.query, request.country)
         return result
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-
+        raise HTTPException(status_code=500, detail=str(e)) from e
 @app.post("/v2/query")
 async def v2_query(request: AssessRequest):
     """Quick synchronous-style query endpoint (awaits pipeline)."""
@@ -132,8 +131,7 @@ async def v2_query(request: AssessRequest):
         result = await execute(request.query, request.country)
         return result
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
+        raise HTTPException(status_code=500, detail=str(e)) from e
 async def _run_assessment_job(job_id: str) -> None:
     try:
         job = job_store.mark_running(job_id)
@@ -199,9 +197,8 @@ async def api_v3_job_status(job_id: str):
             "updated_at": job.updated_at,
             "error": job.error,
         }
-    except KeyError:
-        raise HTTPException(status_code=404, detail="job not found")
-
+    except KeyError as e:
+        raise HTTPException(status_code=404, detail="job not found") from e
 @app.get("/api/v3/jobs/{job_id}/status")
 async def api_v3_job_status_alias(job_id: str):
     return await api_v3_job_status(job_id)
@@ -210,8 +207,8 @@ async def api_v3_job_status_alias(job_id: str):
 async def api_v3_job_result(job_id: str):
     try:
         job = job_store.get(job_id)
-    except KeyError:
-        raise HTTPException(status_code=404, detail="job not found")
+    except KeyError as e:
+        raise HTTPException(status_code=404, detail="job not found") from e
     if job.result is None:
         return {"job_id": job.job_id, "status": job.status, "result": None, "error": job.error}
     return job.result
@@ -287,8 +284,7 @@ async def api_head_of_country(request: HeadOfCountryRequest):
         result = await execute(request.query, request.country)
         return result.get("head_of_country_briefing", result)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
+        raise HTTPException(status_code=500, detail=str(e)) from e
 @app.post("/api/v3/head-of-country")
 async def api_head_of_country_v3(request: HeadOfCountryRequest):
     return await api_head_of_country(request)
@@ -393,8 +389,7 @@ async def api_wargame(request: WargameRequest):
         result = await run_wargame(base_context, action)
         return result
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
+        raise HTTPException(status_code=500, detail=str(e)) from e
 @app.get("/api/self-model")
 async def api_self_model():
     """Return the system's self-model dashboard."""
@@ -403,16 +398,14 @@ async def api_self_model():
         model = get_self_model()
         return model.get_dashboard()
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-
+        raise HTTPException(status_code=500, detail=str(e)) from e
 @app.get("/api/v3/jobs/{job_id}/stix2")
 async def api_v3_job_stix2(job_id: str):
     """Export assessment as STIX 2.1 bundle."""
     try:
         job = job_store.get(job_id)
-    except KeyError:
-        raise HTTPException(status_code=404, detail="job not found")
+    except KeyError as e:
+        raise HTTPException(status_code=404, detail="job not found") from e
     if job.result is None:
         raise HTTPException(status_code=404, detail="job not completed")
     try:
@@ -428,9 +421,7 @@ async def api_v3_job_stix2(job_id: str):
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-
+        raise HTTPException(status_code=500, detail=str(e)) from e
 # mount websocket router
 app.include_router(ws_router)
 
@@ -454,9 +445,7 @@ async def create_job(request: AssessRequest):
         _schedule_job(run_job_background(job["job_id"], request.query, request.country))
         return {"job_id": job["job_id"], "status": job["status"], "created_at": job["created_at"]}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-
+        raise HTTPException(status_code=500, detail=str(e)) from e
 @app.get("/api/v3/analyst-jobs")
 async def list_jobs(limit: int = 50):
     jobs = await STORE.list_jobs(limit=limit)

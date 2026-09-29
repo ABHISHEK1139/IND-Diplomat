@@ -2,14 +2,13 @@
 Politiq AI — DuckDuckGo Provider
 =================================
 
-Implementation of the SearchProvider interface using duckduckgo_search.
+Implementation of the SearchProvider interface using the DuckDuckGo backend.
 """
 
 import asyncio
 import logging
 from typing import List
-from duckduckgo_search import DDGS
-from duckduckgo_search.exceptions import DuckDuckGoSearchException
+from dip.core.search_compat import DDGS, DDGSException as DuckDuckGoSearchException
 
 from dip.pipeline.collection.research.schemas import SearchResult, ResearchRequest
 from dip.pipeline.collection.research.retrieval.providers.base import SearchProvider

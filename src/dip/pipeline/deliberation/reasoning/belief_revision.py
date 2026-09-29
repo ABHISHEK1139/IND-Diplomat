@@ -16,7 +16,6 @@ from datetime import datetime, timezone
 from typing import Dict, List, Optional
 from pydantic import BaseModel, Field
 
-from dip.pipeline.deliberation.reasoning.message_bus import MessageBus
 
 logger = logging.getLogger("Layer4.BeliefRevision")
 

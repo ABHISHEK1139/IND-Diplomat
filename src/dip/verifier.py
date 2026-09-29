@@ -16,7 +16,6 @@ verification_score in [0.0, 1.0].
 """
 
 from typing import List
-import math
 
 
 # ── Fuzzy membership functions (inline to avoid circular imports) ──

@@ -9,8 +9,6 @@ Comprehensive end-to-end tests covering:
   - Deliberation module heuristic fallbacks
 """
 
-import asyncio
-import json
 import os
 import sys
 import pytest
@@ -89,7 +87,6 @@ async def test_stix2_export_generated():
 async def test_step_tracer_produces_files():
     """Step tracer must write trace files for each pipeline step."""
     from dip.unified_pipeline import execute
-    from pathlib import Path
     from unittest.mock import patch
     from dip.runtime.control_loop.investigation_controller import InvestigationController
     
@@ -120,7 +117,7 @@ async def test_step_tracer_produces_files():
 @pytest.mark.e2e
 async def test_cove_heuristic_does_not_hang():
     """CoVe deliberation must complete instantly in heuristic mode."""
-    from dip.pipeline.deliberation.deliberation.cove import decompose, _heuristic_decompose
+    from dip.pipeline.deliberation.deliberation.cove import _heuristic_decompose
     from dip.pipeline.deliberation.reasoning.council_session import CouncilSession
     from dip.core.schema import Hypothesis
     import time
@@ -231,7 +228,6 @@ async def test_threat_synthesizer_heuristic():
     """Threat synthesizer must produce valid assessment in heuristic mode."""
     from dip.pipeline.synthesis.decision_core.threat_synthesizer import _build_heuristic_assessment
     from dip.pipeline.deliberation.reasoning.council_session import CouncilSession
-    from dip.core.schema import IntelligenceAssessment, Signal
     import time
     
     session = CouncilSession(query="test", state_context=None)

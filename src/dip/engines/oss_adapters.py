@@ -63,7 +63,7 @@ DEFAULT_STACK: List[OSSCapability] = [
     ),
     OSSCapability(
         name="DuckDuckGo Search",
-        package="duckduckgo_search",
+        package="ddgs",
         replaces="local PDF/OCR treaty pipeline",
         dip_use="live web search for treaty text, legal precedents, and news feeds",
     ),

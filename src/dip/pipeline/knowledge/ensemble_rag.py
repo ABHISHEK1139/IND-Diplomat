@@ -7,9 +7,8 @@ for legal grounding across UN Charter, UNCLOS, Geneva Conventions, and WTO GATT.
 from __future__ import annotations
 
 import logging
-import os
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional
+from typing import List
 
 logger = logging.getLogger("DIP.Knowledge.EnsembleRAG")
 

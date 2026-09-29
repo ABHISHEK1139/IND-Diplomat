@@ -8,7 +8,7 @@ of what it briefed the Executive on previously.
 import json
 import os
 import logging
-from typing import List, Optional
+from typing import Optional
 from datetime import datetime, timezone
 from dip.core.schema import StateContext
 

@@ -1,5 +1,4 @@
 """Tests for Phase 1 modules: Trajectory, CSIS, ACH, Online Drift."""
-from datetime import datetime, timezone
 
 from dip.pipeline.forecasting.trajectory.prophet_forecaster import forecast_trajectory
 from dip.pipeline.forecasting.trajectory.online_drift import OnlineDriftDetector

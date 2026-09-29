@@ -1,6 +1,6 @@
 import logging
 from typing import List
-from dip.core.schema import Signal, BayesianTrace, StateContext
+from dip.core.schema import Signal, BayesianTrace
 
 logger = logging.getLogger("Layer3.BayesianTracker")
 

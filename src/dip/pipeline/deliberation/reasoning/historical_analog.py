@@ -8,7 +8,6 @@ structurally or semantically similar to the current investigation.
 import logging
 from typing import List, Dict, Any
 
-from dip.telemetry.llm_tracer import tracer
 
 logger = logging.getLogger("Layer4.HistoricalAnalog")
 

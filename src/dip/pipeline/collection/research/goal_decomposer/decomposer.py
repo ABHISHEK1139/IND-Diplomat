@@ -1,5 +1,4 @@
 import logging
-from pydantic import BaseModel
 
 try:
     import dspy

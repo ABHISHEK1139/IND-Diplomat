@@ -16,7 +16,7 @@ These prompts work with deepseek-r1:8b via Ollama in json_mode.
 
 from __future__ import annotations
 
-from typing import List, Set
+from typing import Set
 
 
 # ═══════════════════════════════════════════════════════════════════════

@@ -1,5 +1,5 @@
 from typing import List, Optional
-from dip.core.schema import StateContext, Hypothesis, AssessmentDecision
+from dip.core.schema import StateContext, Hypothesis
 
 class CouncilSession:
     """

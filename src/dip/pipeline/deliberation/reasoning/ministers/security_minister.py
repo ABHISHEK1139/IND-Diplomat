@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import json
 import logging
-from typing import List, Optional
+from typing import Optional
 
 from dip.pipeline.deliberation.reasoning.schema import AgentMessage, MessageType
 from dip.pipeline.deliberation.reasoning.ministers.base_specialist import BaseSpecialist

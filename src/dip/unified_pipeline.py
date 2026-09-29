@@ -22,13 +22,12 @@ import logging
 import os
 import time
 from pathlib import Path
-from pydantic import ValidationError
-from typing import Dict, Any, Optional, List
+from typing import Dict, Any, List
 
 from dip.core.Config.config import config
 from dip.core.schema import Hypothesis, NextGenSREOutput
 from dip.engines import HeadOfStatePipelineGraph, PipelinePhase, build_head_of_country_briefing, run_fuzzy_sre, observability
-from dip.engines.step_tracer import start_trace, trace_step, get_tracer
+from dip.engines.step_tracer import start_trace, trace_step
 from dip.engines.symbolic_guardrails import run_symbolic_guardrails
 from dip.engines.safety_enforcer import enforce_safety
 
@@ -92,8 +91,6 @@ def _import_global():
 # ── Core imports (always available) ──────────────────────────────
 
 from dip.pipeline.world_model.state.state_provider import StateProvider
-from dip.pipeline.world_model.state.working_memory import WorkingMemory
-from dip.pipeline.world_model.state.uncertainty_monitor import apply_uncertainty_decay
 from dip.pipeline.deliberation.reasoning.council_session import CouncilSession
 from dip.pipeline.deliberation.reasoning.coordinator import run_council
 from dip.pipeline.deliberation.deliberation.red_team import challenge as red_team_challenge
@@ -105,7 +102,7 @@ from dip.pipeline.synthesis.decision_core.refusal_engine import refuse
 from dip.runtime.investigation.hitl import request_review
 from dip.pipeline.synthesis.workspace.dossier.composer import DossierComposer
 from dip.pipeline.deliberation.reasoning.introspection import analyze_bias
-from dip.pipeline.forecasting.trajectory.assessment_gate import assess as gate_assess, build_assessment_state, AssessmentState, GateVerdict
+from dip.pipeline.forecasting.trajectory.assessment_gate import assess as gate_assess, build_assessment_state
 from dip.pipeline.forecasting.trajectory.assessment_record import record_assessment
 
 

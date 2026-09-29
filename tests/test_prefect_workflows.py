@@ -1,5 +1,4 @@
 import pytest
-from scripts.deploy_prefect import dip2_global_flow
 
 @pytest.mark.unit
 def test_prefect_flow_dry_run(monkeypatch):

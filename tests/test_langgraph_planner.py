@@ -8,8 +8,8 @@ data passing works as expected.
 """
 
 import pytest
-from unittest.mock import patch, MagicMock
-from dip.layer0_planning.workflow import PlanningWorkflow, PlannerState
+from unittest.mock import patch
+from dip.layer0_planning.workflow import PlanningWorkflow
 
 # ------------------------------------------------------------------
 # Tests

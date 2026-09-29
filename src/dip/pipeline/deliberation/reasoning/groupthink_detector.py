@@ -14,11 +14,11 @@ Metrics:
 """
 
 import logging
-from typing import Dict, List, Tuple
+from typing import Dict, List
 from collections import Counter
 
 from dip.pipeline.deliberation.reasoning.message_bus import MessageBus
-from dip.pipeline.deliberation.reasoning.schema import AgentMessage, MessageType
+from dip.pipeline.deliberation.reasoning.schema import MessageType
 
 logger = logging.getLogger("Layer4.GroupthinkDetector")
 

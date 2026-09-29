@@ -6,7 +6,6 @@ Provides URL-based caching so we don't fetch/extract the same article twice.
 """
 
 import hashlib
-import json
 import logging
 from typing import Optional, Dict
 

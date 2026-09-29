@@ -10,11 +10,10 @@ VerificationPipeline, and returns a ResearchResult.
 import time
 import uuid
 import logging
-from typing import List, Optional
-import litellm
+from typing import List
 
 from dip.core.Config.config import config
-from dip.pipeline.collection.research.schemas import ResearchRequest, ResearchResult, Evidence
+from dip.pipeline.collection.research.schemas import ResearchRequest, ResearchResult
 from dip.pipeline.collection.research.retrieval.pipeline import RetrievalPipeline
 from dip.pipeline.collection.research.retrieval.providers.duckduckgo import DuckDuckGoProvider
 from dip.pipeline.collection.research.verification.pipeline import VerificationPipeline

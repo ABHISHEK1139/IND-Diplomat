@@ -1,12 +1,10 @@
 """Comprehensive tests for Phase 2-5 modules."""
-import json
 import pytest
 
 from dip.pipeline.world_model.state.source_weighting import SourceReliability
 from dip.engines.legal.signal_legal_mapper import map_signal_to_treaties, get_all_relevant_treaties
-from dip.engines.legal.treaty_rag_pipeline import TreatyRAGPipeline
 from dip.pipeline.memory.core.confidence_recalibrator import ConfidenceRecalibrator
-from dip.engines.safety_enforcer import enforce_safety, SafetyReport
+from dip.engines.safety_enforcer import enforce_safety
 from dip.engines.self_model import SelfModel
 from dip.engines.experiment_gate import ExperimentGate
 from dip.pipeline.forecasting.wargaming.mesa_simulation import SimpleWargameSim

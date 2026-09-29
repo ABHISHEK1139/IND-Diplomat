@@ -93,8 +93,7 @@ def test_threat_synthesizer_merger():
 @pytest.mark.asyncio
 async def test_hybrid_dual_engine_integration():
     """Test that unified_pipeline runs both Heuristic and AI engines and merges them."""
-    from dip.pipeline.deliberation.reasoning.council_session import CouncilSession
-    from dip.core.schema import StateContext, Hypothesis
+    from dip.core.schema import Hypothesis
     from dip.unified_pipeline import _merge_dual_engine_hypotheses
     
     heuristic_baseline = [

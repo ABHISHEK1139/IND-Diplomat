@@ -23,11 +23,11 @@ import logging
 import time
 import urllib.parse
 from datetime import datetime, timezone
-from typing import List, Dict, Optional
+from typing import List, Dict
 
 from dip.core.schema import Investigation, RawObservation, TimelineEvent
 from dip.core.investigation_store import InvestigationStore
-from dip.pipeline.collection.source_registry import SourceRegistry, SourceEntry
+from dip.pipeline.collection.source_registry import SourceEntry
 from dip.pipeline.collection.source_selector import SourceSelector
 from dip.pipeline.collection.query_generator import QueryGenerator
 from dip.pipeline.collection.deduplicator import Deduplicator

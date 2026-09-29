@@ -5,8 +5,6 @@ from dip.core.Config.config import config
 When stix2 is installed, this provides export of assessments as STIX bundles.
 """
 
-import os
-import uuid
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 

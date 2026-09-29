@@ -44,11 +44,12 @@ def install_python_package(import_name: str) -> str:
 
 def fix_ddgs() -> str:
     uninstall_result = _run_pip(["uninstall", "duckduckgo_search", "-y"])
-    install_result = _run_pip(["install", "-U", "ddgs==9.10.0"])
+    # Unpinned: matches the "ddgs>=9.0.0" floor declared in pyproject/requirements.
+    install_result = _run_pip(["install", "-U", "ddgs>=9.0.0"])
     if install_result.returncode == 0:
         if uninstall_result.returncode == 0:
-            return "Repaired internet search module: removed duckduckgo_search and installed ddgs==9.10.0"
-        return "Installed internet search module: ddgs==9.10.0"
+            return "Repaired internet search module: removed duckduckgo_search and installed ddgs"
+        return "Installed internet search module: ddgs"
     error = (install_result.stderr or install_result.stdout or "").strip().splitlines()[-1:]
     tail = error[0] if error else "unknown error"
     return f"Failed to repair ddgs: {tail}"

@@ -1,5 +1,4 @@
 ﻿import pytest
-import asyncio
 from dip.runtime.graph import intelligence_graph, IntelligenceState
 
 @pytest.mark.asyncio

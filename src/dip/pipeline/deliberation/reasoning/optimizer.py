@@ -7,7 +7,6 @@ backtesting registry (e.g. Ukraine 2022).
 """
 
 import logging
-from typing import List
 
 try:
     import dspy

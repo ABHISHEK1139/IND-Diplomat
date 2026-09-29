@@ -61,7 +61,7 @@ COUPLING_MATRIX = {
     ("SAU", "YEM"): 0.60, ("SAU", "QAT"): 0.35, ("SAU", "ARE"): 0.40,
     ("SAU", "EGY"): 0.30,
     ("IRQ", "SYR"): 0.35, ("IRQ", "TUR"): 0.30,
-    ("EGY", "ETH"): 0.30, ("EGY", "SDN"): 0.25,
+    ("EGY", "ETH"): 0.30,
     ("YEM", "OMN"): 0.25,
     ("QAT", "ARE"): 0.30,
     

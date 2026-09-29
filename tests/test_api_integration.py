@@ -1,6 +1,4 @@
 """Integration tests for API endpoints and WebSocket job events."""
-import asyncio
-import json
 
 from fastapi.testclient import TestClient
 

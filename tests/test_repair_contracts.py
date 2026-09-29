@@ -19,8 +19,6 @@ def test_single_health_route():
 
 
 def test_blank_assessment_rejected_at_boundary():
-    from fastapi.testclient import TestClient
-
     client = TestClient(api.app, raise_server_exceptions=False)
     assert client.post("/api/v3/assess", json={"query": "   ", "country": "IND"}).status_code == 422
     assert client.post("/api/v3/assess", json={"query": "x", "country": "   "}).status_code == 422

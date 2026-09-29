@@ -20,7 +20,7 @@ from dip.pipeline.deliberation.reasoning.schema import (
     AgentMessage, MessageType, BeliefLedger, Belief as SchemaBelief
 )
 from dip.pipeline.deliberation.reasoning.message_bus import MessageBus
-from dip.pipeline.deliberation.reasoning.belief_revision import BeliefTrajectory, BeliefSnapshot
+from dip.pipeline.deliberation.reasoning.belief_revision import BeliefTrajectory
 
 logger = logging.getLogger("Layer4.BaseSpecialist")
 

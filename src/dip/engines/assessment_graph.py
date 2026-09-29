@@ -7,12 +7,10 @@ to record phase events, which can be backed by LangGraph when installed.
 """
 
 import json
-import os
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel
 
 from .contracts import AssessmentGoal, BlackboardEvent, create_assessment_goal
 from .oss_adapters import OSSAdapterRegistry

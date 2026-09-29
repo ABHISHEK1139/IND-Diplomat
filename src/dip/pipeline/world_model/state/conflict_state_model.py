@@ -6,7 +6,7 @@ Computes the escalation index and multidimensional state.
 
 from typing import List
 from dip.core.schema import Belief, Signal, TemporalIndicator, DomainIndex, EscalationResult
-from dip.core.fuzzy import rising, _clamp
+from dip.core.fuzzy import _clamp
 from dip.pipeline.world_model.state.adversary_intent_model import IntentAnalyzer
 
 W_CAPABILITY = 0.35

@@ -11,7 +11,7 @@ Port of DIP_8 concept with A3.0 curriculum planning.
 from __future__ import annotations
 
 import logging
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger("Layer4_Reasoning.curriculum")

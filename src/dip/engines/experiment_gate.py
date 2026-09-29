@@ -7,7 +7,7 @@ ground truth bounds (the guardrails), and the LLM provides the nuanced narrative
 and qualitative assessment within those bounds.
 """
 
-from typing import Dict, Any, Callable, Optional
+from typing import Dict, Any, Callable
 import logging
 from dip.core.schema import NextGenSREOutput
 

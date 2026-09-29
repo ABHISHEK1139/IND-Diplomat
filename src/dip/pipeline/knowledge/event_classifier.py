@@ -5,7 +5,6 @@ Event Classifier (Layer 2)
 Uses LLM to semantically classify events by domain.
 """
 
-import os
 import json
 import logging
 from typing import Tuple

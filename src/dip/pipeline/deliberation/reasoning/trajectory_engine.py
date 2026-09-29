@@ -16,10 +16,11 @@ Also computes:
 
 import logging
 import math
-from typing import Dict, List, Optional
+from typing import Dict, List
 from pydantic import BaseModel, Field
 from datetime import datetime, timezone
 
+from dip.core.schema import StateContext
 from dip.pipeline.deliberation.reasoning.belief_revision import BeliefTrajectory
 from dip.pipeline.deliberation.reasoning.message_bus import MessageBus
 
@@ -55,7 +56,7 @@ class TrajectoryEngine:
     to project forward-looking conflict state distributions.
     """
 
-    def __init__(self, belief_trajectory: BeliefTrajectory, message_bus: MessageBus, state_context: 'StateContext'):
+    def __init__(self, belief_trajectory: BeliefTrajectory, message_bus: MessageBus, state_context: StateContext):
         self.bt = belief_trajectory
         self.bus = message_bus
         self.state_context = state_context

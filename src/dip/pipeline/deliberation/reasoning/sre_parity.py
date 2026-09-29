@@ -8,7 +8,7 @@ Combined module: all remaining Layer 4 SRE parity components from DIP_8.
 from __future__ import annotations
 
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 import numpy as np
 
 logger = logging.getLogger("Layer4_Reasoning.sre_parity")

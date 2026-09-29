@@ -1,4 +1,3 @@
-import json
 import pytest
 from fastapi.testclient import TestClient
 from dip.api import app

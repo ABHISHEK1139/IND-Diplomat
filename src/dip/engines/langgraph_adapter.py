@@ -6,8 +6,7 @@ When langgraph is installed, this provides a StateGraph-based implementation
 of the assessment pipeline with checkpointing and human-in-the-loop support.
 """
 
-import os
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 from pydantic import BaseModel
 
@@ -19,8 +18,8 @@ try:
 except Exception:
     LANGGRAPH_AVAILABLE = False
 
-from .contracts import AssessmentGoal, BlackboardEvent, PipelinePhase
-from .assessment_graph import AssessmentBlackboard, HeadOfStatePipelineGraph
+from .contracts import AssessmentGoal, PipelinePhase
+from .assessment_graph import AssessmentBlackboard
 
 
 class LangGraphState(BaseModel):

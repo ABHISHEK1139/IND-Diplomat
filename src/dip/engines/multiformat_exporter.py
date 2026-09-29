@@ -3,7 +3,6 @@ import json
 import csv
 import logging
 from typing import Dict, Any
-from pathlib import Path
 
 logger = logging.getLogger("DIP.NextGen.MultiformatExporter")
 

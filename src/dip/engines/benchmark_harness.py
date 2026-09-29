@@ -123,7 +123,6 @@ async def run_vanilla_rag(query: str, country_code: str) -> BenchmarkRun:
     try:
         # Retrieve context using DIP's sensors
         from dip.pipeline.collection.feed_integrator import FeedIntegrator
-        from dip.pipeline.knowledge.signal_extractor import SignalExtractor
         
         integrator = FeedIntegrator()
         observations = await integrator.fetch_observations(country_code, query)

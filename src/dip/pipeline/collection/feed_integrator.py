@@ -13,7 +13,7 @@ Now integrates 4 data providers:
 import asyncio
 import hashlib
 import logging
-from typing import List, Dict, Any, Optional
+from typing import List
 from datetime import datetime, timezone
 from dip.core.schema import RawObservation, InvestigationGoal
 from dip.pipeline.collection.sensors.gdelt_sensor import GdeltSensor

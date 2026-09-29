@@ -9,7 +9,7 @@ import logging
 import os
 import statistics
 from pathlib import Path
-from typing import List, Dict, Optional
+from typing import List, Dict
 from datetime import datetime, timezone
 from dip.core.schema import Belief, TemporalIndicator
 from dip.core.fuzzy import rising

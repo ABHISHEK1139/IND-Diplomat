@@ -1,9 +1,7 @@
 """Tests for the Assessment Gate — deterministic verdict rules."""
 from dip.pipeline.forecasting.trajectory.assessment_gate import (
     AssessmentState,
-    GateVerdict,
     assess,
-    build_assessment_state,
     _check_critical_pirs,
     _check_capability_coverage,
     _check_stale_military,

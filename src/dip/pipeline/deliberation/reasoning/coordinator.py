@@ -11,10 +11,10 @@ Wires the DynamicExpertSpawner and CouncilDebate modules together.
 
 import asyncio
 import logging
-from typing import List, Tuple, Dict, Any
+from typing import List, Any
 
 from .council_session import CouncilSession
-from dip.pipeline.deliberation.reasoning.dynamic_experts import DynamicExpertSpawner, DynamicExpert
+from dip.pipeline.deliberation.reasoning.dynamic_experts import DynamicExpertSpawner
 from dip.pipeline.deliberation.reasoning.council_debate import CouncilDebate
 from dip.pipeline.world_model.world.world_model import WorldModel
 from dip.core.schema import MinisterHypothesisOutput

@@ -1,8 +1,6 @@
 import logging
-from typing import List
 
 from dip.pipeline.deliberation.reasoning.message_bus import MessageBus
-from dip.pipeline.deliberation.reasoning.schema import AgentMessage
 
 logger = logging.getLogger("Layer4.DeterministicGate")
 

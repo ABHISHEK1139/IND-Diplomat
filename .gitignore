@@ -16,10 +16,16 @@ build/
 
 # Testing
 .pytest_cache/
+.ruff_cache/
 .coverage
+coverage.xml
 htmlcov/
 .mypy_cache/
 test_results*.txt
+
+# One-off codemods / scratch tooling (not part of the shipped package)
+scratch/
+
 
 # Virtual Environments
 venv/

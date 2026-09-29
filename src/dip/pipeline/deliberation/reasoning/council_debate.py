@@ -14,7 +14,7 @@ from dip.telemetry.llm_tracer import tracer
 from dip.pipeline.world_model.world.world_model import WorldModel
 from dip.pipeline.deliberation.reasoning.dynamic_experts import DynamicExpert
 from dip.core.schema import MinisterHypothesisOutput
-from dip.core.json_utils import strip_markdown_json, safe_parse_json
+from dip.core.json_utils import strip_markdown_json
 
 logger = logging.getLogger("Layer4.CouncilDebate")
 

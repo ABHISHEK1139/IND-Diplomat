@@ -13,11 +13,6 @@ from dip.core.schema import RawObservation
 
 logger = logging.getLogger("Layer1.news_sensor")
 
-try:
-    from duckduckgo_search import DDGS
-    DDGS_AVAILABLE = True
-except ImportError:
-    DDGS_AVAILABLE = False
 
 try:
     import feedparser

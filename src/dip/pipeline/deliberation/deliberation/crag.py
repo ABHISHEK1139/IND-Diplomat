@@ -1,4 +1,3 @@
-from dip.core.Config.config import config
 """
 CRAG — Corrective Retrieval-Augmented Generation investigator.
 
@@ -25,7 +24,6 @@ except ImportError:
     litellm = None
 
 from dip.core.Config.config import config
-from dip.core.schema import StateContext
 from dip.pipeline.deliberation.reasoning.council_session import CouncilSession
 from dip.core.json_utils import strip_markdown_json
 # BOUNDARY LOCK (design.txt Step 1-2): Layer-4 must NEVER import Layer-1/Layer-2.
@@ -206,8 +204,12 @@ async def _retrieve_evidence(
     provenance_hits = len(signals)
 
     findings: List[str] = []
+    # Trim set shared by the tokeniser and the length filter so both agree.
+    # str.strip() takes a literal character set (no range semantics); the
+    # hyphen is listed last purely to make the intent obvious to readers.
+    _TRIM = " ?_.-"
     for r in requests:
-        tokens = [t.lower().strip(" ?-_.") for t in r.split() if len(t.strip(" ?-_. ")) > 3]
+        tokens = [t.lower().strip(_TRIM) for t in r.split() if len(t.strip(_TRIM)) > 3]
         hits = sum(1 for doc in corpus if any(t and t in doc for t in tokens[:6]))
         if hits > 0:
             findings.append(

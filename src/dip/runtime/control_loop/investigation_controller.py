@@ -1,7 +1,7 @@
 import time
 import logging
 import asyncio
-from typing import Dict, Any, List
+from typing import Dict, Any
 
 from dip.core.schema import StateContext, ResearchLogEntry
 from dip.pipeline.knowledge.signal_extractor import SignalExtractor

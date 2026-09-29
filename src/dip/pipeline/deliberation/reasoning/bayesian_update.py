@@ -6,7 +6,7 @@ without relying on LLM hallucination for percentages.
 """
 
 import logging
-from typing import Dict, List
+from typing import List
 
 try:
     from pgmpy.models import BayesianNetwork

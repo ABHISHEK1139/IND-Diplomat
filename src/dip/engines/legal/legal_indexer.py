@@ -12,15 +12,13 @@ compatibility with the rest of the pipeline.
 from __future__ import annotations
 
 import logging
-from typing import Dict, List, Optional
+from typing import Dict, Optional
 
 logger = logging.getLogger("Legal.indexer")
 
-try:
-    from duckduckgo_search import DDGS
-    DDGS_AVAILABLE = True
-except ImportError:
-    DDGS_AVAILABLE = False
+from dip.core.search_compat import DDGS, SEARCH_AVAILABLE as DDGS_AVAILABLE
+
+if not DDGS_AVAILABLE:
     logger.info("duckduckgo-search not installed. query_legal_articles will return empty results.")
 
 

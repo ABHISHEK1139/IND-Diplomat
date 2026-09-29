@@ -6,7 +6,7 @@ Uses the Babelscape/rebel-large model to extract semantic relations
 """
 
 import logging
-from typing import List, Dict, Any
+from typing import List, Dict
 
 try:
     from transformers import pipeline

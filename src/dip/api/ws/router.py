@@ -1,7 +1,6 @@
 """WebSocket router exposing `/ws/assessments` for live updates."""
 
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
-from typing import Any
 from .ws_manager import manager
 from dip.collaboration.collaboration.yjs_sync import yjs_engine
 

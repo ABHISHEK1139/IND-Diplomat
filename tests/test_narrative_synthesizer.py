@@ -1,5 +1,4 @@
-﻿import pytest
-from dip.pipeline.synthesis.presentation.narrative_synthesizer import narrative_synthesizer
+﻿from dip.pipeline.synthesis.presentation.narrative_synthesizer import narrative_synthesizer
 
 def test_strategic_narrative_synthesis():
     briefing = narrative_synthesizer.synthesize(

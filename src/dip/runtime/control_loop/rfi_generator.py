@@ -1,4 +1,4 @@
-from typing import List, Any
+from typing import List
 from dip.core.schema import RFIQuery
 from .gap_analyzer import IdentifiedGap
 

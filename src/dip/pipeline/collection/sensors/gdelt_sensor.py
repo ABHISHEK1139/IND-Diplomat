@@ -25,7 +25,6 @@ class GdeltSensor:
 
     async def fetch(self, country: str = "IND") -> List[RawObservation]:
         """Fetches the latest events from GDELT, filtered by country."""
-        import asyncio
         observations = []
         try:
             timeout = aiohttp.ClientTimeout(total=15)

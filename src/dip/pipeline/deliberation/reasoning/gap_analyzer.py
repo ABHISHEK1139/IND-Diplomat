@@ -1,6 +1,6 @@
 import logging
 import json
-from dip.core.json_utils import strip_markdown_json, safe_parse_json
+from dip.core.json_utils import strip_markdown_json
 from typing import List
 from litellm import completion
 from dip.core.schema import StateContext, IntelligenceGap

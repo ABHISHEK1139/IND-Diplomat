@@ -1,4 +1,3 @@
-import asyncio
 
 from dip.engines.observed_signal import ObservedSignal
 from dip.engines.signal_belief import SignalBeliefModel

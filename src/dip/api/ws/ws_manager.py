@@ -3,7 +3,6 @@ Clients connect and subscribe to topics; server can publish job updates.
 """
 from __future__ import annotations
 
-import asyncio
 import logging
 import uuid
 from typing import Dict, Any, Set

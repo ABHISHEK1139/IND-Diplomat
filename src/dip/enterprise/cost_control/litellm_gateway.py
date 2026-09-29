@@ -1,5 +1,4 @@
 import logging
-import litellm
 
 logger = logging.getLogger("DIP3.Layer10.CostControl")
 

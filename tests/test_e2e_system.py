@@ -1,6 +1,5 @@
 import pytest
 import tempfile
-import os
 from pathlib import Path
 from dip.core.schema import StateContext, Signal, WargameAction, WargameResult
 from dip.pipeline.forecasting.wargaming.scenario_engine import run_wargame

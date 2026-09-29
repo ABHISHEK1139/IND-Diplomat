@@ -6,10 +6,10 @@ Stored in: data/traces/<trace_id>/
 
 from __future__ import annotations
 
-import json, os, time
+import json, time
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 TRACES_DIR = Path(__file__).resolve().parent.parent / "data" / "traces"
 

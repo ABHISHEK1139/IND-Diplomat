@@ -17,7 +17,7 @@ Integrates:
 import asyncio
 import logging
 from enum import Enum
-from typing import Dict, List, Optional
+from typing import Dict, Optional
 
 from dip.pipeline.deliberation.reasoning.schema import MessageType, AgentMessage
 from dip.pipeline.deliberation.reasoning.message_bus import MessageBus

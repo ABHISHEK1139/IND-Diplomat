@@ -10,7 +10,7 @@ from dip.pipeline.collection.research.planner import ResearchPlanner
 
 logging.basicConfig(level=logging.INFO)
 
-from duckduckgo_search import DDGS
+from dip.core.search_compat import DDGS
 
 import pytest
 

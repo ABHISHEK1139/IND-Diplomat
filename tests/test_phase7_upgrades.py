@@ -3,7 +3,6 @@ import pytest
 from dip.pipeline.knowledge.vector_store import VectorStore
 from dip.pipeline.memory.backtesting.crisis_registry import CrisisRegistry
 import json
-import os
 import shutil
 import tempfile
 from pathlib import Path

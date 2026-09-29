@@ -5,9 +5,7 @@ Converts raw signals into corroborated beliefs using fuzzy accumulation.
 """
 
 import logging
-from typing import List, Dict, Any
-from datetime import datetime
-import math
+from typing import List, Dict
 from dip.core.schema import Signal, Belief
 from dip.core.fuzzy import _clamp
 

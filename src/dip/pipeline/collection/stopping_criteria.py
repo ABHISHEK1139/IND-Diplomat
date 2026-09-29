@@ -12,7 +12,6 @@ Criteria:
 
 import logging
 
-from dip.pipeline.collection.budget_manager import BudgetManager
 
 logger = logging.getLogger("Layer1.StoppingCriteria")
 

@@ -12,7 +12,6 @@ from typing import List, Dict, Any, Optional
 from dip.pipeline.memory.backtesting.crisis_registry import CRISIS_DATABASE
 from dip.core.schema import Signal
 from dip.pipeline.world_model.state.belief_accumulator import evaluate
-from dip.pipeline.world_model.state.temporal_memory import compute_trends
 from dip.pipeline.world_model.state.conflict_state_model import compute_domain_indices, compute_escalation
 from dip.pipeline.memory.backtesting.scenario_registry import BacktestScenario
 

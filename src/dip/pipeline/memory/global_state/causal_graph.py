@@ -7,7 +7,7 @@ Finds causal paths (A -> B -> C) to calculate exact economic and military shockw
 
 import networkx as nx
 import logging
-from typing import Dict, List, Tuple
+from typing import Dict, List
 
 logger = logging.getLogger("Layer7.causal_graph")
 

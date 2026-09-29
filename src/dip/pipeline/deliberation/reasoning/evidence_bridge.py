@@ -13,10 +13,10 @@ The bridge:
 
 import logging
 import hashlib
-from typing import Dict, List, Optional
+from typing import Dict, List
 
-from dip.core.schema import StateContext, Signal, Belief, RawObservation
-from dip.pipeline.deliberation.reasoning.schema import EvidenceNode, AgentMessage, MessageType
+from dip.core.schema import StateContext, Signal
+from dip.pipeline.deliberation.reasoning.schema import EvidenceNode
 from dip.pipeline.deliberation.reasoning.message_bus import MessageBus
 
 logger = logging.getLogger("Layer4.EvidenceBridge")
@@ -38,7 +38,12 @@ DOMAIN_AGENT_MAP: Dict[str, List[str]] = {
 
 def signal_to_evidence(signal: Signal, index: int) -> EvidenceNode:
     """Convert a Layer 2 Signal into an EvidenceNode for the Message Bus."""
-    evidence_id = f"EV_{hashlib.md5(f'{signal.entity}_{signal.action}_{index}'.encode()).hexdigest()[:8]}"
+    # MD5 is used only as a short, stable content-address for the evidence ID
+    # (not for any integrity or authentication guarantee).
+    digest = hashlib.md5(
+        f"{signal.entity}_{signal.action}_{index}".encode(), usedforsecurity=False
+    ).hexdigest()[:8]
+    evidence_id = f"EV_{digest}"
     return EvidenceNode(
         evidence_id=evidence_id,
         observation_id=signal.source_ref,

@@ -9,7 +9,6 @@ is idle. It finds hidden cross-temporal patterns and "dreams" up new insights.
 import os
 import logging
 import asyncio
-from typing import List
 
 try:
     import chromadb

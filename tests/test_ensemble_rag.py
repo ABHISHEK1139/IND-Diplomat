@@ -1,5 +1,4 @@
-﻿import pytest
-from dip.pipeline.knowledge.ensemble_rag import legal_rag
+﻿from dip.pipeline.knowledge.ensemble_rag import legal_rag
 
 def test_ensemble_legal_rag_retrieval():
     passages = legal_rag.retrieve("sovereignty violation and self defense un charter", top_k=2)

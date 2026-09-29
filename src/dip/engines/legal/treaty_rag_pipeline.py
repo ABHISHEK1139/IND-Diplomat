@@ -17,11 +17,9 @@ from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger("Legal.treaty_rag")
 
-try:
-    from duckduckgo_search import DDGS
-    DDGS_AVAILABLE = True
-except ImportError:
-    DDGS_AVAILABLE = False
+from dip.core.search_compat import DDGS, SEARCH_AVAILABLE as DDGS_AVAILABLE
+
+if not DDGS_AVAILABLE:
     logger.info("duckduckgo-search not installed. Legal RAG will use heuristic fallback only.")
 
 try:

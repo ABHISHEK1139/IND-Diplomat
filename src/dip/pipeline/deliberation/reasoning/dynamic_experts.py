@@ -7,7 +7,7 @@ investigation domain. Experts query the World Model rather than raw text.
 
 import logging
 import json
-from typing import List, Any, Optional
+from typing import List, Any
 
 from dip.core.Config.config import config
 from dip.telemetry.llm_tracer import tracer

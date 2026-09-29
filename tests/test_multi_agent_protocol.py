@@ -17,7 +17,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..",
 
 from dip.core.schema import StateContext, Signal, Belief as CoreBelief
 from dip.pipeline.deliberation.reasoning.schema import (
-    AgentMessage, MessageType, EvidenceNode
+    AgentMessage, MessageType
 )
 from dip.pipeline.deliberation.reasoning.message_bus import MessageBus
 from dip.pipeline.deliberation.reasoning.debate_orchestrator import DebateOrchestrator
@@ -25,11 +25,10 @@ from dip.pipeline.deliberation.reasoning.ministers.base_specialist import BaseSp
 from dip.pipeline.deliberation.reasoning.evidence_bridge import (
     inject_evidence_into_bus, build_evidence_context_prompt
 )
-from dip.pipeline.deliberation.reasoning.groupthink_detector import GroupthinkDetector
 from dip.pipeline.deliberation.reasoning.belief_revision import BeliefTrajectory
 from dip.pipeline.deliberation.reasoning.trajectory_engine import TrajectoryEngine
 from dip.pipeline.deliberation.reasoning.backtesting import (
-    BacktestEngine, ForecastResult, HISTORICAL_CASES
+    BacktestEngine, ForecastResult
 )
 from dip.pipeline.deliberation.reasoning.ablation import AblationStudy, AblationConfig
 from dip.pipeline.deliberation.reasoning.calibration import CalibrationLoop

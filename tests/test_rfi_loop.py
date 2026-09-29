@@ -1,8 +1,7 @@
 import pytest
-import asyncio
 from unittest.mock import patch, MagicMock
 
-from dip.core.schema import InvestigationGoal, StateContext, RFIQuery
+from dip.core.schema import InvestigationGoal, StateContext
 from dip.runtime.control_loop.readiness_engine import evaluate_readiness
 
 def test_readiness_low_coverage():

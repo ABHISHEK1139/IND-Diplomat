@@ -6,7 +6,7 @@ Uses trafilatura to extract clean text and metadata from raw HTML.
 """
 
 import logging
-from typing import Optional, Dict, Any
+from typing import Optional
 
 try:
     import trafilatura

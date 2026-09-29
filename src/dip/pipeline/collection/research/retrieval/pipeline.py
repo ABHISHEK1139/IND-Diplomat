@@ -5,8 +5,6 @@ Politiq AI — Retrieval Pipeline
 Orchestrates the flow from Search -> Cache Check -> Parallel Crawl -> Extract -> Document.
 """
 
-import asyncio
-import json
 import logging
 from typing import List, Dict
 

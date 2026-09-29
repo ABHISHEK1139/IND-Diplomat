@@ -20,6 +20,15 @@ except ImportError:
 
 logger = logging.getLogger("Memory.vault")
 
+# Punctuation stripped when tokenising free text. No hyphen is present, so no
+# accidental range (`a-z`) semantics.
+_PUNCT = '.,!?()[]{}"\'`;:'
+
+
+def _tokenize(text: str) -> set:
+    return {w.strip(_PUNCT) for w in text.lower().split() if w.strip(_PUNCT)}
+
+
 class MemoryVault:
     def __init__(self, vault_path: str = None):
         if vault_path is None:
@@ -166,8 +175,7 @@ class MemoryVault:
 
     def retrieve_similar_crises(self, current_state_context: str) -> List[Dict[str, Any]]:
         """Retrieve the 3 most similar past crises using keyword matching."""
-        keywords = set(w.strip('.,!?()[]{}""\'') for w in current_state_context.lower().split())
-        keywords = {w for w in keywords if len(w) > 2}
+        keywords = {w for w in _tokenize(current_state_context) if len(w) > 2}
         
         results = []
         try:
@@ -183,7 +191,7 @@ class MemoryVault:
                     tags = json.loads(tags_json) if tags_json else []
                     
                     score = 0
-                    title_words = set(w.strip('.,!?()[]{}""\'') for w in title.lower().split())
+                    title_words = _tokenize(title)
                     score += len(keywords.intersection(title_words))
                     
                     tag_words = set(t.lower() for t in tags)

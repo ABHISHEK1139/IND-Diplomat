@@ -7,9 +7,8 @@ It also emits WebSocket progress events (when `api_ws.ws_manager` is available).
 """
 from __future__ import annotations
 
-import asyncio
 import logging
-from typing import Any, Dict
+from typing import Any
 
 from pydantic import BaseModel, ConfigDict
 

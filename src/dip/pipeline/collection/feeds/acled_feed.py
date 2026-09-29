@@ -11,10 +11,11 @@ API: https://api.acleddata.com/acled/read
 """
 
 
-import os
 import logging
 from datetime import datetime, timezone, timedelta
 from typing import Any, Dict, List, Optional
+
+from dip.core.url_guard import require_http_scheme
 
 logger = logging.getLogger("Layer1_Collection.acled_feed")
 
@@ -51,8 +52,10 @@ class ACLEDFeed:
         )
 
         try:
-            req = urllib.request.Request(url, headers={"Accept": "application/json"})
-            with urllib.request.urlopen(req, timeout=30) as resp:
+            headers = {"Accept": "application/json"}
+            with urllib.request.urlopen(
+                urllib.request.Request(require_http_scheme(url), headers=headers), timeout=30
+            ) as resp:  # nosec B310 - scheme validated by require_http_scheme
                 data = _json.loads(resp.read().decode())
                 if data.get("status") == 200:
                     return data.get("data", [])

@@ -5,7 +5,6 @@ War Gaming Scenario Engine (Layer 8)
 Simulates the global downstream effects of a hypothetical geopolitical action.
 """
 
-import os
 import json
 import logging
 from typing import List
