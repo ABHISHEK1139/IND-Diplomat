@@ -332,7 +332,7 @@ def export_all_scenarios(
     """
     paths: List[str] = []
 
-    for result, metrics in zip(results, all_metrics):
+    for result, metrics in zip(results, all_metrics, strict=True):
         path = export_scenario_json(
             result, metrics, window_size, output_dir
         )

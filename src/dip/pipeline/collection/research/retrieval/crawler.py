@@ -63,7 +63,7 @@ class WebCrawler:
             tasks = [self.fetch_url(session, url) for url in urls]
             html_contents = await asyncio.gather(*tasks, return_exceptions=True)
             
-            for url, content in zip(urls, html_contents):
+            for url, content in zip(urls, html_contents, strict=True):
                 if isinstance(content, Exception):
                     logger.warning(f"Gather error for {url}: {content}")
                     results[url] = None

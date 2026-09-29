@@ -68,8 +68,10 @@ class SourceSelector:
             # Score all pairs
             scores = self._model.predict(pairs)
             
-            # Attach scores to sources
-            scored_sources = list(zip(all_sources, scores))
+            # Attach scores to sources. strict=True: if the reranker returns a
+            # different number of scores than sources, fail into the existing
+            # except rather than silently truncating and dropping sources.
+            scored_sources = list(zip(all_sources, scores, strict=True))
             
             # Sort by score descending
             scored_sources.sort(key=lambda x: x[1], reverse=True)

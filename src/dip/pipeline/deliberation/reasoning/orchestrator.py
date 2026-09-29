@@ -84,7 +84,7 @@ class ReasoningOrchestrator:
         tasks = [expert.analyze(world_model, topic) for expert in experts]
         task_results = await asyncio.gather(*tasks, return_exceptions=True)
         raw_hypotheses = []
-        for expert, result in zip(experts, task_results):
+        for expert, result in zip(experts, task_results, strict=True):
             if isinstance(result, Exception):
                 logger.exception("Expert %s failed", getattr(expert, "name", expert), exc_info=result)
                 continue
