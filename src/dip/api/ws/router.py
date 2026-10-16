@@ -1,14 +1,31 @@
 """WebSocket router exposing `/ws/assessments` for live updates."""
 
+import os
+
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 from .ws_manager import manager
 from dip.collaboration.collaboration.yjs_sync import yjs_engine
 
 router = APIRouter()
 
+#: Optional shared secret for the WebSocket endpoints. When set (via the
+#: DIP_WS_TOKEN env var), clients must connect with ``?token=<secret>`` or
+#: the connection is refused. Unset = previous behavior (no auth), which is
+#: only safe while the API is bound to loopback.
+_WS_TOKEN = os.environ.get("DIP_WS_TOKEN", "")
+
+
+async def _check_ws_token(websocket: WebSocket) -> bool:
+    if _WS_TOKEN and websocket.query_params.get("token") != _WS_TOKEN:
+        await websocket.close(code=4401)
+        return False
+    return True
+
 
 @router.websocket("/ws/assessments")
 async def websocket_assessments(websocket: WebSocket):
+    if not await _check_ws_token(websocket):
+        return
     conn_id = await manager.connect(websocket)
     try:
         await websocket.send_json({"type": "connected", "conn_id": conn_id})
@@ -31,6 +48,8 @@ async def websocket_assessments(websocket: WebSocket):
 @router.websocket("/ws/collab/{document_id}")
 async def websocket_collab(websocket: WebSocket, document_id: str):
     """Real-time Yjs CRDT synchronization endpoint for collaborative editing."""
+    if not await _check_ws_token(websocket):
+        return
     conn_id = await manager.connect(websocket)
     topic = f"collab_{document_id}"
     await manager.subscribe(conn_id, topic)

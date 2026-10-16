@@ -4,10 +4,9 @@ FastAPI Server for Politiq AI
 Exposes the 7-layer pipeline and War Gaming Engine to the Web Dashboard.
 """
 
-from fastapi import FastAPI, HTTPException, Response
-from fastapi.staticfiles import StaticFiles
+from fastapi import FastAPI, HTTPException, Query, Response
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, Field, field_validator
 import asyncio
 import json
 import os
@@ -46,12 +45,14 @@ async def lifespan(app: FastAPI):
         config.validate_runtime_credentials()
         config.validate_production_settings()
     # JSON stores support one API process. Never replay interrupted jobs silently.
+    # Prune terminal jobs past the retention window so the stores stop growing
+    # forever, then fail anything that was in flight at shutdown.
+    job_store.prune()
     for job in job_store.list():
         if str(job.status).upper() in {"QUEUED", "RUNNING"}:
             job_store.mark_error(job.job_id, "Interrupted by server restart")
-    for job in await STORE.list_jobs(limit=1000000):
-        if job["status"] in {"QUEUED", "RUNNING"}:
-            await STORE.update_job(job["job_id"], status="FAILED", error="Interrupted by server restart")
+    await STORE.prune()
+    await STORE.mark_interrupted("Interrupted by server restart")
     try:
         yield
     finally:
@@ -84,7 +85,8 @@ app.add_middleware(
 )
 
 class AssessRequest(BaseModel):
-    query: str
+    # Bounded: an unbounded string flows straight into prompt construction.
+    query: str = Field(max_length=8000)
     country: str = "IND"
 
     @field_validator("query")
@@ -144,25 +146,22 @@ async def _run_assessment_job(job_id: str) -> None:
         stored = job_store.mark_complete(job_id, result)
 
         if ws_manager:
-            # Lifecycle status comes from the store; the pipeline assessment
-            # disposition travels separately so WS never masks a FAILED job.
+            # One canonical event, broadcast to all sockets and published to
+            # the job topic exactly once.
             done_payload = {
-                "type": "job_completed",
+                "type": "job.completed",
                 "job_id": job_id,
                 "status": stored.status,
                 "assessment_status": result.get("status"),
                 "result": result,
             }
             await ws_manager.broadcast(done_payload)
-            await ws_manager.broadcast({"type": "job.completed", "job_id": job_id, "status": stored.status, "assessment_status": result.get("status"), "result": result})
             await ws_manager.publish_topic(f"job:{job_id}", done_payload)
-            await ws_manager.publish_topic(f"job:{job_id}", {"type": "job.completed", "job_id": job_id, "status": stored.status, "assessment_status": result.get("status"), "result": result})
     except Exception as exc:
         job_store.mark_error(job_id, str(exc))
         if ws_manager:
-            err_payload = {"type": "job_failed", "job_id": job_id, "status": "FAILED", "error": str(exc)}
+            err_payload = {"type": "job.failed", "job_id": job_id, "status": "FAILED", "error": str(exc)}
             await ws_manager.broadcast(err_payload)
-            await ws_manager.broadcast({"type": "job.failed", "job_id": job_id, "status": "FAILED", "error": str(exc)})
             await ws_manager.publish_topic(f"job:{job_id}", err_payload)
     except BaseException:
         job_store.mark_error(job_id, "Cancelled")
@@ -182,8 +181,10 @@ async def api_v3_assess(request: AssessRequest):
     }
 
 @app.get("/api/v3/jobs")
-async def api_v3_jobs():
-    return [job.model_dump(mode="json") for job in job_store.list()]
+async def api_v3_jobs(limit: int = Query(default=50, ge=1, le=500)):
+    # List views are summaries: exclude the full result payloads (use
+    # /api/v3/jobs/{job_id}/result for the blob).
+    return [job.model_dump(mode="json", exclude={"result"}) for job in job_store.list(limit=limit)]
 
 @app.get("/api/v3/jobs/{job_id}")
 async def api_v3_job_status(job_id: str):
@@ -425,10 +426,10 @@ async def api_v3_job_stix2(job_id: str):
 # mount websocket router
 app.include_router(ws_router)
 
-# Mount the frontend directory to serve static HTML
-frontend_path = os.path.join(os.path.dirname(__file__), "frontend")
-if os.path.exists(frontend_path):
-    app.mount("/", StaticFiles(directory=frontend_path, html=True), name="frontend")
+# NOTE: the web frontend is a separate Next.js app (frontend-next/ at the repo
+# root); there is no bundled static frontend under src/dip/api/frontend, so
+# nothing is mounted at "/" here. The old mount pointed at a directory that
+# does not exist and silently served nothing.
 
 
 # ---------------------
@@ -441,13 +442,19 @@ async def create_job(request: AssessRequest):
     """Create an async analyst job and return job metadata."""
     try:
         job = await STORE.create_job(request.query, request.country)
-        # Track the runner in app state so shutdown cancels it (API-04).
-        _schedule_job(run_job_background(job["job_id"], request.query, request.country))
-        return {"job_id": job["job_id"], "status": job["status"], "created_at": job["created_at"]}
+        # Claim it for this process before scheduling the runner: a worker
+        # polling the same store may otherwise claim and run it too.
+        claimed = await STORE.claim_job(job["job_id"])
+        if claimed is not None:
+            # Track the runner in app state so shutdown cancels it (API-04).
+            _schedule_job(run_job_background(job["job_id"], request.query, request.country))
+        # If the claim lost, a worker owns the job and will run it.
+        status = claimed["status"] if claimed is not None else "QUEUED"
+        return {"job_id": job["job_id"], "status": status, "created_at": job["created_at"]}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e)) from e
 @app.get("/api/v3/analyst-jobs")
-async def list_jobs(limit: int = 50):
+async def list_jobs(limit: int = Query(default=50, ge=1, le=500)):
     jobs = await STORE.list_jobs(limit=limit)
     return {"count": len(jobs), "jobs": jobs}
 

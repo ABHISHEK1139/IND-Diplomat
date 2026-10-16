@@ -93,7 +93,10 @@ class MemoryVault:
         file_content = "\n".join(yaml_lines) + "\n" + content
         
         safe_title = "".join(c for c in title if c.isalnum() or c in ' -_').strip().replace(' ', '_')
-        filename = f"{timestamp[:10]}_{safe_title}.md"
+        # Include the doc_id: the old date+title filename collided (and was
+        # overwritten) when the same query ran twice on the same day.
+        safe_doc_id = "".join(c for c in str(doc_id) if c.isalnum() or c in '-_')
+        filename = f"{timestamp[:10]}_{safe_doc_id}_{safe_title}.md"
         file_path = os.path.join(self.vault_path, filename)
         
         with open(file_path, 'w', encoding='utf-8') as f:

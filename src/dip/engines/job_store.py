@@ -6,8 +6,9 @@ backed by Prefect/Celery/Postgres without changing the analyst API contract.
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 import json
+import os
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 from uuid import uuid4
@@ -15,6 +16,19 @@ from uuid import uuid4
 from pydantic import BaseModel, Field
 from dip.core.atomic_json import write_json
 from dip.core.Config.config import DATA_DIR
+
+#: Retention for terminal jobs (COMPLETED/FAILED); older entries are pruned.
+JOB_RETENTION_DAYS = int(os.getenv("DIP_JOB_RETENTION_DAYS", "30"))
+#: Hard ceiling for list() so one request cannot serialize the whole store.
+MAX_LIST_LIMIT = 1000
+
+
+def _parse_ts(value: Optional[str]) -> datetime:
+    """Parse an ISO timestamp defensively; unparseable/missing -> epoch."""
+    try:
+        return datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+    except (ValueError, TypeError):
+        return datetime(1970, 1, 1, tzinfo=timezone.utc)
 
 
 def _now() -> str:
@@ -86,8 +100,26 @@ class AssessmentJobStore:
             raise KeyError(job_id)
         return self._jobs[job_id]
 
-    def list(self) -> List[AssessmentJob]:
-        return sorted(self._jobs.values(), key=lambda job: job.created_at, reverse=True)
+    def list(self, limit: int = 100) -> List[AssessmentJob]:
+        # Clamp: an unbounded limit lets one request serialize the whole store.
+        limit = max(1, min(int(limit), MAX_LIST_LIMIT))
+        return sorted(self._jobs.values(), key=lambda job: job.created_at, reverse=True)[:limit]
+
+    def prune(self, retention_days: int = JOB_RETENTION_DAYS) -> int:
+        """Drop terminal (COMPLETED/FAILED) jobs older than the retention
+        window. QUEUED/RUNNING jobs are always kept. Returns the drop count."""
+        cutoff = datetime.now(timezone.utc) - timedelta(days=retention_days)
+        stale = [
+            job_id
+            for job_id, job in self._jobs.items()
+            if job.status in {"COMPLETED", "FAILED"}
+            and _parse_ts(job.updated_at) < cutoff
+        ]
+        for job_id in stale:
+            del self._jobs[job_id]
+        if stale:
+            self._save()
+        return len(stale)
 
     def mark_running(self, job_id: str) -> AssessmentJob:
         job = self.get(job_id)

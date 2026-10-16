@@ -8,6 +8,7 @@ import sys
 import os
 import json
 import asyncio
+import tempfile
 from datetime import datetime
 
 # Anchor the package on sys.path so the script runs from any CWD without
@@ -78,13 +79,20 @@ async def replay_run(manifest_file: str):
         print(f"  [{entry.timestamp}] {entry.agent} -> {entry.event} (Msg: {entry.message_id})")
         
 if __name__ == "__main__":
-    # Create a dummy manifest
-    manifest_data = RunManifest(
-        run_id="REPLAY_RUN_2026",
-        evidence_snapshot="SNAP_009"
-    ).model_dump()
-    
-    with open("dummy_manifest.json", "w") as f:
-        json.dump(manifest_data, f)
-        
-    asyncio.run(replay_run("dummy_manifest.json"))
+    if len(sys.argv) > 1:
+        # Replay a real manifest: python run_replay.py path/to/manifest.json
+        asyncio.run(replay_run(sys.argv[1]))
+    else:
+        # Demo mode: the dummy manifest goes to a temp file, never the CWD.
+        manifest_data = RunManifest(
+            run_id="REPLAY_RUN_2026",
+            evidence_snapshot="SNAP_009"
+        ).model_dump()
+
+        with tempfile.NamedTemporaryFile("w", suffix=".json", prefix="dip_replay_", delete=False) as f:
+            json.dump(manifest_data, f)
+            tmp_manifest = f.name
+        try:
+            asyncio.run(replay_run(tmp_manifest))
+        finally:
+            os.unlink(tmp_manifest)
