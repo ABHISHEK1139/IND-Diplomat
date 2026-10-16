@@ -21,6 +21,7 @@ import json
 import logging
 import os
 import time
+import uuid
 from pathlib import Path
 from typing import Dict, Any, List
 
@@ -758,8 +759,12 @@ async def execute(query: str, country_code: str, job_id: str | None = None) -> D
             MemoryVault, _, _ = _import_memory()
             if MemoryVault:
                 vault = MemoryVault()
+                # trace_id is unique per run (sha256 of objective+country+theater
+                # + microsecond timestamp); the old per-second doc_id collided
+                # when two assessments for one country ran in the same second
+                # and silently overwrote each other via INSERT OR REPLACE.
                 vault.store_intelligence(
-                    doc_id=f"{country_code}_{int(time.time())}",
+                    doc_id=f"{country_code}_{result.get('trace_id') or uuid.uuid4().hex[:12]}",
                     title=f"Assessment: {query[:60]}",
                     content=result.get("briefing", ""),
                     metadata={
